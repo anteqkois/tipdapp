@@ -9,7 +9,8 @@
     "start": "next start",
     "commit": "git add . && cz",
     "postcommit": "git push",
-    "lint": "next lint"
+    "lint": "next lint",
+    "release": "standard-version"
   },
   "dependencies": {
     "next": "12.1.0",
