@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "commit": "git add . && git commit -u",
+    "commit": "git add . && cz",
     "postcommit": "git push",
     "lint": "next lint"
   },
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.2",
+    "commitizen": "^4.2.4",
     "eslint": "8.10.0",
     "eslint-config-next": "12.1.0",
     "postcss": "^8.4.7",
