@@ -1,10 +1,18 @@
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+
 import Head from 'next/head';
 import Image from 'next/image';
 
+import { login } from '../redux/userSlice';
+
 export default function Home() {
-  const handleEvent = (e) => {
-    const val = e !== treu ? true : false;
-  };
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(login({ email: 'jannowak@gmail.com', password: 'haslo123' }));
+  }, []);
+
   return (
     <div>
       <Head>

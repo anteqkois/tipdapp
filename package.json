@@ -3,6 +3,15 @@
   "version": "0.1.1",
   "node": "17.6.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anteqkois/nextjs-boilerplate.git"
+  },
+  "author": "Antek Kois",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anteqkois/nextjs-boilerplate/issues"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,9 +22,13 @@
     "release": "standard-version"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.0",
+    "axios": "^0.26.0",
     "next": "12.1.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-redux": "^7.2.6",
+    "redux-devtools-extension": "^2.13.9"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.2",
