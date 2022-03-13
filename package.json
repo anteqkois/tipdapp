@@ -18,6 +18,7 @@
     "start": "next start",
     "commit": "git add . && cz",
     "postcommit": "git push",
+    "test":"npx hardhat test",
     "lint": "next lint",
     "release": "standard-version"
   },
