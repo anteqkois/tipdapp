@@ -4,6 +4,7 @@ const { parseUnits, formatUnits } = ethers.utils;
 
 describe('Qoistip', function () {
   let qoistip;
+  let anqToken;
   let owner;
   let addr1;
   let addr2;
@@ -14,6 +15,9 @@ describe('Qoistip', function () {
 
     const Qoistip = await ethers.getContractFactory('Qoistip');
     qoistip = await Qoistip.deploy(9951);
+
+    const ANQToken = await ethers.getContractFactory('ANQToken');
+    anqToken = await ANQToken.deploy();
   });
 
   describe('Math', () => {
@@ -32,6 +36,12 @@ describe('Qoistip', function () {
     });
     it('Calculate 3% fee with indivisible number', async function () {
       expect(await qoistip.calculateWithFee(781)).to.equal(757);
+    });
+  });
+  describe('Add new supported Token', () => {
+    it('Add token', async function () {
+      await qoistip.addSuportedToken(anqToken.address);
+      expect(await qoistip.supportedToken(anqToken.address)).to.equal(true);
     });
   });
 });
