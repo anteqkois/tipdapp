@@ -40,8 +40,20 @@ describe('Qoistip', function () {
   });
   describe('Add new supported Token', () => {
     it('Add token', async function () {
+      expect(await qoistip.supportedToken(anqToken.address)).to.equal(false);
       await qoistip.addSuportedToken(anqToken.address);
       expect(await qoistip.supportedToken(anqToken.address)).to.equal(true);
+    });
+    it('Send donate', async function () {
+      expect(await qoistip.customerBalance(addr1.address, anqToken.address)).to.equal(0);
+
+      await anqToken.approve(qoistip.address, parseUnits('781'));
+      await qoistip.donate(addr1.address, anqToken.address, parseUnits('781'));
+
+      expect(await qoistip.customerBalance(addr1.address, anqToken.address)).to.equal(parseUnits('757.57'));
+      expect(await qoistip.customerBalance(qoistip.address, anqToken.address)).to.equal(
+        parseUnits('781').sub(parseUnits('757.57')),
+      );
     });
   });
 });

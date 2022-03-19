@@ -31,12 +31,12 @@ contract Qoistip is Ownable {
         return (_amount * fee) / 10000;
     }
 
-    function customerBalance(address _tokenAddress)
+    function customerBalance(address _customerAddress, address _tokenAddress)
         external
         view
         returns (uint256 balance)
     {
-        return customerToTokenToBalance[msg.sender][_tokenAddress];
+        return customerToTokenToBalance[_customerAddress][_tokenAddress];
     }
 
     function addSuportedToken(address _tokenAddress) external {
@@ -53,10 +53,10 @@ contract Qoistip is Ownable {
         return supportedTokens[_tokenAddress];
     }
 
-    function handleDonate(
+    function donate(
+        address _addressToTip,
         address _tokenAddress,
-        uint256 _tokenAmount,
-        address _addressToTip
+        uint256 _tokenAmount
     ) external returns (bool success) {
         require(_addressToTip != address(0), "Can not send to 0 address");
         require(supportedTokens[_tokenAddress], "Not supported token");
@@ -65,11 +65,11 @@ contract Qoistip is Ownable {
             address(this),
             _tokenAmount
         );
-        uint256 withFee = calculateWithFee(_tokenAmount);
-        customerToTokenToBalance[_addressToTip][_tokenAddress] = withFee;
-        customerToTokenToBalance[owner()][_tokenAddress] =
+        uint256 _withFee = calculateWithFee(_tokenAmount);
+        customerToTokenToBalance[_addressToTip][_tokenAddress] = _withFee;
+        customerToTokenToBalance[address(this)][_tokenAddress] =
             _tokenAmount -
-            withFee;
+            _withFee;
         return true;
     }
 }
