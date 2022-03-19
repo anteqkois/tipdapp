@@ -12,9 +12,11 @@ contract Qoistip is Ownable {
 
     /// 99=>1%,  0,1%=>999  0,03% => 997
     // address USDT = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
+    //TODO change customerToTokenToBalance, customerETHBalance and donate function name
     uint256 fee;
     mapping(address => bool) supportedTokens;
     mapping(address => mapping(address => uint256)) customerToTokenToBalance;
+    mapping(address => uint256) customerETHBalance;
 
     event NewSuportedToken(address newSuportedToken);
     event NewDonate(
@@ -38,15 +40,22 @@ contract Qoistip is Ownable {
         return (_amount * fee) / 10000;
     }
 
-    function customerBalance(address _customerAddress, address _tokenAddress)
+    function customerBalanceERC20(
+        address _customerAddress,
+        address _tokenAddress
+    ) external view returns (uint256 balance) {
+        return customerToTokenToBalance[_customerAddress][_tokenAddress];
+    }
+
+    function customerBalanceETH(address _customerAddress)
         external
         view
         returns (uint256 balance)
     {
-        return customerToTokenToBalance[_customerAddress][_tokenAddress];
+        return customerETHBalance[_customerAddress];
     }
 
-    function addSuportedToken(address _tokenAddress) external {
+    function addSuportedToken(address _tokenAddress) external onlyOwner {
         require(supportedTokens[_tokenAddress] == false);
         supportedTokens[_tokenAddress] = true;
         emit NewSuportedToken(_tokenAddress);
@@ -60,13 +69,14 @@ contract Qoistip is Ownable {
         return supportedTokens[_tokenAddress];
     }
 
-    function donate(
+    function donateERC20(
         address _addressToDonate,
         address _tokenAddress,
         uint256 _tokenAmount
     ) external returns (bool success) {
         require(_addressToDonate != address(0), "Can not send to 0 address");
         require(supportedTokens[_tokenAddress], "Not supported token");
+        // require(_tokenAmount != 0, "Donate tokens amount can not be 0");
         IERC20(_tokenAddress).transferFrom(
             msg.sender,
             address(this),
@@ -86,7 +96,28 @@ contract Qoistip is Ownable {
         return true;
     }
 
-    function withdraw(address _tokenAddress) public {
+    function donateETH(address _addressToDonate)
+        external
+        payable
+        returns (bool success)
+    {
+        uint256 _value = msg.value;
+        require(_addressToDonate != address(0), "Can not send to 0 address");
+        require(_value != 0, "Donate tokens amount can not be 0");
+
+        uint256 _withFee = calculateWithFee(_value);
+        customerETHBalance[_addressToDonate] = _withFee;
+        customerETHBalance[address(this)] = _value - _withFee;
+        // emit NewDonate(
+        //     msg.sender,
+        //     _addressToDonate,
+        //     _tokenAddress,
+        //     _value
+        // );
+        return true;
+    }
+
+    function withdrawERC20(address _tokenAddress) public {
         uint256 _tokenBalance = customerToTokenToBalance[msg.sender][
             _tokenAddress
         ];
@@ -95,12 +126,12 @@ contract Qoistip is Ownable {
         IERC20(_tokenAddress).transfer(msg.sender, _tokenBalance);
     }
 
-    function withdrawMany(
-        address[] memory _tokenAddress
-    ) external {
+    function withdrawETH(address _tokenAddress) public {}
+
+    function withdrawManyERC20(address[] memory _tokenAddress) external {
         uint256 _iteration = _tokenAddress.length;
         for (uint256 _i = 0; _i < _iteration; _i++) {
-            withdraw(_tokenAddress[_i]);
+            withdrawERC20(_tokenAddress[_i]);
         }
     }
 }
