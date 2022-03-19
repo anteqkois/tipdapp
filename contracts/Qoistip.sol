@@ -111,9 +111,10 @@ contract Qoistip is Ownable {
         uint256 _tokenBalance = addressToTokenToBalance[msg.sender][
             _tokenAddress
         ];
-        require(_tokenBalance != 0, "You have 0 tokens on balance");
+        require(_tokenBalance > 0, "You have 0 tokens on balance");
         addressToTokenToBalance[msg.sender][_tokenAddress] = 0;
         IERC20(_tokenAddress).transfer(msg.sender, _tokenBalance);
+        emit Withdraw(msg.sender, _tokenAddress, _tokenBalance);
     }
 
     function withdrawManyERC20(address[] memory _tokenAddress) external {
@@ -125,9 +126,10 @@ contract Qoistip is Ownable {
 
     function withdrawETH() public {
         uint256 _ethBalance = BalanceETH[msg.sender];
-        require(_ethBalance >= 0, "Your have not ETH on contract balance");
+        require(_ethBalance > 0, "You have 0 ETH");
         BalanceETH[msg.sender] = 0;
         (bool sent, ) = address(msg.sender).call{value: _ethBalance}("");
         require(sent, "Failed to send Ether");
+        emit Withdraw(msg.sender, address(0), _ethBalance);
     }
 }
