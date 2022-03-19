@@ -12,14 +12,13 @@ contract Qoistip is Ownable {
 
     /// 99=>1%,  0,1%=>999  0,03% => 997
     // address USDT = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
-    //TODO change customerToTokenToBalance, customerETHBalance and donate function name
     uint256 fee;
     mapping(address => bool) supportedTokens;
-    mapping(address => mapping(address => uint256)) customerToTokenToBalance;
-    mapping(address => uint256) customerETHBalance;
+    mapping(address => mapping(address => uint256)) addressToTokenToBalance;
+    mapping(address => uint256) BalanceETH;
 
     event NewSuportedToken(address newSuportedToken);
-    event NewDonate(
+    event Donate(
         address donator,
         address addressToDonate,
         address tokenAddress,
@@ -40,19 +39,20 @@ contract Qoistip is Ownable {
         return (_amount * fee) / 10000;
     }
 
-    function customerBalanceERC20(
-        address _customerAddress,
-        address _tokenAddress
-    ) external view returns (uint256 balance) {
-        return customerToTokenToBalance[_customerAddress][_tokenAddress];
-    }
-
-    function customerBalanceETH(address _customerAddress)
+    function balanceOfERC20(address _customerAddress, address _tokenAddress)
         external
         view
         returns (uint256 balance)
     {
-        return customerETHBalance[_customerAddress];
+        return addressToTokenToBalance[_customerAddress][_tokenAddress];
+    }
+
+    function balanceOfETH(address _customerAddress)
+        external
+        view
+        returns (uint256 balance)
+    {
+        return BalanceETH[_customerAddress];
     }
 
     function addSuportedToken(address _tokenAddress) external onlyOwner {
@@ -76,23 +76,18 @@ contract Qoistip is Ownable {
     ) external returns (bool success) {
         require(_addressToDonate != address(0), "Can not send to 0 address");
         require(supportedTokens[_tokenAddress], "Not supported token");
-        // require(_tokenAmount != 0, "Donate tokens amount can not be 0");
+        require(_tokenAmount != 0, "Donate tokens amount can not be 0");
         IERC20(_tokenAddress).transferFrom(
             msg.sender,
             address(this),
             _tokenAmount
         );
         uint256 _withFee = calculateWithFee(_tokenAmount);
-        customerToTokenToBalance[_addressToDonate][_tokenAddress] = _withFee;
-        customerToTokenToBalance[address(this)][_tokenAddress] =
+        addressToTokenToBalance[_addressToDonate][_tokenAddress] = _withFee;
+        addressToTokenToBalance[address(this)][_tokenAddress] =
             _tokenAmount -
             _withFee;
-        emit NewDonate(
-            msg.sender,
-            _addressToDonate,
-            _tokenAddress,
-            _tokenAmount
-        );
+        emit Donate(msg.sender, _addressToDonate, _tokenAddress, _tokenAmount);
         return true;
     }
 
@@ -106,32 +101,33 @@ contract Qoistip is Ownable {
         require(_value != 0, "Donate tokens amount can not be 0");
 
         uint256 _withFee = calculateWithFee(_value);
-        customerETHBalance[_addressToDonate] = _withFee;
-        customerETHBalance[address(this)] = _value - _withFee;
-        // emit NewDonate(
-        //     msg.sender,
-        //     _addressToDonate,
-        //     _tokenAddress,
-        //     _value
-        // );
+        BalanceETH[_addressToDonate] = _withFee;
+        BalanceETH[address(this)] = _value - _withFee;
+        emit Donate(msg.sender, _addressToDonate, address(0), _value);
         return true;
     }
 
     function withdrawERC20(address _tokenAddress) public {
-        uint256 _tokenBalance = customerToTokenToBalance[msg.sender][
+        uint256 _tokenBalance = addressToTokenToBalance[msg.sender][
             _tokenAddress
         ];
         require(_tokenBalance != 0, "You have 0 tokens on balance");
-        customerToTokenToBalance[msg.sender][_tokenAddress] = 0;
+        addressToTokenToBalance[msg.sender][_tokenAddress] = 0;
         IERC20(_tokenAddress).transfer(msg.sender, _tokenBalance);
     }
-
-    function withdrawETH(address _tokenAddress) public {}
 
     function withdrawManyERC20(address[] memory _tokenAddress) external {
         uint256 _iteration = _tokenAddress.length;
         for (uint256 _i = 0; _i < _iteration; _i++) {
             withdrawERC20(_tokenAddress[_i]);
         }
+    }
+
+    function withdrawETH() public {
+        uint256 _ethBalance = BalanceETH[msg.sender];
+        require(_ethBalance >= 0, "Your have not ETH on contract balance");
+        BalanceETH[msg.sender] = 0;
+        (bool sent, ) = address(msg.sender).call{value: _ethBalance}("");
+        require(sent, "Failed to send Ether");
     }
 }
