@@ -16,7 +16,14 @@ contract Qoistip is Ownable {
     mapping(address => bool) supportedTokens;
     mapping(address => mapping(address => uint256)) customerToTokenToBalance;
 
-    event newSuportedToken(address newSuportedToken);
+    event NewSuportedToken(address newSuportedToken);
+    event NewDonate(
+        address donator,
+        address addressToDonate,
+        address tokenAddress,
+        uint256 tokenAmount
+    );
+    event Withdraw(address customer, address tokenAddress, uint256 tokenAmount);
 
     constructor(uint256 _fee) {
         fee = _fee;
@@ -42,7 +49,7 @@ contract Qoistip is Ownable {
     function addSuportedToken(address _tokenAddress) external {
         require(supportedTokens[_tokenAddress] == false);
         supportedTokens[_tokenAddress] = true;
-        emit newSuportedToken(_tokenAddress);
+        emit NewSuportedToken(_tokenAddress);
     }
 
     function supportedToken(address _tokenAddress)
@@ -54,11 +61,11 @@ contract Qoistip is Ownable {
     }
 
     function donate(
-        address _addressToTip,
+        address _addressToDonate,
         address _tokenAddress,
         uint256 _tokenAmount
     ) external returns (bool success) {
-        require(_addressToTip != address(0), "Can not send to 0 address");
+        require(_addressToDonate != address(0), "Can not send to 0 address");
         require(supportedTokens[_tokenAddress], "Not supported token");
         IERC20(_tokenAddress).transferFrom(
             msg.sender,
@@ -66,10 +73,34 @@ contract Qoistip is Ownable {
             _tokenAmount
         );
         uint256 _withFee = calculateWithFee(_tokenAmount);
-        customerToTokenToBalance[_addressToTip][_tokenAddress] = _withFee;
+        customerToTokenToBalance[_addressToDonate][_tokenAddress] = _withFee;
         customerToTokenToBalance[address(this)][_tokenAddress] =
             _tokenAmount -
             _withFee;
+        emit NewDonate(
+            msg.sender,
+            _addressToDonate,
+            _tokenAddress,
+            _tokenAmount
+        );
         return true;
+    }
+
+    function withdraw(address _tokenAddress) public {
+        uint256 _tokenBalance = customerToTokenToBalance[msg.sender][
+            _tokenAddress
+        ];
+        require(_tokenBalance != 0, "You have 0 tokens on balance");
+        customerToTokenToBalance[msg.sender][_tokenAddress] = 0;
+        IERC20(_tokenAddress).transfer(msg.sender, _tokenBalance);
+    }
+
+    function withdrawMany(
+        address[] memory _tokenAddress
+    ) external {
+        uint256 _iteration = _tokenAddress.length;
+        for (uint256 _i = 0; _i < _iteration; _i++) {
+            withdraw(_tokenAddress[_i]);
+        }
     }
 }
