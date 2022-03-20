@@ -18,7 +18,7 @@
     "start": "next start",
     "commit": "git add . && cz",
     "postcommit": "git push",
-    "test":"npx hardhat test",
+    "test": "npx hardhat test",
     "lint": "next lint",
     "release": "standard-version"
   },
@@ -26,6 +26,7 @@
     "@openzeppelin/contracts": "^4.5.0",
     "@reduxjs/toolkit": "^1.8.0",
     "axios": "^0.26.0",
+    "dotenv": "^16.0.0",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -43,6 +44,7 @@
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.6.0",
     "hardhat": "^2.9.1",
+    "hardhat-gas-reporter": "^1.0.8",
     "postcss": "^8.4.7",
     "standard-version": "^9.3.2",
     "tailwindcss": "^3.0.23"

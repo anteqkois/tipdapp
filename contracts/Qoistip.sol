@@ -19,12 +19,16 @@ contract Qoistip is Ownable {
 
     event NewSuportedToken(address newSuportedToken);
     event Donate(
-        address donator,
-        address addressToDonate,
+        address indexed donator,
+        address indexed addressToDonate,
         address tokenAddress,
         uint256 tokenAmount
     );
-    event Withdraw(address customer, address tokenAddress, uint256 tokenAmount);
+    event Withdraw(
+        address indexed customer,
+        address tokenAddress,
+        uint256 tokenAmount
+    );
 
     constructor(uint256 _fee) {
         fee = _fee;
