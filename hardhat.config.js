@@ -22,6 +22,10 @@ module.exports = {
   defaultNetwork: 'hardhat',
   networks: {
     hardhat: {
+      forking: {
+        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
+      },
+
       // chainId: 1337,
       accounts: {
         // mnemonic: 'qoisdapp',
@@ -64,6 +68,6 @@ module.exports = {
     // gasPrice: 21,
   },
   mocha: {
-    timeout: 20000,
+    timeout: 200000,
   },
 };

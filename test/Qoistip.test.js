@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const { ethers } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
 
-describe('Qoistip', function () {
+xdescribe('Qoistip', function () {
   let qoistip;
   let anqToken;
   let token2;
