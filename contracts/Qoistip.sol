@@ -6,18 +6,18 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-/** @title In the future, working name for now */
 contract Qoistip is Ownable {
     using SafeMath for uint256;
 
     /// 99=>1%,  0,1%=>999  0,03% => 997
-    // address USDT = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
     uint256 fee;
     mapping(address => bool) supportedTokens;
     mapping(address => mapping(address => uint256)) addressToTokenToBalance;
     mapping(address => uint256) BalanceETH;
 
-    event NewSuportedToken(address newSuportedToken);
+    mapping(address => address) addressToTokenContract;
+    address[] tokenContract;
+
     event Donate(
         address indexed donator,
         address indexed addressToDonate,
@@ -35,11 +35,12 @@ contract Qoistip is Ownable {
     }
 
     function setFee(uint256 _fee) external onlyOwner {
+        //add some limit, for exampple new fee must < +10%, or fee <20% ?
         require(_fee < 10000);
         fee = _fee;
     }
 
-    function calculateWithFee(uint256 _amount) public view returns (uint256) {
+    function calculateWithFee(uint256 _amount) internal view returns (uint256) {
         return (_amount * fee) / 10000;
     }
 
@@ -60,9 +61,9 @@ contract Qoistip is Ownable {
     }
 
     function addSuportedToken(address _tokenAddress) external onlyOwner {
+        // check cost of checking data and write, and only write
         require(supportedTokens[_tokenAddress] == false);
         supportedTokens[_tokenAddress] = true;
-        emit NewSuportedToken(_tokenAddress);
     }
 
     function supportedToken(address _tokenAddress)
@@ -136,4 +137,6 @@ contract Qoistip is Ownable {
         require(sent, "Failed to send Ether");
         emit Withdraw(msg.sender, address(0), _ethBalance);
     }
+
+    function registerCustomer() external {}
 }
