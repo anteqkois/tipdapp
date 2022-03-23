@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const { ethers } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
 
-xdescribe('Qoistip', function () {
+describe('Qoistip', function () {
   let qoistip;
   let anqToken;
   let token2;
@@ -15,7 +15,8 @@ xdescribe('Qoistip', function () {
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
     const Qoistip = await ethers.getContractFactory('Qoistip');
-    qoistip = await Qoistip.deploy(9951);
+    // qoistip = await Qoistip.deploy(9951);
+    qoistip = await Qoistip.deploy(9700);
 
     const ANQToken = await ethers.getContractFactory('ANQToken');
     anqToken = await ANQToken.deploy();
@@ -23,7 +24,8 @@ xdescribe('Qoistip', function () {
     token2 = await Token2.deploy();
   });
 
-  describe('Math', () => {
+  //calculateWithFee is internal now
+  xdescribe('Math', () => {
     it('Calculate 0,49% fee with divisible number', async function () {
       expect(await qoistip.calculateWithFee(parseUnits('100'))).to.equal(parseUnits('99.51'));
     });
@@ -46,7 +48,9 @@ xdescribe('Qoistip', function () {
       expect(await qoistip.supportedToken(anqToken.address)).to.equal(false);
     });
     it('Add token and check if is suported', async function () {
-      await expect(qoistip.addSuportedToken(anqToken.address)).to.emit(qoistip, 'NewSuportedToken').withArgs(anqToken.address);
+      //deleted emit event, it's usefull
+      // await expect(qoistip.addSuportedToken(anqToken.address)).to.emit(qoistip, 'NewSuportedToken').withArgs(anqToken.address);
+      await qoistip.addSuportedToken(anqToken.address);
       expect(await qoistip.supportedToken(anqToken.address)).to.equal(true);
     });
     it('Only owner can add new supported token', async function () {
