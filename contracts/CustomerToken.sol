@@ -6,19 +6,21 @@ contract CustomerToken {
 
     mapping(address => mapping(address => uint256)) private _allowances;
 
+    // max = 10mln tokens
+    // uint256 private constant _maxSupply = 10_000_000 * 10**18;
+    uint256 private immutable _maxSupply;
     uint256 private _totalSupply;
-    // uint256 private immutable _maxSupply;
-    uint256 private _maxSupply;
 
     // string private immutable _symbol;
     // string private immutable _name;
     string private _symbol;
     string private _name;
 
-    constructor(string memory name_, string memory symbol_) {
+    constructor(string memory name_, string memory symbol_, uint maxSupply_) {
         _name = name_;
         _symbol = symbol_;
-        _mint(msg.sender, 1_000 * 10**18);
+        _maxSupply = maxSupply_;
+        // _mint(msg.sender, 1_000 * 10**18);
     }
 
     event Transfer(address indexed from, address indexed to, uint256 value);
@@ -130,8 +132,10 @@ contract CustomerToken {
         emit Transfer(from, to, amount);
     }
 
-    function _mint(address account, uint256 amount) internal {
-        require(account != address(0), "ERC20: mint to the zero address");
+    // switch after to internal, in Factory pattern
+    function _mint(address account, uint256 amount) external {
+        require(totalSupply() + amount <= maxSupply(), "ERC20: mint to the zero address");
+        // require(account != address(0), "ERC20: mint to the zero address");
 
         _totalSupply += amount;
         _balances[account] += amount;

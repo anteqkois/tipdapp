@@ -22,7 +22,15 @@ describe('Qoistip', function () {
     anqToken = await ANQToken.deploy();
     const Token2 = await ethers.getContractFactory('Token2');
     token2 = await Token2.deploy();
+    const CustomerToken = await ethers.getContractFactory('CustomerToken');
+    customerToken = await CustomerToken.deploy('CST', 'CustomerToken', parseUnits('100000000'));
   });
+
+  describe('Test CustomerTokenGas', async()=>{
+    it('gas', async ()=>{
+      console.log(await customerToken._mint(addr1.address, parseUnits('100')));
+    })
+  })
 
   //calculateWithFee is internal now
   xdescribe('Math', () => {
@@ -43,7 +51,7 @@ describe('Qoistip', function () {
       expect(await qoistip.calculateWithFee(781)).to.equal(757);
     });
   });
-  describe('Add new supported Token', () => {
+  xdescribe('Add new supported Token', () => {
     it('Check if not suported', async function () {
       expect(await qoistip.supportedToken(anqToken.address)).to.equal(false);
     });
@@ -61,7 +69,7 @@ describe('Qoistip', function () {
       expect(await qoistip.supportedToken(token2.address)).to.equal(true);
     });
   });
-  describe('Donate ERC20', () => {
+  xdescribe('Donate ERC20', () => {
     it('Check balance before donate', async function () {
       expect(await qoistip.balanceOfERC20(addr1.address, anqToken.address)).to.equal(0);
     });
@@ -78,7 +86,7 @@ describe('Qoistip', function () {
       );
     });
   });
-  describe('Donate ETH', () => {
+  xdescribe('Donate ETH', () => {
     it('Check balance before donate', async function () {
       expect(await qoistip.balanceOfETH(addr1.address)).to.be.equal(0);
     });
@@ -94,7 +102,7 @@ describe('Qoistip', function () {
       expect(await qoistip.balanceOfETH(qoistip.address)).to.be.equal(parseUnits('0.03'));
     });
   });
-  describe('Withdraw ERC20', () => {
+  xdescribe('Withdraw ERC20', () => {
     //TODO check events
     it('One ERC20 Token', async function () {
       expect(await qoistip.balanceOfERC20(addr1.address, anqToken.address)).to.equal(parseUnits('757.57'));
@@ -124,7 +132,7 @@ describe('Qoistip', function () {
       await expect(qoistip.connect(addr1).withdrawERC20(anqToken.address)).to.be.revertedWith('You have 0 tokens on balance');
     });
   });
-  describe('Withdraw ETH', () => {
+  xdescribe('Withdraw ETH', () => {
     it('One ERC20 Token', async function () {
       expect(await qoistip.balanceOfETH(addr1.address)).to.equal(parseUnits('0.97'));
       const tx = await qoistip.connect(addr1).withdrawETH();

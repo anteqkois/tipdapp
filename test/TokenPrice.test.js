@@ -3,7 +3,7 @@ const { ethers } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
 const { UniswapPairAddress } = require('../constant');
 
-describe('TokenPrice', function () {
+xdescribe('TokenPrice', function () {
   let tokenPrice;
   let owner;
   let addr1;
