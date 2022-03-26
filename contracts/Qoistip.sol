@@ -160,12 +160,15 @@ contract Qoistip is Ownable {
         string memory _tokenSymbol,
         string memory _tokenName,
         uint256 _maxSupply
-    ) external {
+    ) external returns(address){
         CustomerToken _newToken = new CustomerToken(
             _tokenSymbol,
             _tokenName,
             _maxSupply
         );
-        tokenCustomer[msg.sender] = address(_newToken);
+        address _newTokenAddress = address(_newToken); 
+        tokenCustomer[msg.sender] = _newTokenAddress;
+        // add Event
+        return _newTokenAddress;
     }
 }

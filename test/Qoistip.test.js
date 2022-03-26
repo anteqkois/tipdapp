@@ -2,11 +2,13 @@ const { expect } = require('chai');
 const { ethers } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
 const { UniswapPairAddress } = require('../constant');
+const CustomerToken = require('../artifacts/contracts/CustomerToken.sol/CustomerToken.json')
 
 describe('Qoistip', function () {
   let qoistip;
   let anqToken;
   let tokenPrice;
+  let customerToken1;
   let token2;
   let owner;
   let addr1;
@@ -67,6 +69,14 @@ describe('Qoistip', function () {
       expect(await qoistip.supportedToken(token2.address)).to.equal(false);
     });
   });
+
+  describe('New customer', async()=>{
+    it('Register new customer', async ()=>{
+      const customerToken1Address = await qoistip.registerCustomer('CT1', 'CustomerToken1', parseUnits('1000000'));
+      customerToken1 = new ethers.Contract(customerToken1Address, CustomerToken.abi, ethers.provider);
+
+    })
+  })
 
   xdescribe('Donate ERC20', () => {
     it('Check balance before donate', async function () {
