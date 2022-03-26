@@ -1,22 +1,30 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract CustomerToken {
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract CustomerToken is Ownable {
     mapping(address => uint256) private _balances;
 
     mapping(address => mapping(address => uint256)) private _allowances;
 
-    // max = 10mln tokens
     // uint256 private constant _maxSupply = 10_000_000 * 10**18;
     uint256 private immutable _maxSupply;
     uint256 private _totalSupply;
 
-    // string private immutable _symbol;
-    // string private immutable _name;
     string private _symbol;
     string private _name;
 
-    constructor(string memory name_, string memory symbol_, uint maxSupply_) {
+    constructor(
+        string memory symbol_,
+        string memory name_,
+        uint256 maxSupply_
+    ) {
+        //  1mln <= maxSupply_ <= 100mln
+        require(
+            (maxSupply_ <= 100_000_000 * 10**18) &&
+                (maxSupply_ >= 1_000_000 * 10**18)
+        );
         _name = name_;
         _symbol = symbol_;
         _maxSupply = maxSupply_;
@@ -38,7 +46,7 @@ contract CustomerToken {
         return _symbol;
     }
 
-    function decimals() public view returns (uint8) {
+    function decimals() public pure returns (uint8) {
         return 18;
     }
 
@@ -133,8 +141,12 @@ contract CustomerToken {
     }
 
     // switch after to internal, in Factory pattern
-    function _mint(address account, uint256 amount) external {
-        require(totalSupply() + amount <= maxSupply(), "ERC20: mint to the zero address");
+    function mint(address account, uint256 amount) external onlyOwner {
+        require(
+            totalSupply() + amount <= maxSupply(),
+            "ERC20: max token supply were minted"
+        );
+        // nie będzie możliwości by wywołąć tą funkcję do mintowani do adresu 0
         // require(account != address(0), "ERC20: mint to the zero address");
 
         _totalSupply += amount;

@@ -1,22 +1,26 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "./TokenPrice.sol";
+import "./CustomerToken.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+// import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Qoistip is Ownable {
-    using SafeMath for uint256;
+    // using SafeMath for uint256;
 
     /// 99=>1%,  0,1%=>999  0,03% => 997
     uint256 fee;
-    mapping(address => bool) supportedTokens;
+    TokenPrice private _tokenPrice;
+    // mapping(address => bool) supportedTokens;
+    mapping(address => address) tokenPair;
+    mapping(address => address) tokenCustomer;
     mapping(address => mapping(address => uint256)) addressToTokenToBalance;
     mapping(address => uint256) BalanceETH;
-
-    mapping(address => address) addressToTokenContract;
-    address[] tokenContract;
+    // address[] tokenContract;
 
     event Donate(
         address indexed donator,
@@ -30,8 +34,11 @@ contract Qoistip is Ownable {
         uint256 tokenAmount
     );
 
-    constructor(uint256 _fee) {
+    constructor(uint256 _fee, address tokenPrice_) {
         fee = _fee;
+        // check who chepaer
+        // _tokenPrice = tokenPrice_;
+        _tokenPrice = TokenPrice(tokenPrice_);
     }
 
     function setFee(uint256 _fee) external onlyOwner {
@@ -60,10 +67,13 @@ contract Qoistip is Ownable {
         return BalanceETH[_customerAddress];
     }
 
-    function addSuportedToken(address _tokenAddress) external onlyOwner {
+    function setSuportedToken(address _tokenAddress, address _pairAddress)
+        external
+        onlyOwner
+    {
         // check cost of checking data and write, and only write
-        require(supportedTokens[_tokenAddress] == false);
-        supportedTokens[_tokenAddress] = true;
+        // require(supportedTokens[_tokenAddress] == false);
+        tokenPair[_tokenAddress] = _pairAddress;
     }
 
     function supportedToken(address _tokenAddress)
@@ -71,7 +81,7 @@ contract Qoistip is Ownable {
         view
         returns (bool)
     {
-        return supportedTokens[_tokenAddress];
+        return tokenPair[_tokenAddress] != address(0);
     }
 
     function donateERC20(
@@ -80,7 +90,7 @@ contract Qoistip is Ownable {
         uint256 _tokenAmount
     ) external returns (bool success) {
         require(_addressToDonate != address(0), "Can not send to 0 address");
-        require(supportedTokens[_tokenAddress], "Not supported token");
+        require(tokenPair[_tokenAddress] != address(0), "Not supported token");
         require(_tokenAmount != 0, "Donate tokens amount can not be 0");
         IERC20(_tokenAddress).transferFrom(
             msg.sender,
@@ -92,6 +102,14 @@ contract Qoistip is Ownable {
         addressToTokenToBalance[address(this)][_tokenAddress] =
             _tokenAmount -
             _withFee;
+        uint256 tokenToMint = _tokenPrice.getTokenPrice(
+            tokenPair[_tokenAddress],
+            _tokenAmount
+        );
+        CustomerToken(tokenCustomer[_addressToDonate]).mint(
+            msg.sender,
+            tokenToMint
+        );
         emit Donate(msg.sender, _addressToDonate, _tokenAddress, _tokenAmount);
         return true;
     }
@@ -138,5 +156,16 @@ contract Qoistip is Ownable {
         emit Withdraw(msg.sender, address(0), _ethBalance);
     }
 
-    function registerCustomer() external {}
+    function registerCustomer(
+        string memory _tokenSymbol,
+        string memory _tokenName,
+        uint256 _maxSupply
+    ) external {
+        CustomerToken _newToken = new CustomerToken(
+            _tokenSymbol,
+            _tokenName,
+            _maxSupply
+        );
+        tokenCustomer[msg.sender] = address(_newToken);
+    }
 }
