@@ -56,6 +56,7 @@ module.exports = {
     artifacts: './artifacts',
   },
   gasReporter: {
+    enabled: true,
     currency: 'USD',
     maxMethodDiff: 20,
     // coinmarketcap: process.env.COINMARKETCAP_API_KEY,

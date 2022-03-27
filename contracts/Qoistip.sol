@@ -1,26 +1,29 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./TokenPrice.sol";
 import "./CustomerToken.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-
-// import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Qoistip is Ownable {
-    // using SafeMath for uint256;
-
     /// 99=>1%,  0,1%=>999  0,03% => 997
+    
     uint256 fee;
-    TokenPrice private _tokenPrice;
-    // mapping(address => bool) supportedTokens;
-    mapping(address => address) tokenPair;
+    struct PriceOracle{
+        address addressFeed;
+        // flags inUSD/chaiLinkHaveOracle/ (Not use to packing strucn <32 Bits, in future check gas when these are read ?)
+        // uint8 flags;
+        bool inUSD;
+        bool chaiLinkOracle;
+    }
+
+    // mapping(address => address) chailinkAddressTokenFeed;
+    // mapping(address => ChailinkPriceFeed) chailinkAddressTokenFeed;
+    mapping(address => PriceOracle) addressToPriceOracle;
     mapping(address => address) tokenCustomer;
     mapping(address => mapping(address => uint256)) addressToTokenToBalance;
     mapping(address => uint256) BalanceETH;
-    // address[] tokenContract;
 
     event Donate(
         address indexed donator,
@@ -34,11 +37,8 @@ contract Qoistip is Ownable {
         uint256 tokenAmount
     );
 
-    constructor(uint256 _fee, address tokenPrice_) {
+    constructor(uint256 _fee) {
         fee = _fee;
-        // check who chepaer
-        // _tokenPrice = tokenPrice_;
-        _tokenPrice = TokenPrice(tokenPrice_);
     }
 
     function setFee(uint256 _fee) external onlyOwner {
@@ -67,30 +67,48 @@ contract Qoistip is Ownable {
         return BalanceETH[_customerAddress];
     }
 
-    function setSuportedToken(address _tokenAddress, address _pairAddress)
+    function setPriceOracle(address _tokenAddress, address _oracleAddress, bool _inUSD, bool _chailinkOracle)
         external
         onlyOwner
     {
         // check cost of checking data and write, and only write
-        // require(supportedTokens[_tokenAddress] == false);
-        tokenPair[_tokenAddress] = _pairAddress;
+        addressToPriceOracle[_tokenAddress] = PriceOracle(_oracleAddress, _inUSD, _chailinkOracle);
     }
 
-    function supportedToken(address _tokenAddress)
+    function priceOracle(address _tokenAddress)
         external
         view
-        returns (bool)
+        returns(PriceOracle memory)
     {
-        return tokenPair[_tokenAddress] != address(0);
+        return addressToPriceOracle[_tokenAddress];
     }
 
+    function _getTokenPrice() private returns(uint price){
+
+    }
+
+    function registerCustomer(
+        string memory _tokenSymbol,
+        string memory _tokenName,
+        uint256 _maxSupply
+    ) external returns(address){
+        CustomerToken _newToken = new CustomerToken(
+            _tokenSymbol,
+            _tokenName,
+            _maxSupply
+        );
+        address _newTokenAddress = address(_newToken); 
+        tokenCustomer[msg.sender] = _newTokenAddress;
+        // add Event
+        return _newTokenAddress;
+    }
     function donateERC20(
         address _addressToDonate,
         address _tokenAddress,
         uint256 _tokenAmount
     ) external returns (bool success) {
         require(_addressToDonate != address(0), "Can not send to 0 address");
-        require(tokenPair[_tokenAddress] != address(0), "Not supported token");
+        // require(tokenPair[_tokenAddress] != address(0), "Not supported token");
         require(_tokenAmount != 0, "Donate tokens amount can not be 0");
         IERC20(_tokenAddress).transferFrom(
             msg.sender,
@@ -102,14 +120,11 @@ contract Qoistip is Ownable {
         addressToTokenToBalance[address(this)][_tokenAddress] =
             _tokenAmount -
             _withFee;
-        uint256 tokenToMint = _tokenPrice.getTokenPrice(
-            tokenPair[_tokenAddress],
-            _tokenAmount
-        );
-        CustomerToken(tokenCustomer[_addressToDonate]).mint(
-            msg.sender,
-            tokenToMint
-        );
+        // uint256 tokenToMint = 
+        // CustomerToken(tokenCustomer[_addressToDonate]).mint(
+        //     msg.sender,
+        //     tokenToMint
+        // );
         emit Donate(msg.sender, _addressToDonate, _tokenAddress, _tokenAmount);
         return true;
     }
@@ -130,45 +145,30 @@ contract Qoistip is Ownable {
         return true;
     }
 
-    function withdrawERC20(address _tokenAddress) public {
-        uint256 _tokenBalance = addressToTokenToBalance[msg.sender][
-            _tokenAddress
-        ];
-        require(_tokenBalance > 0, "You have 0 tokens on balance");
-        addressToTokenToBalance[msg.sender][_tokenAddress] = 0;
-        IERC20(_tokenAddress).transfer(msg.sender, _tokenBalance);
-        emit Withdraw(msg.sender, _tokenAddress, _tokenBalance);
-    }
+    // function withdrawERC20(address _tokenAddress) public {
+    //     uint256 _tokenBalance = addressToTokenToBalance[msg.sender][
+    //         _tokenAddress
+    //     ];
+    //     require(_tokenBalance > 0, "You have 0 tokens on balance");
+    //     addressToTokenToBalance[msg.sender][_tokenAddress] = 0;
+    //     IERC20(_tokenAddress).transfer(msg.sender, _tokenBalance);
+    //     emit Withdraw(msg.sender, _tokenAddress, _tokenBalance);
+    // }
 
-    function withdrawManyERC20(address[] memory _tokenAddress) external {
-        uint256 _iteration = _tokenAddress.length;
-        for (uint256 _i = 0; _i < _iteration; _i++) {
-            withdrawERC20(_tokenAddress[_i]);
-        }
-    }
+    // function withdrawManyERC20(address[] memory _tokenAddress) external {
+    //     uint256 _iteration = _tokenAddress.length;
+    //     for (uint256 _i = 0; _i < _iteration; _i++) {
+    //         withdrawERC20(_tokenAddress[_i]);
+    //     }
+    // }
 
-    function withdrawETH() public {
-        uint256 _ethBalance = BalanceETH[msg.sender];
-        require(_ethBalance > 0, "You have 0 ETH");
-        BalanceETH[msg.sender] = 0;
-        (bool sent, ) = address(msg.sender).call{value: _ethBalance}("");
-        require(sent, "Failed to send Ether");
-        emit Withdraw(msg.sender, address(0), _ethBalance);
-    }
+    // function withdrawETH() public {
+    //     uint256 _ethBalance = BalanceETH[msg.sender];
+    //     require(_ethBalance > 0, "You have 0 ETH");
+    //     BalanceETH[msg.sender] = 0;
+    //     (bool sent, ) = address(msg.sender).call{value: _ethBalance}("");
+    //     require(sent, "Failed to send Ether");
+    //     emit Withdraw(msg.sender, address(0), _ethBalance);
+    // }
 
-    function registerCustomer(
-        string memory _tokenSymbol,
-        string memory _tokenName,
-        uint256 _maxSupply
-    ) external returns(address){
-        CustomerToken _newToken = new CustomerToken(
-            _tokenSymbol,
-            _tokenName,
-            _maxSupply
-        );
-        address _newTokenAddress = address(_newToken); 
-        tokenCustomer[msg.sender] = _newTokenAddress;
-        // add Event
-        return _newTokenAddress;
-    }
 }

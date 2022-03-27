@@ -1,15 +1,14 @@
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
-const { UniswapPairAddress } = require('../constant');
-const CustomerToken = require('../artifacts/contracts/CustomerToken.sol/CustomerToken.json')
+const { UniswapPairAddress } = require('../../constant');
+const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json')
 
 describe('Qoistip', function () {
   let qoistip;
-  let anqToken;
-  let tokenPrice;
   let customerToken1;
-  let token2;
+  // let anqToken;
+  // let token2;
   let owner;
   let addr1;
   let addr2;
@@ -18,16 +17,13 @@ describe('Qoistip', function () {
   before(async () => {
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
-    const TokenPrice = await ethers.getContractFactory('contracts/TokenPrice.sol:TokenPrice');
-    tokenPrice = await TokenPrice.deploy();
-
     const Qoistip = await ethers.getContractFactory('Qoistip');
     qoistip = await Qoistip.deploy(9700, tokenPrice.address);
 
-    const ANQToken = await ethers.getContractFactory('ANQToken');
-    anqToken = await ANQToken.deploy();
-    const Token2 = await ethers.getContractFactory('Token2');
-    token2 = await Token2.deploy();
+    // const ANQToken = await ethers.getContractFactory('ANQToken');
+    // anqToken = await ANQToken.deploy();
+    // const Token2 = await ethers.getContractFactory('Token2');
+    // token2 = await Token2.deploy();
     // const CustomerToken = await ethers.getContractFactory('CustomerToken');
     // customerToken = await CustomerToken.deploy('CST', 'CustomerToken', parseUnits('100000000'));
   });
@@ -70,7 +66,7 @@ describe('Qoistip', function () {
     });
   });
 
-  describe('New customer', async()=>{
+  xdescribe('New customer', async()=>{
     it('Register new customer', async ()=>{
       const customerToken1Address = await qoistip.registerCustomer('CT1', 'CustomerToken1', parseUnits('1000000'));
       customerToken1 = new ethers.Contract(customerToken1Address, CustomerToken.abi, ethers.provider);
