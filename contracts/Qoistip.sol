@@ -8,9 +8,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Qoistip is Ownable {
     /// 99=>1%,  0,1%=>999  0,03% => 997
-    
+
     uint256 fee;
-    struct PriceOracle{
+    struct PriceOracle {
         address addressFeed;
         // flags inUSD/chaiLinkHaveOracle/ (Not use to packing strucn <32 Bits, in future check gas when these are read ?)
         // uint8 flags;
@@ -18,10 +18,8 @@ contract Qoistip is Ownable {
         bool chaiLinkOracle;
     }
 
-    // mapping(address => address) chailinkAddressTokenFeed;
-    // mapping(address => ChailinkPriceFeed) chailinkAddressTokenFeed;
     mapping(address => PriceOracle) addressToPriceOracle;
-    mapping(address => address) tokenCustomer;
+    mapping(address => address) private _tokenCustomer;
     mapping(address => mapping(address => uint256)) addressToTokenToBalance;
     mapping(address => uint256) BalanceETH;
 
@@ -36,6 +34,10 @@ contract Qoistip is Ownable {
         address tokenAddress,
         uint256 tokenAmount
     );
+    event NewCustomer(
+        address customerAddress,
+        address customerToken
+    );
 
     constructor(uint256 _fee) {
         fee = _fee;
@@ -45,6 +47,14 @@ contract Qoistip is Ownable {
         //add some limit, for exampple new fee must < +10%, or fee <20% ?
         require(_fee < 10000);
         fee = _fee;
+    }
+
+    function tokenCustomer(address _customerAddress)
+        external
+        view
+        returns (address)
+    {
+        return _tokenCustomer[_customerAddress];
     }
 
     function calculateWithFee(uint256 _amount) internal view returns (uint256) {
@@ -67,41 +77,44 @@ contract Qoistip is Ownable {
         return BalanceETH[_customerAddress];
     }
 
-    function setPriceOracle(address _tokenAddress, address _oracleAddress, bool _inUSD, bool _chailinkOracle)
-        external
-        onlyOwner
-    {
+    function setPriceOracle(
+        address _tokenAddress,
+        address _oracleAddress,
+        bool _inUSD,
+        bool _chailinkOracle
+    ) external onlyOwner {
         // check cost of checking data and write, and only write
-        addressToPriceOracle[_tokenAddress] = PriceOracle(_oracleAddress, _inUSD, _chailinkOracle);
+        addressToPriceOracle[_tokenAddress] = PriceOracle(
+            _oracleAddress,
+            _inUSD,
+            _chailinkOracle
+        );
     }
 
     function priceOracle(address _tokenAddress)
         external
         view
-        returns(PriceOracle memory)
+        returns (PriceOracle memory)
     {
         return addressToPriceOracle[_tokenAddress];
     }
 
-    function _getTokenPrice() private returns(uint price){
-
-    }
+    function _getTokenPrice() private returns (uint256 price) {}
 
     function registerCustomer(
         string memory _tokenSymbol,
         string memory _tokenName,
         uint256 _maxSupply
-    ) external returns(address){
-        CustomerToken _newToken = new CustomerToken(
+    ) external {
+        address _newToken = address(new CustomerToken(
             _tokenSymbol,
             _tokenName,
             _maxSupply
-        );
-        address _newTokenAddress = address(_newToken); 
-        tokenCustomer[msg.sender] = _newTokenAddress;
-        // add Event
-        return _newTokenAddress;
+        ));
+        _tokenCustomer[msg.sender] = _newToken;
+        emit NewCustomer(msg.sender, _newToken);
     }
+
     function donateERC20(
         address _addressToDonate,
         address _tokenAddress,
@@ -120,8 +133,8 @@ contract Qoistip is Ownable {
         addressToTokenToBalance[address(this)][_tokenAddress] =
             _tokenAmount -
             _withFee;
-        // uint256 tokenToMint = 
-        // CustomerToken(tokenCustomer[_addressToDonate]).mint(
+        // uint256 tokenToMint =
+        // CustomerToken(private _tokenCustomer[_addressToDonate]).mint(
         //     msg.sender,
         //     tokenToMint
         // );
@@ -170,5 +183,4 @@ contract Qoistip is Ownable {
     //     require(sent, "Failed to send Ether");
     //     emit Withdraw(msg.sender, address(0), _ethBalance);
     // }
-
 }

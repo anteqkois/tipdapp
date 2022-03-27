@@ -56,10 +56,24 @@ describe('Qoistip', function () {
     });
   });
 
-  xdescribe('New customer', async () => {
-    it('Register new customer', async () => {
-      const customerToken1Address = await qoistip.registerCustomer('CT1', 'CustomerToken1', parseUnits('1000000'));
+  describe('New customer', async () => {
+    it('Register new customer and emit event NewCustomer', async () => {
+      const registerCustomerTransation = await qoistip
+        .connect(addr1)
+        .registerCustomer('CT1', 'CustomerToken1', parseUnits('1000000'));
+
+      registerCustomerTransation.wait();
+      const customerToken1Address = await qoistip.tokenCustomer(addr1.address);
+
+      await expect(registerCustomerTransation).to.emit(qoistip, 'NewCustomer').withArgs(addr1.address, customerToken1Address);
+      expect(customerToken1Address).to.not.equal('0x0000000000000000000000000000000000000000');
+
       customerToken1 = new ethers.Contract(customerToken1Address, CustomerToken.abi, ethers.provider);
+      expect(await customerToken1.name()).to.equal('CustomerToken1');
+      expect(await customerToken1.symbol()).to.equal('CT1');
+      expect(await customerToken1.totalSupply()).to.equal(0);
+      expect(await customerToken1.maxSupply()).to.equal(parseUnits('1000000'));
+      expect(await customerToken1.owner()).to.equal(qoistip.address);
     });
   });
 });

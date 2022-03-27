@@ -195,16 +195,4 @@ contract CustomerToken is Ownable {
             }
         }
     }
-
-    // function _beforeTokenTransfer(
-    //     address from,
-    //     address to,
-    //     uint256 amount
-    // ) internal {}
-
-    // function _afterTokenTransfer(
-    //     address from,
-    //     address to,
-    //     uint256 amount
-    // ) internal {}
-}
+    }
