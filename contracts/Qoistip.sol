@@ -2,6 +2,8 @@
 pragma solidity ^0.8.0;
 
 import "./CustomerToken.sol";
+import "./AggregatorV3Interface.sol";
+import "./QoistipPriceAggregator.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -10,15 +12,17 @@ contract Qoistip is Ownable {
     /// 99=>1%,  0,1%=>999  0,03% => 997
 
     uint256 fee;
+    QoistipPriceAggregator qoistipPriceAggregator;
     struct PriceOracle {
-        address addressFeed;
-        // flags inUSD/chaiLinkHaveOracle/ (Not use to packing strucn <32 Bits, in future check gas when these are read ?)
+        address oracleAddress;
+        // flags priceInUSD/chaiLinkHaveOracle/ (Not use to packing strucn <32 Bits, in future check gas when these are read ?)
         // uint8 flags;
-        bool inUSD;
-        bool chaiLinkOracle;
+        bool priceInUSD;
+        bool isChailink;
     }
 
     mapping(address => PriceOracle) addressToPriceOracle;
+    // ! add ability to token to change owner (from old DonateC to new, when migrate ?)
     mapping(address => address) private _tokenCustomer;
     mapping(address => mapping(address => uint256)) addressToTokenToBalance;
     mapping(address => uint256) BalanceETH;
@@ -34,13 +38,11 @@ contract Qoistip is Ownable {
         address tokenAddress,
         uint256 tokenAmount
     );
-    event NewCustomer(
-        address customerAddress,
-        address customerToken
-    );
+    event NewCustomer(address customerAddress, address customerToken);
 
-    constructor(uint256 _fee) {
+    constructor(uint256 _fee, QoistipPriceAggregator _qoistipPriceAggregator) {
         fee = _fee;
+        qoistipPriceAggregator = _qoistipPriceAggregator;
     }
 
     function setFee(uint256 _fee) external onlyOwner {
@@ -99,18 +101,33 @@ contract Qoistip is Ownable {
         return addressToPriceOracle[_tokenAddress];
     }
 
-    function _getTokenPrice() private returns (uint256 price) {}
+    function _getAmountMint(address _tokenAddress)
+        private
+        view
+        returns (uint256)
+    {
+        PriceOracle memory oracle = addressToPriceOracle[_tokenAddress];
+        require(oracle.oracleAddress != address(0), "Not supported token");
+        int256 price;
+        if (oracle.isChailink) {
+            (, price, , , ) = AggregatorV3Interface(oracle.oracleAddress)
+                .latestRoundData();
+        } else {
+            price = qoistipPriceAggregator.latestRoundData(_tokenAddress);
+        }
+
+        // return uint256(price);
+        return uint256(price * 10 ** 10);
+    }
 
     function registerCustomer(
         string memory _tokenSymbol,
         string memory _tokenName,
         uint256 _maxSupply
     ) external {
-        address _newToken = address(new CustomerToken(
-            _tokenSymbol,
-            _tokenName,
-            _maxSupply
-        ));
+        address _newToken = address(
+            new CustomerToken(_tokenSymbol, _tokenName, _maxSupply)
+        );
         _tokenCustomer[msg.sender] = _newToken;
         emit NewCustomer(msg.sender, _newToken);
     }
@@ -120,24 +137,25 @@ contract Qoistip is Ownable {
         address _tokenAddress,
         uint256 _tokenAmount
     ) external returns (bool success) {
-        require(_addressToDonate != address(0), "Can not send to 0 address");
-        // require(tokenPair[_tokenAddress] != address(0), "Not supported token");
-        require(_tokenAmount != 0, "Donate tokens amount can not be 0");
+        require(_addressToDonate != address(0), "Can not donate address 0");
+        require(_tokenAmount != 0, "Amount of tokens donated can not be 0");
+        uint256 _tokenToMint = _getAmountMint(_tokenAddress);
+
         IERC20(_tokenAddress).transferFrom(
             msg.sender,
             address(this),
             _tokenAmount
         );
+        
         uint256 _withFee = calculateWithFee(_tokenAmount);
         addressToTokenToBalance[_addressToDonate][_tokenAddress] = _withFee;
         addressToTokenToBalance[address(this)][_tokenAddress] =
             _tokenAmount -
             _withFee;
-        // uint256 tokenToMint =
-        // CustomerToken(private _tokenCustomer[_addressToDonate]).mint(
-        //     msg.sender,
-        //     tokenToMint
-        // );
+        CustomerToken(_tokenCustomer[_addressToDonate]).mint(
+            msg.sender,
+            _tokenToMint
+        );
         emit Donate(msg.sender, _addressToDonate, _tokenAddress, _tokenAmount);
         return true;
     }

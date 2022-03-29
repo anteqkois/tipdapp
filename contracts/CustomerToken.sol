@@ -143,14 +143,15 @@ contract CustomerToken is Ownable {
     // switch after to internal, in Factory pattern
     function mint(address account, uint256 amount) external onlyOwner {
         require(
-            totalSupply() + amount <= maxSupply(),
+            (_totalSupply += amount) <= _maxSupply,
             "ERC20: max token supply were minted"
         );
         // nie będzie możliwości by wywołąć tą funkcję do mintowani do adresu 0
         // require(account != address(0), "ERC20: mint to the zero address");
-
-        _totalSupply += amount;
-        _balances[account] += amount;
+        unchecked {
+            // _totalSupply += amount;
+            _balances[account] += amount;
+        }
         emit Transfer(address(0), account, amount);
     }
 
@@ -195,4 +196,4 @@ contract CustomerToken is Ownable {
             }
         }
     }
-    }
+}

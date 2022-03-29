@@ -1,110 +1,95 @@
 const { expect } = require('chai');
-const { ethers } = require('hardhat');
+const { ethers, network } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
-const { UniswapPairAddress } = require('../../constant');
-const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json')
+const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, ERC20_TOKEN_ADDRESS } = require('../../constant');
+const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
+const sandABI = require('../../abi/SAND.json');
 
 describe('Qoistip', function () {
   let qoistip;
+  let qoistipPriceAggregator;
   let customerToken1;
-  // let anqToken;
-  // let token2;
+  let sand;
+  let sandHodler;
   let owner;
-  let addr1;
+  let customer1;
   let addr2;
   let addrs;
 
   before(async () => {
-    [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
+    [owner, customer1, addr2, ...addrs] = await ethers.getSigners();
+
+    sand = new ethers.Contract(ERC20_TOKEN_ADDRESS.SAND, sandABI, ethers.provider);
+
+    // Have SAND, USDT, USDC
+    const accountToInpersonate = '0x109e588d17C1c1cff206aCB0b3FF0AAEffDe92bd';
+
+    await network.provider.request({
+      method: 'hardhat_impersonateAccount',
+      params: [accountToInpersonate],
+    });
+    sandHodler = await ethers.getSigner(accountToInpersonate);
+
+    const QoistipPriceAggregator = await ethers.getContractFactory('QoistipPriceAggregator');
+    qoistipPriceAggregator = await QoistipPriceAggregator.deploy();
 
     const Qoistip = await ethers.getContractFactory('Qoistip');
-    qoistip = await Qoistip.deploy(9700, tokenPrice.address);
+    qoistip = await Qoistip.deploy(9700, qoistipPriceAggregator.address);
 
-    // const ANQToken = await ethers.getContractFactory('ANQToken');
-    // anqToken = await ANQToken.deploy();
-    // const Token2 = await ethers.getContractFactory('Token2');
-    // token2 = await Token2.deploy();
-    // const CustomerToken = await ethers.getContractFactory('CustomerToken');
-    // customerToken = await CustomerToken.deploy('CST', 'CustomerToken', parseUnits('100000000'));
+    //set Qoisdapp smart contract needed veriables
+    await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, true, true);
+    const registerCustomerTransation = await qoistip
+      .connect(customer1)
+      .registerCustomer('CT1', 'CustomerToken1', parseUnits('1000000'));
+
+    registerCustomerTransation.wait();
+    const customerToken1Address = await qoistip.tokenCustomer(customer1.address);
+    customerToken1 = new ethers.Contract(customerToken1Address, CustomerToken.abi, ethers.provider);
   });
 
-  //calculateWithFee is internal now
-  xdescribe('Math', () => {
-    it('Calculate 0,49% fee with divisible number', async function () {
-      expect(await qoistip.calculateWithFee(parseUnits('100'))).to.equal(parseUnits('99.51'));
+  describe('Donate ERC20', () => {
+    it('Check $SAND balance before donate', async function () {
+      expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(0);
     });
-    it('Calculate 0,49% fee with indivisible number', async function () {
-      expect(await qoistip.calculateWithFee(100)).to.equal(99);
-      expect(await qoistip.calculateWithFee(781)).to.equal(777);
-    });
-    it('Calculate 3% fee with divisible number', async function () {
-      await qoistip.setFee(9700);
-      expect(await qoistip.calculateWithFee(100)).to.equal(97);
-      expect(await qoistip.calculateWithFee(parseUnits('100'))).to.equal(parseUnits('97'));
-      expect(await qoistip.calculateWithFee(parseUnits('781'))).to.equal(parseUnits('757.57'));
-    });
-    it('Calculate 3% fee with indivisible number', async function () {
-      expect(await qoistip.calculateWithFee(781)).to.equal(757);
-    });
-  });
+    it('Send donate in $SAND and check event', async function () {
+      await sand.connect(sandHodler).approve(qoistip.address, parseUnits('781'));
 
-  describe('Set new supported Token', () => {
-    it('Check if not suported', async function () {
-      expect(await qoistip.supportedToken(anqToken.address)).to.equal(false);
+      const donateTx = await qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('781'));
+      //! i'ts doesnt work
+      // expect(donateTx).to.changeTokenBalances(
+      //   sand,
+      //   [sandHodler, qoistip],
+      //   [parseUnits('781'), parseUnits('781')],
+      // );
+      const rc = await donateTx.wait();
+      expect(rc).to.emit(qoistip, 'Donate').withArgs(owner.address, customer1.address, sand.address, parseUnits('781'));
     });
-    it('Add token and check if is suported', async function () {
-      await qoistip.setSuportedToken(anqToken.address, UniswapPairAddress.USDC_WETH);
-      expect(await qoistip.supportedToken(anqToken.address)).to.equal(true);
-    });
-    it('Only owner can add new supported token', async function () {
-      await expect(qoistip.connect(addr1).setSuportedToken(token2.address, UniswapPairAddress.USDC_WETH)).to.be.revertedWith(
-        'Ownable: caller is not the owner',
-      );
-      // await qoistip.addSuportedToken(token2.address, UniswapPairAddress.USDC_WETH);
-      // expect(await qoistip.supportedToken(token2.address)).to.equal(true);
-      expect(await qoistip.supportedToken(token2.address)).to.equal(false);
-    });
-  });
-
-  xdescribe('New customer', async()=>{
-    it('Register new customer', async ()=>{
-      const customerToken1Address = await qoistip.registerCustomer('CT1', 'CustomerToken1', parseUnits('1000000'));
-      customerToken1 = new ethers.Contract(customerToken1Address, CustomerToken.abi, ethers.provider);
-
-    })
-  })
-
-  xdescribe('Donate ERC20', () => {
-    it('Check balance before donate', async function () {
-      expect(await qoistip.balanceOfERC20(addr1.address, anqToken.address)).to.equal(0);
-    });
-    it('Send donate and check event', async function () {
-      await anqToken.approve(qoistip.address, parseUnits('781'));
-      await expect(qoistip.donateERC20(addr1.address, anqToken.address, parseUnits('781')))
-        .to.emit(qoistip, 'Donate')
-        .withArgs(owner.address, addr1.address, anqToken.address, parseUnits('781'));
-    });
-    it('Check balance after donate', async function () {
-      expect(await qoistip.balanceOfERC20(addr1.address, anqToken.address)).to.equal(parseUnits('757.57'));
-      expect(await qoistip.balanceOfERC20(qoistip.address, anqToken.address)).to.equal(
+    it('Check $SAND and $CT1 balance after donate', async function () {
+      expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(parseUnits('757.57'));
+      console.log(await qoistip.balanceOfERC20(customer1.address, sand.address));
+      expect(await qoistip.balanceOfERC20(qoistip.address, sand.address)).to.equal(
         parseUnits('781').sub(parseUnits('757.57')),
       );
+
+      expect(await sand.balanceOf(qoistip.address)).to.equal(parseUnits('781'));
+      // ! check donator balance of customer token, use Chailink sc agregator
+      // expect(await customerToken1.balanceOf(sandHodler.address)).to.equal(parseUnits('781'));
     });
   });
 
   xdescribe('Donate ETH', () => {
     it('Check balance before donate', async function () {
-      expect(await qoistip.balanceOfETH(addr1.address)).to.be.equal(0);
+      expect(await qoistip.balanceOfETH(customer1.address)).to.be.equal(0);
     });
     it('Send donate and check', async function () {
-      const tx = await qoistip.donateETH(addr1.address, { value: parseUnits('1') });
+      const tx = await qoistip.donateETH(customer1.address, { value: parseUnits('1') });
       expect(tx).to.changeEtherBalance(owner.address, parseUnits('1'));
       expect(tx)
         .to.emit(qoistip, 'Donate')
-        .withArgs(owner.address, addr1.address, '0x0000000000000000000000000000000000000000', parseUnits('1'));
+        .withArgs(owner.address, customer1.address, '0x0000000000000000000000000000000000000000', parseUnits('1'));
     });
     it('Check balance after donate', async function () {
-      expect(await qoistip.balanceOfETH(addr1.address)).to.be.equal(parseUnits('0.97'));
+      expect(await qoistip.balanceOfETH(customer1.address)).to.be.equal(parseUnits('0.97'));
       expect(await qoistip.balanceOfETH(qoistip.address)).to.be.equal(parseUnits('0.03'));
     });
   });
@@ -112,20 +97,20 @@ describe('Qoistip', function () {
   xdescribe('Withdraw ERC20', () => {
     //TODO check events
     it('One ERC20 Token', async function () {
-      expect(await qoistip.balanceOfERC20(addr1.address, anqToken.address)).to.equal(parseUnits('757.57'));
+      expect(await qoistip.balanceOfERC20(customer1.address, anqToken.address)).to.equal(parseUnits('757.57'));
 
-      await qoistip.connect(addr1).withdrawERC20(anqToken.address);
+      await qoistip.connect(customer1).withdrawERC20(anqToken.address);
 
-      expect(await qoistip.balanceOfERC20(addr1.address, anqToken.address)).to.equal(0);
-      expect(await anqToken.balanceOf(addr1.address)).to.equal(parseUnits('757.57'));
+      expect(await qoistip.balanceOfERC20(customer1.address, anqToken.address)).to.equal(0);
+      expect(await anqToken.balanceOf(customer1.address)).to.equal(parseUnits('757.57'));
     });
     it('Many ERC20 Token', async function () {
       await anqToken.approve(qoistip.address, parseUnits('781'));
-      await qoistip.donateERC20(addr1.address, anqToken.address, parseUnits('781'));
+      await qoistip.donateERC20(customer1.address, anqToken.address, parseUnits('781'));
       await token2.approve(qoistip.address, parseUnits('781'));
-      await qoistip.donateERC20(addr1.address, token2.address, parseUnits('781'));
+      await qoistip.donateERC20(customer1.address, token2.address, parseUnits('781'));
 
-      expect(await qoistip.balanceOfERC20(addr1.address, anqToken.address)).to.equal(parseUnits('757.57'));
+      expect(await qoistip.balanceOfERC20(customer1.address, anqToken.address)).to.equal(parseUnits('757.57'));
       expect(await qoistip.balanceOfERC20(addr1.address, token2.address)).to.equal(parseUnits('757.57'));
 
       await qoistip.connect(addr1).withdrawManyERC20([anqToken.address, token2.address]);

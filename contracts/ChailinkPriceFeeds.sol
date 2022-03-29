@@ -2,7 +2,7 @@
 pragma solidity ^0.8;
 
 // import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
-
+import './AggregatorV3Interface.sol';
 contract ChailinkPriceFeeds {
     // AggregatorV3Interface internal priceFeed;
 
@@ -16,17 +16,4 @@ contract ChailinkPriceFeeds {
         return price;
         // return price / 1e8;
     }
-}
-
-interface AggregatorV3Interface {
-    function latestRoundData()
-        external
-        view
-        returns (
-            uint80 roundId,
-            int256 answer,
-            uint256 startedAt,
-            uint256 updatedAt,
-            uint80 answeredInRound
-        );
 }
