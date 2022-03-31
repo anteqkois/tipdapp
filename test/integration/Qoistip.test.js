@@ -40,7 +40,7 @@ describe('Qoistip', function () {
     await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, true, true);
     const registerCustomerTransation = await qoistip
       .connect(customer1)
-      .registerCustomer('CT1', 'CustomerToken1', parseUnits('1000000'));
+      .registerCustomer('CT1', 'CustomerToken1');
 
     registerCustomerTransation.wait();
     const customerToken1Address = await qoistip.tokenCustomer(customer1.address);
@@ -55,7 +55,7 @@ describe('Qoistip', function () {
       await sand.connect(sandHodler).approve(qoistip.address, parseUnits('781'));
 
       const donateTx = await qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('781'));
-      //! i'ts doesnt work
+      //TODO i'ts doesnt work
       // expect(donateTx).to.changeTokenBalances(
       //   sand,
       //   [sandHodler, qoistip],
@@ -72,7 +72,7 @@ describe('Qoistip', function () {
       );
 
       expect(await sand.balanceOf(qoistip.address)).to.equal(parseUnits('781'));
-      // ! check donator balance of customer token, use Chailink sc agregator
+      //TODO check donator balance of customer token, use Chailink sc agregator
       // expect(await customerToken1.balanceOf(sandHodler.address)).to.equal(parseUnits('781'));
     });
   });

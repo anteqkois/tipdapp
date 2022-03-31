@@ -122,11 +122,10 @@ contract Qoistip is Ownable {
 
     function registerCustomer(
         string memory _tokenSymbol,
-        string memory _tokenName,
-        uint256 _maxSupply
+        string memory _tokenName
     ) external {
         address _newToken = address(
-            new CustomerToken(_tokenSymbol, _tokenName, _maxSupply)
+            new CustomerToken(_tokenSymbol, _tokenName)
         );
         _tokenCustomer[msg.sender] = _newToken;
         emit NewCustomer(msg.sender, _newToken);

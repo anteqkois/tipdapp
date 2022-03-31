@@ -17,7 +17,7 @@ interface CustomerToken {
 
     function totalSupply() external view returns (uint256);
 
-    function maxSupply() external view returns (uint256);
+    // function maxSupply() external view returns (uint256);
 
     function balanceOf(address account) external view returns (uint256);
 

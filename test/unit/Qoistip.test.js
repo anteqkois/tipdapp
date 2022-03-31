@@ -65,7 +65,7 @@ describe('Qoistip', function () {
     it('Register new customer and emit event NewCustomer', async () => {
       const registerCustomerTransation = await qoistip
         .connect(addr1)
-        .registerCustomer('CT1', 'CustomerToken1', parseUnits('1000000'));
+        .registerCustomer('CT1', 'CustomerToken1');
 
       registerCustomerTransation.wait();
       const customerToken1Address = await qoistip.tokenCustomer(addr1.address);
@@ -77,7 +77,7 @@ describe('Qoistip', function () {
       expect(await customerToken1.name()).to.equal('CustomerToken1');
       expect(await customerToken1.symbol()).to.equal('CT1');
       expect(await customerToken1.totalSupply()).to.equal(0);
-      expect(await customerToken1.maxSupply()).to.equal(parseUnits('1000000'));
+      // expect(await customerToken1.maxSupply()).to.equal(parseUnits('1000000'));
       expect(await customerToken1.owner()).to.equal(qoistip.address);
     });
   });

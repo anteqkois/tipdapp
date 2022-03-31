@@ -9,7 +9,7 @@ contract CustomerToken is Ownable {
     mapping(address => mapping(address => uint256)) private _allowances;
 
     // uint256 private constant _maxSupply = 10_000_000 * 10**18;
-    uint256 private immutable _maxSupply;
+    // uint256 private immutable _maxSupply;
     uint256 private _totalSupply;
 
     string private _symbol;
@@ -17,17 +17,17 @@ contract CustomerToken is Ownable {
 
     constructor(
         string memory symbol_,
-        string memory name_,
-        uint256 maxSupply_
+        string memory name_
+        // uint256 maxSupply_
     ) {
         //  1mln <= maxSupply_ <= 100mln
-        require(
-            (maxSupply_ <= 100_000_000 * 10**18) &&
-                (maxSupply_ >= 1_000_000 * 10**18)
-        );
+        // require(
+        //     (maxSupply_ <= 100_000_000 * 10**18) &&
+        //         (maxSupply_ >= 1_000_000 * 10**18)
+        // );
         _name = name_;
         _symbol = symbol_;
-        _maxSupply = maxSupply_;
+        // _maxSupply = maxSupply_;
         // _mint(msg.sender, 1_000 * 10**18);
     }
 
@@ -54,9 +54,9 @@ contract CustomerToken is Ownable {
         return _totalSupply;
     }
 
-    function maxSupply() public view returns (uint256) {
-        return _maxSupply;
-    }
+    // function maxSupply() public view returns (uint256) {
+    //     return _maxSupply;
+    // }
 
     function balanceOf(address account) public view returns (uint256) {
         return _balances[account];
@@ -142,10 +142,10 @@ contract CustomerToken is Ownable {
 
     // switch after to internal, in Factory pattern
     function mint(address account, uint256 amount) external onlyOwner {
-        require(
-            (_totalSupply += amount) <= _maxSupply,
-            "ERC20: max token supply were minted"
-        );
+        // require(
+        //     (_totalSupply += amount) <= _maxSupply,
+        //     "ERC20: max token supply were minted"
+        // );
         // nie będzie możliwości by wywołąć tą funkcję do mintowani do adresu 0
         // require(account != address(0), "ERC20: mint to the zero address");
         unchecked {
