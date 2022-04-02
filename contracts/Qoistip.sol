@@ -104,11 +104,7 @@ contract Qoistip is Ownable {
     AggregatorV3Interface constant ethOracle =
         AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
 
-    function _getPrice(address _tokenAddress)
-        private
-        view
-        returns (uint256)
-    {
+    function _getPrice(address _tokenAddress) private view returns (uint256) {
         PriceOracle memory oracle = addressToPriceOracle[_tokenAddress];
         require(oracle.oracleAddress != address(0), "Not supported token");
         int256 price;
@@ -150,8 +146,8 @@ contract Qoistip is Ownable {
     ) external returns (bool success) {
         require(_addressToDonate != address(0), "Can not donate address 0");
         require(_tokenAmount != 0, "Amount of tokens donated can not be 0");
-        uint256 _tokenToMint = (_getPrice(_tokenAddress)*_tokenAmount)/1e18;
-        console.log('Amount token to mint: %s', _tokenToMint);
+        uint256 _tokenToMint = (_getPrice(_tokenAddress) * _tokenAmount) / 1e18;
+        console.log("Amount token to mint: %s", _tokenToMint);
 
         IERC20(_tokenAddress).transferFrom(
             msg.sender,

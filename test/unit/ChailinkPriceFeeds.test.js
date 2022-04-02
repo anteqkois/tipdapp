@@ -23,7 +23,13 @@ describe('ChailinkPriceFeeds', function () {
     });
     it('Get $SHIB price', async () => {
       expect(await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB));
-      console.log(await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB));
+      console.log(
+        await chailinkPriceFeeds.getDerivedPrice(
+          CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB,
+          CHAILINK_PRICE_ORACLE_ADDRESS_ETH.USDC,
+          18,
+        ),
+      );
       // expect(
       //   await chailinkPriceFeeds.getDerivedPrice(
       //     CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB,
