@@ -1,12 +1,13 @@
 const { expect } = require('chai');
 const { ethers, network } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
-const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, ERC20_TOKEN_ADDRESS } = require('../../constant');
+const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, ERC20_TOKEN_ADDRESS, CHAILINK_PRICE_ORACLE_ADDRESS_ETH } = require('../../constant');
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
 const sandABI = require('../../abi/SAND.json');
 
 describe('Qoistip', function () {
   let qoistip;
+  let chailinkPriceFeeds;
   let qoistipPriceAggregator;
   let customerToken1;
   let sand;
@@ -36,11 +37,12 @@ describe('Qoistip', function () {
     const Qoistip = await ethers.getContractFactory('Qoistip');
     qoistip = await Qoistip.deploy(9700, qoistipPriceAggregator.address);
 
+    const ChailinkPriceFeeds = await ethers.getContractFactory('ChailinkPriceFeeds');
+    chailinkPriceFeeds = await ChailinkPriceFeeds.deploy();
+
     //set Qoisdapp smart contract needed veriables
     await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, true, true);
-    const registerCustomerTransation = await qoistip
-      .connect(customer1)
-      .registerCustomer('CT1', 'CustomerToken1');
+    const registerCustomerTransation = await qoistip.connect(customer1).registerCustomer('CT1', 'CustomerToken1');
 
     registerCustomerTransation.wait();
     const customerToken1Address = await qoistip.tokenCustomer(customer1.address);
@@ -52,9 +54,9 @@ describe('Qoistip', function () {
       expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(0);
     });
     it('Send donate in $SAND and check event', async function () {
-      await sand.connect(sandHodler).approve(qoistip.address, parseUnits('781'));
+      await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
 
-      const donateTx = await qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('781'));
+      const donateTx = await qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('100'));
       //TODO i'ts doesnt work
       // expect(donateTx).to.changeTokenBalances(
       //   sand,
@@ -62,18 +64,22 @@ describe('Qoistip', function () {
       //   [parseUnits('781'), parseUnits('781')],
       // );
       const rc = await donateTx.wait();
-      expect(rc).to.emit(qoistip, 'Donate').withArgs(owner.address, customer1.address, sand.address, parseUnits('781'));
+      expect(rc).to.emit(qoistip, 'Donate').withArgs(owner.address, customer1.address, sand.address, parseUnits('100'));
     });
-    it('Check $SAND and $CT1 balance after donate', async function () {
-      expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(parseUnits('757.57'));
-      console.log(await qoistip.balanceOfERC20(customer1.address, sand.address));
-      expect(await qoistip.balanceOfERC20(qoistip.address, sand.address)).to.equal(
-        parseUnits('781').sub(parseUnits('757.57')),
-      );
+    it('Check $SAND balance after donate', async function () {
+      expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(parseUnits('97'));
+      expect(await qoistip.balanceOfERC20(qoistip.address, sand.address)).to.equal(parseUnits('100').sub(parseUnits('97')));
+      expect(await sand.balanceOf(qoistip.address)).to.equal(parseUnits('100'));
+    });
+    it('Check $CT1 balance after donate', async function () {
+      const sandPrice = await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND);
+      // console.log(await customerToken1.balanceOf(sandHodler.address));
+      // console.log(sandPrice);
+      // console.log(parseUnits('100'));
+      const calculateExpectBalance = parseUnits('100').mul(sandPrice).div('1000000000000000000'); 
+      // console.log(parseUnits('100').mul(sandPrice).div('1000000000000000000'));
 
-      expect(await sand.balanceOf(qoistip.address)).to.equal(parseUnits('781'));
-      //TODO check donator balance of customer token, use Chailink sc agregator
-      // expect(await customerToken1.balanceOf(sandHodler.address)).to.equal(parseUnits('781'));
+      expect(await customerToken1.balanceOf(sandHodler.address)).to.equal(calculateExpectBalance);
     });
   });
 

@@ -101,7 +101,10 @@ contract Qoistip is Ownable {
         return addressToPriceOracle[_tokenAddress];
     }
 
-    function _getAmountMint(address _tokenAddress)
+    AggregatorV3Interface constant ethOracle =
+        AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
+
+    function _getPrice(address _tokenAddress)
         private
         view
         returns (uint256)
@@ -110,14 +113,23 @@ contract Qoistip is Ownable {
         require(oracle.oracleAddress != address(0), "Not supported token");
         int256 price;
         if (oracle.isChailink) {
-            (, price, , , ) = AggregatorV3Interface(oracle.oracleAddress)
-                .latestRoundData();
+            if (oracle.priceInUSD) {
+                (, price, , , ) = AggregatorV3Interface(oracle.oracleAddress)
+                    .latestRoundData();
+                return uint256(price * 10**10);
+            } else {
+                (, price, , , ) = AggregatorV3Interface(oracle.oracleAddress)
+                    .latestRoundData();
+                (, int256 priceEth, , , ) = ethOracle.latestRoundData();
+                return uint256((price * 10**18) / priceEth);
+                // return uint256(price);
+            }
         } else {
             price = qoistipPriceAggregator.latestRoundData(_tokenAddress);
+            return uint256(price);
         }
 
         // return uint256(price);
-        return uint256(price * 10 ** 10);
     }
 
     function registerCustomer(
@@ -138,14 +150,15 @@ contract Qoistip is Ownable {
     ) external returns (bool success) {
         require(_addressToDonate != address(0), "Can not donate address 0");
         require(_tokenAmount != 0, "Amount of tokens donated can not be 0");
-        uint256 _tokenToMint = _getAmountMint(_tokenAddress);
+        uint256 _tokenToMint = (_getPrice(_tokenAddress)*_tokenAmount)/1e18;
+        console.log('Amount token to mint: %s', _tokenToMint);
 
         IERC20(_tokenAddress).transferFrom(
             msg.sender,
             address(this),
             _tokenAmount
         );
-        
+
         uint256 _withFee = calculateWithFee(_tokenAmount);
         addressToTokenToBalance[_addressToDonate][_tokenAddress] = _withFee;
         addressToTokenToBalance[address(this)][_tokenAddress] =

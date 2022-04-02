@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
-const { CHAILINK_PRICE_ORACLE_ADDRESS_USD } = require('../../constant');
+const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, CHAILINK_PRICE_ORACLE_ADDRESS_ETH } = require('../../constant');
 
 describe('ChailinkPriceFeeds', function () {
   let chailinkPriceFeeds;
@@ -17,9 +17,27 @@ describe('ChailinkPriceFeeds', function () {
   });
 
   describe('Check if ChailinkPriceFeeds send response', () => {
-    it('Get ETH price', async () => {
+    it('Get $ETH price', async () => {
       expect(await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_USD.ETH));
-      // console.log(await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_USD.ETH));
+      console.log(await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_USD.ETH));
+    });
+    it('Get $SHIB price', async () => {
+      expect(await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB));
+      console.log(await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB));
+      // expect(
+      //   await chailinkPriceFeeds.getDerivedPrice(
+      //     CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB,
+      //     CHAILINK_PRICE_ORACLE_ADDRESS_ETH.USDC,
+      //     18,
+      //   ),
+      // );
+      // console.log(
+      //   await chailinkPriceFeeds.getDerivedPrice(
+      //     CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB,
+      //     CHAILINK_PRICE_ORACLE_ADDRESS_ETH.USDC,
+      //     18,
+      //   ),
+      // );
     });
   });
 });
