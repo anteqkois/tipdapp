@@ -66,15 +66,9 @@ describe('Qoistip', function () {
     it('Send donate in $SAND and check event', async function () {
       await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
 
-      const donateTx = await qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('100'));
-      //TODO i'ts doesnt work
-      // expect(donateTx).to.changeTokenBalances(
-      //   sand,
-      //   [sandHodler, qoistip],
-      //   [parseUnits('781'), parseUnits('781')],
-      // );
-      const rc = await donateTx.wait();
-      expect(rc).to.emit(qoistip, 'Donate').withArgs(sandHodler.address, customer1.address, sand.address, parseUnits('100'));
+      await expect(qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('100')))
+       .to.emit(qoistip, 'Donate')
+        .withArgs(sandHodler.address, customer1.address, sand.address, parseUnits('100'));
     });
     it('Check $SAND balance after donate', async function () {
       expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(parseUnits('97'));
@@ -92,16 +86,16 @@ describe('Qoistip', function () {
     it('Send donate in $SHIB and check event', async function () {
       await shib.connect(shibHodler).approve(qoistip.address, parseUnits('10000'));
 
-      const donateTx = await qoistip.connect(shibHodler).donateERC20(customer1.address, shib.address, parseUnits('10000'));
+      await expect(qoistip.connect(shibHodler).donateERC20(customer1.address, shib.address, parseUnits('10000')))
+        .to.emit(qoistip, 'Donate');
       //TODO i'ts doesnt work
-      // expect(donateTx).to.changeTokenBalances(
-      //   sand,
-      //   [sandHodler, qoistip],
-      //   [parseUnits('781'), parseUnits('781')],
+      // await expect(qoistip.connect(shibHodler).donateERC20(customer1.address, shib.address, parseUnits('10000')))
+      //   .to.emit(qoistip, 'Donate')
+      //   .withArgs(shibHodler.address, customer1.address, shib.address, parseUnits('10000')).and.changeTokenBalances(
+      //   shib,
+      //   [shibHodler, qoistip],
+      //   [parseUnits('10000'), parseUnits('10000')],
       // );
-      const rc = await donateTx.wait();
-      //TODO checking Events doens't work
-      expect(rc).to.emit(qoistip, 'Donate').withArgs(shibHodler.address, customer1.address, shib.address, parseUnits('10000'));
     });
     it('Check $SHIB balance after donate', async function () {
       expect(await qoistip.balanceOfERC20(customer1.address, shib.address)).to.equal(parseUnits('9700'));
