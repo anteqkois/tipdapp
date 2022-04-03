@@ -117,13 +117,12 @@ describe('Qoistip', function () {
     it('Check $ETH balance in smart contract before donate', async function () {
       expect(await qoistip.balanceOfETH(customer1.address)).to.be.equal(0);
     });
-    it('Send donate in $ETH and check emited events and if balances were changed', async function () {
+    it('Send donate in $ETH and if balances were changed', async function () {
       //TODO checking doesn't work
-      const tx = await qoistip.donateETH(customer1.address, { value: parseUnits('1') });
-      expect(tx).to.changeEtherBalance(owner.address, parseUnits('10'));
-      expect(tx)
-        .to.emit(qoistip, 'Donate')
-        .withArgs(owner.address, customer1.address, '0x0000000000000000000000000000000000000000', parseUnits('10'));
+      await expect(() => qoistip.donateETH(customer1.address, { value: parseUnits('1') })).to.changeEtherBalances(
+        [owner, qoistip],
+        [parseUnits('-1'), parseUnits('1')],
+      );
     });
     it('Check $ETH balance after donate', async function () {
       expect(await qoistip.balanceOfETH(customer1.address)).to.be.equal(parseUnits('0.97'));
@@ -136,17 +135,17 @@ describe('Qoistip', function () {
     });
   });
 
-  xdescribe('Withdraw ERC20', () => {
+  describe('Withdraw ERC20', () => {
     //TODO check events
     it('One ERC20 Token', async function () {
-      expect(await qoistip.balanceOfERC20(customer1.address, anqToken.address)).to.equal(parseUnits('757.57'));
+      expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(parseUnits('97'));
 
-      await qoistip.connect(customer1).withdrawERC20(anqToken.address);
+      await qoistip.connect(customer1).withdrawERC20(sand.address);
 
-      expect(await qoistip.balanceOfERC20(customer1.address, anqToken.address)).to.equal(0);
-      expect(await anqToken.balanceOf(customer1.address)).to.equal(parseUnits('757.57'));
+      expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(0);
+      expect(await sand.balanceOf(customer1.address)).to.equal(parseUnits('97'));
     });
-    it('Many ERC20 Token', async function () {
+    xit('Many ERC20 Token', async function () {
       await anqToken.approve(qoistip.address, parseUnits('781'));
       await qoistip.donateERC20(customer1.address, anqToken.address, parseUnits('781'));
       await token2.approve(qoistip.address, parseUnits('781'));
@@ -162,7 +161,7 @@ describe('Qoistip', function () {
       expect(await qoistip.balanceOfERC20(addr1.address, token2.address)).to.equal(0);
       expect(await token2.balanceOf(addr1.address)).to.equal(parseUnits('757.57'));
     });
-    it('Revert if zero balance', async function () {
+    xit('Revert if zero balance', async function () {
       await expect(qoistip.connect(addr1).withdrawERC20(anqToken.address)).to.be.revertedWith('You have 0 tokens on balance');
     });
   });

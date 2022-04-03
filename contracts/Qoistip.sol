@@ -57,7 +57,7 @@ contract Qoistip is Ownable {
         require(_fee < 10000);
         fee = _fee;
     }
-    
+
     function setMinValue(uint256 _newMinValue) external onlyOwner {
         _minValue = _newMinValue;
     }
@@ -196,15 +196,15 @@ contract Qoistip is Ownable {
         return true;
     }
 
-    // function withdrawERC20(address _tokenAddress) public {
-    //     uint256 _tokenBalance = addressToTokenToBalance[msg.sender][
-    //         _tokenAddress
-    //     ];
-    //     require(_tokenBalance > 0, "You have 0 tokens on balance");
-    //     addressToTokenToBalance[msg.sender][_tokenAddress] = 0;
-    //     IERC20(_tokenAddress).transfer(msg.sender, _tokenBalance);
-    //     emit Withdraw(msg.sender, _tokenAddress, _tokenBalance);
-    // }
+    function withdrawERC20(address _tokenAddress) public {
+        uint256 _tokenBalance = addressToTokenToBalance[msg.sender][
+            _tokenAddress
+        ];
+        require(_tokenBalance > 0, "You have 0 tokens on balance");
+        addressToTokenToBalance[msg.sender][_tokenAddress] = 0;
+        IERC20(_tokenAddress).transfer(msg.sender, _tokenBalance);
+        emit Withdraw(msg.sender, _tokenAddress, _tokenBalance);
+    }
 
     // function withdrawManyERC20(address[] memory _tokenAddress) external {
     //     uint256 _iteration = _tokenAddress.length;
