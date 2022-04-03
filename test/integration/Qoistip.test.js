@@ -104,22 +104,35 @@ describe('Qoistip', function () {
       const calculateExpectBalance = parseUnits('10000').mul(shibPrice).div('1000000000000000000');
       expect(await customerToken1.balanceOf(shibHodler.address)).to.equal(calculateExpectBalance);
     });
+    it('Can not send donate if worth is to small', async function () {
+      await sand.connect(sandHodler).approve(qoistip.address, parseUnits('0.0001'));
+
+      await expect(
+        qoistip.connect(shibHodler).donateERC20(customer1.address, shib.address, parseUnits('0.026')),
+      ).to.be.revertedWith('Donate worth < min value $');
+    });
   });
 
-  xdescribe('Donate ETH', () => {
-    it('Check balance before donate', async function () {
+  describe('Donate ETH', () => {
+    it('Check $ETH balance in smart contract before donate', async function () {
       expect(await qoistip.balanceOfETH(customer1.address)).to.be.equal(0);
     });
-    it('Send donate and check', async function () {
+    it('Send donate in $ETH and check emited events and if balances were changed', async function () {
+      //TODO checking doesn't work
       const tx = await qoistip.donateETH(customer1.address, { value: parseUnits('1') });
-      expect(tx).to.changeEtherBalance(owner.address, parseUnits('1'));
+      expect(tx).to.changeEtherBalance(owner.address, parseUnits('10'));
       expect(tx)
         .to.emit(qoistip, 'Donate')
-        .withArgs(owner.address, customer1.address, '0x0000000000000000000000000000000000000000', parseUnits('1'));
+        .withArgs(owner.address, customer1.address, '0x0000000000000000000000000000000000000000', parseUnits('10'));
     });
-    it('Check balance after donate', async function () {
+    it('Check $ETH balance after donate', async function () {
       expect(await qoistip.balanceOfETH(customer1.address)).to.be.equal(parseUnits('0.97'));
       expect(await qoistip.balanceOfETH(qoistip.address)).to.be.equal(parseUnits('0.03'));
+    });
+    it('Check $CT1 balance after donate', async function () {
+      const ethPrice = await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_USD.ETH);
+      const calculateExpectBalance = parseUnits('1').mul(ethPrice).div('1000000000000000000');
+      expect(await customerToken1.balanceOf(owner.address)).to.equal(calculateExpectBalance);
     });
   });
 

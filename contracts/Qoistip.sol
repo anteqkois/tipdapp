@@ -12,7 +12,13 @@ contract Qoistip is Ownable {
     /// 99=>1%,  0,1%=>999  0,03% => 997
 
     uint256 fee;
+    uint private _minValue;
     QoistipPriceAggregator qoistipPriceAggregator;
+    AggregatorV3Interface constant usdcEthOracle =
+        AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
+
+    AggregatorV3Interface constant ethUsdOracle =
+        AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
     struct PriceOracle {
         address oracleAddress;
         // flags priceInUSD/chaiLinkHaveOracle/ (Not use to packing strucn <32 Bits, in future check gas when these are read ?)
@@ -42,6 +48,7 @@ contract Qoistip is Ownable {
 
     constructor(uint256 _fee, QoistipPriceAggregator _qoistipPriceAggregator) {
         fee = _fee;
+        _minValue = 1e17;
         qoistipPriceAggregator = _qoistipPriceAggregator;
     }
 
@@ -49,6 +56,10 @@ contract Qoistip is Ownable {
         //add some limit, for exampple new fee must < +10%, or fee <20% ?
         require(_fee < 10000);
         fee = _fee;
+    }
+    
+    function setMinValue(uint256 _newMinValue) external onlyOwner {
+        _minValue = _newMinValue;
     }
 
     function tokenCustomer(address _customerAddress)
@@ -101,33 +112,6 @@ contract Qoistip is Ownable {
         return addressToPriceOracle[_tokenAddress];
     }
 
-    AggregatorV3Interface constant ethOracle =
-        AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
-
-    function _getPrice(address _tokenAddress) private view returns (uint256) {
-        PriceOracle memory oracle = addressToPriceOracle[_tokenAddress];
-        require(oracle.oracleAddress != address(0), "Not supported token");
-        int256 price;
-        if (oracle.isChailink) {
-            if (oracle.priceInUSD) {
-                (, price, , , ) = AggregatorV3Interface(oracle.oracleAddress)
-                    .latestRoundData();
-                return uint256(price * 10**10);
-            } else {
-                (, price, , , ) = AggregatorV3Interface(oracle.oracleAddress)
-                    .latestRoundData();
-                (, int256 priceEth, , , ) = ethOracle.latestRoundData();
-                return uint256((price * 10**18) / priceEth);
-                // return uint256(price);
-            }
-        } else {
-            price = qoistipPriceAggregator.latestRoundData(_tokenAddress);
-            return uint256(price);
-        }
-
-        // return uint256(price);
-    }
-
     function registerCustomer(
         string memory _tokenSymbol,
         string memory _tokenName
@@ -139,15 +123,34 @@ contract Qoistip is Ownable {
         emit NewCustomer(msg.sender, _newToken);
     }
 
+    function _getPrice(address _tokenAddress) private view returns (uint256) {
+        PriceOracle memory oracle = addressToPriceOracle[_tokenAddress];
+        require(oracle.oracleAddress != address(0), "Not supported token");
+        if (oracle.isChailink) {
+            (, int256 price, , , ) = AggregatorV3Interface(oracle.oracleAddress)
+                .latestRoundData();
+            if (oracle.priceInUSD) {
+                return uint256(price * 10**10);
+            } else {
+                (, int256 priceEth, , , ) = usdcEthOracle.latestRoundData();
+                return uint256((price * 10**18) / priceEth);
+            }
+        } else {
+            return
+                uint256(qoistipPriceAggregator.latestRoundData(_tokenAddress));
+        }
+    }
+
     function donateERC20(
         address _addressToDonate,
         address _tokenAddress,
         uint256 _tokenAmount
     ) external returns (bool success) {
         require(_addressToDonate != address(0), "Can not donate address 0");
-        require(_tokenAmount != 0, "Amount of tokens donated can not be 0");
+        //TODO check if it is worth over 1$ ?
         uint256 _tokenToMint = (_getPrice(_tokenAddress) * _tokenAmount) / 1e18;
-        console.log("Amount token to mint: %s", _tokenToMint);
+        require(_tokenToMint >= _minValue, "Donate worth < min value $");
+        // console.log("Amount token to mint: %s", _tokenToMint);
 
         IERC20(_tokenAddress).transferFrom(
             msg.sender,
@@ -173,14 +176,23 @@ contract Qoistip is Ownable {
         payable
         returns (bool success)
     {
-        uint256 _value = msg.value;
+        // uint256 _value = msg.value;
         require(_addressToDonate != address(0), "Can not send to 0 address");
-        require(_value != 0, "Donate tokens amount can not be 0");
+        // require(_value != 0, "Donate tokens amount can not be 0");
+        (, int256 price, , , ) = ethUsdOracle.latestRoundData();
+        uint256 _tokenToMint = (uint(price) * 10**10 * msg.value) / 1e18;
+        require(_tokenToMint >= _minValue, "Donate worth < min value $");
+        // console.log("Amount token to mint: %s", _tokenToMint);
 
-        uint256 _withFee = calculateWithFee(_value);
+        uint256 _withFee = calculateWithFee(msg.value);
         BalanceETH[_addressToDonate] = _withFee;
-        BalanceETH[address(this)] = _value - _withFee;
-        emit Donate(msg.sender, _addressToDonate, address(0), _value);
+        BalanceETH[address(this)] = msg.value - _withFee;
+
+        CustomerToken(_tokenCustomer[_addressToDonate]).mint(
+            msg.sender,
+            _tokenToMint
+        );
+        emit Donate(msg.sender, _addressToDonate, address(0), msg.value);
         return true;
     }
 
