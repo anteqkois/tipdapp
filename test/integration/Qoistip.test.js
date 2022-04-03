@@ -24,7 +24,7 @@ describe('Qoistip', function () {
 
     sand = new ethers.Contract(ERC20_TOKEN_ADDRESS.SAND, sandABI, ethers.provider);
     shib = new ethers.Contract(ERC20_TOKEN_ADDRESS.SHIB, sandABI, ethers.provider);
-  
+
     // Have SAND, USDT, USDC
     const accountWithSAND = '0x109e588d17C1c1cff206aCB0b3FF0AAEffDe92bd';
     const accountWithSHIB = '0xd6Bc559a59B24A58A82F274555d152d67F15a7A6';
@@ -63,11 +63,11 @@ describe('Qoistip', function () {
     it('Check $SAND balance before donate', async function () {
       expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(0);
     });
-    it('Send donate in $SAND and check event', async function () {
+    it('Send donate in $SAND and check emited event', async function () {
       await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
 
       await expect(qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('100')))
-       .to.emit(qoistip, 'Donate')
+        .to.emit(qoistip, 'Donate')
         .withArgs(sandHodler.address, customer1.address, sand.address, parseUnits('100'));
     });
     it('Check $SAND balance after donate', async function () {
@@ -77,25 +77,18 @@ describe('Qoistip', function () {
     });
     it('Check $CT1 balance after donate', async function () {
       const sandPrice = await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND);
-      const calculateExpectBalance = parseUnits('100').mul(sandPrice).div('1000000000000000000'); 
+      const calculateExpectBalance = parseUnits('100').mul(sandPrice).div('1000000000000000000');
       expect(await customerToken1.balanceOf(sandHodler.address)).to.equal(calculateExpectBalance);
     });
     it('Check $SHIB balance before donate', async function () {
       expect(await qoistip.balanceOfERC20(customer1.address, shib.address)).to.equal(0);
     });
-    it('Send donate in $SHIB and check event', async function () {
+    it('Send donate in $SHIB and check changeTokenBalance function', async function () {
       await shib.connect(shibHodler).approve(qoistip.address, parseUnits('10000'));
 
-      await expect(qoistip.connect(shibHodler).donateERC20(customer1.address, shib.address, parseUnits('10000')))
-        .to.emit(qoistip, 'Donate');
-      //TODO i'ts doesnt work
-      // await expect(qoistip.connect(shibHodler).donateERC20(customer1.address, shib.address, parseUnits('10000')))
-      //   .to.emit(qoistip, 'Donate')
-      //   .withArgs(shibHodler.address, customer1.address, shib.address, parseUnits('10000')).and.changeTokenBalances(
-      //   shib,
-      //   [shibHodler, qoistip],
-      //   [parseUnits('10000'), parseUnits('10000')],
-      // );
+      await expect(() =>
+        qoistip.connect(shibHodler).donateERC20(customer1.address, shib.address, parseUnits('10000')),
+      ).to.changeTokenBalances(shib, [shibHodler, qoistip], [parseUnits('-10000'), parseUnits('10000')]);
     });
     it('Check $SHIB balance after donate', async function () {
       expect(await qoistip.balanceOfERC20(customer1.address, shib.address)).to.equal(parseUnits('9700'));
@@ -106,9 +99,9 @@ describe('Qoistip', function () {
       const shibPrice = await chailinkPriceFeeds.getDerivedPrice(
         CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB,
         CHAILINK_PRICE_ORACLE_ADDRESS_ETH.USDC,
-        18
+        18,
       );
-      const calculateExpectBalance = parseUnits('10000').mul(shibPrice).div('1000000000000000000'); 
+      const calculateExpectBalance = parseUnits('10000').mul(shibPrice).div('1000000000000000000');
       expect(await customerToken1.balanceOf(shibHodler.address)).to.equal(calculateExpectBalance);
     });
   });
