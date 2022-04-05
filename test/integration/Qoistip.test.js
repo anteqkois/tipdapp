@@ -117,8 +117,7 @@ describe('Qoistip', function () {
     it('Check $ETH balance in smart contract before donate', async function () {
       expect(await qoistip.balanceOfETH(customer1.address)).to.be.equal(0);
     });
-    it('Send donate in $ETH and if balances were changed', async function () {
-      //TODO checking doesn't work
+    it('Send donate in $ETH and if check balances were changed', async function () {
       await expect(() => qoistip.donateETH(customer1.address, { value: parseUnits('1') })).to.changeEtherBalances(
         [owner, qoistip],
         [parseUnits('-1'), parseUnits('1')],
@@ -150,20 +149,15 @@ describe('Qoistip', function () {
     it('Many ERC20 Token', async function () {
       await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
       await qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('100'));
-      // await token2.approve(qoistip.address, parseUnits('781'));
-      // await qoistip.donateERC20(customer1.address, token2.address, parseUnits('781'));
 
       expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(parseUnits('97'));
       expect(await qoistip.balanceOfERC20(customer1.address, shib.address)).to.equal(parseUnits('9700'));
 
-      //TODO check many events
-      // await qoistip.connect(customer1).withdrawManyERC20([sand.address, shib.address]);
       await expect(qoistip.connect(customer1).withdrawManyERC20([sand.address, shib.address]))
         .to.emit(qoistip, 'Withdraw')
         .withArgs(customer1.address, sand.address, parseUnits('97'))
         .and.emit(qoistip, 'Withdraw')
         .withArgs(customer1.address, shib.address, parseUnits('9700'));
-
 
       expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(0);
       expect(await sand.balanceOf(customer1.address)).to.equal(parseUnits('97').mul('2'));
@@ -175,20 +169,19 @@ describe('Qoistip', function () {
     });
   });
 
-  xdescribe('Withdraw ETH', () => {
-    it('One ERC20 Token', async function () {
-      expect(await qoistip.balanceOfETH(addr1.address)).to.equal(parseUnits('0.97'));
-      const tx = await qoistip.connect(addr1).withdrawETH();
-      await tx.wait();
-      expect(tx).to.changeEtherBalance(addr1.address, parseUnits('0.97'));
-      expect(tx)
-        .to.emit(qoistip, 'Donate')
-        .withArgs(addr1.address, '0x0000000000000000000000000000000000000000', parseUnits('0.97'));
+  describe('Withdraw ETH', () => {
+    it('All ETH', async function () {
+      expect(await qoistip.balanceOfETH(customer1.address)).to.equal(parseUnits('0.97'));
 
-      expect(await qoistip.balanceOfETH(addr1.address)).to.equal(0);
+      await expect(() => qoistip.connect(customer1).withdrawETH()).to.changeEtherBalances(
+        [customer1, qoistip],
+        [parseUnits('0.97'), parseUnits('-0.97')],
+      );
+
+      expect(await qoistip.balanceOfETH(customer1.address)).to.equal(0);
     });
     it('Revert if zero balance', async function () {
-      await expect(qoistip.connect(addr1).withdrawETH()).to.be.revertedWith('You have 0 ETH');
+      await expect(qoistip.connect(customer1).withdrawETH()).to.be.revertedWith('You have 0 ETH');
     });
   });
 });

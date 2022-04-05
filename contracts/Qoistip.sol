@@ -213,12 +213,12 @@ contract Qoistip is Ownable {
         }
     }
 
-    // function withdrawETH() public {
-    //     uint256 _ethBalance = BalanceETH[msg.sender];
-    //     require(_ethBalance > 0, "You have 0 ETH");
-    //     BalanceETH[msg.sender] = 0;
-    //     (bool sent, ) = address(msg.sender).call{value: _ethBalance}("");
-    //     require(sent, "Failed to send Ether");
-    //     emit Withdraw(msg.sender, address(0), _ethBalance);
-    // }
+    function withdrawETH() public payable {
+        uint256 _ethBalance = BalanceETH[msg.sender];
+        require(_ethBalance > 0, "You have 0 ETH");
+        BalanceETH[msg.sender] = 0;
+        (bool sent, ) = address(msg.sender).call{value: _ethBalance}("");
+        require(sent, "Failed to send Ether");
+        emit Withdraw(msg.sender, address(0), _ethBalance);
+    }
 }
