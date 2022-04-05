@@ -206,12 +206,12 @@ contract Qoistip is Ownable {
         emit Withdraw(msg.sender, _tokenAddress, _tokenBalance);
     }
 
-    // function withdrawManyERC20(address[] memory _tokenAddress) external {
-    //     uint256 _iteration = _tokenAddress.length;
-    //     for (uint256 _i = 0; _i < _iteration; _i++) {
-    //         withdrawERC20(_tokenAddress[_i]);
-    //     }
-    // }
+    function withdrawManyERC20(address[] memory _tokenAddress) external {
+        uint256 _iteration = _tokenAddress.length;
+        for (uint256 _i = 0; _i < _iteration; _i++) {
+            withdrawERC20(_tokenAddress[_i]);
+        }
+    }
 
     // function withdrawETH() public {
     //     uint256 _ethBalance = BalanceETH[msg.sender];
