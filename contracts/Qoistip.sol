@@ -12,7 +12,8 @@ contract Qoistip is Ownable {
     /// 99=>1%,  0,1%=>999  0,03% => 997
 
     uint256 fee;
-    uint private _minValue;
+    uint256 private _minValue;
+    address migrateAddress;
     QoistipPriceAggregator qoistipPriceAggregator;
     AggregatorV3Interface constant usdcEthOracle =
         AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
@@ -52,10 +53,21 @@ contract Qoistip is Ownable {
         qoistipPriceAggregator = _qoistipPriceAggregator;
     }
 
+    // modifier migrateNotActive {
+    // require(migrateAddress == address(0), '');
+    // _:
+    // }
+
     function setFee(uint256 _fee) external onlyOwner {
         //add some limit, for exampple new fee must < +10%, or fee <20% ?
         require(_fee < 10000);
         fee = _fee;
+    }
+
+    function setMigrateAddress(address _migrateAddress) external onlyOwner {
+        //it can only be called once
+        require(_migrateAddress == address(0));
+        migrateAddress = _migrateAddress;
     }
 
     function setMinValue(uint256 _newMinValue) external onlyOwner {
@@ -116,11 +128,24 @@ contract Qoistip is Ownable {
         string memory _tokenSymbol,
         string memory _tokenName
     ) external {
+        require(
+            _tokenCustomer[msg.sender] == address(0),
+            "This address has been already registered"
+        );
+        require(
+            migrateAddress == address(0),
+            "New version smart contract is available "
+        );
+
         address _newToken = address(
             new CustomerToken(_tokenSymbol, _tokenName)
         );
         _tokenCustomer[msg.sender] = _newToken;
         emit NewCustomer(msg.sender, _newToken);
+    }
+
+    function migrate() external {
+        CustomerToken(_tokenCustomer[msg.sender]).transferOwnership(migrateAddress);
     }
 
     function _getPrice(address _tokenAddress) private view returns (uint256) {

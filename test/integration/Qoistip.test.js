@@ -111,6 +111,11 @@ describe('Qoistip', function () {
         qoistip.connect(shibHodler).donateERC20(customer1.address, shib.address, parseUnits('0.026')),
       ).to.be.revertedWith('Donate worth < min value $');
     });
+    it('Revert when address not register', async function () {
+     await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
+
+     await expect(qoistip.connect(sandHodler).donateERC20(addr2.address, sand.address, parseUnits('100'))).to.be.reverted;
+    });
   });
 
   describe('Donate ETH', () => {
