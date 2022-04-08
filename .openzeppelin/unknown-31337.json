@@ -1,0 +1,191 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x70bDA08DBe07363968e9EE53d899dFE48560605B",
+    "txHash": "0xb7ad7f4e4c7d4e7ef05472a76aac77bf1b1cd4fdf879053bcb1cf83f2e8335ee"
+  },
+  "proxies": [
+    {
+      "address": "0x70bDA08DBe07363968e9EE53d899dFE48560605B",
+      "txHash": "0xb850eb9fbd9499527d12b1c1510de8571fac67a2b44e60f57d3f4d2db64615ba",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x26B862f640357268Bd2d9E95bc81553a2Aa81D7E",
+      "txHash": "0x854ccf208e15ea118d1e160213cd51b5f1ba9a1dbcf69765fe15799dd8ef2bf8",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "caf116bc5633c7fa5e7b5c33653196f98227c4e3d2ec65eb5230729d6e701d90": {
+      "address": "0xaca81583840B1bf2dDF6CDe824ada250C1936B4D",
+      "txHash": "0xf66614e1f11b2986ed53a33cf6c37ecb846a8067d8bedce5923306d53cfd1b33",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "_fee",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_uint256",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:15"
+          },
+          {
+            "label": "_minValue",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_uint256",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:16"
+          },
+          {
+            "label": "qoistipPriceAggregator",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_contract(QoistipPriceAggregator)2119",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:17"
+          },
+          {
+            "label": "addressToPriceOracle",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_mapping(t_address,t_struct(PriceOracle)1432_storage)",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:31"
+          },
+          {
+            "label": "_tokenCustomer",
+            "offset": 0,
+            "slot": "105",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:33"
+          },
+          {
+            "label": "addressToTokenToBalance",
+            "offset": 0,
+            "slot": "106",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:34"
+          },
+          {
+            "label": "BalanceETH",
+            "offset": 0,
+            "slot": "107",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:35"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_contract(QoistipPriceAggregator)2119": {
+            "label": "contract QoistipPriceAggregator",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_struct(PriceOracle)1432_storage)": {
+            "label": "mapping(address => struct Qoistip.PriceOracle)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(PriceOracle)1432_storage": {
+            "label": "struct Qoistip.PriceOracle",
+            "members": [
+              {
+                "label": "oracleAddress",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "priceInUSD",
+                "type": "t_bool",
+                "offset": 20,
+                "slot": "0"
+              },
+              {
+                "label": "isChailink",
+                "type": "t_bool",
+                "offset": 21,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    }
+  }
+}

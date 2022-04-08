@@ -12,8 +12,6 @@ xdescribe('Qoistip', function () {
   let customerToken1;
   let sand;
   let sandHodler;
-  let shib;
-  let shibHodler;
   let owner;
   let customer1;
   let addr2;
@@ -23,22 +21,16 @@ xdescribe('Qoistip', function () {
     [owner, customer1, addr2, ...addrs] = await ethers.getSigners();
 
     sand = new ethers.Contract(ERC20_TOKEN_ADDRESS.SAND, sandABI, ethers.provider);
-    shib = new ethers.Contract(ERC20_TOKEN_ADDRESS.SHIB, sandABI, ethers.provider);
 
     // Have SAND, USDT, USDC
     const accountWithSAND = '0x109e588d17C1c1cff206aCB0b3FF0AAEffDe92bd';
-    const accountWithSHIB = '0xd6Bc559a59B24A58A82F274555d152d67F15a7A6';
 
     await network.provider.request({
       method: 'hardhat_impersonateAccount',
       params: [accountWithSAND],
     });
-    await network.provider.request({
-      method: 'hardhat_impersonateAccount',
-      params: [accountWithSHIB],
-    });
+
     sandHodler = await ethers.getSigner(accountWithSAND);
-    shibHodler = await ethers.getSigner(accountWithSHIB);
 
     const QoistipPriceAggregator = await ethers.getContractFactory('QoistipPriceAggregator');
     qoistipPriceAggregator = await QoistipPriceAggregator.deploy();
@@ -51,16 +43,18 @@ xdescribe('Qoistip', function () {
 
     //set Qoisdapp smart contract needed veriables
     await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, true, true);
-    await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SHIB, CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB, false, true);
     const registerCustomerTransation = await qoistip.connect(customer1).registerCustomer('CT1', 'CustomerToken1');
 
     registerCustomerTransation.wait();
     const customerToken1Address = await qoistip.tokenCustomer(customer1.address);
     customerToken1 = new ethers.Contract(customerToken1Address, CustomerToken.abi, ethers.provider);
+
+    await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
+    await qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('100'));
   });
 
-  describe('Migrate ', () => {
-
+  xdescribe('Migrate ', async() => {
+    const QoistipV2 = await ethers.getContractFactory('QoistipV2');
+    qoistipV2 = await QoistipV2.deploy(qoistipPriceAggregator.address);
   });
-    
 });

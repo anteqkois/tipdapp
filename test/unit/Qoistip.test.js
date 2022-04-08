@@ -21,7 +21,7 @@ describe('Qoistip', function () {
     qoistipPriceAggregator = await QoistipPriceAggregator.deploy();
 
     const Qoistip = await ethers.getContractFactory('Qoistip');
-    qoistip = await Qoistip.deploy(9700, qoistipPriceAggregator.address);
+    qoistip = await upgrades.deployProxy(Qoistip, [qoistipPriceAggregator.address]);
   });
 
   describe('Set new price token oracle', () => {

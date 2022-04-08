@@ -5,15 +5,15 @@ import "./CustomerToken.sol";
 import "./AggregatorV3Interface.sol";
 import "./QoistipPriceAggregator.sol";
 import "hardhat/console.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract Qoistip is Initializable, OwnableUpgradeable {
+contract QoistipV2 is Ownable {
     /// 99=>1%,  0,1%=>999  0,03% => 997
 
-    uint256 private _fee;
+    uint256 fee;
     uint256 private _minValue;
+    address migrateAddress;
     QoistipPriceAggregator qoistipPriceAggregator;
     AggregatorV3Interface constant usdcEthOracle =
         AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
@@ -47,29 +47,27 @@ contract Qoistip is Initializable, OwnableUpgradeable {
     );
     event NewCustomer(address customerAddress, address customerToken);
 
-    // constructor(QoistipPriceAggregator _qoistipPriceAggregator) {
-    //     _fee = 9700;
-    //     _minValue = 1e17;
-    //     qoistipPriceAggregator = _qoistipPriceAggregator;
-    // }
-    function initialize(QoistipPriceAggregator _qoistipPriceAggregator)
-        public
-        initializer
-    {
-        __Ownable_init();
-        _fee = 9700;
+    constructor(uint256 _fee, QoistipPriceAggregator _qoistipPriceAggregator) {
+        fee = _fee;
         _minValue = 1e17;
         qoistipPriceAggregator = _qoistipPriceAggregator;
     }
 
-    function fee() external view returns (uint256) {
-        return _fee;
+    // modifier migrateNotActive {
+    // require(migrateAddress == address(0), '');
+    // _:
+    // }
+
+    function setFee(uint256 _fee) external onlyOwner {
+        //add some limit, for exampple new fee must < +10%, or fee <20% ?
+        require(_fee < 10000);
+        fee = _fee;
     }
 
-    function setFee(uint256 _newFee) external onlyOwner {
-        //add some limit, for exampple new _fee must < +10%, or _fee <20% ?
-        require(_newFee < 10000);
-        _fee = _newFee;
+    function setMigrateAddress(address _migrateAddress) external onlyOwner {
+        //it can only be called once
+        require(_migrateAddress == address(0));
+        migrateAddress = _migrateAddress;
     }
 
     function setMinValue(uint256 _newMinValue) external onlyOwner {
@@ -84,9 +82,8 @@ contract Qoistip is Initializable, OwnableUpgradeable {
         return _tokenCustomer[_customerAddress];
     }
 
-    // Delete this ?
     function calculateWithFee(uint256 _amount) internal view returns (uint256) {
-        return (_amount * _fee) / 10000;
+        return (_amount * fee) / 10000;
     }
 
     function balanceOfERC20(address _customerAddress, address _tokenAddress)
@@ -135,12 +132,20 @@ contract Qoistip is Initializable, OwnableUpgradeable {
             _tokenCustomer[msg.sender] == address(0),
             "This address has been already registered"
         );
+        require(
+            migrateAddress == address(0),
+            "New version smart contract is available "
+        );
 
         address _newToken = address(
             new CustomerToken(_tokenSymbol, _tokenName)
         );
         _tokenCustomer[msg.sender] = _newToken;
         emit NewCustomer(msg.sender, _newToken);
+    }
+
+    function migrate() external {
+        CustomerToken(_tokenCustomer[msg.sender]).transferOwnership(migrateAddress);
     }
 
     function _getPrice(address _tokenAddress) private view returns (uint256) {
@@ -200,7 +205,6 @@ contract Qoistip is Initializable, OwnableUpgradeable {
         require(_addressToDonate != address(0), "Can not send to 0 address");
         // require(_value != 0, "Donate tokens amount can not be 0");
         (, int256 price, , , ) = ethUsdOracle.latestRoundData();
-        //mul by 10**10 becouse price is return in 8 digit
         uint256 _tokenToMint = (uint(price) * 10**10 * msg.value) / 1e18;
         require(_tokenToMint >= _minValue, "Donate worth < min value $");
         // console.log("Amount token to mint: %s", _tokenToMint);
@@ -227,7 +231,7 @@ contract Qoistip is Initializable, OwnableUpgradeable {
         emit Withdraw(msg.sender, _tokenAddress, _tokenBalance);
     }
 
-    function withdrawManyERC20(address[] calldata _tokenAddress) external {
+    function withdrawManyERC20(address[] memory _tokenAddress) external {
         uint256 _iteration = _tokenAddress.length;
         for (uint256 _i = 0; _i < _iteration; _i++) {
             withdrawERC20(_tokenAddress[_i]);

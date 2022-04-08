@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { ethers, network } = require('hardhat');
+const { ethers, network, upgrades } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
 const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, ERC20_TOKEN_ADDRESS, CHAILINK_PRICE_ORACLE_ADDRESS_ETH } = require('../../constant');
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
@@ -44,7 +44,9 @@ describe('Qoistip', function () {
     qoistipPriceAggregator = await QoistipPriceAggregator.deploy();
 
     const Qoistip = await ethers.getContractFactory('Qoistip');
-    qoistip = await Qoistip.deploy(9700, qoistipPriceAggregator.address);
+    qoistip = await upgrades.deployProxy(Qoistip, [qoistipPriceAggregator.address]);
+    // qoistip = await Qoistip.deploy(qoistipPriceAggregator.address);
+
 
     const ChailinkPriceFeeds = await ethers.getContractFactory('ChailinkPriceFeeds');
     chailinkPriceFeeds = await ChailinkPriceFeeds.deploy();
@@ -115,6 +117,7 @@ describe('Qoistip', function () {
      await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
 
      await expect(qoistip.connect(sandHodler).donateERC20(addr2.address, sand.address, parseUnits('100'))).to.be.reverted;
+    // expect(await qoistip.connect(sandHodler).donateERC20(addr2.address, sand.address, parseUnits('100')));
     });
   });
 
