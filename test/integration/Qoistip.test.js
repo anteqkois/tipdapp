@@ -44,9 +44,8 @@ describe('Qoistip', function () {
     qoistipPriceAggregator = await QoistipPriceAggregator.deploy();
 
     const Qoistip = await ethers.getContractFactory('Qoistip');
-    qoistip = await upgrades.deployProxy(Qoistip, [qoistipPriceAggregator.address]);
+    qoistip = await upgrades.deployProxy(Qoistip, [qoistipPriceAggregator.address], { kind: 'uups' });
     // qoistip = await Qoistip.deploy(qoistipPriceAggregator.address);
-
 
     const ChailinkPriceFeeds = await ethers.getContractFactory('ChailinkPriceFeeds');
     chailinkPriceFeeds = await ChailinkPriceFeeds.deploy();
@@ -61,7 +60,7 @@ describe('Qoistip', function () {
     customerToken1 = new ethers.Contract(customerToken1Address, CustomerToken.abi, ethers.provider);
   });
 
-  describe('Donate ERC20', () => {
+  describe('Donate ERC20', async () => {
     it('Check $SAND balance before donate', async function () {
       expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(0);
     });
@@ -106,22 +105,28 @@ describe('Qoistip', function () {
       const calculateExpectBalance = parseUnits('10000').mul(shibPrice).div('1000000000000000000');
       expect(await customerToken1.balanceOf(shibHodler.address)).to.equal(calculateExpectBalance);
     });
-    it('Can not send donate if worth is to small', async function () {
-      await sand.connect(sandHodler).approve(qoistip.address, parseUnits('0.0001'));
+    it('Can not send donate if worth is to small ($SAND)', async function () {
+      await sand.connect(sandHodler).approve(qoistip.address, parseUnits('0.01'));
 
       await expect(
-        qoistip.connect(shibHodler).donateERC20(customer1.address, shib.address, parseUnits('0.026')),
+        qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('0.01')),
       ).to.be.revertedWith('Donate worth < min value $');
     });
-    it('Revert when address not register', async function () {
-     await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
+    it('Revert when address to donate is 0x0...', async function () {
+      await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
 
-     await expect(qoistip.connect(sandHodler).donateERC20(addr2.address, sand.address, parseUnits('100'))).to.be.reverted;
-    // expect(await qoistip.connect(sandHodler).donateERC20(addr2.address, sand.address, parseUnits('100')));
+      await expect(
+        qoistip.connect(sandHodler).donateERC20('0x0000000000000000000000000000000000000000', sand.address, parseUnits('100')),
+      ).to.be.reverted;
+    });
+    it('Revert when address not register', async function () {
+      await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
+
+      await expect(qoistip.connect(sandHodler).donateERC20(addr2.address, sand.address, parseUnits('100'))).to.be.reverted;
     });
   });
 
-  describe('Donate ETH', () => {
+  describe('Donate ETH', async () => {
     it('Check $ETH balance in smart contract before donate', async function () {
       expect(await qoistip.balanceOfETH(customer1.address)).to.be.equal(0);
     });
@@ -142,7 +147,7 @@ describe('Qoistip', function () {
     });
   });
 
-  describe('Withdraw ERC20', () => {
+  describe('Withdraw ERC20', async () => {
     it('One ERC20 Token', async function () {
       const sandBalance = await qoistip.balanceOfERC20(customer1.address, sand.address);
       expect(sandBalance).to.equal(parseUnits('97'));
@@ -177,7 +182,7 @@ describe('Qoistip', function () {
     });
   });
 
-  describe('Withdraw ETH', () => {
+  describe('Withdraw ETH', async () => {
     it('All ETH', async function () {
       expect(await qoistip.balanceOfETH(customer1.address)).to.equal(parseUnits('0.97'));
 
@@ -190,6 +195,17 @@ describe('Qoistip', function () {
     });
     it('Revert if zero balance', async function () {
       await expect(qoistip.connect(customer1).withdrawETH()).to.be.revertedWith('You have 0 ETH');
+    });
+  });
+
+  describe('Upgrade implementation', async () => {
+    it('Upgrade', async function () {
+      expect(await qoistip.version()).to.equal(1);
+
+      const QoistipV2 = await ethers.getContractFactory('QoistipV2');
+      await upgrades.upgradeProxy(qoistip, QoistipV2);
+
+      expect(await qoistip.version()).to.equal(2);
     });
   });
 });

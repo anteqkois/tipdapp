@@ -5,34 +5,34 @@ import "./CustomerToken.sol";
 import "./AggregatorV3Interface.sol";
 import "./QoistipPriceAggregator.sol";
 import "hardhat/console.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-contract Qoistip is Initializable, OwnableUpgradeable {
-    /// 99=>1%,  0,1%=>999  0,03% => 997
+contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
+    mapping(address => PriceOracle) addressToPriceOracle;
+    // ! add ability to token to change owner (from old DonateC to new, when migrate ?)
+    mapping(address => address) private _tokenCustomer;
+    mapping(address => mapping(address => uint256)) addressToTokenToBalance;
+    mapping(address => uint256) BalanceETH;
 
+    // 99=>1%,  0,1%=>999  0,03% => 997
     uint256 private _fee;
-    uint256 private _minValue;
+    // 0.1$
+    uint256 private constant _minValue = 1e17;
     QoistipPriceAggregator qoistipPriceAggregator;
     AggregatorV3Interface constant usdcEthOracle =
         AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
 
     AggregatorV3Interface constant ethUsdOracle =
         AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
+
     struct PriceOracle {
         address oracleAddress;
-        // flags priceInUSD/chaiLinkHaveOracle/ (Not use to packing strucn <32 Bits, in future check gas when these are read ?)
-        // uint8 flags;
         bool priceInUSD;
         bool isChailink;
     }
-
-    mapping(address => PriceOracle) addressToPriceOracle;
-    // ! add ability to token to change owner (from old DonateC to new, when migrate ?)
-    mapping(address => address) private _tokenCustomer;
-    mapping(address => mapping(address => uint256)) addressToTokenToBalance;
-    mapping(address => uint256) BalanceETH;
 
     event Donate(
         address indexed donator,
@@ -45,22 +45,20 @@ contract Qoistip is Initializable, OwnableUpgradeable {
         address tokenAddress,
         uint256 tokenAmount
     );
-    event NewCustomer(address customerAddress, address customerToken);
+    event NewCustomer(address indexed customerAddress, address customerToken);
 
-    // constructor(QoistipPriceAggregator _qoistipPriceAggregator) {
-    //     _fee = 9700;
-    //     _minValue = 1e17;
-    //     qoistipPriceAggregator = _qoistipPriceAggregator;
-    // }
     function initialize(QoistipPriceAggregator _qoistipPriceAggregator)
         public
         initializer
     {
         __Ownable_init();
         _fee = 9700;
-        _minValue = 1e17;
+        // _minValue = 1e17;
         qoistipPriceAggregator = _qoistipPriceAggregator;
     }
+
+    // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
+    function _authorizeUpgrade(address) internal override onlyOwner {}
 
     function fee() external view returns (uint256) {
         return _fee;
@@ -72,9 +70,9 @@ contract Qoistip is Initializable, OwnableUpgradeable {
         _fee = _newFee;
     }
 
-    function setMinValue(uint256 _newMinValue) external onlyOwner {
-        _minValue = _newMinValue;
-    }
+    // function setMinValue(uint256 _newMinValue) external onlyOwner {
+    //     _minValue = _newMinValue;
+    // }
 
     function tokenCustomer(address _customerAddress)
         external
@@ -166,11 +164,8 @@ contract Qoistip is Initializable, OwnableUpgradeable {
         address _tokenAddress,
         uint256 _tokenAmount
     ) external returns (bool success) {
-        require(_addressToDonate != address(0), "Can not donate address 0");
-        //TODO check if it is worth over 1$ ?
         uint256 _tokenToMint = (_getPrice(_tokenAddress) * _tokenAmount) / 1e18;
         require(_tokenToMint >= _minValue, "Donate worth < min value $");
-        // console.log("Amount token to mint: %s", _tokenToMint);
 
         IERC20(_tokenAddress).transferFrom(
             msg.sender,
@@ -196,14 +191,10 @@ contract Qoistip is Initializable, OwnableUpgradeable {
         payable
         returns (bool success)
     {
-        // uint256 _value = msg.value;
-        require(_addressToDonate != address(0), "Can not send to 0 address");
-        // require(_value != 0, "Donate tokens amount can not be 0");
         (, int256 price, , , ) = ethUsdOracle.latestRoundData();
         //mul by 10**10 becouse price is return in 8 digit
         uint256 _tokenToMint = (uint(price) * 10**10 * msg.value) / 1e18;
         require(_tokenToMint >= _minValue, "Donate worth < min value $");
-        // console.log("Amount token to mint: %s", _tokenToMint);
 
         uint256 _withFee = calculateWithFee(msg.value);
         BalanceETH[_addressToDonate] = _withFee;
@@ -241,5 +232,9 @@ contract Qoistip is Initializable, OwnableUpgradeable {
         (bool sent, ) = address(msg.sender).call{value: _ethBalance}("");
         require(sent, "Failed to send Ether");
         emit Withdraw(msg.sender, address(0), _ethBalance);
+    }
+
+    function version() external pure virtual returns (uint8) {
+        return 1;
     }
 }
