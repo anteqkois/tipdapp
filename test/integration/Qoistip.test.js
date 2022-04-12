@@ -51,8 +51,8 @@ describe('Qoistip', function () {
     chailinkPriceFeeds = await ChailinkPriceFeeds.deploy();
 
     //set Qoisdapp smart contract needed veriables
-    await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, true, true);
-    await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SHIB, CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB, false, true);
+    await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, true);
+    await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SHIB, CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB, false);
     const registerCustomerTransation = await qoistip.connect(customer1).registerCustomer('CT1', 'CustomerToken1');
 
     registerCustomerTransation.wait();

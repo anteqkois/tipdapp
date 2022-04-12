@@ -11,7 +11,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
-    mapping(address => bytes) priceOracleData;
+    mapping(address => bytes32) oracleData;
     // ! add ability to token to change owner (from old DonateC to new, when migrate ?)
     mapping(address => address) private _tokenCustomer;
     mapping(address => mapping(address => uint256)) addressToTokenToBalance;
@@ -92,35 +92,6 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         return BalanceETH[_customerAddress];
     }
 
-    function setPriceOracle(
-        address _tokenAddress,
-        address _oracleAddress,
-        bool _inUSD,
-        bool _isChailink
-    ) external onlyOwner {
-        // check cost of checking data and write, and only write
-        priceOracleData[_tokenAddress] = abi.encode(
-            _oracleAddress,
-            _inUSD,
-            _isChailink
-        );
-    }
-
-    function priceOracle(address _tokenAddress)
-        external
-        view
-        returns (
-            address oracleAddress,
-            bool inUSD,
-            bool isChailink
-        )
-    {
-        (oracleAddress, inUSD, isChailink) = abi.decode(
-            priceOracleData[_tokenAddress],
-            (address, bool, bool)
-        );
-    }
-
     function registerCustomer(
         string memory _tokenSymbol,
         string memory _tokenName
@@ -137,29 +108,45 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         emit NewCustomer(msg.sender, _newToken);
     }
 
+    function setPriceOracle(
+        address _tokenAddress,
+        address _oracleAddress,
+        bool _inUSD
+    ) external onlyOwner {
+        bytes32 priceOracleData = bytes20(_oracleAddress);
+        if (_inUSD) priceOracleData |= (bytes32(uint256(1)) << 95);
+        oracleData[_tokenAddress] = priceOracleData;
+    }
+
+    function priceOracle(address _tokenAddress)
+        external
+        view
+        returns (
+            address oracleAddress,
+            bool inUSD
+        )
+    {
+        bytes32 data = oracleData[_tokenAddress];
+        oracleAddress = address(bytes20(data));
+        inUSD = (data & (bytes32(uint256(1)) << 95)) != 0 ? true : false;
+    }
+
     function _getPrice(address _tokenAddress)
         internal
         view
         virtual
         returns (uint256)
     {
-        (address oracleAddress, bool inUSD, bool isChailink) = abi.decode(
-            priceOracleData[_tokenAddress],
-            (address, bool, bool)
-        );
-        require(oracleAddress != address(0), "Not supported token");
-        if (isChailink) {
-            (, int256 price, , , ) = AggregatorV3Interface(oracleAddress)
-                .latestRoundData();
-            if (inUSD) {
-                return uint256(price * 10**10);
-            } else {
-                (, int256 priceEth, , , ) = usdcEthOracle.latestRoundData();
-                return uint256((price * 10**18) / priceEth);
-            }
+        bytes32 oracle = oracleData[_tokenAddress];
+
+        (, int256 price, , , ) = AggregatorV3Interface(address(bytes20(oracle)))
+            .latestRoundData();
+        // in USD
+        if (oracle & (bytes32(uint256(1)) << 95) != 0 ? true : false) {
+            return uint256(price * 10**10);
         } else {
-            return
-                uint256(qoistipPriceAggregator.latestRoundData(_tokenAddress));
+            (, int256 priceEth, , , ) = usdcEthOracle.latestRoundData();
+            return uint256((price * 10**18) / priceEth);
         }
     }
 

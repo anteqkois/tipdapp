@@ -5,7 +5,7 @@ const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, ERC20_TOKEN_ADDRESS } = require('../.
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
 const sandABI = require('../../abi/SAND.json');
 
-xdescribe('Qoistip', function () {
+describe('Qoistip', function () {
   let qoistip;
   let qoistipPriceAggregator;
   let customerToken1;
@@ -28,36 +28,32 @@ xdescribe('Qoistip', function () {
     it('Check if not suported, no price oracle', async function () {
       const priceOracleData = await qoistip.priceOracle(ERC20_TOKEN_ADDRESS.SAND);
       expect(priceOracleData.oracleAddress).to.equal('0x0000000000000000000000000000000000000000');
-      expect(priceOracleData.priceInUSD).to.equal(false);
-      expect(priceOracleData.isChailink).to.equal(false);
+      expect(priceOracleData.inUSD).to.be.false;
     });
     it('Add price token pracle and check if data on-chain are right', async function () {
-      await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, true, true);
+      await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, true);
 
       const priceOracleData = await qoistip.priceOracle(ERC20_TOKEN_ADDRESS.SAND);
       expect(priceOracleData.oracleAddress).to.equal(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND);
-      expect(priceOracleData.priceInUSD).to.equal(true);
-      expect(priceOracleData.isChailink).to.equal(true);
+      expect(priceOracleData.inUSD).to.be.true;
     });
     it('Only owner can set price token oracle', async function () {
       await expect(
-        qoistip.connect(addr1).setPriceOracle(ERC20_TOKEN_ADDRESS.ENJ, CHAILINK_PRICE_ORACLE_ADDRESS_USD.ENJ, true, true),
+        qoistip.connect(addr1).setPriceOracle(ERC20_TOKEN_ADDRESS.ENJ, CHAILINK_PRICE_ORACLE_ADDRESS_USD.ENJ, true),
       ).to.be.revertedWith('Ownable: caller is not the owner');
 
-      await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.ENJ, CHAILINK_PRICE_ORACLE_ADDRESS_USD.ENJ, true, true);
+      await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.ENJ, CHAILINK_PRICE_ORACLE_ADDRESS_USD.ENJ, true);
 
       const priceOracleData = await qoistip.priceOracle(ERC20_TOKEN_ADDRESS.ENJ);
       expect(priceOracleData.oracleAddress).to.equal(CHAILINK_PRICE_ORACLE_ADDRESS_USD.ENJ);
-      expect(priceOracleData.priceInUSD).to.equal(true);
-      expect(priceOracleData.isChailink).to.equal(true);
+      expect(priceOracleData.inUSD).to.be.true;
     });
     it('Disabled ptice token oracle', async function () {
-      await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.ENJ, '0x0000000000000000000000000000000000000000', false, false);
+      await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.ENJ, '0x0000000000000000000000000000000000000000', false);
 
       const priceOracleData = await qoistip.priceOracle(ERC20_TOKEN_ADDRESS.ENJ);
       expect(priceOracleData.oracleAddress).to.equal('0x0000000000000000000000000000000000000000');
-      expect(priceOracleData.priceInUSD).to.equal(false);
-      expect(priceOracleData.isChailink).to.equal(false);
+      expect(priceOracleData.inUSD).to.be.false;
     });
   });
 

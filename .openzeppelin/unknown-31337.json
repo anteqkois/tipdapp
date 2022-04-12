@@ -13,14 +13,14 @@
     },
     {
       "address": "0x70bDA08DBe07363968e9EE53d899dFE48560605B",
-      "txHash": "0xe9ee36d63ec8b405c92b4a9371abfa484b9584e23c7069e929d7275c8349eb02",
+      "txHash": "0x21202a801c95c6729ed4ad26c90190972479efe5de31452256a151a17d04a67b",
       "kind": "uups"
     }
   ],
   "impls": {
-    "519fe0f9266f040bd6c8fd7b25f57c8c15bff2bab5706a9e9e2baa9d96e831d0": {
+    "42f6f9235bc904a1f725c5a46709e2ec7cec7d659a06eee81dd73a48755e916f": {
       "address": "0xaca81583840B1bf2dDF6CDe824ada250C1936B4D",
-      "txHash": "0x235c2659915b42094b056a58154e78cd33fb61732bf72421725182056733f24b",
+      "txHash": "0x51fff0cb846cac7d97083b1f25c9d3df16ca6e356c73a34c19cbe9b3afb4e2b4",
       "layout": {
         "storage": [
           {
@@ -80,10 +80,10 @@
             "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
           },
           {
-            "label": "priceOracleData",
+            "label": "oracleData",
             "offset": 0,
             "slot": "201",
-            "type": "t_mapping(t_address,t_bytes_storage)",
+            "type": "t_mapping(t_address,t_bytes32)",
             "contract": "Qoistip",
             "src": "contracts/Qoistip.sol:14"
           },
@@ -123,7 +123,7 @@
             "label": "qoistipPriceAggregator",
             "offset": 0,
             "slot": "206",
-            "type": "t_contract(QoistipPriceAggregator)2699",
+            "type": "t_contract(QoistipPriceAggregator)2716",
             "contract": "Qoistip",
             "src": "contracts/Qoistip.sol:24"
           }
@@ -145,11 +145,11 @@
             "label": "bool",
             "numberOfBytes": "1"
           },
-          "t_bytes_storage": {
-            "label": "bytes",
+          "t_bytes32": {
+            "label": "bytes32",
             "numberOfBytes": "32"
           },
-          "t_contract(QoistipPriceAggregator)2699": {
+          "t_contract(QoistipPriceAggregator)2716": {
             "label": "contract QoistipPriceAggregator",
             "numberOfBytes": "20"
           },
@@ -157,8 +157,8 @@
             "label": "mapping(address => address)",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_address,t_bytes_storage)": {
-            "label": "mapping(address => bytes)",
+          "t_mapping(t_address,t_bytes32)": {
+            "label": "mapping(address => bytes32)",
             "numberOfBytes": "32"
           },
           "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
@@ -176,9 +176,9 @@
         }
       }
     },
-    "485e85b238864ad5118075a5028780575f3598ed7480332da09e281b64a123c0": {
+    "d333306e4818748f214b66e6c383e23949721377dc5ca05a45e84caa72e4b9ea": {
       "address": "0xB06c856C8eaBd1d8321b687E188204C1018BC4E5",
-      "txHash": "0xf6a63585ff54e7cc81cac56f57cde3ccbf53c2d218371247419881d7141ee307",
+      "txHash": "0x8a038458c9e3c96440328fdd2f2cb289c744da8d43232ba95ea64c28f6667347",
       "layout": {
         "storage": [
           {
@@ -238,10 +238,10 @@
             "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
           },
           {
-            "label": "priceOracleData",
+            "label": "oracleData",
             "offset": 0,
             "slot": "201",
-            "type": "t_mapping(t_address,t_bytes_storage)",
+            "type": "t_mapping(t_address,t_bytes32)",
             "contract": "Qoistip",
             "src": "contracts/Qoistip.sol:14"
           },
@@ -281,7 +281,7 @@
             "label": "qoistipPriceAggregator",
             "offset": 0,
             "slot": "206",
-            "type": "t_contract(QoistipPriceAggregator)2699",
+            "type": "t_contract(QoistipPriceAggregator)2716",
             "contract": "Qoistip",
             "src": "contracts/Qoistip.sol:24"
           }
@@ -303,11 +303,11 @@
             "label": "bool",
             "numberOfBytes": "1"
           },
-          "t_bytes_storage": {
-            "label": "bytes",
+          "t_bytes32": {
+            "label": "bytes32",
             "numberOfBytes": "32"
           },
-          "t_contract(QoistipPriceAggregator)2699": {
+          "t_contract(QoistipPriceAggregator)2716": {
             "label": "contract QoistipPriceAggregator",
             "numberOfBytes": "20"
           },
@@ -315,8 +315,8 @@
             "label": "mapping(address => address)",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_address,t_bytes_storage)": {
-            "label": "mapping(address => bytes)",
+          "t_mapping(t_address,t_bytes32)": {
+            "label": "mapping(address => bytes32)",
             "numberOfBytes": "32"
           },
           "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
