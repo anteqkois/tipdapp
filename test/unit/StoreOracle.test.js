@@ -23,13 +23,21 @@ describe('StoreOracle', function () {
   });
 
   describe('Store oracle data', async () => {
-    it('$SAND', async function () {
+    it('$SAND using bytes32', async function () {
       await storeOracle.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, false, true);
       const oracleData = await storeOracle.getPriceOracle(ERC20_TOKEN_ADDRESS.SAND);
       expect(oracleData.oracleAddress).to.be.equal(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND); 
       expect(oracleData.inUSD).to.be.false; 
       expect(oracleData.chailinkOracle).to.be.true; 
       console.log(await storeOracle.getPriceOracle(ERC20_TOKEN_ADDRESS.SAND));
+    });
+    it('$SAND using uint256', async function () {
+      await storeOracle.setPriceOracle2(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, false, true);
+      const oracleData = await storeOracle.getPriceOracle2(ERC20_TOKEN_ADDRESS.SAND);
+      expect(oracleData.oracleAddress).to.be.equal(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND); 
+      // expect(oracleData.inUSD).to.be.false; 
+      // expect(oracleData.chailinkOracle).to.be.true; 
+      console.log(await storeOracle.getPriceOracle2(ERC20_TOKEN_ADDRESS.SAND));
     });
   });
 });

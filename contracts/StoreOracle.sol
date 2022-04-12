@@ -7,13 +7,7 @@ import "hardhat/console.sol";
 
 contract StoreOracle {
     mapping(address => bytes32) addressToPriceOracle;
-
-    // QoistipPriceAggregator qoistipPriceAggregator;
-    // AggregatorV3Interface constant usdcEthOracle =
-    //     AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
-
-    // AggregatorV3Interface constant ethUsdOracle =
-    //     AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
+    mapping(address => uint256) addressToPriceOracle2;
 
     // function pack(int16 a, int16 b) public pure returns (bytes32) {
     //     return (bytes32(bytes2(a)) >> 16) | bytes2(b);
@@ -22,6 +16,12 @@ contract StoreOracle {
     // function unpack(bytes32 x) public pure returns (int16, int16) {
     //     return (int16(bytes2(x << 16)), int16(bytes2(x)));
     // }
+
+    modifier checkGas() {
+        uint256 startGas = gasleft();
+        _;
+        console.log(startGas - gasleft());
+    }
 
     function setPriceOracle(
         address _tokenAddress,
@@ -35,11 +35,10 @@ contract StoreOracle {
         addressToPriceOracle[_tokenAddress] = priceOracleData;
     }
 
-    uint256 _packedBools;
-
     function getPriceOracle(address _tokenAddress)
         external
         view
+        checkGas
         returns (
             address oracleAddress,
             bool inUSD,
@@ -48,9 +47,43 @@ contract StoreOracle {
     {
         bytes32 data = addressToPriceOracle[_tokenAddress];
         oracleAddress = address(bytes20(data));
-        inUSD = (data & bytes32(uint256(1)) << 95) != 0 ? true : false;
-        chailinkOracle = (data & bytes32(uint256(1)) << 94) != 0 ? true : false;
+        inUSD = (data & (bytes32(uint256(1)) << 95)) != 0 ? true : false;
+        chailinkOracle = (data & (bytes32(uint256(1)) << 94)) != 0
+            ? true
+            : false;
     }
+
+    function setPriceOracle2(
+        address _tokenAddress,
+        address _oracleAddress,
+        bool _inUSD,
+        bool _chailinkOracle
+    ) external {
+        uint256 priceOracleData = uint160(_oracleAddress);
+        if (_inUSD) priceOracleData |= (uint256(1) << 161);
+        if (_chailinkOracle) priceOracleData |= (uint256(1) << 162);
+        addressToPriceOracle2[_tokenAddress] = priceOracleData;
+        console.log(priceOracleData);
+    }
+
+    function getPriceOracle2(address _tokenAddress)
+        external
+        view
+        checkGas
+        returns (
+            address oracleAddress,
+            bool inUSD,
+            bool chailinkOracle
+        )
+    {
+        uint256 data = addressToPriceOracle2[_tokenAddress];
+        oracleAddress = address(uint160(data));
+        inUSD = (data & (uint256(1) << 161)) != 0 ? true : false;
+        chailinkOracle = (data & (uint256(1) << 162)) != 0 ? true : false;
+        // chailinkOracle = (data & bytes32(uint256(1)) << 94) != 0 ? true : false;
+    }
+
+    uint256 _packedBools;
 
     function setBoolean(uint256 _boolNumber, bool _value) public {
         console.log(_packedBools);

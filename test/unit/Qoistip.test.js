@@ -5,7 +5,7 @@ const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, ERC20_TOKEN_ADDRESS } = require('../.
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
 const sandABI = require('../../abi/SAND.json');
 
-describe('Qoistip', function () {
+xdescribe('Qoistip', function () {
   let qoistip;
   let qoistipPriceAggregator;
   let customerToken1;
