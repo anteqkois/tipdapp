@@ -3,7 +3,7 @@ const { ethers } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
 const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, CHAILINK_PRICE_ORACLE_ADDRESS_ETH } = require('../../constant');
 
-describe('ChailinkPriceFeeds', function () {
+xdescribe('ChailinkPriceFeeds', function () {
   let chailinkPriceFeeds;
   let owner;
   let addr1;

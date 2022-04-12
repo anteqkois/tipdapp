@@ -11,7 +11,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
-    mapping(address => PriceOracle) addressToPriceOracle;
+    mapping(address => bytes) priceOracleData;
     // ! add ability to token to change owner (from old DonateC to new, when migrate ?)
     mapping(address => address) private _tokenCustomer;
     mapping(address => mapping(address => uint256)) addressToTokenToBalance;
@@ -27,12 +27,6 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
 
     AggregatorV3Interface constant ethUsdOracle =
         AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
-
-    struct PriceOracle {
-        address oracleAddress;
-        bool priceInUSD;
-        bool isChailink;
-    }
 
     event Donate(
         address indexed donator,
@@ -82,11 +76,6 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         return _tokenCustomer[_customerAddress];
     }
 
-    // Delete this ?
-    function calculateWithFee(uint256 _amount) internal view returns (uint256) {
-        return (_amount * _fee) / 10000;
-    }
-
     function balanceOfERC20(address _customerAddress, address _tokenAddress)
         external
         view
@@ -107,22 +96,29 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         address _tokenAddress,
         address _oracleAddress,
         bool _inUSD,
-        bool _chailinkOracle
+        bool _isChailink
     ) external onlyOwner {
         // check cost of checking data and write, and only write
-        addressToPriceOracle[_tokenAddress] = PriceOracle(
+        priceOracleData[_tokenAddress] = abi.encode(
             _oracleAddress,
             _inUSD,
-            _chailinkOracle
+            _isChailink
         );
     }
 
     function priceOracle(address _tokenAddress)
         external
         view
-        returns (PriceOracle memory)
+        returns (
+            address oracleAddress,
+            bool inUSD,
+            bool isChailink
+        )
     {
-        return addressToPriceOracle[_tokenAddress];
+        (oracleAddress, inUSD, isChailink) = abi.decode(
+            priceOracleData[_tokenAddress],
+            (address, bool, bool)
+        );
     }
 
     function registerCustomer(
@@ -141,13 +137,21 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         emit NewCustomer(msg.sender, _newToken);
     }
 
-    function _getPrice(address _tokenAddress) private view returns (uint256) {
-        PriceOracle memory oracle = addressToPriceOracle[_tokenAddress];
-        require(oracle.oracleAddress != address(0), "Not supported token");
-        if (oracle.isChailink) {
-            (, int256 price, , , ) = AggregatorV3Interface(oracle.oracleAddress)
+    function _getPrice(address _tokenAddress)
+        internal
+        view
+        virtual
+        returns (uint256)
+    {
+        (address oracleAddress, bool inUSD, bool isChailink) = abi.decode(
+            priceOracleData[_tokenAddress],
+            (address, bool, bool)
+        );
+        require(oracleAddress != address(0), "Not supported token");
+        if (isChailink) {
+            (, int256 price, , , ) = AggregatorV3Interface(oracleAddress)
                 .latestRoundData();
-            if (oracle.priceInUSD) {
+            if (inUSD) {
                 return uint256(price * 10**10);
             } else {
                 (, int256 priceEth, , , ) = usdcEthOracle.latestRoundData();
@@ -173,7 +177,8 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
             _tokenAmount
         );
 
-        uint256 _withFee = calculateWithFee(_tokenAmount);
+        // uint256 _withFee = calculateWithFee(_tokenAmount);
+        uint256 _withFee = (_tokenAmount * _fee) / 10000;
         addressToTokenToBalance[_addressToDonate][_tokenAddress] = _withFee;
         addressToTokenToBalance[address(this)][_tokenAddress] =
             _tokenAmount -
@@ -196,7 +201,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         uint256 _tokenToMint = (uint(price) * 10**10 * msg.value) / 1e18;
         require(_tokenToMint >= _minValue, "Donate worth < min value $");
 
-        uint256 _withFee = calculateWithFee(msg.value);
+        uint256 _withFee = (msg.value * _fee) / 10000;
         BalanceETH[_addressToDonate] = _withFee;
         BalanceETH[address(this)] = msg.value - _withFee;
 
