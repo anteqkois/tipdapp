@@ -2,25 +2,20 @@
   "manifestVersion": "3.2",
   "proxies": [
     {
-      "address": "0xaca81583840B1bf2dDF6CDe824ada250C1936B4D",
-      "txHash": "0xaea3524b2b9b3bd409d5d50de50dc6ce487ca97cb8dab48e796b20eca1e7f562",
-      "kind": "uups"
-    },
-    {
-      "address": "0x26B862f640357268Bd2d9E95bc81553a2Aa81D7E",
-      "txHash": "0x5f4216ac3a13cf8f4cf89f1b474349ba0425a39b6d194bd52a8579cf4b15bcde",
-      "kind": "uups"
-    },
-    {
       "address": "0x70bDA08DBe07363968e9EE53d899dFE48560605B",
-      "txHash": "0x21202a801c95c6729ed4ad26c90190972479efe5de31452256a151a17d04a67b",
+      "txHash": "0xa33b6f97960de71843400279a7db3c9b77c9af8ae4a74913e97a24951dcca268",
+      "kind": "uups"
+    },
+    {
+      "address": "0xaca81583840B1bf2dDF6CDe824ada250C1936B4D",
+      "txHash": "0xe26cc4521c8ae5cdb15be7680ef455ec08564bbea92f8ac94de31e792ef986a3",
       "kind": "uups"
     }
   ],
   "impls": {
-    "42f6f9235bc904a1f725c5a46709e2ec7cec7d659a06eee81dd73a48755e916f": {
+    "cf74029718917c5275a3f14a2a50b6bd0241b05882068ac2534315afce5d44b5": {
       "address": "0xaca81583840B1bf2dDF6CDe824ada250C1936B4D",
-      "txHash": "0x51fff0cb846cac7d97083b1f25c9d3df16ca6e356c73a34c19cbe9b3afb4e2b4",
+      "txHash": "0x99e84ece2e960ebab07dc2e6f7fe9544d4e6d9e77e6559a5652e7379756462e2",
       "layout": {
         "storage": [
           {
@@ -118,14 +113,6 @@
             "type": "t_uint256",
             "contract": "Qoistip",
             "src": "contracts/Qoistip.sol:21"
-          },
-          {
-            "label": "qoistipPriceAggregator",
-            "offset": 0,
-            "slot": "206",
-            "type": "t_contract(QoistipPriceAggregator)2716",
-            "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:24"
           }
         ],
         "types": {
@@ -148,10 +135,6 @@
           "t_bytes32": {
             "label": "bytes32",
             "numberOfBytes": "32"
-          },
-          "t_contract(QoistipPriceAggregator)2716": {
-            "label": "contract QoistipPriceAggregator",
-            "numberOfBytes": "20"
           },
           "t_mapping(t_address,t_address)": {
             "label": "mapping(address => address)",
@@ -176,9 +159,155 @@
         }
       }
     },
-    "d333306e4818748f214b66e6c383e23949721377dc5ca05a45e84caa72e4b9ea": {
+    "ff19c1e0d1e4855938debc1ab16c76e48c15a6c6817b5ff24941f06db7131fee": {
+      "address": "0xefAB0Beb0A557E452b398035eA964948c750b2Fd",
+      "txHash": "0x1e67154338959dfc8dc37a35574d596a7727a46878defdca877a1c7a11a9af32",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC1967UpgradeUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:211"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "UUPSUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:107"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "151",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "152",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "oracleData",
+            "offset": 0,
+            "slot": "201",
+            "type": "t_mapping(t_address,t_bytes32)",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:14"
+          },
+          {
+            "label": "_tokenCustomer",
+            "offset": 0,
+            "slot": "202",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:16"
+          },
+          {
+            "label": "addressToTokenToBalance",
+            "offset": 0,
+            "slot": "203",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:17"
+          },
+          {
+            "label": "BalanceETH",
+            "offset": 0,
+            "slot": "204",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:18"
+          },
+          {
+            "label": "_fee",
+            "offset": 0,
+            "slot": "205",
+            "type": "t_uint256",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:21"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_bytes32)": {
+            "label": "mapping(address => bytes32)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "86464dc624043c27eb025412f92fbea9ad00aba0a527d1e9bf830262c471aceb": {
       "address": "0xB06c856C8eaBd1d8321b687E188204C1018BC4E5",
-      "txHash": "0x8a038458c9e3c96440328fdd2f2cb289c744da8d43232ba95ea64c28f6667347",
+      "txHash": "0x8b3c5a374b1bb8dad6c89ffca680f0601c0b069cee7bd5d3e2a6766aa96aa0ca",
       "layout": {
         "storage": [
           {
@@ -278,12 +407,12 @@
             "src": "contracts/Qoistip.sol:21"
           },
           {
-            "label": "qoistipPriceAggregator",
+            "label": "_qoistipPriceAggregator",
             "offset": 0,
             "slot": "206",
-            "type": "t_contract(QoistipPriceAggregator)2716",
-            "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:24"
+            "type": "t_contract(QoistipPriceAggregator)2674",
+            "contract": "QoistipV2",
+            "src": "contracts/QoistipV2.sol:7"
           }
         ],
         "types": {
@@ -307,7 +436,7 @@
             "label": "bytes32",
             "numberOfBytes": "32"
           },
-          "t_contract(QoistipPriceAggregator)2716": {
+          "t_contract(QoistipPriceAggregator)2674": {
             "label": "contract QoistipPriceAggregator",
             "numberOfBytes": "20"
           },

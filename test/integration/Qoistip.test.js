@@ -4,6 +4,7 @@ const { parseUnits, formatUnits } = ethers.utils;
 const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, ERC20_TOKEN_ADDRESS, CHAILINK_PRICE_ORACLE_ADDRESS_ETH } = require('../../constant');
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
 const sandABI = require('../../abi/SAND.json');
+const { initScriptLoader } = require('next/script');
 
 describe('Qoistip', function () {
   let qoistip;
@@ -14,6 +15,8 @@ describe('Qoistip', function () {
   let sandHodler;
   let shib;
   let shibHodler;
+  let elon;
+  let elonHodler;
   let owner;
   let customer1;
   let addr2;
@@ -24,10 +27,12 @@ describe('Qoistip', function () {
 
     sand = new ethers.Contract(ERC20_TOKEN_ADDRESS.SAND, sandABI, ethers.provider);
     shib = new ethers.Contract(ERC20_TOKEN_ADDRESS.SHIB, sandABI, ethers.provider);
+    elon = new ethers.Contract(ERC20_TOKEN_ADDRESS.SHIB, sandABI, ethers.provider);
 
     // Have SAND, USDT, USDC
     const accountWithSAND = '0x109e588d17C1c1cff206aCB0b3FF0AAEffDe92bd';
     const accountWithSHIB = '0xd6Bc559a59B24A58A82F274555d152d67F15a7A6';
+    const accountWithELON = '0xCFFAd3200574698b78f32232aa9D63eABD290703';// This address have many tokens !(SHIB, CRO...)
 
     await network.provider.request({
       method: 'hardhat_impersonateAccount',
@@ -37,14 +42,16 @@ describe('Qoistip', function () {
       method: 'hardhat_impersonateAccount',
       params: [accountWithSHIB],
     });
+    await network.provider.request({
+      method: 'hardhat_impersonateAccount',
+      params: [accountWithELON],
+    });
     sandHodler = await ethers.getSigner(accountWithSAND);
     shibHodler = await ethers.getSigner(accountWithSHIB);
-
-    const QoistipPriceAggregator = await ethers.getContractFactory('QoistipPriceAggregator');
-    qoistipPriceAggregator = await QoistipPriceAggregator.deploy();
+    elonHodler = await ethers.getSigner(accountWithELON);
 
     const Qoistip = await ethers.getContractFactory('Qoistip');
-    qoistip = await upgrades.deployProxy(Qoistip, [qoistipPriceAggregator.address], { kind: 'uups' });
+    qoistip = await upgrades.deployProxy(Qoistip, [], { kind: 'uups' });
     // qoistip = await Qoistip.deploy(qoistipPriceAggregator.address);
 
     const ChailinkPriceFeeds = await ethers.getContractFactory('ChailinkPriceFeeds');
@@ -202,10 +209,37 @@ describe('Qoistip', function () {
     it('Upgrade', async function () {
       expect(await qoistip.version()).to.equal(1);
 
+      const QoistipPriceAggregator = await ethers.getContractFactory('QoistipPriceAggregator');
+      qoistipPriceAggregator = await QoistipPriceAggregator.deploy();
+
       const QoistipV2 = await ethers.getContractFactory('QoistipV2');
-      await upgrades.upgradeProxy(qoistip, QoistipV2);
+      await upgrades.upgradeProxy(qoistip, QoistipV2, [qoistipPriceAggregator.address]);
+      // await upgrades.upgradeProxy(qoistip, QoistipV2, { call: { fn: 'initialize', args: [qoistipPriceAggregator.address] } });
 
       expect(await qoistip.version()).to.equal(2);
+    });
+    it('Add new no Chailink Oracle', async function () {
+      await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.ELON, qoistipPriceAggregator.address, false, false);
+    });
+    it('Check $ELON balance before donate', async function () {
+      expect(await qoistip.balanceOfERC20(customer1.address, elon.address)).to.equal(0);
+    });
+    it('Send donate in $SAND and check emited event', async function () {
+      await sand.connect(elonHodler).approve(qoistip.address, parseUnits('1000000'));
+
+      await expect(qoistip.connect(elonHodler).donateERC20(customer1.address, elon.address, parseUnits('1000000')))
+        .to.emit(qoistip, 'Donate')
+        .withArgs(elonHodler.address, customer1.address, elon.address, parseUnits('1000000'));
+    });
+    it('Check $ELON balance after donate', async function () {
+      expect(await qoistip.balanceOfERC20(customer1.address, elon.address)).to.equal(parseUnits('970000'));
+      expect(await qoistip.balanceOfERC20(qoistip.address, elon.address)).to.equal(parseUnits('1000000').sub(parseUnits('970000')));
+      expect(await elon.balanceOf(qoistip.address)).to.equal(parseUnits('1000000'));
+    });
+    it('Check $CT1 balance after donate', async function () {
+      const elonPrice = await qoistipPriceAggregator.latestRoundData(ERC20_TOKEN_ADDRESS.ELON);
+      const calculateExpectBalance = parseUnits('1000000').mul(elonPrice).div('1000000000000000000');
+      expect(await customerToken1.balanceOf(elonHodler.address)).to.equal(calculateExpectBalance);
     });
   });
 });

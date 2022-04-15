@@ -21,7 +21,6 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     uint256 private _fee;
     // 0.1$
     uint256 private constant _minValue = 1e17;
-    QoistipPriceAggregator qoistipPriceAggregator;
     AggregatorV3Interface constant usdcEthOracle =
         AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
 
@@ -41,14 +40,10 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     );
     event NewCustomer(address indexed customerAddress, address customerToken);
 
-    function initialize(QoistipPriceAggregator _qoistipPriceAggregator)
-        public
-        initializer
-    {
+    function initialize() public initializer {
         __Ownable_init();
         _fee = 9700;
         // _minValue = 1e17;
-        qoistipPriceAggregator = _qoistipPriceAggregator;
     }
 
     // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
@@ -58,7 +53,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         return _fee;
     }
 
-    function setFee(uint256 _newFee) external onlyOwner {
+    function setFee(uint256 _newFee) external virtual onlyOwner {
         //add some limit, for exampple new _fee must < +10%, or _fee <20% ?
         require(_newFee < 10000);
         _fee = _newFee;
@@ -95,7 +90,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     function registerCustomer(
         string memory _tokenSymbol,
         string memory _tokenName
-    ) external {
+    ) external virtual {
         require(
             _tokenCustomer[msg.sender] == address(0),
             "This address has been already registered"
@@ -112,7 +107,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         address _tokenAddress,
         address _oracleAddress,
         bool _inUSD
-    ) external onlyOwner {
+    ) external virtual onlyOwner {
         bytes32 priceOracleData = bytes20(_oracleAddress);
         if (_inUSD) priceOracleData |= (bytes32(uint256(1)) << 95);
         oracleData[_tokenAddress] = priceOracleData;
@@ -121,14 +116,10 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     function priceOracle(address _tokenAddress)
         external
         view
-        returns (
-            address oracleAddress,
-            bool inUSD
-        )
+        virtual
+        returns (bytes32 data)
     {
-        bytes32 data = oracleData[_tokenAddress];
-        oracleAddress = address(bytes20(data));
-        inUSD = (data & (bytes32(uint256(1)) << 95)) != 0 ? true : false;
+        data = oracleData[_tokenAddress];
     }
 
     function _getPrice(address _tokenAddress)
@@ -150,11 +141,12 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         }
     }
 
+    //donateERC20_K3u(): 0x0000701f
     function donateERC20(
         address _addressToDonate,
         address _tokenAddress,
         uint256 _tokenAmount
-    ) external returns (bool success) {
+    ) external virtual returns (bool success) {
         uint256 _tokenToMint = (_getPrice(_tokenAddress) * _tokenAmount) / 1e18;
         require(_tokenToMint >= _minValue, "Donate worth < min value $");
 
@@ -178,13 +170,16 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         return true;
     }
 
+    //donateETH_Bej(): 0x00002206
     function donateETH(address _addressToDonate)
         external
         payable
+        virtual
         returns (bool success)
     {
         (, int256 price, , , ) = ethUsdOracle.latestRoundData();
         //mul by 10**10 becouse price is return in 8 digit
+        // Delete multiple ? Wheather this multiplation is necessary ?
         uint256 _tokenToMint = (uint(price) * 10**10 * msg.value) / 1e18;
         require(_tokenToMint >= _minValue, "Donate worth < min value $");
 
@@ -200,27 +195,32 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         return true;
     }
 
-    function withdrawERC20(address _tokenAddress) public {
+    function withdrawERC20(address _tokenAddress) public virtual {
         uint256 _tokenBalance = addressToTokenToBalance[msg.sender][
             _tokenAddress
         ];
-        require(_tokenBalance > 0, "You have 0 tokens on balance");
-        addressToTokenToBalance[msg.sender][_tokenAddress] = 0;
+        require(_tokenBalance != 0, "You have 0 tokens on balance");
+        delete addressToTokenToBalance[msg.sender][_tokenAddress];
+        // addressToTokenToBalance[msg.sender][_tokenAddress] = 0;
         IERC20(_tokenAddress).transfer(msg.sender, _tokenBalance);
         emit Withdraw(msg.sender, _tokenAddress, _tokenBalance);
     }
 
     function withdrawManyERC20(address[] calldata _tokenAddress) external {
         uint256 _iteration = _tokenAddress.length;
-        for (uint256 _i = 0; _i < _iteration; _i++) {
+        for (uint256 _i = 0; _i != _iteration; ) {
             withdrawERC20(_tokenAddress[_i]);
+            unchecked {
+                _i++;
+            }
         }
     }
 
-    function withdrawETH() public payable {
+    function withdrawETH() public payable virtual {
         uint256 _ethBalance = BalanceETH[msg.sender];
-        require(_ethBalance > 0, "You have 0 ETH");
-        BalanceETH[msg.sender] = 0;
+        require(_ethBalance != 0, "You have 0 ETH");
+        delete BalanceETH[msg.sender];
+        // BalanceETH[msg.sender] = 0;
         (bool sent, ) = address(msg.sender).call{value: _ethBalance}("");
         require(sent, "Failed to send Ether");
         emit Withdraw(msg.sender, address(0), _ethBalance);

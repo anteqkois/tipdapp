@@ -6,7 +6,7 @@ import "./QoistipPriceAggregator.sol";
 import "hardhat/console.sol";
 
 contract StoreOracle {
-    mapping(address => bytes32) addressToPriceOracle;
+    mapping(address => bytes32) public addressToPriceOracle;
     mapping(address => uint256) addressToPriceOracle2;
 
     // function pack(int16 a, int16 b) public pure returns (bytes32) {
@@ -38,7 +38,6 @@ contract StoreOracle {
     function getPriceOracle(address _tokenAddress)
         external
         view
-        checkGas
         returns (
             address oracleAddress,
             bool inUSD,
@@ -63,13 +62,12 @@ contract StoreOracle {
         if (_inUSD) priceOracleData |= (uint256(1) << 161);
         if (_chailinkOracle) priceOracleData |= (uint256(1) << 162);
         addressToPriceOracle2[_tokenAddress] = priceOracleData;
-        console.log(priceOracleData);
+        // console.log(priceOracleData);
     }
 
     function getPriceOracle2(address _tokenAddress)
         external
         view
-        checkGas
         returns (
             address oracleAddress,
             bool inUSD,
@@ -86,13 +84,13 @@ contract StoreOracle {
     uint256 _packedBools;
 
     function setBoolean(uint256 _boolNumber, bool _value) public {
-        console.log(_packedBools);
+        // console.log(_packedBools);
         if (_value) _packedBools |= (uint256(1) << _boolNumber);
         else _packedBools &= ~(uint256(1) << _boolNumber);
     }
 
     function getBoolean(uint256 _boolNumber) public view returns (bool) {
-        console.log(_packedBools);
+        // console.log(_packedBools);
         uint256 flag = (_packedBools >> _boolNumber) & uint256(1);
         return (flag == 1 ? true : false);
     }

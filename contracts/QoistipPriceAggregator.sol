@@ -6,7 +6,7 @@ contract QoistipPriceAggregator {
 
     constructor() {
         //set ELON price
-        tokenPrice[0x761D38e5ddf6ccf6Cf7c55759d5210750B5D60F3] = 108;
+        tokenPrice[0x761D38e5ddf6ccf6Cf7c55759d5210750B5D60F3] = 0.0000008041*1e18;
     }
 
     function latestRoundData(address _addressToken)

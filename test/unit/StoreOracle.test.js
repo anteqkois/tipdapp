@@ -29,7 +29,8 @@ describe('StoreOracle', function () {
       expect(oracleData.oracleAddress).to.be.equal(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND); 
       expect(oracleData.inUSD).to.be.false; 
       expect(oracleData.chailinkOracle).to.be.true; 
-      console.log(await storeOracle.getPriceOracle(ERC20_TOKEN_ADDRESS.SAND));
+      // console.log(await storeOracle.getPriceOracle(ERC20_TOKEN_ADDRESS.SAND));
+      console.log(await storeOracle.addressToPriceOracle(ERC20_TOKEN_ADDRESS.SAND));
     });
     it('$SAND using uint256', async function () {
       await storeOracle.setPriceOracle2(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, false, true);
@@ -37,7 +38,42 @@ describe('StoreOracle', function () {
       expect(oracleData.oracleAddress).to.be.equal(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND); 
       // expect(oracleData.inUSD).to.be.false; 
       // expect(oracleData.chailinkOracle).to.be.true; 
-      console.log(await storeOracle.getPriceOracle2(ERC20_TOKEN_ADDRESS.SAND));
+      // console.log(await storeOracle.getPriceOracle2(ERC20_TOKEN_ADDRESS.SAND));
+    });
+  });
+  describe('Pack Oracle data off-chain', async () => {
+    it('$SAND off-chain', async function () {
+      // Packed: 0x35e3f7e558c04ce7eee1629258ecbba03b36ec56400000000000000000000000
+      const oracleData = {
+        inUSD: true,
+        isChailink: false,
+      };
+
+      let packedFlags = ethers.utils.hexlify(0);
+      console.log(packedFlags);
+      if (oracleData.inUSD) {
+        packedFlags |= ethers.utils.hexlify(1) << 6;
+      }
+      if (oracleData.isChailink) {
+        packedFlags |= ethers.utils.hexlify(1) << 5;
+      }
+
+      //0101011001000000
+      //0101011010000000
+
+      let packedData = ethers.utils.solidityPack(
+        ['address', 'uint8', 'uint88'],
+        [CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, packedFlags, 0],
+      );
+
+      console.log(packedData);
+
+      // await storeOracle.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, false, true);
+      // const oracleData = await storeOracle.getPriceOracle(ERC20_TOKEN_ADDRESS.SAND);
+      // expect(oracleData.oracleAddress).to.be.equal(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND);
+      // expect(oracleData.inUSD).to.be.false;
+      // expect(oracleData.chailinkOracle).to.be.true;
+      // console.log(await storeOracle.getPriceOracle(ERC20_TOKEN_ADDRESS.SAND));
     });
   });
 });
