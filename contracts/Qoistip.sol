@@ -12,7 +12,6 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     mapping(address => bytes32) oracleData;
-    // ! add ability to token to change owner (from old DonateC to new, when migrate ?)
     mapping(address => address) private _tokenCustomer;
     mapping(address => mapping(address => uint256)) addressToTokenToBalance;
     mapping(address => uint256) BalanceETH;
@@ -20,7 +19,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     // 99=>1%,  0,1%=>999  0,03% => 997
     uint256 private _fee;
     // 0.1$
-    uint256 private constant _minValue = 1e17;
+    uint256 private _minValue;
     AggregatorV3Interface constant usdcEthOracle =
         AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
 
@@ -43,7 +42,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     function initialize() public initializer {
         __Ownable_init();
         _fee = 9700;
-        // _minValue = 1e17;
+        _minValue = 1e17;
     }
 
     // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
@@ -59,9 +58,9 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         _fee = _newFee;
     }
 
-    // function setMinValue(uint256 _newMinValue) external onlyOwner {
-    //     _minValue = _newMinValue;
-    // }
+    function setMinValue(uint256 _newMinValue) external onlyOwner {
+        _minValue = _newMinValue;
+    }
 
     function tokenCustomer(address _customerAddress)
         external
@@ -103,14 +102,12 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         emit NewCustomer(msg.sender, _newToken);
     }
 
-    function setPriceOracle(
-        address _tokenAddress,
-        address _oracleAddress,
-        bool _inUSD
-    ) external virtual onlyOwner {
-        bytes32 priceOracleData = bytes20(_oracleAddress);
-        if (_inUSD) priceOracleData |= (bytes32(uint256(1)) << 95);
-        oracleData[_tokenAddress] = priceOracleData;
+    function setPriceOracle(address _tokenAddress, bytes32 _priceOracleData)
+        external
+        virtual
+        onlyOwner
+    {
+        oracleData[_tokenAddress] = _priceOracleData;
     }
 
     function priceOracle(address _tokenAddress)
@@ -147,6 +144,8 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         address _tokenAddress,
         uint256 _tokenAmount
     ) external virtual returns (bool success) {
+        address tokenCustomerAddress = _tokenCustomer[_addressToDonate];
+        require(tokenCustomerAddress != address(0), "Address to donate was not registered");
         uint256 _tokenToMint = (_getPrice(_tokenAddress) * _tokenAmount) / 1e18;
         require(_tokenToMint >= _minValue, "Donate worth < min value $");
 
@@ -156,13 +155,12 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
             _tokenAmount
         );
 
-        // uint256 _withFee = calculateWithFee(_tokenAmount);
         uint256 _withFee = (_tokenAmount * _fee) / 10000;
         addressToTokenToBalance[_addressToDonate][_tokenAddress] = _withFee;
         addressToTokenToBalance[address(this)][_tokenAddress] =
             _tokenAmount -
             _withFee;
-        CustomerToken(_tokenCustomer[_addressToDonate]).mint(
+        CustomerToken(tokenCustomerAddress).mint(
             msg.sender,
             _tokenToMint
         );
@@ -201,7 +199,6 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         ];
         require(_tokenBalance != 0, "You have 0 tokens on balance");
         delete addressToTokenToBalance[msg.sender][_tokenAddress];
-        // addressToTokenToBalance[msg.sender][_tokenAddress] = 0;
         IERC20(_tokenAddress).transfer(msg.sender, _tokenBalance);
         emit Withdraw(msg.sender, _tokenAddress, _tokenBalance);
     }

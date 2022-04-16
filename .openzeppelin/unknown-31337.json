@@ -8,7 +8,7 @@
     },
     {
       "address": "0xaca81583840B1bf2dDF6CDe824ada250C1936B4D",
-      "txHash": "0xe26cc4521c8ae5cdb15be7680ef455ec08564bbea92f8ac94de31e792ef986a3",
+      "txHash": "0xb05760389e10dcc98ece17b0a63d752db9e5bca1eb982b254cf0a246c3c4a69e",
       "kind": "uups"
     }
   ],
@@ -159,9 +159,9 @@
         }
       }
     },
-    "ff19c1e0d1e4855938debc1ab16c76e48c15a6c6817b5ff24941f06db7131fee": {
+    "5686f67767ce9134e051f3622719acecce6d3d8759329afa9b54cbe80da3990d": {
       "address": "0xefAB0Beb0A557E452b398035eA964948c750b2Fd",
-      "txHash": "0x1e67154338959dfc8dc37a35574d596a7727a46878defdca877a1c7a11a9af32",
+      "txHash": "0xd43654951f87339f6144979db1136c2d3096d3a8c6b90a5007bfaf4c222a3f0a",
       "layout": {
         "storage": [
           {
@@ -234,7 +234,7 @@
             "slot": "202",
             "type": "t_mapping(t_address,t_address)",
             "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:16"
+            "src": "contracts/Qoistip.sol:15"
           },
           {
             "label": "addressToTokenToBalance",
@@ -242,7 +242,7 @@
             "slot": "203",
             "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
             "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:17"
+            "src": "contracts/Qoistip.sol:16"
           },
           {
             "label": "BalanceETH",
@@ -250,7 +250,7 @@
             "slot": "204",
             "type": "t_mapping(t_address,t_uint256)",
             "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:18"
+            "src": "contracts/Qoistip.sol:17"
           },
           {
             "label": "_fee",
@@ -258,7 +258,15 @@
             "slot": "205",
             "type": "t_uint256",
             "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:21"
+            "src": "contracts/Qoistip.sol:20"
+          },
+          {
+            "label": "_minValue",
+            "offset": 0,
+            "slot": "206",
+            "type": "t_uint256",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:22"
           }
         ],
         "types": {
@@ -305,9 +313,9 @@
         }
       }
     },
-    "86464dc624043c27eb025412f92fbea9ad00aba0a527d1e9bf830262c471aceb": {
+    "50d16244058eb14067211f3e699d667899cf89b1f77042dce9a83f739f10b0ea": {
       "address": "0xB06c856C8eaBd1d8321b687E188204C1018BC4E5",
-      "txHash": "0x8b3c5a374b1bb8dad6c89ffca680f0601c0b069cee7bd5d3e2a6766aa96aa0ca",
+      "txHash": "0x73804ed196f514b770f4368a5bcc588d29ddbf4d4ede5efc707802fbde869a86",
       "layout": {
         "storage": [
           {
@@ -380,7 +388,7 @@
             "slot": "202",
             "type": "t_mapping(t_address,t_address)",
             "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:16"
+            "src": "contracts/Qoistip.sol:15"
           },
           {
             "label": "addressToTokenToBalance",
@@ -388,7 +396,7 @@
             "slot": "203",
             "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
             "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:17"
+            "src": "contracts/Qoistip.sol:16"
           },
           {
             "label": "BalanceETH",
@@ -396,7 +404,7 @@
             "slot": "204",
             "type": "t_mapping(t_address,t_uint256)",
             "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:18"
+            "src": "contracts/Qoistip.sol:17"
           },
           {
             "label": "_fee",
@@ -404,13 +412,21 @@
             "slot": "205",
             "type": "t_uint256",
             "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:21"
+            "src": "contracts/Qoistip.sol:20"
+          },
+          {
+            "label": "_minValue",
+            "offset": 0,
+            "slot": "206",
+            "type": "t_uint256",
+            "contract": "Qoistip",
+            "src": "contracts/Qoistip.sol:22"
           },
           {
             "label": "_qoistipPriceAggregator",
             "offset": 0,
-            "slot": "206",
-            "type": "t_contract(QoistipPriceAggregator)2674",
+            "slot": "207",
+            "type": "t_contract(QoistipPriceAggregator)2687",
             "contract": "QoistipV2",
             "src": "contracts/QoistipV2.sol:7"
           }
@@ -436,7 +452,7 @@
             "label": "bytes32",
             "numberOfBytes": "32"
           },
-          "t_contract(QoistipPriceAggregator)2674": {
+          "t_contract(QoistipPriceAggregator)2687": {
             "label": "contract QoistipPriceAggregator",
             "numberOfBytes": "20"
           },

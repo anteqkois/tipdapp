@@ -2,9 +2,9 @@ const { expect } = require('chai');
 const { ethers, network, upgrades } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
 const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, ERC20_TOKEN_ADDRESS, CHAILINK_PRICE_ORACLE_ADDRESS_ETH } = require('../../constant');
+const { packToBytes32, unpackFromBytes32 } = require('../../helpers/packOracleData');
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
 const sandABI = require('../../abi/SAND.json');
-const { initScriptLoader } = require('next/script');
 
 describe('Qoistip', function () {
   let qoistip;
@@ -27,12 +27,12 @@ describe('Qoistip', function () {
 
     sand = new ethers.Contract(ERC20_TOKEN_ADDRESS.SAND, sandABI, ethers.provider);
     shib = new ethers.Contract(ERC20_TOKEN_ADDRESS.SHIB, sandABI, ethers.provider);
-    elon = new ethers.Contract(ERC20_TOKEN_ADDRESS.SHIB, sandABI, ethers.provider);
+    elon = new ethers.Contract(ERC20_TOKEN_ADDRESS.ELON, sandABI, ethers.provider);
 
     // Have SAND, USDT, USDC
     const accountWithSAND = '0x109e588d17C1c1cff206aCB0b3FF0AAEffDe92bd';
     const accountWithSHIB = '0xd6Bc559a59B24A58A82F274555d152d67F15a7A6';
-    const accountWithELON = '0xCFFAd3200574698b78f32232aa9D63eABD290703';// This address have many tokens !(SHIB, CRO...)
+    const accountWithELON = '0xCFFAd3200574698b78f32232aa9D63eABD290703'; // This address have many tokens !(SHIB, CRO...)
 
     await network.provider.request({
       method: 'hardhat_impersonateAccount',
@@ -58,8 +58,12 @@ describe('Qoistip', function () {
     chailinkPriceFeeds = await ChailinkPriceFeeds.deploy();
 
     //set Qoisdapp smart contract needed veriables
-    await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, true);
-    await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SHIB, CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB, false);
+    const sandData = packToBytes32(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, { inUSD: true, isChailink: true });
+    await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, sandData);
+
+    const shibData = packToBytes32(CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB, { inUSD: false, isChailink: true });
+    await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SHIB, shibData);
+
     const registerCustomerTransation = await qoistip.connect(customer1).registerCustomer('CT1', 'CustomerToken1');
 
     registerCustomerTransation.wait();
@@ -213,19 +217,21 @@ describe('Qoistip', function () {
       qoistipPriceAggregator = await QoistipPriceAggregator.deploy();
 
       const QoistipV2 = await ethers.getContractFactory('QoistipV2');
-      await upgrades.upgradeProxy(qoistip, QoistipV2, [qoistipPriceAggregator.address]);
-      // await upgrades.upgradeProxy(qoistip, QoistipV2, { call: { fn: 'initialize', args: [qoistipPriceAggregator.address] } });
+      qoistip = await upgrades.upgradeProxy(qoistip, QoistipV2, {
+        call: { fn: 'setQoistipPriceAggregator', args: [qoistipPriceAggregator.address] },
+      });
 
       expect(await qoistip.version()).to.equal(2);
     });
     it('Add new no Chailink Oracle', async function () {
-      await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.ELON, qoistipPriceAggregator.address, false, false);
+      const elonData = packToBytes32(ERC20_TOKEN_ADDRESS.ELON, { inUSD: true, isChailink: false });
+      await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.ELON, elonData);
     });
     it('Check $ELON balance before donate', async function () {
       expect(await qoistip.balanceOfERC20(customer1.address, elon.address)).to.equal(0);
     });
-    it('Send donate in $SAND and check emited event', async function () {
-      await sand.connect(elonHodler).approve(qoistip.address, parseUnits('1000000'));
+    it('Send donate in $ELON and check emited event', async function () {
+      await elon.connect(elonHodler).approve(qoistip.address, parseUnits('1000000'));
 
       await expect(qoistip.connect(elonHodler).donateERC20(customer1.address, elon.address, parseUnits('1000000')))
         .to.emit(qoistip, 'Donate')
@@ -233,13 +239,21 @@ describe('Qoistip', function () {
     });
     it('Check $ELON balance after donate', async function () {
       expect(await qoistip.balanceOfERC20(customer1.address, elon.address)).to.equal(parseUnits('970000'));
-      expect(await qoistip.balanceOfERC20(qoistip.address, elon.address)).to.equal(parseUnits('1000000').sub(parseUnits('970000')));
+      expect(await qoistip.balanceOfERC20(qoistip.address, elon.address)).to.equal(
+        parseUnits('1000000').sub(parseUnits('970000')),
+      );
       expect(await elon.balanceOf(qoistip.address)).to.equal(parseUnits('1000000'));
     });
     it('Check $CT1 balance after donate', async function () {
       const elonPrice = await qoistipPriceAggregator.latestRoundData(ERC20_TOKEN_ADDRESS.ELON);
       const calculateExpectBalance = parseUnits('1000000').mul(elonPrice).div('1000000000000000000');
       expect(await customerToken1.balanceOf(elonHodler.address)).to.equal(calculateExpectBalance);
+    });
+    it('Owner restriction still work', async function () {
+      await expect(qoistip.connect(addr2).setQoistipPriceAggregator(qoistipPriceAggregator.address)).to.be.revertedWith(
+        'Ownable: caller is not the owner',
+      );
+      expect(await qoistip.setQoistipPriceAggregator(qoistipPriceAggregator.address));
     });
   });
 });

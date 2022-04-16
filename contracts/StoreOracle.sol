@@ -30,8 +30,8 @@ contract StoreOracle {
         bool _chailinkOracle
     ) external {
         bytes32 priceOracleData = bytes20(_oracleAddress);
-        if (_inUSD) priceOracleData |= (bytes32(uint256(1)) << 95);
-        if (_chailinkOracle) priceOracleData |= (bytes32(uint256(1)) << 94);
+        if (_inUSD) priceOracleData |= (bytes32(uint256(1)) << 96);
+        if (_chailinkOracle) priceOracleData |= (bytes32(uint256(1)) << 95);
         addressToPriceOracle[_tokenAddress] = priceOracleData;
     }
 
@@ -46,8 +46,8 @@ contract StoreOracle {
     {
         bytes32 data = addressToPriceOracle[_tokenAddress];
         oracleAddress = address(bytes20(data));
-        inUSD = (data & (bytes32(uint256(1)) << 95)) != 0 ? true : false;
-        chailinkOracle = (data & (bytes32(uint256(1)) << 94)) != 0
+        inUSD = (data & (bytes32(uint256(1)) << 96)) != 0 ? true : false;
+        chailinkOracle = (data & (bytes32(uint256(1)) << 95)) != 0
             ? true
             : false;
     }

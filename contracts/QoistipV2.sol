@@ -6,26 +6,14 @@ import "./Qoistip.sol";
 contract QoistipV2 is Qoistip {
     QoistipPriceAggregator private _qoistipPriceAggregator;
 
-    function initialize(QoistipPriceAggregator qoistipPriceAggregator)
-        public
-        initializer
+    function setQoistipPriceAggregator(QoistipPriceAggregator qoistipPriceAggregator)
+        external
+        onlyOwner
     {
-        Qoistip.initialize();
+        // Qoistip.initialize();
         _qoistipPriceAggregator = qoistipPriceAggregator;
     }
-
-    function setPriceOracle(
-        address _tokenAddress,
-        address _oracleAddress,
-        bool _inUSD,
-        bool _isChailink
-    ) external virtual onlyOwner {
-        bytes32 priceOracleData = bytes20(_oracleAddress);
-        if (_inUSD) priceOracleData |= (bytes32(uint256(1)) << 95);
-        if (_isChailink) priceOracleData |= (bytes32(uint256(1)) << 94);
-        oracleData[_tokenAddress] = priceOracleData;
-    }
-
+    
     function _getPrice(address _tokenAddress)
         internal
         view
