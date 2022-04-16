@@ -1,6 +1,6 @@
 {
   "name": "qoisdapp",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "node": "17.6.0",
   "private": true,
   "repository": {

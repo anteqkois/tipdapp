@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/anteqkois/qoisdapp/compare/v0.1.3...v0.1.4) (2022-04-16)
+
+
+### Features
+
+* **donateeth:** handle donate in eth and add ability to check if donate have minimal worth ([6fcc507](https://github.com/anteqkois/qoisdapp/commit/6fcc507328cb07939cefaa446eb61799941ba82b))
+* **qoisdapp:** add migrateAddress veriable, block registerCustomer if migrate is active ([9c901ed](https://github.com/anteqkois/qoisdapp/commit/9c901edd51b992d844f18271ed93cfd5f2bece61))
+* **qoisdapp:** add withdrawETH method, test it ([7d68312](https://github.com/anteqkois/qoisdapp/commit/7d683122fb150906b26ae2fbd005b41ba14e9053))
+* **qoisdapp:** add withdrawManyERC20 method, test it ([86cdc57](https://github.com/anteqkois/qoisdapp/commit/86cdc570830730a7787b3ebb8aebcc6a4d86e994))
+* **qoisdapp:** change architecture main smart contract to use openzeppelin-upgradelity features ([345f104](https://github.com/anteqkois/qoisdapp/commit/345f104a5c50e524e8010c0c1e0c0f7917d8f6e0))
+* **qoisdapp:** change handle oracle data to use packing bytes32 ([097d5b7](https://github.com/anteqkois/qoisdapp/commit/097d5b72ee24af9fb35e9787f7d20f7fe2f11b70))
+* **qoistipv2:** add ability to upgrade smart contract and test it ([6a2085a](https://github.com/anteqkois/qoisdapp/commit/6a2085a5afc193a1a5d8034b8aecb03df3b9f670))
+* **storeoracle:** add ability to pack oracle data off-chain ([04f719f](https://github.com/anteqkois/qoisdapp/commit/04f719f696f375f56bc892ae7745eaf980189edb))
+* **storeoracle:** add method to handle packing data with uint256 ([d29317c](https://github.com/anteqkois/qoisdapp/commit/d29317c72b0562057964320497ba64e0aed82c71))
+* **storeoracle:** create function to pack and unpack oracle data using bytes32 ([7a9029c](https://github.com/anteqkois/qoisdapp/commit/7a9029c87f497b7f3e9d685bae5913e7b926b6b3))
+* **withdraw:** handle withdraw one token ([a6d3457](https://github.com/anteqkois/qoisdapp/commit/a6d345796d6889b6843e267164c4de19de543990))
+
 ### [0.1.3](https://github.com/anteqkois/qoisdapp/compare/v0.1.2...v0.1.3) (2022-04-03)
 
 
