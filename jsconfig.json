@@ -1,0 +1,8 @@
+{
+ "compilerOptions": {
+  "baseUrl": ".",
+  "paths": {
+   "@/prismaClient": ["prisma/client.js"]
+  }
+ }
+}

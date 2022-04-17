@@ -5,21 +5,22 @@ async function main() {
 
   console.log('Deploying contracts with the account:', deployer.address);
 
-  const Greeter = await hre.ethers.getContractFactory('Greeter');
-  const greeter = await Greeter.deploy('Hello, Hardhat!');
-  await greeter.deployed();
-
-  const ANQToken = await hre.ethers.getContractFactory('ANQToken');
-  const anq = await Greeter.deploy();
-  await anq.deployed();
-
   const Qoistip = await hre.ethers.getContractFactory('Qoistip');
-  const qoistip = await Greeter.deploy();
-  await qoistip.deployed();
+  const qoistip = await hre.upgrades.deployProxy(Qoistip, [], { kind: 'uups' });
 
-  console.log('Greeter deployed to:', greeter.address);
-  console.log('ANQToken deployed to:', anq.address);
+  // const qoistip = await Greeter.deploy();
+
+  const QoistipPriceAggregator = await ethers.getContractFactory('QoistipPriceAggregator');
+  const qoistipPriceAggregator = await QoistipPriceAggregator.deploy();
+  await qoistipPriceAggregator.deployed();
+
+  const QoistipV2 = await ethers.getContractFactory('QoistipV2');
+  qoistip = await upgrades.upgradeProxy(qoistip, QoistipV2, {
+    call: { fn: 'setQoistipPriceAggregator', args: [qoistipPriceAggregator.address] },
+  });
+
   console.log('Qoistip deployed to:', qoistip.address);
+  console.log('QoistipPriceAggregator deployed to:', qoistipPriceAggregator.address);
 }
 
 main()
