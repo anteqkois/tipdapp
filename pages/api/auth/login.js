@@ -1,4 +1,4 @@
-import uid from 'helpers/generateId';
+import { randomUUID } from 'crypto';
 import prismaClient from '@/prismaClient';
 import { ApiError } from 'next/dist/server/api-utils';
 
@@ -6,7 +6,6 @@ export default async function handler(req, res) {
   try {
     const { walletAddress } = req.body;
 
-    // check in db if wallet have account
     const user = await prismaClient.user.findFirst({
       where: {
         walletAddress,
@@ -14,10 +13,13 @@ export default async function handler(req, res) {
     });
 
     if (user) {
-      const nonce = uid();
-      res.status(200).json({ nonce: nonce, user: user });
+      const nonce = randomUUID();
+      await prismaClient.user.update({
+        where: { walletAddress },
+        data: { nonce },
+      });
+      res.status(200).json({ nonce, user });
     } else {
-      // ApiError
       throw new ApiError(305, 'Account not registered. Sign in first');
     }
   } catch (error) {

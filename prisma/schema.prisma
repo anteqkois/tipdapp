@@ -14,10 +14,10 @@ datasource db {
 model User {
   id            String   @id @default(cuid())
   walletAddress String   @unique
-  nonce         String
   email         String   @unique
   firstName     String
   lastName      String
+  nonce         String
   createdAt     DateTime @default(now())
   updateAt      DateTime @updatedAt
 }
