@@ -28,8 +28,7 @@ const useUser = () => {
     }
   };
 
-  const signIn = async (firstName, lastName, email, nick) => {
-    console.log(firstName, lastName, email, nick);
+  const signIn = async ({ firstName, lastName, email, nick }) => {
     try {
       if (!signer) {
         const { signer: newSigner } = await connectWallet();
@@ -48,8 +47,6 @@ const useUser = () => {
           nick,
         },
       });
-
-      console.log(data);
 
       const signature = await signer.signMessage(data.nonce);
 

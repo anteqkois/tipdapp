@@ -13,8 +13,11 @@ const Input = ({ type, id, name, label, placeholder, onChange, value, error }) =
         onChange={onChange}
         value={value}
         placeholder={placeholder}
-        className="block p-2 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+        className={`block p-2 w-full text-gray-900 bg-gray-50 rounded-lg border ${
+          error ? 'border-red-600' : 'border-gray-300'
+        } focus:ring-blue-500 focus:border-blue-500`}
       ></input>
+      <p className="text-red-600 min-h-[24px]">{error && `* ${error}`}</p>
     </div>
   );
 };
