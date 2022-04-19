@@ -4,7 +4,7 @@ const { parseUnits, formatUnits } = ethers.utils;
 const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, ERC20_TOKEN_ADDRESS, CHAILINK_PRICE_ORACLE_ADDRESS_ETH } = require('../../constant');
 const { packToBytes32, unpackFromBytes32 } = require('../../helpers/packOracleData');
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
-const sandABI = require('../../abi/SAND.json');
+const sandABI = require('../../artifacts/utils/SAND.json');
 
 describe('Qoistip', function () {
   let qoistip;

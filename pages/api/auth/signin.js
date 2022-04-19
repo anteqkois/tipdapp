@@ -4,7 +4,8 @@ import { ApiError } from 'next/dist/server/api-utils';
 
 export default async function handler(req, res) {
   try {
-    const { walletAddress, email, firstName, lastName } = req.body;
+    const { walletAddress, email, firstName, lastName, nick } = req.body;
+    console.log(req.body);
 
     const user = await prismaClient.user.findFirst({
       where: {
@@ -14,7 +15,7 @@ export default async function handler(req, res) {
 
     if (!user) {
       const nonce = randomUUID();
-      const newUser = await prismaClient.user.create({ data: { walletAddress, email, firstName, lastName, nonce } });
+      const newUser = await prismaClient.user.create({ data: { walletAddress, email, firstName, lastName, nonce, nick } });
       res.status(200).json({ nonce: nonce, user: newUser });
     } else {
       throw new ApiError(305, 'Account is already register. Login to acccount.');

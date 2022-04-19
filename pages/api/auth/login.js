@@ -12,8 +12,8 @@ export default async function handler(req, res) {
       },
     });
 
+    const nonce = randomUUID();
     if (user) {
-      const nonce = randomUUID();
       await prismaClient.user.update({
         where: { walletAddress },
         data: { nonce },

@@ -28,7 +28,8 @@ const useUser = () => {
     }
   };
 
-  const signIn = async () => {
+  const signIn = async (firstName, lastName, email, nick) => {
+    console.log(firstName, lastName, email, nick);
     try {
       if (!signer) {
         const { signer: newSigner } = await connectWallet();
@@ -37,23 +38,21 @@ const useUser = () => {
 
       const walletAddress = await signer.getAddress();
 
-      const signInData = {
-        walletAddress,
-        email: 'jannowaq@gmail.com',
-        firstName: 'Jan',
-        lastName: 'Nowak',
-      };
-
       const { data } = await axios('/api/auth/signin', {
         method: 'POST',
         data: {
-          ...signInData,
+          walletAddress,
+          firstName,
+          lastName,
+          email,
+          nick,
         },
       });
 
-      console.log(data)
+      console.log(data);
 
       const signature = await signer.signMessage(data.nonce);
+
       await axios('/api/auth/verification', {
         method: 'POST',
         data: {
