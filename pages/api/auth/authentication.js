@@ -46,7 +46,7 @@ export default async function handler(req, res) {
 
       res.status(200).json({ message: 'You are authorizated' });
     } else {
-      throw new ApiError(305, 'Account not registered. Sign in first');
+      throw new ApiError(401, 'Account not registered. Sign in first');
     }
   } catch (error) {
     console.log(error);

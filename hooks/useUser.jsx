@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import useEthers from './useEthers';
+import toast from 'react-hot-toast';
 
 const useUser = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -37,7 +38,7 @@ const useUser = () => {
 
       const walletAddress = await signer.getAddress();
 
-      const { data } = await axios('/api/auth/signin', {
+      const dataSignIn = await axios('/api/auth/signin', {
         method: 'POST',
         data: {
           walletAddress,
@@ -48,18 +49,21 @@ const useUser = () => {
         },
       });
 
-      const signature = await signer.signMessage(data.nonce);
+      const signature = await signer.signMessage(dataSignIn.data.nonce);
 
-      await axios('/api/auth/verification', {
+      const dataAuth = await axios('/api/auth/authentication', {
         method: 'POST',
         data: {
           walletAddress,
-          nonce: data.nonce,
+          nonce: dataSignIn.data.nonce,
           signature,
         },
       });
+      dataAuth.status = 200 && toast.success('You are succesfully sign in');
     } catch (error) {
-      console.log(error);
+      //TODO handle display api error 
+      toast.error(error.message);
+      // console.log(error);
     }
   };
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import useUser from '../hooks/useUser';
-import toast from 'react-hot-toast';
 
 // import Metamask from '../assets/metamask.svg';
 import Metamask from '../assets/metamask.svg';
@@ -43,8 +42,8 @@ const signin = () => {
   });
   return (
     <div className="position-center flex flex-col w-full p-3 rounded-lg border-2 border-gray-300 md:max-w-md md:p-5">
-      <h1 className="text-4xl text-center flex justify-center items-end gap-2">
-        Sign in <Metamask className="text-4xl -mb-1" />
+      <h1 className="text-4xl text-center flex justify-center items-center gap-3">
+        Sign in <Metamask className="text-7xl" />
       </h1>
       <form onSubmit={formik.handleSubmit}>
         <Input
