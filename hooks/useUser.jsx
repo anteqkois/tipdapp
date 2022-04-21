@@ -14,16 +14,35 @@ const useUser = () => {
         signer = newSigner;
       }
 
-      const address = await signer.getAddress();
+      const walletAddress = await signer.getAddress();
 
-      const { data } = await axios('/api/auth/login', {
+      const dataLogin = await axios('/api/auth/login', {
         method: 'POST',
         data: {
-          walletAddress: address,
+          walletAddress,
         },
       });
+      const signature = await signer.signMessage(dataLogin.data.nonce);
 
-      console.log(data);
+      const dataAuth = await axios('/api/auth/authentication', {
+        method: 'POST',
+        data: {
+          walletAddress,
+          nonce: dataLogin.data.nonce,
+          signature,
+        },
+      });
+      dataAuth.status = 200 && toast.success('You are succesfully login');
+      // console.log(dataLogin.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      const dataLogout = await axios('/api/auth/logout');
+      dataLogout.status = 200 && toast.success('You are succesfully logout');
     } catch (error) {
       console.log(error);
     }
@@ -61,13 +80,13 @@ const useUser = () => {
       });
       dataAuth.status = 200 && toast.success('You are succesfully sign in');
     } catch (error) {
-      //TODO handle display api error 
+      //TODO handle display api error
       toast.error(error.message);
       // console.log(error);
     }
   };
 
-  return { login, signIn };
+  return { login, signIn, logout };
 };
 
 export default useUser;

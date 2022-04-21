@@ -5,15 +5,18 @@ import jwt from 'jsonwebtoken';
 
 export default async function handler(req, res) {
   //TODO chaeck if user are already login/auth
+  let walletAddress, nonce, user;
   try {
-    const { walletAddress, nonce, signature } = req.body;
+    const { signature } = req.body;
+    walletAddress = req.body.walletAddress;
+    nonce = req.body.nonce;
 
     const signerAddress = ethers.utils.verifyMessage(nonce, signature);
     if (signerAddress !== walletAddress) {
       throw new ApiError(305, 'Wrong signature, address are not equeal');
     }
 
-    const user = await prismaClient.user.findFirst({
+    user = await prismaClient.user.findFirst({
       where: {
         walletAddress: signerAddress,
       },
@@ -39,16 +42,18 @@ export default async function handler(req, res) {
 
       res.setHeader('Set-Cookie', serialize('JWT', accessToken, { path: '/', httpOnly: true, maxAge: 3600 * 24 }));
 
-      await prismaClient.user.update({
-        where: { walletAddress },
-        data: { nonce: '' },
-      });
-
       res.status(200).json({ message: 'You are authorizated' });
     } else {
       throw new ApiError(401, 'Account not registered. Sign in first');
     }
   } catch (error) {
     console.log(error);
+  } finally {
+    if (user) {
+      await prismaClient.user.update({
+        where: { walletAddress },
+        data: { nonce: '' },
+      });
+    }
   }
 }

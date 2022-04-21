@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const { ethers, network, upgrades } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
 const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, ERC20_TOKEN_ADDRESS, CHAILINK_PRICE_ORACLE_ADDRESS_ETH } = require('../../constant');
-const { packToBytes32, unpackFromBytes32 } = require('../../helpers/packOracleData');
+const { packToBytes32, unpackFromBytes32 } = require('../../lib/packOracleData');
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
 const sandABI = require('../../artifacts/utils/SAND.json');
 
