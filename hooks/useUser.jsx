@@ -24,7 +24,7 @@ const useUser = () => {
       });
       const signature = await signer.signMessage(dataLogin.data.nonce);
 
-      const dataAuth = await axios('/api/auth/authentication', {
+      const dataAuth = await axios('/api/auth/authorization', {
         method: 'POST',
         data: {
           walletAddress,
@@ -70,7 +70,7 @@ const useUser = () => {
 
       const signature = await signer.signMessage(dataSignIn.data.nonce);
 
-      const dataAuth = await axios('/api/auth/authentication', {
+      const dataAuth = await axios('/api/auth/authorization', {
         method: 'POST',
         data: {
           walletAddress,
