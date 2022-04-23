@@ -10,7 +10,8 @@ const login = () => {
   const { login, signIn, logout } = useUser();
 
   const getUserdata = async () => {
-    const data = await axios('/api/user/123123');
+    const data = await axios('/api/user');
+    console.log(data);
   };
 
   const auth = async () => {

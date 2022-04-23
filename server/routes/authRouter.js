@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { catchAsyncErrors, createApiError } = require('../middlewares/error');
+const { catchAsyncErrors } = require('../middlewares/error');
 const { authorization, login, logout, signin } = require('../controllers/authController');
 
 //GET

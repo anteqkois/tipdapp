@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const { createApiError } = require('../middlewares/error');
 
 const authorization = async (req, res) => {
-
   if (req.cookies.JWT) {
     const user = jwt.verify(req.cookies.JWT, process.env.JWT_TOKEN_SECRET, (err, user) => {
       if (err) {
@@ -38,11 +37,11 @@ const authorization = async (req, res) => {
     if (nonce !== user.nonce) {
       createApiError('Wrong signature, nonces are not equeal.');
     }
-    // expiresIn: 3600 = 1 houer
+
+    //TODO add refresh token
     const accessToken = jwt.sign(
       {
         role: 'authencicated',
-        // exp: Date.now() / 1000 + 60 * 60,
         user_metadata: { walletAddress: walletAddress, id: user.id },
       },
       process.env.JWT_TOKEN_SECRET,
@@ -52,7 +51,7 @@ const authorization = async (req, res) => {
     );
 
     res.cookie('JWT', accessToken, {
-      maxAge: 3600 * 24,
+      maxAge: 60 * 60 * 1000,
       httpOnly: true,
     });
 
