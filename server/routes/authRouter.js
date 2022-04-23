@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-// const { catchAsyncErrors, createApiError } = require('../middlewares/errors');
+const { catchAsyncErrors, createApiError } = require('../middlewares/error');
 const { authorization, login, logout, signin } = require('../controllers/authController');
 
 //GET
-router.post('/logout', logout);
+router.get('/logout', catchAsyncErrors(logout));
 
 //POST
-router.post('/authorization', authorization);
-router.post('/login', login);
-router.post('/signin', signin);
+router.post('/login', catchAsyncErrors(login));
+router.post('/signin', catchAsyncErrors(signin));
+router.post('/authorization', catchAsyncErrors(authorization));
 
 module.exports = router;

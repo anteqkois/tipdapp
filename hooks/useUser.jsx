@@ -33,9 +33,8 @@ const useUser = () => {
         },
       });
       dataAuth.status = 200 && toast.success('You are succesfully login');
-      // console.log(dataLogin.data);
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data);
     }
   };
 
@@ -44,7 +43,7 @@ const useUser = () => {
       const dataLogout = await axios('/api/auth/logout');
       dataLogout.status = 200 && toast.success('You are succesfully logout');
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data);
     }
   };
 
@@ -80,9 +79,7 @@ const useUser = () => {
       });
       dataAuth.status = 200 && toast.success('You are succesfully sign in');
     } catch (error) {
-      //TODO handle display api error
-      toast.error(error.message);
-      // console.log(error);
+      toast.error(error.response.data);
     }
   };
 

@@ -4,6 +4,16 @@ const notFound = (req, res, next) => {
   next(err);
 };
 
+const catchAsyncErrors = (handler) => {
+  return async (req, res, next) => {
+    try {
+      await handler(req, res, next);
+    } catch (error) {
+      next(error);
+    }
+  };
+};
+
 const catchErrors = (handler) => {
   return (req, res, next) => {
     try {
@@ -11,17 +21,7 @@ const catchErrors = (handler) => {
     } catch (error) {
       next(error);
     }
-    // handler(req, res, next).catch((err) => {
-    // next(err);
-    // });
   };
-};
-
-const createError = (message, status) => {
-  const err = new Error(message);
-  err.status = status;
-
-  throw err;
 };
 
 class ApiError extends Error {
@@ -31,22 +31,22 @@ class ApiError extends Error {
     this.status = status;
   }
 }
-// const createApiError = (message, status) => {
-//   throw new ApiError(message, status);
-//   // const err = new ApiError(message, status);
-//   // throw err;
-// };
+const createApiError = (message, status) => {
+  throw new ApiError(message, status);
+};
 
 const handleErrors = (err, req, res, next) => {
-  return res.status(err.status || 500).send({ error: err.message });
-  next();
+  // return res.status(err.status || 500).send({ error: err.message });
+  // console.log(err);
+  return res.status(err.status || 500).send(err.message);
+  // next();
 };
 
 module.exports = {
   notFound,
-  // createError,
-  // createApiError,
+  createApiError,
   catchErrors,
+  catchAsyncErrors,
   ApiError,
   handleErrors,
 };

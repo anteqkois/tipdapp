@@ -1,131 +1,124 @@
-const { randomUUID } = require('crypto') ;
-const prismaClient = require( '../../prisma/client');
-const { ethers } = require('ethers') ;
-const jwt = require('jsonwebtoken') ;
-const { ApiError } = require('../middlewares/error') ;
+const { randomUUID } = require('crypto');
+const { prismaClient } = require('../../prisma/client');
+const { ethers } = require('ethers');
+const jwt = require('jsonwebtoken');
+const { createApiError } = require('../middlewares/error');
 
 const authorization = async (req, res) => {
-  //TODO chaeck if user are already login/auth
-  let walletAddress, nonce, user;
-  try {
-    const { signature } = req.body;
-    walletAddress = req.body.walletAddress;
-    nonce = req.body.nonce;
 
-    const signerAddress = ethers.utils.verifyMessage(nonce, signature);
-    if (signerAddress !== walletAddress) {
-      throw new ApiError(305, 'Wrong signature, address are not equeal');
-    }
-
-    user = await prismaClient.user.findFirst({
-      where: {
-        walletAddress: signerAddress,
-      },
-    });
-    console.log(user);
-
-    if (user) {
-      if (nonce !== user.nonce) {
-        throw new ApiError(305, 'Wrong signature, nonce are not equeal');
+  if (req.cookies.JWT) {
+    const user = jwt.verify(req.cookies.JWT, process.env.JWT_TOKEN_SECRET, (err, user) => {
+      if (err) {
+        res.cookie('JWT', '', {
+          maxAge: 0,
+          httpOnly: true,
+        });
+      } else {
+        createApiError('You have already authorized.');
       }
-      // expiresIn: 3600 = 1 houer
-      const accessToken = jwt.sign(
-        {
-          role: 'authencicated',
-          // exp: Date.now() / 1000 + 60 * 60,
-          user_metadata: { walletAddress: walletAddress, id: user.id },
-        },
-        process.env.JWT_TOKEN_SECRET,
-        {
-          expiresIn: 3600,
-        },
-      );
-
-      // res.setHeader('Set-Cookie', serialize('JWT', accessToken, { path: '/', httpOnly: true, maxAge: 3600 * 24 }));
-      res.cookie('JWT', accessToken, {
-        maxAge: 3600 * 24,
-        httpOnly: true,
-      });
-
-      res.status(200).json({ message: 'You are authorizated' });
-    } else {
-      //TODO create ApiError
-      // throw new ApiError(401, 'Account not registered. Sign in first');
-    }
-  } catch (error) {
-    console.log(error);
-  } finally {
-    if (user) {
-      await prismaClient.user.update({
-        where: { walletAddress },
-        data: { nonce: '' },
-      });
-    }
+    });
   }
+
+  const { signature, walletAddress, nonce } = req.body;
+  if (!signature || !walletAddress || !nonce) createApiError('Missing data in request.');
+
+  const signerAddress = ethers.utils.verifyMessage(nonce, signature);
+
+  if (signerAddress !== walletAddress) {
+    createApiError('Wrong signature, addresses are not equeal.');
+  }
+
+  user = await prismaClient.user.findFirst({
+    where: {
+      walletAddress: signerAddress,
+    },
+  });
+
+  if (user) {
+    if (nonce !== user.nonce) {
+      createApiError('Wrong signature, nonces are not equeal.');
+    }
+    // expiresIn: 3600 = 1 houer
+    const accessToken = jwt.sign(
+      {
+        role: 'authencicated',
+        // exp: Date.now() / 1000 + 60 * 60,
+        user_metadata: { walletAddress: walletAddress, id: user.id },
+      },
+      process.env.JWT_TOKEN_SECRET,
+      {
+        expiresIn: 3600,
+      },
+    );
+
+    res.cookie('JWT', accessToken, {
+      maxAge: 3600 * 24,
+      httpOnly: true,
+    });
+
+    res.status(200).json({ message: 'You are authorizated' });
+  } else {
+    createApiError('Account not registered. Sign in first.');
+  }
+
+  await prismaClient.user.update({
+    where: { walletAddress },
+    data: { nonce: '' },
+  });
 };
 
 const login = async (req, res) => {
-  try {
-    const { walletAddress } = req.body;
+  const { walletAddress } = req.body;
+  if (!walletAddress) createApiError('Missing wallet address.');
 
-    const user = await prismaClient.user.findFirst({
-      where: {
-        walletAddress,
-      },
+  const user = await prismaClient.user.findFirst({
+    where: {
+      walletAddress,
+    },
+  });
+
+  const nonce = randomUUID();
+  if (user) {
+    await prismaClient.user.update({
+      where: { walletAddress },
+      data: { nonce },
     });
-
-    const nonce = randomUUID();
-    if (user) {
-      await prismaClient.user.update({
-        where: { walletAddress },
-        data: { nonce },
-      });
-      res.status(200).json({ nonce, user });
-    } else {
-      throw new ApiError(305, 'Account not registered. Sign in first');
-    }
-  } catch (error) {
-    res.status(error.statusCode || 400).send({ error: error.message });
+    res.status(200).json({ nonce, user });
+  } else {
+    createApiError('Account not registered. Sign in first.', 400);
   }
 };
 
 const logout = async (req, res) => {
-  try {
-    if (req.cookies.JWT) {
-      res.cookie('JWT', accessToken, {
-        maxAge: 0,
-        httpOnly: true,
-      });
-      res.status(200).send({ message: 'You are succesfully logout.' });
-    } else {
-      res.status(422).send({ error: 'You have not logged in yet.' });
-    }
-  } catch (error) {
-    res.status(error.statusCode || 400).send({ error: error.message });
+  if (req.cookies.JWT) {
+    res.cookie('JWT', '', {
+      maxAge: 0,
+      httpOnly: true,
+    });
+    res.status(200).send({ message: 'You are succesfully logout.' });
+  } else {
+    createApiError('You have not logged in yet.', 422);
   }
 };
 
 const signin = async (req, res) => {
- try {
-   const { walletAddress, email, firstName, lastName, nick } = req.body;
+  const { walletAddress, email, firstName, lastName, nick } = req.body;
+  if (!walletAddress || !email || !firstName || !lastName || !nick) createApiError('Missing data to create accout.');
 
-   const user = await prismaClient.user.findFirst({
-     where: {
-       walletAddress,
-     },
-   });
+  const user = await prismaClient.user.findFirst({
+    where: {
+      walletAddress,
+    },
+  });
 
-   if (!user) {
-     const nonce = randomUUID();
-     const newUser = await prismaClient.user.create({ data: { walletAddress, email, firstName, lastName, nonce, nick } });
-     res.status(200).json({ nonce: nonce, user: newUser });
-   } else {
-     throw new ApiError(305, 'Account is already register. Login to acccount.');
-   }
- } catch (error) {
-   res.status(error.statusCode || 400).send({ error: error.message });
- }
+  if (!user) {
+    const nonce = randomUUID();
+    const newUser = await prismaClient.user.create({ data: { walletAddress, email, firstName, lastName, nonce, nick } });
+    res.status(200).json({ nonce: nonce, user: newUser });
+  } else {
+    // next(createApiError('Account is already register. Login to acccount.', 305));
+    createApiError('Account is already register.');
+  }
 };
 
-module.exports = { authorization, login, logout, signin };
 module.exports = { authorization, login, logout, signin };
