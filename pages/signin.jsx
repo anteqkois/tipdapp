@@ -1,11 +1,11 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import useUser from '../hooks/useUser';
+import useUser from '../src/hooks/useUser';
 
 import Metamask from '../assets/metamask.svg';
 
-import Input from '@/components/utils/Input';
-import Button from '@/components/utils/Button';
+import Input from 'src/components/utils/Input';
+import Button from 'src/components/utils/Button';
 
 const validate = (values) => {
   const errors = {};

@@ -1,4 +1,4 @@
-import { requireAuthPage } from '../lib/requireAuthPage';
+import { requireAuthPage } from '../utils/requireAuthPage';
 import React from 'react';
 
 const dashboard = ({ auth }) => {

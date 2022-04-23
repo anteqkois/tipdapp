@@ -3,7 +3,7 @@
   "baseUrl": ".",
   "paths": {
    "@/prismaClient": ["prisma/client.js"],
-   "@/components/*": ["components/*"],
+   "@/components/*": ["src/components/*"],
   }
  }
 }

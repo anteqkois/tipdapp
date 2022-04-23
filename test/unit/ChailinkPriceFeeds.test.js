@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
-const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, CHAILINK_PRICE_ORACLE_ADDRESS_ETH } = require('../../constant');
+const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, CHAILINK_PRICE_ORACLE_ADDRESS_ETH } = require('../../utils/constant');
 
 xdescribe('ChailinkPriceFeeds', function () {
   let chailinkPriceFeeds;

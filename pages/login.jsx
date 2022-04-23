@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React from 'react';
 import toast from 'react-hot-toast';
-import useEthers from '../hooks/useEthers';
-import useUser from '../hooks/useUser';
+import useEthers from '../src/hooks/useEthers';
+import useUser from '../src/hooks/useUser';
 
 const login = () => {
   // const {} = useUserWallet();

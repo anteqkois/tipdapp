@@ -1,9 +1,9 @@
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
-const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, CHAILINK_PRICE_ORACLE_ADDRESS_ETH, ERC20_TOKEN_ADDRESS } = require('../../constant');
+const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, CHAILINK_PRICE_ORACLE_ADDRESS_ETH, ERC20_TOKEN_ADDRESS } = require('../../utils/constant');
 const sandABI = require('../../artifacts/utils/SAND.json');
-const { packToBytes32, unpackFromBytes32 } = require('../../lib/packOracleData');
+const { packToBytes32, unpackFromBytes32 } = require('../../utils/packOracleData');
 
 describe('StoreOracle', function () {
   let qoistipPriceAggregator;

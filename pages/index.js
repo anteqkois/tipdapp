@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 
-import { login } from '../redux/userSlice';
+import { login } from '../src/redux/userSlice';
 
 export default function Home() {
   const dispatch = useDispatch();

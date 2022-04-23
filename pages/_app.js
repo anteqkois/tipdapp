@@ -1,7 +1,7 @@
 import { Provider } from 'react-redux';
-import store from '../redux/store.js';
-import { EthersProvider } from '../hooks/useEthers.jsx';
-import '../styles/globals.css';
+import store from '../src/redux/store.js';
+import { EthersProvider } from '../src/hooks/useEthers.jsx';
+import '../src/styles/globals.css';
 import { Toaster } from 'react-hot-toast';
 
 function MyApp({ Component, pageProps }) {
