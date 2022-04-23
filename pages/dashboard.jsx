@@ -1,18 +1,15 @@
 import { requireAuthPage } from '../utils/requireAuthPage';
 import React from 'react';
 
-const dashboard = ({ auth }) => {
-  return <div>{auth}</div>;
+const dashboard = ({ user }) => {
+  // console.log(user);
+  return <div>{}</div>;
 };
 
 export default dashboard;
 
 export const getServerSideProps = requireAuthPage(async (ctx) => {
-  // console.log(ctx.req.user);
   return {
-    props: { auth: 'działa' },
+    props: { user: ctx.req.user },
   };
 });
-
-//API make owne middleware HOC - https://github.com/hunterbecton/next-js-middleware/tree/main/middleware
-//Page use requireAuthPage HOC
