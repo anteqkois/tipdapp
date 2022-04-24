@@ -6,6 +6,7 @@ import Image from 'next/image';
 
 import { login } from '../src/redux/userSlice';
 import Navbar from 'src/components/Navbar';
+import Layout from '@/components/Layout';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -22,10 +23,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1 className="text-3xl font-bold underline text-red-600">Test 2</h1>
+      <Layout>
+        {/* <h1 className="text-3xl font-bold underline text-red-600">Test 2</h1> */}
         <Navbar />
-      </main>
+      </Layout>
     </div>
   );
 }
