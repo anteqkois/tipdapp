@@ -1,7 +1,13 @@
 import React from 'react';
+import Navbar from './Navbar/index';
 
 const Layout = ({ children }) => {
-  return <main className="">{children}</main>;
+  return (
+    <>
+      <Navbar />
+      <main className="">{children}</main>;
+    </>
+  );
 };
 
 export default Layout;

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Hamburger from './Hamburger';
 import useMedia from 'src/hooks/useMedia';
 import Button from '../utils/Button';
+import Navlink from './Navlink';
 
 const Navbar = () => {
   const media = useMedia(['(min-width: 1024px)'], ['desktop'], 'mobile');
@@ -20,7 +21,7 @@ const Navbar = () => {
       >
         <ul>
           <li>
-            <Link href="/dashboard">
+            <Navlink href="/dashboard" classActive="bg-stone-900">
               <p className="flex gap-3 p-4 uppercase font-semibold group rounded-xl text-zinc-600 hover:text-zinc-900 hover:cursor-pointer hover:bg-stone-300">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +34,7 @@ const Navbar = () => {
                 </svg>
                 dashboard
               </p>
-            </Link>
+            </Navlink>
           </li>
           <li>
             <Link href="/tips">
@@ -123,34 +124,38 @@ const Navbar = () => {
       <div className="flex-center">LOGO</div>
       <ul className="flex w-fit rounded-xl m-3 bg-stone-200">
         <li>
-          <Link href="/dashboard">
-            <p className="flex gap-3 p-4 uppercase font-semibold group rounded-xl text-zinc-600 hover:text-zinc-900 hover:cursor-pointer hover:bg-stone-300">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                className="inline-block fill-stone-600 group-hover:fill-stone-900 duration-300"
-              >
-                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm7.753 18.305c-.261-.586-.789-.991-1.871-1.241-2.293-.529-4.428-.993-3.393-2.945 3.145-5.942.833-9.119-2.489-9.119-3.388 0-5.644 3.299-2.489 9.119 1.066 1.964-1.148 2.427-3.393 2.945-1.084.25-1.608.658-1.867 1.246-1.405-1.723-2.251-3.919-2.251-6.31 0-5.514 4.486-10 10-10s10 4.486 10 10c0 2.389-.845 4.583-2.247 6.305z" />
-              </svg>
-            </p>
-          </Link>
+          <Navlink
+            href="/dashboard"
+            classActive="bg-stone-400 hover:bg-stone-400 hover:text-zinc-900"
+            className="flex gap-3 p-4 uppercase font-semibold group rounded-xl text-zinc-600 hover:text-zinc-900 hover:cursor-pointer hover:bg-stone-300"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              className="inline-block fill-stone-600 group-hover:fill-stone-900 duration-300"
+            >
+              <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm7.753 18.305c-.261-.586-.789-.991-1.871-1.241-2.293-.529-4.428-.993-3.393-2.945 3.145-5.942.833-9.119-2.489-9.119-3.388 0-5.644 3.299-2.489 9.119 1.066 1.964-1.148 2.427-3.393 2.945-1.084.25-1.608.658-1.867 1.246-1.405-1.723-2.251-3.919-2.251-6.31 0-5.514 4.486-10 10-10s10 4.486 10 10c0 2.389-.845 4.583-2.247 6.305z" />
+            </svg>
+          </Navlink>
         </li>
         <li>
-          <Link href="/tips">
-            <p className="flex gap-3 p-4 uppercase font-semibold group rounded-xl text-zinc-600 hover:text-zinc-900 hover:cursor-pointer hover:bg-stone-300">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                className="inline-block fill-stone-600 group-hover:fill-stone-900 duration-300"
-              >
-                <path d="M12 3c5.514 0 10 3.592 10 8.007 0 4.917-5.145 7.961-9.91 7.961-1.937 0-3.383-.397-4.394-.644-1 .613-1.595 1.037-4.272 1.82.535-1.373.723-2.748.602-4.265-.838-1-2.025-2.4-2.025-4.872-.001-4.415 4.485-8.007 9.999-8.007zm0-2c-6.338 0-12 4.226-12 10.007 0 2.05.738 4.063 2.047 5.625.055 1.83-1.023 4.456-1.993 6.368 2.602-.47 6.301-1.508 7.978-2.536 1.418.345 2.775.503 4.059.503 7.084 0 11.91-4.837 11.91-9.961-.001-5.811-5.702-10.006-12.001-10.006zm-3.5 10c0 .829-.671 1.5-1.5 1.5-.828 0-1.5-.671-1.5-1.5s.672-1.5 1.5-1.5c.829 0 1.5.671 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5c.829 0 1.5-.671 1.5-1.5s-.671-1.5-1.5-1.5zm5 0c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5c.829 0 1.5-.671 1.5-1.5s-.671-1.5-1.5-1.5z" />
-              </svg>
-            </p>
-          </Link>
+          <Navlink
+            href="/tips"
+            classActive="bg-stone-400 hover:bg-stone-400 hover:text-zinc-900"
+            className="flex gap-3 p-4 uppercase font-semibold group rounded-xl text-zinc-600 hover:text-zinc-900 hover:cursor-pointer hover:bg-stone-300"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              className="inline-block fill-stone-600 group-hover:fill-stone-900 duration-300"
+            >
+              <path d="M12 3c5.514 0 10 3.592 10 8.007 0 4.917-5.145 7.961-9.91 7.961-1.937 0-3.383-.397-4.394-.644-1 .613-1.595 1.037-4.272 1.82.535-1.373.723-2.748.602-4.265-.838-1-2.025-2.4-2.025-4.872-.001-4.415 4.485-8.007 9.999-8.007zm0-2c-6.338 0-12 4.226-12 10.007 0 2.05.738 4.063 2.047 5.625.055 1.83-1.023 4.456-1.993 6.368 2.602-.47 6.301-1.508 7.978-2.536 1.418.345 2.775.503 4.059.503 7.084 0 11.91-4.837 11.91-9.961-.001-5.811-5.702-10.006-12.001-10.006zm-3.5 10c0 .829-.671 1.5-1.5 1.5-.828 0-1.5-.671-1.5-1.5s.672-1.5 1.5-1.5c.829 0 1.5.671 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5c.829 0 1.5-.671 1.5-1.5s-.671-1.5-1.5-1.5zm5 0c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5c.829 0 1.5-.671 1.5-1.5s-.671-1.5-1.5-1.5z" />
+            </svg>
+          </Navlink>
         </li>
         <li>
           <Link href="/creator">
