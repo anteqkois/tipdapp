@@ -5,7 +5,7 @@ const Button = ({ children, onClick, className, type, ...props }) => {
     <button
       {...props}
       className={(() => {
-        let result = `${className} rounded-md uppercase font-semibold hover:text-slate-100 `;
+        let result = `${className} rounded-lg uppercase font-semibold hover:text-slate-100 `;
         switch (type) {
           case 'ghost':
             result += `mx-1 px-4 py-1.5 outline outline-zinc-800 outline-4 hover:text-slate-100 hover:outline-zinc-700`;
