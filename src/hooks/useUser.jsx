@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import useEthers from './useEthers';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
 
 const useUser = () => {
   const [isConnected, setIsConnected] = useState(false);
   const { signer, connectWallet } = useEthers();
+  const router = useRouter();
 
   const login = async () => {
     try {
@@ -42,6 +44,7 @@ const useUser = () => {
     try {
       const dataLogout = await axios('/api/auth/logout');
       dataLogout.status = 200 && toast.success('You are succesfully logout');
+      router.push('/login');
     } catch (error) {
       toast.error(error.response.data);
     }

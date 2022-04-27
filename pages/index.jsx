@@ -5,13 +5,15 @@ import Head from 'next/head';
 import Image from 'next/image';
 
 import { login } from '../src/redux/userSlice';
+import { EthersProvider } from 'src/hooks/useEthers';
+import { Toaster } from 'react-hot-toast';
 
 export default function Home() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(login({ email: 'jannowak@gmail.com', password: 'haslo123' }));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(login({ email: 'jannowak@gmail.com', password: 'haslo123' }));
+  // }, []);
 
   return (
     <div>
@@ -23,3 +25,12 @@ export default function Home() {
     </div>
   );
 }
+
+Home.getLayout = (page) => (
+  // <Provider store={store}>
+    <EthersProvider>
+      <Toaster position="top-center" reverseOrder={false} />
+      {page}
+    </EthersProvider>
+  // </Provider>
+);

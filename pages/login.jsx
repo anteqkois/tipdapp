@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
-import toast from 'react-hot-toast';
-import useEthers from '../src/hooks/useEthers';
+import toast, { Toaster } from 'react-hot-toast';
+import useEthers, { EthersProvider } from '../src/hooks/useEthers';
 import useUser from '../src/hooks/useUser';
 
 const login = () => {
@@ -59,3 +59,10 @@ const login = () => {
 };
 
 export default login;
+
+login.getLayout = (page) => (
+  <EthersProvider>
+    <Toaster position="top-center" reverseOrder={false} />
+    {page}
+  </EthersProvider>
+);

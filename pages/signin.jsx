@@ -6,6 +6,8 @@ import Metamask from '../assets/metamask.svg';
 
 import Input from 'src/components/utils/Input';
 import Button from 'src/components/utils/Button';
+import { EthersProvider } from 'src/hooks/useEthers';
+import { Toaster } from 'react-hot-toast';
 
 const validate = (values) => {
   const errors = {};
@@ -94,3 +96,10 @@ const signin = () => {
 };
 
 export default signin;
+
+signin.getLayout = (page) => (
+  <EthersProvider>
+    <Toaster position="top-center" reverseOrder={false} />
+    {page}
+  </EthersProvider>
+);

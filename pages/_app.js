@@ -6,6 +6,11 @@ import { Toaster } from 'react-hot-toast';
 import Layout from '@/components/Layout.jsx';
 
 function MyApp({ Component, pageProps }) {
+
+  if(Component.getLayout){
+    return Component.getLayout(<Component {...pageProps} />);
+  }
+
   return (
     <Provider store={store}>
       <EthersProvider>

@@ -4,13 +4,15 @@ import Hamburger from './Hamburger';
 import Button from '../utils/Button';
 import Navlink from './Navlink';
 import useMediaQuery from 'src/hooks/useMediaQuery';
+import useUser from 'src/hooks/useUser';
 
 //TODO add tabindex to desktop version
 
 const Navbar = () => {
-  const isMobile = useMediaQuery('(max-width: 1024px)', true);
-
   const [isOpen, setIsOpen] = useState(false);
+
+  const isMobile = useMediaQuery('(max-width: 1024px)', true);
+  const { logout } = useUser();
 
   return isMobile ? (
     <>
@@ -89,7 +91,12 @@ const Navbar = () => {
               settings
             </Navlink>
           </li>
-          <li onClick={() => setIsOpen(false)}>
+          <li
+            onClick={() => {
+              setIsOpen(false);
+              logout();
+            }}
+          >
             <div
               href="/settings"
               className="flex gap-3 p-4 uppercase font-semibold group rounded-xl text-zinc-600 hover:text-zinc-900 hover:cursor-pointer hover:bg-stone-300"
@@ -176,7 +183,7 @@ const Navbar = () => {
           </li>
         </ul>
       </nav>
-      <Button>LOGOUT</Button>
+      <Button onClick={logout}>LOGOUT</Button>
     </div>
   );
 };
