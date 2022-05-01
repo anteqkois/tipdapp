@@ -2,18 +2,18 @@
 pragma solidity ^0.8.0;
 
 import "./Qoistip.sol";
+import "./QoistipPriceAggregator.sol";
 
 contract QoistipV2 is Qoistip {
     QoistipPriceAggregator private _qoistipPriceAggregator;
 
-    function setQoistipPriceAggregator(QoistipPriceAggregator qoistipPriceAggregator)
-        external
-        onlyOwner
-    {
+    function setQoistipPriceAggregator(
+        QoistipPriceAggregator qoistipPriceAggregator
+    ) external onlyOwner {
         // Qoistip.initialize();
         _qoistipPriceAggregator = qoistipPriceAggregator;
     }
-    
+
     function _getPrice(address _tokenAddress)
         internal
         view

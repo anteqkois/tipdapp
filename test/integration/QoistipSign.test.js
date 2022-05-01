@@ -1,15 +1,19 @@
 const { expect } = require('chai');
 const { ethers, network, upgrades } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
-const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, ERC20_TOKEN_ADDRESS, CHAILINK_PRICE_ORACLE_ADDRESS_ETH } = require('../../utils/constant');
-const { packToBytes32, unpackFromBytes32 } = require('../../utils/packOracleData');
+const {
+  CHAILINK_PRICE_ORACLE_ADDRESS_USD,
+  ERC20_TOKEN_ADDRESS,
+  CHAILINK_PRICE_ORACLE_ADDRESS_ETH,
+} = require('../../utils/constant');
+// const { packToBytes32, unpackFromBytes32 } = require('../../utils/packOracleData');
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
 const sandABI = require('../../src/artifacts/SAND.json');
+const { default: axios } = require('axios');
 
-xdescribe('Qoistip', function () {
-  let qoistip;
+describe('QoistipSign', function () {
+  let qoistipSign;
   let chailinkPriceFeeds;
-  let qoistipPriceAggregator;
   let customerToken1;
   let sand;
   let sandHodler;
@@ -19,11 +23,11 @@ xdescribe('Qoistip', function () {
   let elonHodler;
   let owner;
   let customer1;
-  let addr2;
+  let adminSigner;
   let addrs;
 
   before(async () => {
-    [owner, customer1, addr2, ...addrs] = await ethers.getSigners();
+    [owner, customer1, adminSigner, ...addrs] = await ethers.getSigners();
 
     sand = new ethers.Contract(ERC20_TOKEN_ADDRESS.SAND, sandABI, ethers.provider);
     shib = new ethers.Contract(ERC20_TOKEN_ADDRESS.SHIB, sandABI, ethers.provider);
@@ -50,64 +54,92 @@ xdescribe('Qoistip', function () {
     shibHodler = await ethers.getSigner(accountWithSHIB);
     elonHodler = await ethers.getSigner(accountWithELON);
 
-    const Qoistip = await ethers.getContractFactory('Qoistip');
-    qoistip = await upgrades.deployProxy(Qoistip, [], { kind: 'uups' });
-    // qoistip = await Qoistip.deploy(qoistipPriceAggregator.address);
+    const QoistipSign = await ethers.getContractFactory('QoistipSign');
+    qoistipSign = await upgrades.deployProxy(QoistipSign, [adminSigner.address], { kind: 'uups' });
 
     const ChailinkPriceFeeds = await ethers.getContractFactory('ChailinkPriceFeeds');
     chailinkPriceFeeds = await ChailinkPriceFeeds.deploy();
 
     //set Qoisdapp smart contract needed veriables
-    const sandData = packToBytes32(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND, { inUSD: true, isChailink: true });
-    await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SAND, sandData);
-
-    const shibData = packToBytes32(CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB, { inUSD: false, isChailink: true });
-    await qoistip.setPriceOracle(ERC20_TOKEN_ADDRESS.SHIB, shibData);
-
-    const registerCustomerTransation = await qoistip.connect(customer1).registerCustomer('CT1', 'CustomerToken1');
+    const registerCustomerTransation = await qoistipSign.connect(customer1).registerCustomer('CT1', 'CustomerToken1');
 
     registerCustomerTransation.wait();
-    const customerToken1Address = await qoistip.tokenCustomer(customer1.address);
+    const customerToken1Address = await qoistipSign.tokenCustomer(customer1.address);
     customerToken1 = new ethers.Contract(customerToken1Address, CustomerToken.abi, ethers.provider);
   });
 
   describe('Donate ERC20', async () => {
-    it('Check $SAND balance before donate', async function () {
-      expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(0);
+    const sandPrice = await axios.get('https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest', {
+      headers: {
+        'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY,
+      },
+      params: {
+        symbol: 'SAND',
+        convert: 'USD',
+      },
     });
-    it('Send donate in $SAND and check emited event', async function () {
-      await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
+    console.log(sandPrice.data.data.SAND);
+    console.log(sandPrice.data.data.SAND[0].quote);
+    console.log(sandPrice.data.data.SAND[0].quote.USD);
+    console.log(sandPrice.data.data.SAND[0].quote.USD.price);
 
-      await expect(qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('100')))
-        .to.emit(qoistip, 'Donate')
+    it('Check $SAND balance before donate', async function () {
+      expect(await qoistipSign.balanceOfERC20(customer1.address, sand.address)).to.equal(0);
+    });
+    xit('Send donate in $SAND and check emited event', async function () {
+      await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('100'));
+
+      //       address _addressToDonate,
+      // address _tokenAddress,
+      // uint256 _donatedTokenAmount,
+      // uint256 _mintTokenAmount,
+      // bytes memory signature
+
+      //TODO calculate token to mint
+      const amountToMint = 0;
+
+      //TODO make signature
+      const hashData = ethers.utils.solidityKeccak256(
+        ['address', 'uint256', 'uint256'],
+        [sand.address, parseUnits('100'), amountToMint],
+      );
+      const hashDataBinary = ethers.utils.arrayify(hashData);
+      const signature = await adminSigner.signMessage(hashDataBinary);
+
+      await expect(qoistipSign.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('100'), signature))
+        .to.emit(qoistipSign, 'Donate')
         .withArgs(sandHodler.address, customer1.address, sand.address, parseUnits('100'));
     });
-    it('Check $SAND balance after donate', async function () {
-      expect(await qoistip.balanceOfERC20(customer1.address, sand.address)).to.equal(parseUnits('97'));
-      expect(await qoistip.balanceOfERC20(qoistip.address, sand.address)).to.equal(parseUnits('100').sub(parseUnits('97')));
-      expect(await sand.balanceOf(qoistip.address)).to.equal(parseUnits('100'));
+    xit('Check $SAND balance after donate', async function () {
+      expect(await qoistipSign.balanceOfERC20(customer1.address, sand.address)).to.equal(parseUnits('97'));
+      expect(await qoistipSign.balanceOfERC20(qoistipSign.address, sand.address)).to.equal(
+        parseUnits('100').sub(parseUnits('97')),
+      );
+      expect(await sand.balanceOf(qoistipSign.address)).to.equal(parseUnits('100'));
     });
-    it('Check $CT1 balance after donate', async function () {
-      const sandPrice = await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND);
+    xit('Check $CT1 balance after donate', async function () {
+      //TODO get Sand price from coinmarketcap api
+      // const sandPrice = await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND);
       const calculateExpectBalance = parseUnits('100').mul(sandPrice).div('1000000000000000000');
       expect(await customerToken1.balanceOf(sandHodler.address)).to.equal(calculateExpectBalance);
     });
-    it('Check $SHIB balance before donate', async function () {
+
+    xit('Check $SHIB balance before donate', async function () {
       expect(await qoistip.balanceOfERC20(customer1.address, shib.address)).to.equal(0);
     });
-    it('Send donate in $SHIB and check changeTokenBalance function', async function () {
+    xit('Send donate in $SHIB and check changeTokenBalance function', async function () {
       await shib.connect(shibHodler).approve(qoistip.address, parseUnits('10000'));
 
       await expect(() =>
         qoistip.connect(shibHodler).donateERC20(customer1.address, shib.address, parseUnits('10000')),
       ).to.changeTokenBalances(shib, [shibHodler, qoistip], [parseUnits('-10000'), parseUnits('10000')]);
     });
-    it('Check $SHIB balance after donate', async function () {
+    xit('Check $SHIB balance after donate', async function () {
       expect(await qoistip.balanceOfERC20(customer1.address, shib.address)).to.equal(parseUnits('9700'));
       expect(await qoistip.balanceOfERC20(qoistip.address, shib.address)).to.equal(parseUnits('10000').sub(parseUnits('9700')));
       expect(await shib.balanceOf(qoistip.address)).to.equal(parseUnits('10000'));
     });
-    it('Check $CT1 balance after donate', async function () {
+    xit('Check $CT1 balance after donate', async function () {
       const shibPrice = await chailinkPriceFeeds.getDerivedPrice(
         CHAILINK_PRICE_ORACLE_ADDRESS_ETH.SHIB,
         CHAILINK_PRICE_ORACLE_ADDRESS_ETH.USDC,
@@ -116,28 +148,28 @@ xdescribe('Qoistip', function () {
       const calculateExpectBalance = parseUnits('10000').mul(shibPrice).div('1000000000000000000');
       expect(await customerToken1.balanceOf(shibHodler.address)).to.equal(calculateExpectBalance);
     });
-    it('Can not send donate if worth is to small ($SAND)', async function () {
+    xit('Can not send donate if worth is to small ($SAND)', async function () {
       await sand.connect(sandHodler).approve(qoistip.address, parseUnits('0.01'));
 
       await expect(
         qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('0.01')),
       ).to.be.revertedWith('Donate worth < min value $');
     });
-    it('Revert when address to donate is 0x0...', async function () {
+    xit('Revert when address to donate is 0x0...', async function () {
       await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
 
       await expect(
         qoistip.connect(sandHodler).donateERC20('0x0000000000000000000000000000000000000000', sand.address, parseUnits('100')),
       ).to.be.reverted;
     });
-    it('Revert when address not register', async function () {
+    xit('Revert when address not register', async function () {
       await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
 
-      await expect(qoistip.connect(sandHodler).donateERC20(addr2.address, sand.address, parseUnits('100'))).to.be.reverted;
+      await expect(qoistip.connect(sandHodler).donateERC20(adminSigner.address, sand.address, parseUnits('100'))).to.be.reverted;
     });
   });
 
-  describe('Donate ETH', async () => {
+  xdescribe('Donate ETH', async () => {
     it('Check $ETH balance in smart contract before donate', async function () {
       expect(await qoistip.balanceOfETH(customer1.address)).to.be.equal(0);
     });
@@ -158,7 +190,7 @@ xdescribe('Qoistip', function () {
     });
   });
 
-  describe('Withdraw ERC20', async () => {
+  xdescribe('Withdraw ERC20', async () => {
     it('One ERC20 Token', async function () {
       const sandBalance = await qoistip.balanceOfERC20(customer1.address, sand.address);
       expect(sandBalance).to.equal(parseUnits('97'));
@@ -193,7 +225,7 @@ xdescribe('Qoistip', function () {
     });
   });
 
-  describe('Withdraw ETH', async () => {
+  xdescribe('Withdraw ETH', async () => {
     it('All ETH', async function () {
       expect(await qoistip.balanceOfETH(customer1.address)).to.equal(parseUnits('0.97'));
 
@@ -209,7 +241,7 @@ xdescribe('Qoistip', function () {
     });
   });
 
-  describe('Upgrade implementation', async () => {
+  xdescribe('Upgrade implementation', async () => {
     it('Upgrade', async function () {
       expect(await qoistip.version()).to.equal(1);
 
@@ -250,7 +282,7 @@ xdescribe('Qoistip', function () {
       expect(await customerToken1.balanceOf(elonHodler.address)).to.equal(calculateExpectBalance);
     });
     it('Owner restriction still work', async function () {
-      await expect(qoistip.connect(addr2).setQoistipPriceAggregator(qoistipPriceAggregator.address)).to.be.revertedWith(
+      await expect(qoistip.connect(adminSigner).setQoistipPriceAggregator(qoistipPriceAggregator.address)).to.be.revertedWith(
         'Ownable: caller is not the owner',
       );
       expect(await qoistip.setQoistipPriceAggregator(qoistipPriceAggregator.address));

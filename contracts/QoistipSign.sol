@@ -9,8 +9,11 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
-    mapping(address => bytes32) oracleData;
+contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
+    //Use mapping to handle many address to handle many donate in time
+    address private adminSigner;
+    uint256 private _minValue;
+
     mapping(address => address) private _tokenCustomer;
     mapping(address => mapping(address => uint256)) addressToTokenToBalance;
     mapping(address => uint256) BalanceETH;
@@ -18,7 +21,6 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     // 99=>1%,  0,1%=>999  0,03% => 997
     uint256 private _fee;
     // 0.1$
-    uint256 private _minValue;
     AggregatorV3Interface constant usdcEthOracle =
         AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
 
@@ -38,10 +40,11 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     );
     event NewCustomer(address indexed customerAddress, address customerToken);
 
-    function initialize() external initializer {
+    function initialize(address _adminSigner) external initializer {
         __Ownable_init();
         _fee = 9700;
         _minValue = 1e17;
+        adminSigner = _adminSigner;
     }
 
     // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
@@ -52,7 +55,6 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     }
 
     function setFee(uint256 _newFee) external virtual onlyOwner {
-        //add some limit, for exampple new _fee must < +10%, or _fee <20% ?
         require(_newFee < 10000);
         _fee = _newFee;
     }
@@ -101,80 +103,86 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         emit NewCustomer(msg.sender, _newToken);
     }
 
-    function setPriceOracle(address _tokenAddress, bytes32 _priceOracleData)
-        external
-        virtual
-        onlyOwner
-    {
-        oracleData[_tokenAddress] = _priceOracleData;
-    }
+    function verifySignature(
+        address _tokenAddress,
+        uint256 _donatedTokenAmount,
+        uint256 _mintTokenAmount,
+        bytes memory signature
+    ) private view returns (bool) {
+        bytes32 hashData = keccak256(
+            abi.encodePacked(
+                "\x19Ethereum Signed Message:\n32",
+                _tokenAddress,
+                _donatedTokenAmount,
+                _mintTokenAmount
+            )
+        );
 
-    function priceOracle(address _tokenAddress)
-        external
-        view
-        virtual
-        returns (bytes32 data)
-    {
-        data = oracleData[_tokenAddress];
-    }
+        require(signature.length == 65, "invalid signature length");
 
-    function _getPrice(address _tokenAddress)
-        internal
-        view
-        virtual
-        returns (uint256)
-    {
-        bytes32 oracle = oracleData[_tokenAddress];
-        // require(oracle != 0, "Not suported token");
+        bytes32 r;
+        bytes32 s;
+        uint8 v;
 
-        (, int256 price, , , ) = AggregatorV3Interface(address(bytes20(oracle)))
-            .latestRoundData();
-        // in USD
-        if (oracle & (bytes32(uint256(1)) << 95) != 0 ? true : false) {
-            return uint256(price * 10**10);
-        } else {
-            (, int256 priceEth, , , ) = usdcEthOracle.latestRoundData();
-            return uint256((price * 10**18) / priceEth);
+        assembly {
+            r := mload(add(signature, 32))
+            s := mload(add(signature, 64))
+            v := byte(0, mload(add(signature, 96)))
         }
+
+        address signer = ecrecover(hashData, v, r, s);
+        return (signer == adminSigner);
+        // require(signer == adminSigner, 'Wrong signature');
+        // Not necessary ?
+        // require(signature == hashData, 'Wrong signature')
+
     }
 
     //donateERC20_K3u(): 0x0000701f
     function donateERC20(
         address _addressToDonate,
         address _tokenAddress,
-        uint256 _tokenAmount
+        uint256 _donatedTokenAmount,
+        uint256 _mintTokenAmount,
+        bytes memory signature
     ) external virtual {
         address tokenCustomerAddress = _tokenCustomer[_addressToDonate];
         require(
             tokenCustomerAddress != address(0),
             "Address to donate was not registered"
         );
-        uint256 _tokenToMint = (_getPrice(_tokenAddress) * _tokenAmount) / 1e18;
-        require(_tokenToMint >= _minValue, "Donate worth < min value $");
+
+        //Verify signature
+        bool valid = verifySignature(
+            _tokenAddress,
+            _donatedTokenAmount,
+            _mintTokenAmount,
+            signature
+        );
+
+        require(valid, "Wrong data or signature");
 
         IERC20(_tokenAddress).transferFrom(
             msg.sender,
             address(this),
-            _tokenAmount
+            _donatedTokenAmount
         );
 
-        // bool success = IERC20(_tokenAddress).transferFrom(
-        //     msg.sender,
-        //     address(this),
-        //     _tokenAmount
-        // );
-        // require(success, "Transfer ERC20 not success");
-
-        // No Reentrancy - fist get token, next set balance
-        uint256 _withFee = (_tokenAmount * _fee) / 10000;
+        // Calculate fee off-chain ?
+        uint256 _withFee = (_donatedTokenAmount * _fee) / 10000;
         addressToTokenToBalance[_addressToDonate][_tokenAddress] = _withFee;
         addressToTokenToBalance[address(this)][_tokenAddress] =
-            _tokenAmount -
+            _donatedTokenAmount -
             _withFee;
-        CustomerToken(tokenCustomerAddress).mint(msg.sender, _tokenToMint);
+        CustomerToken(tokenCustomerAddress).mint(msg.sender, _mintTokenAmount);
 
         // Emiting events is neccesary ?
-        emit Donate(msg.sender, _addressToDonate, _tokenAddress, _tokenAmount);
+        emit Donate(
+            msg.sender,
+            _addressToDonate,
+            _tokenAddress,
+            _donatedTokenAmount
+        );
     }
 
     //donateETH_Bej(): 0x00002206
