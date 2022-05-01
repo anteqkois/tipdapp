@@ -9,7 +9,7 @@ interface ICustomerToken {
         uint256 value
     );
 
-    function name() external view returns (string memory);
+    function name() external view  returns (string memory);
 
     function symbol() external view returns (string memory);
 

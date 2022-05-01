@@ -1,0 +1,2 @@
+SLITHER slither --solc-remaps @openzeppelin/=/home/anteqkois/project/qoisdapp/node_modules/@openzeppelin/ contracts/Qoistip.sol
+MYTHRIL myth analyze --solc-json contracts/remapingss.json contracts/Qoistip.sol:Qoistip

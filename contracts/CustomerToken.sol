@@ -2,24 +2,19 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "./ICustomerToken.sol";
 
-contract CustomerToken is Ownable {
-    mapping(address => uint256) private _balances;
-
-    mapping(address => mapping(address => uint256)) private _allowances;
-
-    // uint256 private constant _maxSupply = 10_000_000 * 10**18;
-    // uint256 private immutable _maxSupply;
+contract CustomerToken is Ownable, ICustomerToken {
+    string private _name;
+    string private _symbol;
     uint256 private _totalSupply;
 
-    string private _symbol;
-    string private _name;
+    mapping(address => mapping(address => uint256)) private _allowances;
+    mapping(address => uint256) private _balances;
 
-    constructor(
-        string memory symbol_,
-        string memory name_
-        // uint256 maxSupply_
-    ) {
+    constructor(string memory symbol_, string memory name_)
+    // uint256 maxSupply_
+    {
         //  1mln <= maxSupply_ <= 100mln
         // require(
         //     (maxSupply_ <= 100_000_000 * 10**18) &&
@@ -31,26 +26,26 @@ contract CustomerToken is Ownable {
         // _mint(msg.sender, 1_000 * 10**18);
     }
 
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event Approval(
-        address indexed owner,
-        address indexed spender,
-        uint256 value
-    );
+    // event Transfer(address indexed from, address indexed to, uint256 value);
+    // event Approval(
+    //     address indexed owner,
+    //     address indexed spender,
+    //     uint256 value
+    // );
 
-    function name() public view returns (string memory) {
+    function name() external view virtual override returns (string memory) {
         return _name;
     }
 
-    function symbol() public view returns (string memory) {
+    function symbol() external view virtual override returns (string memory) {
         return _symbol;
     }
 
-    function decimals() public pure returns (uint8) {
+    function decimals() external pure virtual override returns (uint8) {
         return 18;
     }
 
-    function totalSupply() public view returns (uint256) {
+    function totalSupply() external view virtual override returns (uint256) {
         return _totalSupply;
     }
 
@@ -58,27 +53,45 @@ contract CustomerToken is Ownable {
     //     return _maxSupply;
     // }
 
-    function balanceOf(address account) public view returns (uint256) {
+    function balanceOf(address account)
+        external
+        view
+        virtual
+        override
+        returns (uint256)
+    {
         return _balances[account];
     }
 
-    function transfer(address to, uint256 amount) public returns (bool) {
-        address owner = msg.sender;
-        _transfer(owner, to, amount);
+    function transfer(address to, uint256 amount)
+        external
+        virtual
+        override
+        returns (bool)
+    {
+        // address owner = msg.sender;
+        _transfer(msg.sender, to, amount);
         return true;
     }
 
     function allowance(address owner, address spender)
-        public
+        external
         view
+        virtual
+        override
         returns (uint256)
     {
         return _allowances[owner][spender];
     }
 
-    function approve(address spender, uint256 amount) public returns (bool) {
-        address owner = msg.sender;
-        _approve(owner, spender, amount);
+    function approve(address spender, uint256 amount)
+        external
+        virtual
+        override
+        returns (bool)
+    {
+        // address owner = msg.sender;
+        _approve(msg.sender, spender, amount);
         return true;
     }
 
@@ -86,7 +99,7 @@ contract CustomerToken is Ownable {
         address from,
         address to,
         uint256 amount
-    ) public returns (bool) {
+    ) external virtual override returns (bool) {
         address spender = msg.sender;
         _spendAllowance(from, spender, amount);
         _transfer(from, to, amount);
@@ -94,7 +107,9 @@ contract CustomerToken is Ownable {
     }
 
     function increaseAllowance(address spender, uint256 addedValue)
-        public
+        external
+        virtual
+        override
         returns (bool)
     {
         address owner = msg.sender;
@@ -103,7 +118,9 @@ contract CustomerToken is Ownable {
     }
 
     function decreaseAllowance(address spender, uint256 subtractedValue)
-        public
+        external
+        virtual
+        override
         returns (bool)
     {
         address owner = msg.sender;
@@ -148,9 +165,10 @@ contract CustomerToken is Ownable {
         // );
         // nie będzie możliwości by wywołąć tą funkcję do mintowani do adresu 0
         // require(account != address(0), "ERC20: mint to the zero address");
+
         unchecked {
-            // _totalSupply += amount;
             _balances[account] += amount;
+            _totalSupply += amount;
         }
         emit Transfer(address(0), account, amount);
     }
@@ -162,8 +180,8 @@ contract CustomerToken is Ownable {
         require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
         unchecked {
             _balances[account] = accountBalance - amount;
+            _totalSupply -= amount;
         }
-        _totalSupply -= amount;
 
         emit Transfer(account, address(0), amount);
     }
@@ -185,7 +203,7 @@ contract CustomerToken is Ownable {
         address spender,
         uint256 amount
     ) internal {
-        uint256 currentAllowance = allowance(owner, spender);
+        uint256 currentAllowance = _allowances[owner][spender];
         if (currentAllowance != type(uint256).max) {
             require(
                 currentAllowance >= amount,

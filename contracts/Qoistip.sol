@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "./CustomerToken.sol";
 import "./AggregatorV3Interface.sol";
 import "./QoistipPriceAggregator.sol";
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
@@ -39,7 +39,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     );
     event NewCustomer(address indexed customerAddress, address customerToken);
 
-    function initialize() public initializer {
+    function initialize() external initializer {
         __Ownable_init();
         _fee = 9700;
         _minValue = 1e17;
@@ -126,6 +126,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         returns (uint256)
     {
         bytes32 oracle = oracleData[_tokenAddress];
+        // require(oracle != 0, "Not suported token");
 
         (, int256 price, , , ) = AggregatorV3Interface(address(bytes20(oracle)))
             .latestRoundData();
@@ -143,9 +144,12 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         address _addressToDonate,
         address _tokenAddress,
         uint256 _tokenAmount
-    ) external virtual returns (bool success) {
+    ) external virtual {
         address tokenCustomerAddress = _tokenCustomer[_addressToDonate];
-        require(tokenCustomerAddress != address(0), "Address to donate was not registered");
+        require(
+            tokenCustomerAddress != address(0),
+            "Address to donate was not registered"
+        );
         uint256 _tokenToMint = (_getPrice(_tokenAddress) * _tokenAmount) / 1e18;
         require(_tokenToMint >= _minValue, "Donate worth < min value $");
 
@@ -155,17 +159,23 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
             _tokenAmount
         );
 
+        // bool success = IERC20(_tokenAddress).transferFrom(
+        //     msg.sender,
+        //     address(this),
+        //     _tokenAmount
+        // );
+        // require(success, "Transfer ERC20 not success");
+
+        // No Reentrancy - fist get token, next set balance
         uint256 _withFee = (_tokenAmount * _fee) / 10000;
         addressToTokenToBalance[_addressToDonate][_tokenAddress] = _withFee;
         addressToTokenToBalance[address(this)][_tokenAddress] =
             _tokenAmount -
             _withFee;
-        CustomerToken(tokenCustomerAddress).mint(
-            msg.sender,
-            _tokenToMint
-        );
+        CustomerToken(tokenCustomerAddress).mint(msg.sender, _tokenToMint);
+
+        // Emiting events is neccesary ?
         emit Donate(msg.sender, _addressToDonate, _tokenAddress, _tokenAmount);
-        return true;
     }
 
     //donateETH_Bej(): 0x00002206
@@ -173,7 +183,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         external
         payable
         virtual
-        returns (bool success)
+    // returns (bool success)
     {
         (, int256 price, , , ) = ethUsdOracle.latestRoundData();
         //mul by 10**10 becouse price is return in 8 digit
@@ -190,7 +200,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
             _tokenToMint
         );
         emit Donate(msg.sender, _addressToDonate, address(0), msg.value);
-        return true;
+        // return true;
     }
 
     function withdrawERC20(address _tokenAddress) public virtual {
@@ -199,7 +209,12 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         ];
         require(_tokenBalance != 0, "You have 0 tokens on balance");
         delete addressToTokenToBalance[msg.sender][_tokenAddress];
-        IERC20(_tokenAddress).transfer(msg.sender, _tokenBalance);
+        bool success = IERC20(_tokenAddress).transfer(
+            msg.sender,
+            _tokenBalance
+        );
+        require(success, "Withdraw ERC20 not success");
+
         emit Withdraw(msg.sender, _tokenAddress, _tokenBalance);
     }
 
@@ -213,7 +228,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         }
     }
 
-    function withdrawETH() public payable virtual {
+    function withdrawETH() external payable virtual {
         uint256 _ethBalance = BalanceETH[msg.sender];
         require(_ethBalance != 0, "You have 0 ETH");
         delete BalanceETH[msg.sender];

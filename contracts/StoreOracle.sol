@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "./AggregatorV3Interface.sol";
 import "./QoistipPriceAggregator.sol";
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 
 contract StoreOracle {
     mapping(address => bytes32) public addressToPriceOracle;
@@ -16,11 +16,12 @@ contract StoreOracle {
     // function unpack(bytes32 x) public pure returns (int16, int16) {
     //     return (int16(bytes2(x << 16)), int16(bytes2(x)));
     // }
+    // //"@openzeppelin/*=../node_modules/@openzeppelin/*",
 
     modifier checkGas() {
         uint256 startGas = gasleft();
         _;
-        console.log(startGas - gasleft());
+        // console.log(startGas - gasleft());
     }
 
     function setPriceOracle(

@@ -26,20 +26,19 @@ module.exports = {
       forking: {
         url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
       },
-
-      // chainId: 1337,
-      accounts: {
-        // mnemonic: 'qoisdapp',
-      },
-      // mining: {
-      //   auto: false,
-      //   interval: [3000, 6000],
+      //   // chainId: 1337,
+      //   accounts: {
+      //     // mnemonic: 'qoisdapp',
+      //   },
+      //   // mining: {
+      //   //   auto: false,
+      //   //   interval: [3000, 6000],
+      //   // },
       // },
+      // rinkeby: {
+      //   url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_RINKEBY_ID}`,
+      //   accounts: [`${process.env.ACCOUNT_PRIVATE_KEY}`],
     },
-    // rinkeby: {
-    //   url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_RINKEBY_ID}`,
-    //   accounts: [`${process.env.ACCOUNT_PRIVATE_KEY}`],
-    // },
   },
   solidity: {
     version: '0.8.4',
@@ -60,7 +59,7 @@ module.exports = {
     enabled: true,
     currency: 'USD',
     maxMethodDiff: 20,
-    // coinmarketcap: process.env.COINMARKETCAP_API_KEY,
+    coinmarketcap: process.env.COINMARKETCAP_API_KEY,
     token: 'ETH',
     gasPriceApi: 'https://api.etherscan.io/api?module=proxy&action=eth_gasPrice',
     // token: 'MATIC',

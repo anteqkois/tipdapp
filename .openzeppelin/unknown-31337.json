@@ -10,6 +10,21 @@
       "address": "0xaca81583840B1bf2dDF6CDe824ada250C1936B4D",
       "txHash": "0xb05760389e10dcc98ece17b0a63d752db9e5bca1eb982b254cf0a246c3c4a69e",
       "kind": "uups"
+    },
+    {
+      "address": "0xaB7B4c595d3cE8C85e16DA86630f2fc223B05057",
+      "txHash": "0xef9a1cf64fc39055da5c70125b2f1672d1a302419b2c665fd3062fe85dd76859",
+      "kind": "uups"
+    },
+    {
+      "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "txHash": "0xed801232a16391b1b9bafbbab93f6153e465c8922c2830bbd285ea3de21eb9eb",
+      "kind": "uups"
+    },
+    {
+      "address": "0xAD523115cd35a8d4E60B3C0953E0E0ac10418309",
+      "txHash": "0x9aacd8ef7787d03006825bd800163434c206717994e9a9b050d8064821932f79",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -159,9 +174,9 @@
         }
       }
     },
-    "5686f67767ce9134e051f3622719acecce6d3d8759329afa9b54cbe80da3990d": {
-      "address": "0xefAB0Beb0A557E452b398035eA964948c750b2Fd",
-      "txHash": "0xd43654951f87339f6144979db1136c2d3096d3a8c6b90a5007bfaf4c222a3f0a",
+    "22e1cfd753754ac398e6145b49c63bb5c6e0e590a9df0c5f10569087f80ee2b2": {
+      "address": "0xaB7B4c595d3cE8C85e16DA86630f2fc223B05057",
+      "txHash": "0xfbf3027c90c4b619fa4816c3abf1eabd454ada17a5109cb3a6056be3cf7c8290",
       "layout": {
         "storage": [
           {
@@ -313,9 +328,9 @@
         }
       }
     },
-    "50d16244058eb14067211f3e699d667899cf89b1f77042dce9a83f739f10b0ea": {
-      "address": "0xB06c856C8eaBd1d8321b687E188204C1018BC4E5",
-      "txHash": "0x73804ed196f514b770f4368a5bcc588d29ddbf4d4ede5efc707802fbde869a86",
+    "fdfc0dee597669a90bf904e4362cfec027b9a3d68520d2640c253d347613d035": {
+      "address": "0x1780bCf4103D3F501463AD3414c7f4b654bb7aFd",
+      "txHash": "0xa65ca15d464c07222ce7f27814b4499d71e15563b4ffc431b8182801b732a066",
       "layout": {
         "storage": [
           {
@@ -426,7 +441,7 @@
             "label": "_qoistipPriceAggregator",
             "offset": 0,
             "slot": "207",
-            "type": "t_contract(QoistipPriceAggregator)2687",
+            "type": "t_contract(QoistipPriceAggregator)2776",
             "contract": "QoistipV2",
             "src": "contracts/QoistipV2.sol:7"
           }
@@ -452,7 +467,7 @@
             "label": "bytes32",
             "numberOfBytes": "32"
           },
-          "t_contract(QoistipPriceAggregator)2687": {
+          "t_contract(QoistipPriceAggregator)2776": {
             "label": "contract QoistipPriceAggregator",
             "numberOfBytes": "20"
           },
