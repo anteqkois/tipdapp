@@ -69,58 +69,81 @@ describe('QoistipSign', function () {
   });
 
   describe('Donate ERC20', async () => {
-    const sandPrice = await axios.get('https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest', {
-      headers: {
-        'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY,
-      },
-      params: {
-        symbol: 'SAND',
-        convert: 'USD',
-      },
-    });
-    console.log(sandPrice.data.data.SAND);
-    console.log(sandPrice.data.data.SAND[0].quote);
-    console.log(sandPrice.data.data.SAND[0].quote.USD);
-    console.log(sandPrice.data.data.SAND[0].quote.USD.price);
+    // const sandPrice = await axios.get('https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest', {
+    //   headers: {
+    //     'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY,
+    //   },
+    //   params: {
+    //     symbol: 'SAND',
+    //     convert: 'USD',
+    //   },
+    // });
+    // console.log(sandPrice.data.data.SAND);
+    // console.log(sandPrice.data.data.SAND[0].quote);
+    // console.log(sandPrice.data.data.SAND[0].quote.USD);
+    // console.log(sandPrice.data.data.SAND[0].quote.USD.price);
+    const p = 2.1262470976845336;
+    // console.log(parseUnits(p.toString()));
+    // const sandPriceBN = parseUnits(sandPrice.data.data.SAND[0].quote.USD.price.toString());
+    const sandPriceBN = parseUnits(p.toString());
 
     it('Check $SAND balance before donate', async function () {
       expect(await qoistipSign.balanceOfERC20(customer1.address, sand.address)).to.equal(0);
     });
-    xit('Send donate in $SAND and check emited event', async function () {
+    it('Send donate in $SAND', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('100'));
-
-      //       address _addressToDonate,
-      // address _tokenAddress,
-      // uint256 _donatedTokenAmount,
-      // uint256 _mintTokenAmount,
-      // bytes memory signature
+      // check on frontend signature from backend
+      // const hash = await ethers.utils.keccak256(ethAddress);
+      // const sig = await signer.signMessage(ethers.utils.arrayify(hash));
+      // const pk = ethers.utils.recoverPublicKey(hash, sig);
 
       //TODO calculate token to mint
-      const amountToMint = 0;
+      const amountToMint = sandPriceBN.mul('100');
+      const withFee = parseUnits('100').mul('9700').div('10000');
+      const fee = parseUnits('100').sub(withFee);
+
+      // const block = await ethers.provider.getBlock();
+      // const timestamp = block.timestamp;
+      const timestamp = Math.floor(Date.now() / 1000);
 
       //TODO make signature
+      // donatedTokenAmount - amountToMint - AmountToCustomer - amountToAdmin - tokenDpnateAddress - customerTokenAddress
       const hashData = ethers.utils.solidityKeccak256(
-        ['address', 'uint256', 'uint256'],
-        [sand.address, parseUnits('100'), amountToMint],
+        ['uint256', 'uint256', 'uint256', 'uint256', 'uint256', 'address', 'address'],
+        [parseUnits('100'), amountToMint, withFee, fee, timestamp, sand.address, '0x7542002642420d2eea9164caa79a536dee18ae7f'],
       );
+
+      // console.log(timestamp);
+
       const hashDataBinary = ethers.utils.arrayify(hashData);
       const signature = await adminSigner.signMessage(hashDataBinary);
 
-      await expect(qoistipSign.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('100'), signature))
-        .to.emit(qoistipSign, 'Donate')
-        .withArgs(sandHodler.address, customer1.address, sand.address, parseUnits('100'));
+      qoistipSign
+        .connect(sandHodler)
+        .donateERC20(
+          parseUnits('100'),
+          amountToMint,
+          withFee,
+          fee,
+          timestamp,
+          customer1.address,
+          sand.address,
+          '0x7542002642420d2eea9164caa79a536dee18ae7f',
+          signature,
+        );
+
     });
-    xit('Check $SAND balance after donate', async function () {
+    it('Check $SAND balance after donate', async function () {
       expect(await qoistipSign.balanceOfERC20(customer1.address, sand.address)).to.equal(parseUnits('97'));
       expect(await qoistipSign.balanceOfERC20(qoistipSign.address, sand.address)).to.equal(
         parseUnits('100').sub(parseUnits('97')),
       );
       expect(await sand.balanceOf(qoistipSign.address)).to.equal(parseUnits('100'));
     });
-    xit('Check $CT1 balance after donate', async function () {
+    it('Check $CT1 balance after donate', async function () {
       //TODO get Sand price from coinmarketcap api
       // const sandPrice = await chailinkPriceFeeds.getLatestPrice(CHAILINK_PRICE_ORACLE_ADDRESS_USD.SAND);
-      const calculateExpectBalance = parseUnits('100').mul(sandPrice).div('1000000000000000000');
+      const calculateExpectBalance = parseUnits('100').mul(sandPriceBN).div('1000000000000000000');
       expect(await customerToken1.balanceOf(sandHodler.address)).to.equal(calculateExpectBalance);
     });
 

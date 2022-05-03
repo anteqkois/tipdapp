@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "./CustomerToken.sol";
 import "./AggregatorV3Interface.sol";
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
@@ -104,63 +104,83 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     }
 
     function verifySignature(
-        address _tokenAddress,
         uint256 _donatedTokenAmount,
         uint256 _mintTokenAmount,
+        uint256 _withFee,
+        uint256 _feeToAdmin,
+        uint256 _timestampOffChain,
+        address _tokenAddress,
+        address _tokenCustomerAddress,
         bytes memory signature
-    ) private view returns (bool) {
+    ) private view {
         bytes32 hashData = keccak256(
             abi.encodePacked(
-                "\x19Ethereum Signed Message:\n32",
-                _tokenAddress,
                 _donatedTokenAmount,
-                _mintTokenAmount
+                _mintTokenAmount,
+                _withFee,
+                _feeToAdmin,
+                _timestampOffChain,
+                _tokenAddress,
+                _tokenCustomerAddress
             )
         );
 
-        require(signature.length == 65, "invalid signature length");
+        bytes32 hashDataPrefix = keccak256(
+            abi.encodePacked("\x19Ethereum Signed Message:\n32", hashData)
+        );
+
+        require(signature.length == 65, "Wrong signature");
 
         bytes32 r;
         bytes32 s;
         uint8 v;
 
         assembly {
-            r := mload(add(signature, 32))
-            s := mload(add(signature, 64))
-            v := byte(0, mload(add(signature, 96)))
+            r := mload(add(signature, 0x20))
+            s := mload(add(signature, 0x40))
+            v := byte(0, mload(add(signature, 0x60)))
         }
 
-        address signer = ecrecover(hashData, v, r, s);
-        return (signer == adminSigner);
-        // require(signer == adminSigner, 'Wrong signature');
-        // Not necessary ?
-        // require(signature == hashData, 'Wrong signature')
+        address signer = ecrecover(hashDataPrefix, v, r, s);
+        require(signer == adminSigner, "Wrong signature");
 
+        // return (signer == adminSigner);
     }
 
     //donateERC20_K3u(): 0x0000701f
     function donateERC20(
-        address _addressToDonate,
-        address _tokenAddress,
         uint256 _donatedTokenAmount,
         uint256 _mintTokenAmount,
+        uint256 _withFee,
+        uint256 _feeToAdmin,
+        uint256 _timestampOffChain,
+        address _addressToDonate,
+        address _tokenAddress,
+        address _tokenCustomerAddress,
         bytes memory signature
     ) external virtual {
-        address tokenCustomerAddress = _tokenCustomer[_addressToDonate];
-        require(
-            tokenCustomerAddress != address(0),
-            "Address to donate was not registered"
-        );
+        // address tokenCustomerAddress = _tokenCustomer[_addressToDonate];
+        //0x7542002642420d2eea9164caa79a536dee18ae7f
+        // require(
+        //     tokenCustomerAddress != address(0),
+        //     "Address to donate was not registered"
+        // );
+
+        console.log("_timestampOffChain ", _timestampOffChain);
+        console.log("block.timestamp ", block.timestamp);
+        require(_timestampOffChain + 1 minutes > block.timestamp, "Wrong signature");
 
         //Verify signature
-        bool valid = verifySignature(
-            _tokenAddress,
+        verifySignature(
             _donatedTokenAmount,
             _mintTokenAmount,
+            _withFee,
+            _feeToAdmin,
+            _timestampOffChain,
+            _tokenAddress,
+            _tokenCustomerAddress,
             signature
         );
-
-        require(valid, "Wrong data or signature");
 
         IERC20(_tokenAddress).transferFrom(
             msg.sender,
@@ -168,21 +188,9 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
             _donatedTokenAmount
         );
 
-        // Calculate fee off-chain ?
-        uint256 _withFee = (_donatedTokenAmount * _fee) / 10000;
         addressToTokenToBalance[_addressToDonate][_tokenAddress] = _withFee;
-        addressToTokenToBalance[address(this)][_tokenAddress] =
-            _donatedTokenAmount -
-            _withFee;
-        CustomerToken(tokenCustomerAddress).mint(msg.sender, _mintTokenAmount);
-
-        // Emiting events is neccesary ?
-        emit Donate(
-            msg.sender,
-            _addressToDonate,
-            _tokenAddress,
-            _donatedTokenAmount
-        );
+        addressToTokenToBalance[address(this)][_tokenAddress] = _feeToAdmin;
+        CustomerToken(_tokenCustomerAddress).mint(msg.sender, _mintTokenAmount);
     }
 
     //donateETH_Bej(): 0x00002206
