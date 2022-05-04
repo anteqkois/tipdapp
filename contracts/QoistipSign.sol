@@ -159,16 +159,11 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         address _tokenCustomerAddress,
         bytes memory signature
     ) external virtual {
-        // address tokenCustomerAddress = _tokenCustomer[_addressToDonate];
-        //0x7542002642420d2eea9164caa79a536dee18ae7f
-        // require(
-        //     tokenCustomerAddress != address(0),
-        //     "Address to donate was not registered"
-        // );
-
-        console.log("_timestampOffChain ", _timestampOffChain);
-        console.log("block.timestamp ", block.timestamp);
-        require(_timestampOffChain + 1 minutes > block.timestamp, "Wrong signature");
+        // donate worth check on backend
+        require(
+            _timestampOffChain + 1 minutes > block.timestamp,
+            "Wrong signature"
+        );
 
         //Verify signature
         verifySignature(
@@ -188,8 +183,8 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
             _donatedTokenAmount
         );
 
-        addressToTokenToBalance[_addressToDonate][_tokenAddress] = _withFee;
-        addressToTokenToBalance[address(this)][_tokenAddress] = _feeToAdmin;
+        addressToTokenToBalance[_addressToDonate][_tokenAddress] += _withFee;
+        addressToTokenToBalance[address(this)][_tokenAddress] += _feeToAdmin;
         CustomerToken(_tokenCustomerAddress).mint(msg.sender, _mintTokenAmount);
     }
 
@@ -207,7 +202,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         require(_tokenToMint >= _minValue, "Donate worth < min value $");
 
         uint256 _withFee = (msg.value * _fee) / 10000;
-        BalanceETH[_addressToDonate] = _withFee;
+        BalanceETH[_addressToDonate] += _withFee;
         BalanceETH[address(this)] = msg.value - _withFee;
 
         CustomerToken(_tokenCustomer[_addressToDonate]).mint(

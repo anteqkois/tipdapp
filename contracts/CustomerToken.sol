@@ -49,10 +49,6 @@ contract CustomerToken is Ownable, ICustomerToken {
         return _totalSupply;
     }
 
-    // function maxSupply() public view returns (uint256) {
-    //     return _maxSupply;
-    // }
-
     function balanceOf(address account)
         external
         view
