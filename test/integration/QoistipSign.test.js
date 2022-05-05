@@ -6,7 +6,7 @@ const {
   ERC20_TOKEN_ADDRESS,
   CHAILINK_PRICE_ORACLE_ADDRESS_ETH,
 } = require('../../utils/constant');
-const { packDataToSign } = require('../../utils/packDataToSign');
+const { packDataToSign } = require('../mocks/packDataToSign');
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
 const sandABI = require('../../src/artifacts/SAND.json');
 const { default: axios } = require('axios');
@@ -84,24 +84,26 @@ describe('QoistipSign', function () {
       // const sig = await signer.signMessage(ethers.utils.arrayify(hash));
       // const pk = ethers.utils.recoverPublicKey(hash, sig);
 
-      const { signature, signatureData } = packDataToSign('100', 'SAND', customer1.address);
-      console.log(customer1.address);
+      const { signature, signatureData } = await packDataToSign('100', 'SAND', customer1.address, customerToken1.address);
+      // console.log(signature, signatureData);
 
-      qoistipSign
+      await qoistipSign
         .connect(sandHodler)
         .donateERC20(
-          parseUnits('100'),
-          amountToMint,
-          withFee,
-          fee,
-          timestamp,
+          signatureData.tokenAmountBN,
+          signatureData.amountToMint,
+          signatureData.tokenToCustomer,
+          signatureData.fee,
+          signatureData.timestamp,
           customer1.address,
-          sand.address,
-          '0x7542002642420d2eea9164caa79a536dee18ae7f',
+          signatureData.tokenAddress,
+          signatureData.tokenCustomerAddress,
           signature,
         );
     });
     it('Check $SAND balance after donate', async function () {
+      console.log('customer1.address ', customer1.address);
+      console.log('sand.address ', sand.address);
       expect(await qoistipSign.balanceOfERC20(customer1.address, sand.address)).to.equal(parseUnits('97'));
       expect(await qoistipSign.balanceOfERC20(qoistipSign.address, sand.address)).to.equal(
         parseUnits('100').sub(parseUnits('97')),
