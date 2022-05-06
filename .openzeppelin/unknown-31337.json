@@ -30,6 +30,11 @@
       "address": "0x045857BDEAE7C1c7252d611eB24eB55564198b4C",
       "txHash": "0xfbdeae9a3a734bf9fc3821f515a0139de48d8dee0a2e16cc4a7b900a7d66f1e5",
       "kind": "uups"
+    },
+    {
+      "address": "0x2b5A4e5493d4a54E717057B127cf0C000C876f9B",
+      "txHash": "0xbeebc6af9e7ea97b905792f9c60b457f32c346738e3548d6372fcb56be3cdef1",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -345,9 +350,9 @@
         }
       }
     },
-    "45b2f8b47385445ddc85e7ebc2d11454221e871332cbef1133e6afbc8ed5923f": {
-      "address": "0xAD523115cd35a8d4E60B3C0953E0E0ac10418309",
-      "txHash": "0xf1c9e06dee8ea3516492989a55e8952765f6ff518652bc9377ebdaf9017866cd",
+    "3a39be6d6aaea19da2f28ec077e9ccb64dd51b9523a6be698e831d3c349e314b": {
+      "address": "0x045857BDEAE7C1c7252d611eB24eB55564198b4C",
+      "txHash": "0x4dde4603043a43665962351909261e339d9d761f73deee1a0cf0d5ce1e5eab2c",
       "layout": {
         "storage": [
           {

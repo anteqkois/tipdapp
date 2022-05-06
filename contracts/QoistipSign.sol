@@ -129,7 +129,6 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
             abi.encodePacked("\x19Ethereum Signed Message:\n32", hashData)
         );
 
-
         require(signature.length == 65, "Wrong signature");
 
         bytes32 r;
@@ -144,7 +143,6 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
 
         address signer = ecrecover(hashDataPrefix, v, r, s);
         require(signer == adminSigner, "Wrong signature");
-
         // return (signer == adminSigner);
     }
 
@@ -161,15 +159,12 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         bytes memory signature
     ) external virtual {
         // donate worth check on backend
-        // console.log('_timestampOffChain ', _timestampOffChain);
-        // console.log('block.timestamp ', block.timestamp);
-        // console.log('block.number ', block.number);
 
-        // require(
-        //     _timestampOffChain + 1 minutes > block.timestamp,
-        //     "Wrong signature"
-        // );
-        // console.log('test');
+        // console.log('timestamp difference ', _timestampOffChain + 90 seconds - block.timestamp);
+        require(
+            _timestampOffChain + 90 seconds > block.timestamp,
+            "Wrong signature"
+        );
 
         //Verify signature
         verifySignature(

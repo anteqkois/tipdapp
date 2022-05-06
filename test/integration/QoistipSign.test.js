@@ -69,11 +69,7 @@ describe('QoistipSign', function () {
   });
 
   describe('Donate ERC20', async () => {
-    // console.log(sandPrice.data.data.SAND[0].quote.USD.price);
-    const p = 2.1262470976845336;
-    // const sandPriceBN = parseUnits(sandPrice.data.data.SAND[0].quote.USD.price.toString());
-    const sandPriceBN = parseUnits(p.toString());
-
+    const sandPriceBN = parseUnits((2.1262470976845336).toString());
     it('Check $SAND balance before donate', async function () {
       expect(await qoistipSign.balanceOfERC20(customer1.address, sand.address)).to.equal(0);
     });
@@ -85,9 +81,8 @@ describe('QoistipSign', function () {
       // const pk = ethers.utils.recoverPublicKey(hash, sig);
 
       const { signature, signatureData } = await packDataToSign('100', 'SAND', customer1.address, customerToken1.address);
-      // console.log(signature, signatureData);
 
-      await qoistipSign
+        await qoistipSign
         .connect(sandHodler)
         .donateERC20(
           signatureData.tokenAmountBN,

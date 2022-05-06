@@ -22,7 +22,7 @@ const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, customer
 
   const block = await provider.getBlock();
   const timestamp = block.timestamp;
-  console.log(block.number);
+  // console.log(block.number);
   // const timestamp = Math.floor(Date.now() / 1000);
 
   // donatedTokenAmount - amountToMint - AmountToCustomer - amountToAdmin - tokenDonateAddress - customerTokenAddress
