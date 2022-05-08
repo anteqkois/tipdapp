@@ -17,6 +17,9 @@ const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, customer
   const priceBN = parseUnits(price.toString());
  
   const amountToMint = priceBN.mul(tokenAmount);
+  if(amountToMint < parseUnits('0.1')){
+    throw new Error('Donate worth < min value $')
+  }
   const tokenToCustomer = tokenAmountBN.mul('9700').div('10000');
   const fee = tokenAmountBN.sub(tokenToCustomer);
 

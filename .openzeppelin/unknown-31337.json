@@ -33,7 +33,12 @@
     },
     {
       "address": "0x2b5A4e5493d4a54E717057B127cf0C000C876f9B",
-      "txHash": "0xbeebc6af9e7ea97b905792f9c60b457f32c346738e3548d6372fcb56be3cdef1",
+      "txHash": "0x42d513a507b9ab78caaa7920de1187868b333a34f6fbdac7904350dce81864c6",
+      "kind": "uups"
+    },
+    {
+      "address": "0x02df3a3F960393F5B349E40A599FEda91a7cc1A7",
+      "txHash": "0x3873f3d185a7a35dc1579f3952a84c9d1a648ddfd4d1b282e7505c37c675eaa8",
       "kind": "uups"
     }
   ],
@@ -350,9 +355,9 @@
         }
       }
     },
-    "3a39be6d6aaea19da2f28ec077e9ccb64dd51b9523a6be698e831d3c349e314b": {
-      "address": "0x045857BDEAE7C1c7252d611eB24eB55564198b4C",
-      "txHash": "0x4dde4603043a43665962351909261e339d9d761f73deee1a0cf0d5ce1e5eab2c",
+    "f1f0ef0c4cf7b1a6f745a6d51fc76c815b62274bc93bec3f57c3743a81297af1": {
+      "address": "0x413b1AfCa96a3df5A686d8BFBF93d30688a7f7D9",
+      "txHash": "0xc18720138d11e33fb0cde6ebb3e1cd6a0929446c254a41c0aacbd95287c56719",
       "layout": {
         "storage": [
           {
@@ -412,7 +417,7 @@
             "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
           },
           {
-            "label": "adminSigner",
+            "label": "_signer",
             "offset": 0,
             "slot": "201",
             "type": "t_address",
@@ -436,7 +441,7 @@
             "src": "contracts/QoistipSign.sol:17"
           },
           {
-            "label": "addressToTokenToBalance",
+            "label": "_addressToTokenToBalance",
             "offset": 0,
             "slot": "204",
             "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
@@ -444,20 +449,20 @@
             "src": "contracts/QoistipSign.sol:18"
           },
           {
-            "label": "BalanceETH",
+            "label": "_balanceETH",
             "offset": 0,
             "slot": "205",
             "type": "t_mapping(t_address,t_uint256)",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:19"
+            "src": "contracts/QoistipSign.sol:20"
           },
           {
-            "label": "_fee",
+            "label": "_donateFee",
             "offset": 0,
             "slot": "206",
             "type": "t_uint256",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:22"
+            "src": "contracts/QoistipSign.sol:23"
           }
         ],
         "types": {
