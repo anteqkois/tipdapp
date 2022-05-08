@@ -99,45 +99,27 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         emit NewCustomer(msg.sender, _newToken);
     }
 
-    function verifySignature(
+    //donateERC20_K3u(): 0x0000701f
+    function donateERC20(
         bytes calldata signature,
         uint256 tokenAmount,
         uint256 mintTokenAmount,
         uint256 toCustomer,
         uint256 fee,
         uint256 timestampOffChain,
+        address addressToDonate,
         address tokenAddress,
         address tokenCustomerAddress
-    ) private view {
-        // bytes32 hashData = keccak256(
-        //     abi.encodePacked(
-        //         tokenAmount,
-        //         mintTokenAmount,
-        //         toCustomer,
-        //         fee,
-        //         timestampOffChain,
-        //         tokenAddress,
-        //         tokenCustomerAddress
-        //     )
-        // );
+    ) external virtual {
+        // donate worth check on backend
+        //connect msg with onChain data with tx
 
-        // bytes32 hashDataPrefix = keccak256(
-        //     abi.encodePacked(
-        //         "\x19Ethereum Signed Message:\n32",
-        //         keccak256(
-        //             abi.encodePacked(
-        //                 tokenAmount,
-        //                 mintTokenAmount,
-        //                 toCustomer,
-        //                 fee,
-        //                 timestampOffChain,
-        //                 tokenAddress,
-        //                 tokenCustomerAddress
-        //             )
-        //         )
-        //     )
-        // );
+        require(
+            timestampOffChain + 90 seconds > block.timestamp,
+            "Signature time expired"
+        );
 
+        //Verify signature
         require(signature.length == 65, "Wrong signature length");
 
         bytes32 r;
@@ -145,9 +127,10 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         uint8 v;
 
         assembly {
-            r := calldataload(signature.offset)
-            s := calldataload(add(signature.offset, 0x20))
-            v := byte(0, calldataload(add(signature.offset, 0x40)))
+            // signature.offset = 0x144, location code hardset
+            r := calldataload(0x144)
+            s := calldataload(0x164)
+            v := byte(0, calldataload(0x184))
         }
 
         require(
@@ -173,39 +156,6 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
                 s
             ) == _signer,
             "Wrong signature"
-        );
-    }
-
-    //donateERC20_K3u(): 0x0000701f
-    function donateERC20(
-        bytes calldata signature,
-        uint256 tokenAmount,
-        uint256 mintTokenAmount,
-        uint256 toCustomer,
-        uint256 fee,
-        uint256 timestampOffChain,
-        address addressToDonate,
-        address tokenAddress,
-        address tokenCustomerAddress
-    ) external virtual {
-        // donate worth check on backend
-        //connect msg with onChain data with tx
-
-        require(
-            timestampOffChain + 90 seconds > block.timestamp,
-            "Signature time expired"
-        );
-
-        //Verify signature
-        verifySignature(
-            signature,
-            tokenAmount,
-            mintTokenAmount,
-            toCustomer,
-            fee,
-            timestampOffChain,
-            tokenAddress,
-            tokenCustomerAddress
         );
 
         IERC20(tokenAddress).transferFrom(
