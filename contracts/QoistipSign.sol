@@ -114,10 +114,12 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         // donate worth check on backend
         //connect msg with onChain data with tx
 
+        // console.log('block.number ', block.number);
         require(
             timestampOffChain + 90 seconds > block.timestamp,
             "Signature time expired"
         );
+
 
         //Verify signature
         require(signature.length == 65, "Wrong signature length");
