@@ -147,22 +147,17 @@ describe('QoistipSign', function () {
     });
     it('Can not send donate if worth is to small ($SAND)', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('0.01'));
-      
-      await expect(packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address)).to.eventually.be.rejected;
 
-      // await expect(packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address)).to.eventually.be.rejectedWith(
-      //   Error,
-      //   'Donate worth too little',
-      // );
+      await expect(packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address)).to.eventually.be.rejectedWith(
+        Error,
+      );
     });
-    xit('Revert when address to donate is 0x0...', async function () {
+    it('Revert when address to donate is 0x0...', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('100'));
 
-      await expect(packDataToSign('0.01', 'SAND', '0x0000000000000000000000000000000000000000', customerToken1.address)).to.throw;
-
-      // await expect(
-      // qoistip.connect(sandHodler).donateERC20('0x0000000000000000000000000000000000000000', sand.address, parseUnits('100')),
-      // ).to.be.reverted;
+      await expect(
+        packDataToSign('1', 'SAND', ethers.constants.AddressZero, customerToken1.address),
+      ).to.eventually.be.rejectedWith(Error);
     });
     xit('Revert when address not register (handle with db)', async function () {
       await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));

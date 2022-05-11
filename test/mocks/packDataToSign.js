@@ -13,11 +13,11 @@ const tokenPrice = {
 };
 
 // FINAL -> string tokenAmount, string tokenQuote, string addressToDonate
-const packDataToSign = (tokenAmount, tokenQuote, addressToDonate, customerTokenAddress) => {
-  return new Promise(async (resolve, reject) => {
+const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, customerTokenAddress) => {
+  // return new Promise(async (resolve, reject) => {
     if (addressToDonate === ethers.constants.AddressZero) {
-      reject('Address to donate is zero address');
-      // throw new Error('Address to donate is zero address');
+      // reject('Address to donate is zero address');
+      throw new Error('Address to donate is zero address');
     }
     const tokenAmountBN = parseUnits(tokenAmount);
 
@@ -32,17 +32,14 @@ const packDataToSign = (tokenAmount, tokenQuote, addressToDonate, customerTokenA
 
     const amountToMint = priceBN.mul(parseUnits(tokenAmount, 'ether')).div('1000000000000000000');
     if (amountToMint.lt(parseUnits('0.1'))) {
-      reject('Donate worth too little');
-      // throw new Error('Donate worth too little');
+      // reject('Donate worth too little');
+      throw new Error('Donate worth too little');
     }
     const tokenToCustomer = tokenAmountBN.mul('9700').div('10000');
     const fee = tokenAmountBN.sub(tokenToCustomer);
 
     const block = await provider.getBlock();
-    // console.log('off-chain block.number ', block.number);
-    // console.log('off-chain block.timestamp ', block.timestamp);
     const timestamp = block.timestamp;
-    // console.log(block.number);
     // const timestamp = Math.floor(Date.now() / 1000);
 
     // donatedTokenAmount - amountToMint - AmountToCustomer - amountToAdmin - tokenDonateAddress - customerTokenAddress
@@ -54,7 +51,7 @@ const packDataToSign = (tokenAmount, tokenQuote, addressToDonate, customerTokenA
     const hashDataBinary = ethers.utils.arrayify(hashData);
     const signature = await signer.signMessage(hashDataBinary);
 
-    resolve({
+    return {
       signature,
       signatureData: {
         tokenAmountBN,
@@ -65,8 +62,20 @@ const packDataToSign = (tokenAmount, tokenQuote, addressToDonate, customerTokenA
         tokenAddress,
         tokenCustomerAddress,
       },
-    });
-  });
+    }
+    // resolve({
+    //   signature,
+    //   signatureData: {
+    //     tokenAmountBN,
+    //     amountToMint,
+    //     tokenToCustomer,
+    //     fee,
+    //     timestamp,
+    //     tokenAddress,
+    //     tokenCustomerAddress,
+    //   },
+    // });
+  // });
 };
 
 module.exports = { packDataToSign };
