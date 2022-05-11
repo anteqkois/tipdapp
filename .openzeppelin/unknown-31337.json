@@ -43,7 +43,7 @@
     },
     {
       "address": "0x821f3361D454cc98b7555221A06Be563a7E2E0A6",
-      "txHash": "0x1969bc18521de37d81b751e2aa47716ec68c51ce6c4952fc48d2900d75335cfd",
+      "txHash": "0xc20474065010c19b0f3f8b3351e66129d44f7b048c25efde0a8ca4718ec64084",
       "kind": "uups"
     }
   ],
@@ -508,7 +508,7 @@
     },
     "43a7ea9dcf58ee2069cb35ca9822ef88035e6fa465d72a610e0703e790107238": {
       "address": "0x02df3a3F960393F5B349E40A599FEda91a7cc1A7",
-      "txHash": "0x7f4a3be9f96a98e9a414651fd494b17db9a252e0f441e550151add1066728dd9",
+      "txHash": "0x149ea1431470ea354610194a780432a484732384e123ede2f96fc6989b9f8f62",
       "layout": {
         "storage": [
           {
@@ -614,6 +614,160 @@
             "type": "t_uint256",
             "contract": "QoistipSign",
             "src": "contracts/QoistipSign.sol:23"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "3d92a60f0c891f8f55ebfd25fe7aefd596d3f6ed9488fb6fba1346959565061b": {
+      "address": "0x71089Ba41e478702e1904692385Be3972B2cBf9e",
+      "txHash": "0xaf36470e6fac04b4c31c43fb731ec2ed74d0f60436350e5d98236c3463badd15",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC1967UpgradeUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:211"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "UUPSUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:107"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "151",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "152",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "_signer",
+            "offset": 0,
+            "slot": "201",
+            "type": "t_address",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:14"
+          },
+          {
+            "label": "_minValue",
+            "offset": 0,
+            "slot": "202",
+            "type": "t_uint256",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:15"
+          },
+          {
+            "label": "_tokenCustomer",
+            "offset": 0,
+            "slot": "203",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:17"
+          },
+          {
+            "label": "_addressToTokenToBalance",
+            "offset": 0,
+            "slot": "204",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:18"
+          },
+          {
+            "label": "_balanceETH",
+            "offset": 0,
+            "slot": "205",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:20"
+          },
+          {
+            "label": "_donateFee",
+            "offset": 0,
+            "slot": "206",
+            "type": "t_uint256",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:23"
+          },
+          {
+            "label": "number",
+            "offset": 0,
+            "slot": "207",
+            "type": "t_uint256",
+            "contract": "QoistipSignV2",
+            "src": "contracts/QoistipSignV2.sol:7"
           }
         ],
         "types": {

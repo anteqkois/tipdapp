@@ -10,6 +10,7 @@ const customerAddressToCustomerTokenAddress = {
 const tokenPrice = {
   SAND: 2.1262470976845336,
   SHIB: 0.0000152412344123,
+  ELON: 0.0000004991232343,
 };
 
 // FINAL -> string tokenAmount, string tokenQuote, string addressToDonate
@@ -28,7 +29,9 @@ const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, customer
     const tokenCustomerAddress = customerTokenAddress;
     //TODO* FROM DB AND COINMARKETCAP
     const price = tokenPrice[tokenQuote];
-    const priceBN = parseUnits(price.toString());
+    // console.log(price);
+    const priceBN = parseUnits(Number.parseFloat(price).toFixed(18));
+    // const priceBN = parseUnits(price.toString(10));
 
     const amountToMint = priceBN.mul(parseUnits(tokenAmount, 'ether')).div('1000000000000000000');
     if (amountToMint.lt(parseUnits('0.1'))) {
