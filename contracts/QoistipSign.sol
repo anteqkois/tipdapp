@@ -176,7 +176,6 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         external
         payable
         virtual
-    // returns (bool success)
     {
         (, int256 price, , , ) = ethUsdOracle.latestRoundData();
         //mul by 10**10 becouse price is return in 8 digit
@@ -193,7 +192,6 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
             tokenToMint
         );
         // emit Donate(msg.sender, addressToDonate, address(0), msg.value);
-        // return true;
     }
 
     function withdrawERC20(address tokenAddress) public virtual {
