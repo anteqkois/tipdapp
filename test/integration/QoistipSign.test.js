@@ -1,4 +1,6 @@
-const { expect } = require('chai');
+const chai = require('chai');
+const expect = chai.expect;
+chai.use(require('chai-as-promised'));
 const { ethers, network, upgrades } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
 const {
@@ -10,7 +12,7 @@ const { packDataToSign } = require('../mocks/packDataToSign');
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
 const sandABI = require('../../src/artifacts/SAND.json');
 const { axios } = require('axios');
-require('../../server/ethersProvider');
+// require('../../server/ethersProvider');
 
 describe('QoistipSign', function () {
   let qoistipSign;
@@ -146,20 +148,26 @@ describe('QoistipSign', function () {
     it('Can not send donate if worth is to small ($SAND)', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('0.01'));
 
+      // console.log(parseUnits('0.01'))
       // await expect(packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address)).to.throw;
-      await expect(packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address));
+      // const { signature, signatureData } = await packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address);
+      // console.log(signature);
+
+      // expect(await packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address));
+      expect(await packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address)).to.eventually.be.rejected;
+      // expect(await packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address)).to.throw();
 
       // await expect(
-        // qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('0.01')),
+      // qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('0.01')),
       // ).to.be.revertedWith('Donate worth < min value $');
     });
-    it('Revert when address to donate is 0x0...', async function () {
+    xit('Revert when address to donate is 0x0...', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('100'));
 
       await expect(packDataToSign('0.01', 'SAND', '0x0000000000000000000000000000000000000000', customerToken1.address)).to.throw;
 
       // await expect(
-        // qoistip.connect(sandHodler).donateERC20('0x0000000000000000000000000000000000000000', sand.address, parseUnits('100')),
+      // qoistip.connect(sandHodler).donateERC20('0x0000000000000000000000000000000000000000', sand.address, parseUnits('100')),
       // ).to.be.reverted;
     });
     xit('Revert when address not register (handle with db)', async function () {

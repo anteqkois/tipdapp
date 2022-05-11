@@ -14,7 +14,7 @@ const tokenPrice = {
 
 // FINAL -> string tokenAmount, string tokenQuote, string addressToDonate
 const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, customerTokenAddress) => {
-  if(addressToDonate === ethers.constants.AddressZero){
+  if (addressToDonate === ethers.constants.AddressZero) {
     throw new Error('Address to donate is zero address');
   }
   const tokenAmountBN = parseUnits(tokenAmount);
@@ -28,9 +28,10 @@ const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, customer
   const price = tokenPrice[tokenQuote];
   const priceBN = parseUnits(price.toString());
 
-  const amountToMint = priceBN.mul(tokenAmount);
-  if (amountToMint < parseUnits('0.1')) {
-    throw new Error('Donate worth < min value $');
+  const amountToMint = priceBN.mul(parseUnits(tokenAmount, 'ether')).div('1000000000000000000');
+  if (amountToMint.lt(parseUnits('0.1'))) {
+    // console.log('to small');
+    throw new Error('Donate worth too little');
   }
   const tokenToCustomer = tokenAmountBN.mul('9700').div('10000');
   const fee = tokenAmountBN.sub(tokenToCustomer);
