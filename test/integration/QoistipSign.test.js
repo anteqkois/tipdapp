@@ -147,19 +147,13 @@ describe('QoistipSign', function () {
     });
     it('Can not send donate if worth is to small ($SAND)', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('0.01'));
+      
+      await expect(packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address)).to.eventually.be.rejected;
 
-      // console.log(parseUnits('0.01'))
-      // await expect(packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address)).to.throw;
-      // const { signature, signatureData } = await packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address);
-      // console.log(signature);
-
-      // expect(await packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address));
-      expect(await packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address)).to.eventually.be.rejected;
-      // expect(await packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address)).to.throw();
-
-      // await expect(
-      // qoistip.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('0.01')),
-      // ).to.be.revertedWith('Donate worth < min value $');
+      // await expect(packDataToSign('0.01', 'SAND', customer1.address, customerToken1.address)).to.eventually.be.rejectedWith(
+      //   Error,
+      //   'Donate worth too little',
+      // );
     });
     xit('Revert when address to donate is 0x0...', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('100'));
