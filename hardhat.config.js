@@ -32,8 +32,12 @@ module.exports = {
       //   },
       // mining: {
       //   auto: false,
-      //   interval: [12000, 14000],
+      //   interval: 13000,
       // },
+      // throwOnTransactionFailures: true,
+      // allowUnlimitedContractSize: true,
+      // loggingEnabled: true,
+      // throwOnCallFailures: true, 
       // },
       // rinkeby: {
       //   url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_RINKEBY_ID}`,

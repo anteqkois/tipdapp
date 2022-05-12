@@ -13,7 +13,7 @@
     "url": "https://github.com/anteqkois/qoisdapp/issues"
   },
   "scripts": {
-    "dev": "nodemon server.js",
+    "dev": "STATE=dev-local nodemon server.js",
     "start": "NODE_ENV=production node start",
     "build": "next build",
     "commit": "git add . && cz",

@@ -12,7 +12,6 @@ const { packDataToSign } = require('../mocks/packDataToSign');
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
 const sandABI = require('../../src/artifacts/SAND.json');
 const { axios } = require('axios');
-// require('../../server/ethersProvider');
 
 describe('QoistipSign', function () {
   let qoistipSign;
@@ -218,7 +217,6 @@ describe('QoistipSign', function () {
           signatureData.tokenAddress,
           signatureData.tokenCustomerAddress,
         );
-      // await qoistipSign.connect(sandHodler).donateERC20(customer1.address, sand.address, parseUnits('100'));
 
       expect(await qoistipSign.balanceERC20(customer1.address, sand.address)).to.equal(parseUnits('97'));
       expect(await qoistipSign.balanceERC20(customer1.address, shib.address)).to.equal(parseUnits('9700'));
@@ -288,10 +286,6 @@ describe('QoistipSign', function () {
           signatureData.tokenAddress,
           signatureData.tokenCustomerAddress,
         );
-
-      // await expect(qoistipSign.connect(elonHodler).donateERC20(customer1.address, elon.address, parseUnits('1000000')))
-      //   .to.emit(qoistipSign, 'Donate')
-      //   .withArgs(elonHodler.address, customer1.address, elon.address, parseUnits('1000000'));
     });
     it('Check $ELON balance after donate', async function () {
       expect(await qoistipSign.balanceERC20(customer1.address, elon.address)).to.equal(parseUnits('970000'));

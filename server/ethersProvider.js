@@ -6,7 +6,7 @@ let provider, privateKey;
 switch (process.env.STATE) {
   case 'dev-local':
     privateKey = process.env.WALLET_PRIVATE_KEY_LOCAL;
-    provider = new ethers.providers.JsonRpcProvider();
+    provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/');
     break;
   case 'dev-rinkeby':
     privateKey = process.env.WALLET_PRIVATE_KEY_RINKEBY;
@@ -15,16 +15,14 @@ switch (process.env.STATE) {
 
   default:
     privateKey = process.env.WALLET_PRIVATE_KEY_LOCAL;
-    provider = new ethers.providers.JsonRpcProvider();
+    provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/');
     break;
 }
 
 const wallet = new ethers.Wallet(privateKey, provider);
 
-// console.log(wallet);
-// provider.on('block', (blockNumber) => {
-//   console.log('blockNumber ', blockNumber);
-// });
+provider.on('block', (blockNumber) => {
+  console.log('Minted block:  ', blockNumber);
+});
 
-// export { wallet as signer , provider };
 module.exports = { signer: wallet, provider };

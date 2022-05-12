@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const apiRouter = require('./server/routes/index');
 const { notFound, handleErrors } = require('./server/middlewares/error');
+require('./server/ethersProvider.js');
 
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== 'production';

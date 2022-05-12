@@ -59,17 +59,6 @@ contract CustomerToken is Ownable, ICustomerToken {
         return _balances[account];
     }
 
-    function transfer(address to, uint256 amount)
-        external
-        virtual
-        override
-        returns (bool)
-    {
-        // address owner = msg.sender;
-        _transfer(msg.sender, to, amount);
-        return true;
-    }
-
     function allowance(address owner, address spender)
         external
         view
@@ -98,59 +87,43 @@ contract CustomerToken is Ownable, ICustomerToken {
     ) external virtual override returns (bool) {
         address spender = msg.sender;
         _spendAllowance(from, spender, amount);
-        _transfer(from, to, amount);
+        transfer(to, amount);
         return true;
     }
 
-    function increaseAllowance(address spender, uint256 addedValue)
-        external
-        virtual
-        override
-        returns (bool)
-    {
-        address owner = msg.sender;
-        _approve(owner, spender, _allowances[owner][spender] + addedValue);
-        return true;
-    }
+    // function transfer(address to, uint256 amount)
+    //     external
+    //     virtual
+    //     override
+    //     returns (bool)
+    // {
+    //     // address owner = msg.sender;
+    //     _transfer(msg.sender, to, amount);
+    //     return true;
+    // }
 
-    function decreaseAllowance(address spender, uint256 subtractedValue)
-        external
-        virtual
-        override
-        returns (bool)
-    {
-        address owner = msg.sender;
-        uint256 currentAllowance = _allowances[owner][spender];
-        require(
-            currentAllowance >= subtractedValue,
-            "ERC20: decreased allowance below zero"
-        );
-        unchecked {
-            _approve(owner, spender, currentAllowance - subtractedValue);
-        }
-
-        return true;
-    }
-
-    function _transfer(
-        address from,
+    function transfer(
+        // address from,
         address to,
         uint256 amount
     ) internal {
-        require(from != address(0), "ERC20: transfer from the zero address");
+        require(
+            msg.sender != address(0),
+            "ERC20: transfer msg.sender the zero address"
+        );
         require(to != address(0), "ERC20: transfer to the zero address");
 
-        uint256 fromBalance = _balances[from];
+        uint256 fromBalance = _balances[msg.sender];
         require(
             fromBalance >= amount,
             "ERC20: transfer amount exceeds balance"
         );
         unchecked {
-            _balances[from] = fromBalance - amount;
+            _balances[msg.sender] = fromBalance - amount;
         }
         _balances[to] += amount;
 
-        emit Transfer(from, to, amount);
+        emit Transfer(msg.sender, to, amount);
     }
 
     // switch after to internal, in Factory pattern
