@@ -13,25 +13,11 @@ contract CustomerToken is Ownable, ICustomerToken {
     mapping(address => uint256) private _balanceOf;
 
     constructor(string memory symbol_, string memory name_)
-    // uint256 maxSupply_
     {
-        //  1mln <= maxSupply_ <= 100mln
-        // require(
-        //     (maxSupply_ <= 100_000_000 * 10**18) &&
-        //         (maxSupply_ >= 1_000_000 * 10**18)
-        // );
         _name = name_;
         _symbol = symbol_;
-        // _maxSupply = maxSupply_;
         // _mint(msg.sender, 1_000 * 10**18);
     }
-
-    // event Transfer(address indexed from, address indexed to, uint256 value);
-    // event Approval(
-    //     address indexed owner,
-    //     address indexed spender,
-    //     uint256 value
-    // );
 
     function name() external view virtual override returns (string memory) {
         return _name;
@@ -69,30 +55,37 @@ contract CustomerToken is Ownable, ICustomerToken {
         return _allowance[owner][spender];
     }
 
-    // function approve(address spender, uint256 amount)
-    //     external
-    //     virtual
-    //     override
-    //     returns (bool)
-    // {
-    //     _approve(msg.sender, spender, amount);
-    //     return true;
-    // }
+    function approve(address spender, uint256 amount)
+        external
+        virtual
+        override
+        returns (bool)
+    {
+        require(spender != address(0), "ERC20: approve to the zero address");
+
+        _allowance[msg.sender][spender] = amount;
+        emit Approval(msg.sender, spender, amount);
+        return true;
+    }
 
     function transferFrom(
         address from,
         address to,
         uint256 amount
     ) external override returns (bool) {
-        uint256 allowed = _allowance[from][msg.sender];
+        // require(from != address(0), "ERC20: transfer from the zero address");
+        require(to != address(0), "ERC20: transfer to the zero address");
+        // TODO underflow work ? require(_balanceOf[from] >= amount, "ERC20: transfer amount exceeds balance");
 
-        // ???
+        uint256 allowed = _allowance[from][msg.sender];
+        require(allowed >= amount, "ERC20: insufficient allowance");
+
         if (allowed != type(uint256).max)
             _allowance[from][msg.sender] = allowed - amount;
 
-        _balanceOf[from] -= amount;
-
         unchecked {
+            // TODO check if underflow works require(_balanceOf[from] >= amount)
+            _balanceOf[from] -= amount;
             _balanceOf[to] += amount;
         }
 
@@ -101,38 +94,14 @@ contract CustomerToken is Ownable, ICustomerToken {
         return true;
     }
 
-    // function transferFrom(
-    //     address from,
-    //     address to,
-    //     uint256 amount
-    // ) external virtual override returns (bool) {
-    //     // address spender = msg.sender;
-    //     // _spendAllowance(from, spender, amount);
-
-    //     require(from != address(0), "ERC20: transfer from the zero address");
-    //     require(to != address(0), "ERC20: transfer to the zero address");
-
-    //     uint256 fromBalance = _balanceOf[from];
-    //     require(
-    //         fromBalance >= amount,
-    //         "ERC20: transfer amount exceeds balance"
-    //     );
-    //     unchecked {
-    //         _balanceOf[msg.sender] = fromBalance - amount;
-    //     }
-    //     _balanceOf[to] += amount;
-
-    //     emit Transfer(msg.sender, to, amount);
-
-    //     // transfer(to, amount);
-    //     return true;
-    // }
-
     function transfer(address to, uint256 amount)
         external
         override
         returns (bool)
     {
+        require(to != address(0), "ERC20: transfer to the zero address");
+
+        // TODO underflow work ? require(_balanceOf[msg.sender] >= amount, "ERC20: transfer amount exceeds balance");
         _balanceOf[msg.sender] -= amount;
 
         unchecked {
@@ -144,31 +113,7 @@ contract CustomerToken is Ownable, ICustomerToken {
         return true;
     }
 
-    // function transfer(
-    //     // address from,
-    //     address to,
-    //     uint256 amount
-    // ) external {
-    //     require(
-    //         msg.sender != address(0),
-    //         "ERC20: transfer msg.sender the zero address"
-    //     );
-    //     require(to != address(0), "ERC20: transfer to the zero address");
-
-    //     uint256 fromBalance = _balanceOf[msg.sender];
-    //     require(
-    //         fromBalance >= amount,
-    //         "ERC20: transfer amount exceeds balance"
-    //     );
-    //     unchecked {
-    //         _balanceOf[msg.sender] = fromBalance - amount;
-    //     }
-    //     _balanceOf[to] += amount;
-
-    //     emit Transfer(msg.sender, to, amount);
-    // }
-
-    // switch after to internal, in Factory pattern
+    // change onlyOwner to owners
     function mint(address account, uint256 amount) external onlyOwner {
         // nie będzie możliwości by wywołąć tą funkcję do mintowani do adresu 0
         // require(account != address(0), "ERC20: mint to the zero address");
@@ -191,18 +136,5 @@ contract CustomerToken is Ownable, ICustomerToken {
         }
 
         emit Transfer(account, address(0), amount);
-    }
-
-    function approve(address spender, uint256 amount)
-        external
-        virtual
-        override
-        returns (bool)
-    {
-        require(spender != address(0), "ERC20: approve to the zero address");
-
-        _allowance[msg.sender][spender] = amount;
-        emit Approval(msg.sender, spender, amount);
-        return true;
     }
 }

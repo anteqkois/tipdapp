@@ -3,7 +3,7 @@ const { ethers } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
 const { CHAILINK_PRICE_ORACLE_ADDRESS_USD, ERC20_TOKEN_ADDRESS } = require('../../utils/constant');
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
-const sandABI = require('../../artifacts/utils/SAND.json');
+const sandABI = require('../../src/artifacts/SAND.json');
 
 xdescribe('Qoistip', function () {
   let qoistip;
