@@ -12,8 +12,7 @@ contract CustomerToken is Ownable, ICustomerToken {
     mapping(address => mapping(address => uint256)) private _allowance;
     mapping(address => uint256) private _balanceOf;
 
-    constructor(string memory symbol_, string memory name_)
-    {
+    constructor(string memory symbol_, string memory name_) {
         _name = name_;
         _symbol = symbol_;
         // _mint(msg.sender, 1_000 * 10**18);
@@ -102,9 +101,11 @@ contract CustomerToken is Ownable, ICustomerToken {
         require(to != address(0), "ERC20: transfer to the zero address");
 
         // TODO underflow work ? require(_balanceOf[msg.sender] >= amount, "ERC20: transfer amount exceeds balance");
-        _balanceOf[msg.sender] -= amount;
+        uint256 balance = _balanceOf[msg.sender];
+        require(balance >= amount, "ERC20: transfer amount exceeds balance");
 
         unchecked {
+            _balanceOf[msg.sender] -= amount;
             _balanceOf[to] += amount;
         }
 
@@ -116,7 +117,7 @@ contract CustomerToken is Ownable, ICustomerToken {
     // change onlyOwner to owners
     function mint(address account, uint256 amount) external onlyOwner {
         // nie będzie możliwości by wywołąć tą funkcję do mintowani do adresu 0
-        // require(account != address(0), "ERC20: mint to the zero address");
+        require(account != address(0), "ERC20: mint to the zero address");
 
         unchecked {
             _balanceOf[account] += amount;
