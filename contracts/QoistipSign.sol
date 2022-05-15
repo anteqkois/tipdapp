@@ -12,7 +12,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     //Use mapping to handle many address to handle many donate in time
     //Use lock !
-    address private _signer;
+    address private _signerAdmin;
     uint256 private _minValue;
 
     mapping(address => address) private _tokenCustomer;
@@ -20,9 +20,9 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         private _addressToTokenToBalance;
     mapping(address => uint256) private _balanceETH;
 
-    // 99=>1%,  0,1%=>999  0,03% => 997
+    // 0100=>1%  0010=>0,1%  0001=>0,01%  0300=>3%  0030=>0,3%
     uint256 private _donateFee;
-    // 0.1$
+
     AggregatorV3Interface constant usdcEthOracle =
         AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
 
@@ -44,9 +44,10 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
 
     function initialize(address adminSigner) external initializer {
         __Ownable_init();
-        _donateFee = 9700;
+        _donateFee = 300;
+        // 0.1$
         _minValue = 1e17;
-        _signer = adminSigner;
+        _signerAdmin = adminSigner;
     }
 
     // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
@@ -57,7 +58,8 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     }
 
     function setFee(uint256 newFee) external virtual onlyOwner {
-        require(newFee < 10000);
+        // Fee must be below 15%
+        require(newFee < 1500);
         _donateFee = newFee;
     }
 
@@ -121,7 +123,6 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
             "Signature time expired"
         );
 
-
         //Verify signature
         require(signature.length == 65, "Wrong signature length");
 
@@ -157,7 +158,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
                 v,
                 r,
                 s
-            ) == _signer,
+            ) == _signerAdmin,
             "Wrong signature"
         );
 
@@ -167,32 +168,37 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
             tokenAmount
         );
 
-        _addressToTokenToBalance[addressToDonate][tokenAddress] += toCustomer;
-        _addressToTokenToBalance[address(this)][tokenAddress] += fee;
+        unchecked {
+            _addressToTokenToBalance[addressToDonate][
+                tokenAddress
+            ] += toCustomer;
+            _addressToTokenToBalance[address(this)][tokenAddress] += fee;
+        }
+
         CustomerToken(tokenCustomerAddress).mint(msg.sender, mintTokenAmount);
     }
 
     //donateETH_Bej(): 0x00002206
-    function donateETH(address addressToDonate)
-        external
-        payable
-        virtual
-    {
+    function donateETH(address addressToDonate) external payable virtual {
         (, int256 price, , , ) = ethUsdOracle.latestRoundData();
         //mul by 10**10 becouse price is return in 8 digit
         // Delete multiple ? Wheather this multiplation is necessary, maybe difference is to small ?
         uint256 tokenToMint = (uint(price) * 10**10 * msg.value) / 1e18;
+
+        //set to hard number?
         require(tokenToMint >= _minValue, "Donate worth too little");
 
-        uint256 toCustomer = (msg.value * _donateFee) / 10000;
-        _balanceETH[addressToDonate] += toCustomer;
-        _balanceETH[address(this)] = msg.value - toCustomer;
+        uint256 fee = (msg.value * _donateFee) / 10000;
+        _balanceETH[address(this)] += fee;
+        _balanceETH[addressToDonate] += msg.value - fee;
 
         CustomerToken(_tokenCustomer[addressToDonate]).mint(
             msg.sender,
             tokenToMint
         );
-        // emit Donate(msg.sender, addressToDonate, address(0), msg.value);
+
+        // send value ? can i get it from transation ?
+        emit Donate(msg.sender, addressToDonate, address(0), msg.value);
     }
 
     function withdrawERC20(address tokenAddress) public virtual {

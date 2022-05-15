@@ -35,8 +35,9 @@ const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, customer
   if (amountToMint.lt(parseUnits('0.1'))) {
     throw new Error('Donate worth too little');
   }
-  const tokenToCustomer = tokenAmountBN.mul('9700').div('10000');
-  const fee = tokenAmountBN.sub(tokenToCustomer);
+
+  const fee = tokenAmountBN.mul('0300').div('10000');
+  const tokenToCustomer = tokenAmountBN.sub(fee);
 
   const block = await provider.getBlock();
   const timestamp = block.timestamp;

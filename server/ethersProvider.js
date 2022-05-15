@@ -21,8 +21,8 @@ switch (process.env.STATE) {
 
 const wallet = new ethers.Wallet(privateKey, provider);
 
-provider.on('block', (blockNumber) => {
-  console.log('Minted block:  ', blockNumber);
-});
+// provider.on('block', (blockNumber) => {
+//   console.log('Minted block:  ', blockNumber);
+// });
 
 module.exports = { signer: wallet, provider };

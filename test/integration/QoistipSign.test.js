@@ -36,7 +36,7 @@ describe('QoistipSign', function () {
     elon = new ethers.Contract(ERC20_TOKEN_ADDRESS.ELON, sandABI, ethers.provider);
 
     // Have SAND, USDT, USDC
-    const accountWithSAND = '0x109e588d17C1c1cff206aCB0b3FF0AAEffDe92bd';
+    const accountWithSAND = '0x5a52E96BAcdaBb82fd05763E25335261B270Efcb';
     const accountWithSHIB = '0xd6Bc559a59B24A58A82F274555d152d67F15a7A6';
     const accountWithELON = '0xCFFAd3200574698b78f32232aa9D63eABD290703'; // This address have many tokens !(SHIB, CRO...)
 
@@ -69,6 +69,12 @@ describe('QoistipSign', function () {
     const customerToken1Address = await qoistipSign.tokenCustomer(customer1.address);
     customerToken1 = new ethers.Contract(customerToken1Address, CustomerToken.abi, ethers.provider);
   });
+
+  // describe('Check fee', async () => {
+  //   it('Check $SAND balance before donate', async function () {
+  //     expect(await qoistipSign.balanceERC20(customer1.address, sand.address)).to.equal(0);
+  //   });
+  // });
 
   describe('Donate ERC20', async () => {
     const sandPriceBN = parseUnits(Number.parseFloat(2.1262470976845336).toFixed(18));
