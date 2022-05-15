@@ -3,9 +3,10 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./ICustomerToken.sol";
+
 //https://github.com/Rari-Capital/solmate/blob/main/src/tokens/ERC20.sol LOW GAS
 
-contract CustomerToken is Ownable, ICustomerToken {
+contract CustomerTokenSafeGas is Ownable, ICustomerToken {
     string private _name;
     string private _symbol;
     uint256 private _totalSupply;
@@ -16,7 +17,6 @@ contract CustomerToken is Ownable, ICustomerToken {
     constructor(string memory symbol_, string memory name_) {
         _name = name_;
         _symbol = symbol_;
-        // _mint(msg.sender, 1_000 * 10**18);
     }
 
     function name() external view virtual override returns (string memory) {
@@ -61,7 +61,6 @@ contract CustomerToken is Ownable, ICustomerToken {
         override
         returns (bool)
     {
-        // require(spender != address(0), "Approve to zero address");
         _allowance[msg.sender][spender] = amount;
         emit Approval(msg.sender, spender, amount);
         return true;
@@ -72,11 +71,11 @@ contract CustomerToken is Ownable, ICustomerToken {
         address to,
         uint256 amount
     ) external override returns (bool) {
-        uint256 allowed = _allowance[from][msg.sender];
-        require(allowed >= amount, "Insufficient allowance");
+        // uint256 allowed = _allowance[from][msg.sender];
+        // require(allowed >= amount, "Insufficient allowance");
 
-        if (allowed != type(uint256).max)
-            _allowance[from][msg.sender] = allowed - amount;
+        // if (allowed != type(uint256).max)
+        _allowance[from][msg.sender] -= amount;
 
         _transfer(from, to, amount);
         // it neccesary to return bool ?
@@ -98,14 +97,14 @@ contract CustomerToken is Ownable, ICustomerToken {
         address to,
         uint256 amount
     ) internal {
-        require(to != address(0), "Transfer to zero address");
-        require(to != address(this), "Transfer to this address");
+        // require(to != address(0), "Transfer to zero address");
+        // require(to != address(this), "Transfer to this address");
 
-        uint256 balance = _balanceOf[from];
-        require(balance >= amount, "Amount exceeds balance");
+        // uint256 balance = _balanceOf[from];
+        // require(balance >= amount, "Amount exceeds balance");
 
+        _balanceOf[from] -= amount;
         unchecked {
-            _balanceOf[from] -= amount;
             _balanceOf[to] += amount;
         }
         emit Transfer(from, to, amount);
@@ -125,10 +124,10 @@ contract CustomerToken is Ownable, ICustomerToken {
 
     // anyone can burn ?
     function burn(uint256 amount) external {
-        uint256 accountBalance = _balanceOf[msg.sender];
-        require(accountBalance >= amount, "Burn amount exceeds balance");
+        // uint256 accountBalance = _balanceOf[msg.sender];
+        // require(accountBalance >= amount, "Burn amount exceeds balance");
+        _balanceOf[msg.sender] -= amount;
         unchecked {
-            _balanceOf[msg.sender] = accountBalance - amount;
             _totalSupply -= amount;
         }
 

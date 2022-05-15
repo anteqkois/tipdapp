@@ -41,11 +41,20 @@ describe('CustomerToken', function () {
       await customerToken.mint(owner.address, parseUnits('10000'));
       expect(await customerToken.balanceOf(owner.address)).to.be.equal(parseUnits('10000'));
     });
-    it('Owner can mint token to other address', async function () {
-      await customerToken.mint(addr1.address, parseUnits('1000'));
+    it('Change total supply 1', async function () {
+      expect(await customerToken.totalSupply()).to.be.equal(parseUnits('10000'));
+    });
+    it('Owner can mint token to other address and emit Transfer events', async function () {
+      expect(await customerToken.mint(addr1.address, parseUnits('1000')))
+        .to.emit(customerToken, 'Transfer')
+        .withArgs(ethers.constants.AddressZero, addr1.address, parseUnits('1000'));
+
       expect(await customerToken.balanceOf(addr1.address)).to.be.equal(parseUnits('1000'));
     });
-    it('Owner can not mint token to zero address', async function () {
+    it('Change total supply 1', async function () {
+      expect(await customerToken.totalSupply()).to.be.equal(parseUnits('11000'));
+    });
+    xit('Owner can not mint token to zero address', async function () {
       await expect(customerToken.mint(ethers.constants.AddressZero, parseUnits('100'))).to.be.revertedWith(
         'Mint to zero address',
       );
@@ -58,8 +67,11 @@ describe('CustomerToken', function () {
   });
 
   describe('Transfer', async () => {
-    it('Can transfer token', async function () {
-      await customerToken.transfer(addr2.address, parseUnits('1000'));
+    it('Can transfer token and emit event', async function () {
+      await expect(customerToken.transfer(addr2.address, parseUnits('1000')))
+        .to.emit(customerToken, 'Transfer')
+        .withArgs(owner.address, addr2.address, parseUnits('1000'));
+
       expect(await customerToken.balanceOf(owner.address)).to.be.equal(parseUnits('9000'));
       expect(await customerToken.balanceOf(addr2.address)).to.be.equal(parseUnits('1000'));
     });
@@ -91,17 +103,22 @@ describe('CustomerToken', function () {
 
   describe('TransferFrom', async () => {
     it('Can not transfer if allowance to small', async function () {
+      await customerToken.approve(addr2.address, parseUnits('999'));
+
       await expect(
         customerToken.connect(addr2).transferFrom(owner.address, addr1.address, parseUnits('1000')),
       ).to.be.revertedWith('Insufficient allowance');
     });
-    it('Can transfer token', async function () {
+    it('Can transfer token and emit event', async function () {
       await customerToken.approve(addr2.address, parseUnits('1000'));
 
       expect(await customerToken.balanceOf(owner.address)).to.be.equal(parseUnits('9000'));
       expect(await customerToken.balanceOf(addr1.address)).to.be.equal(parseUnits('1000'));
 
-      await customerToken.connect(addr2).transferFrom(owner.address, addr1.address, parseUnits('1000'));
+      await expect(customerToken.connect(addr2).transferFrom(owner.address, addr1.address, parseUnits('1000')))
+        .to.emit(customerToken, 'Transfer')
+        .withArgs(owner.address, addr1.address, parseUnits('1000'));
+
       expect(await customerToken.balanceOf(owner.address)).to.be.equal(parseUnits('8000'));
       expect(await customerToken.balanceOf(addr1.address)).to.be.equal(parseUnits('2000'));
     });
@@ -112,14 +129,23 @@ describe('CustomerToken', function () {
         'Insufficient allowance',
       );
     });
-    it('Revert if approve overflow', async function () {
-      ethers.constants.MaxUint256;
+  });
 
-      // expect(await customerToken.allowance(owner.address, addr2.address)).to.be.equal(0);
+  // check if can burn from other smart contract
+  describe('Burn', async () => {
+    it('User can burn token and it emit event', async function () {
 
-      // await expect(await customerToken.approve(addr2.address, ethers.constants.MaxUint256.add('1000'))).to.be.revertedWith(
-      //   'Insufficient allowance',
-      // );
+      await expect(customerToken.connect(addr1).burn(parseUnits('1000')))
+        .to.emit(customerToken, 'Transfer')
+        .withArgs(addr1.address, ethers.constants.AddressZero, parseUnits('1000'));
+    });
+    it('Change total supply and addressbalance', async function () {
+      expect(await customerToken.balanceOf(addr1.address)).to.be.equal(parseUnits('1000'));
+      expect(await customerToken.totalSupply()).to.be.equal(parseUnits('10000'));
+    });
+    it('Can not burn token if have not enought', async function () {
+      expect(await customerToken.balanceOf(addr1.address)).to.be.equal(parseUnits('1000'));
+      await expect(customerToken.connect(addr1).burn(parseUnits('1001'))).to.be.revertedWith('Burn amount exceeds balance');
     });
   });
 });

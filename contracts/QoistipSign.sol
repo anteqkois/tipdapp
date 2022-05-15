@@ -11,6 +11,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     //Use mapping to handle many address to handle many donate in time
+    //Use lock !
     address private _signer;
     uint256 private _minValue;
 
