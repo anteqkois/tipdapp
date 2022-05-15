@@ -47,7 +47,7 @@ describe('CustomerToken', function () {
     });
     it('Owner can not mint token to zero address', async function () {
       await expect(customerToken.mint(ethers.constants.AddressZero, parseUnits('100'))).to.be.revertedWith(
-        'ERC20: mint to the zero address',
+        'Mint to zero address',
       );
     });
     it('No owner can not mint token', async function () {
@@ -59,19 +59,67 @@ describe('CustomerToken', function () {
 
   describe('Transfer', async () => {
     it('Can transfer token', async function () {
-      await customerToken.transfer(addr2.address, parseUnits('5000'));
-      expect(await customerToken.balanceOf(owner.address)).to.be.equal(parseUnits('5000'));
-      expect(await customerToken.balanceOf(addr2.address)).to.be.equal(parseUnits('5000'));
+      await customerToken.transfer(addr2.address, parseUnits('1000'));
+      expect(await customerToken.balanceOf(owner.address)).to.be.equal(parseUnits('9000'));
+      expect(await customerToken.balanceOf(addr2.address)).to.be.equal(parseUnits('1000'));
     });
     it('Can not transfer token if have not', async function () {
-      await expect(customerToken.transfer(addr2.address, parseUnits('5001'))).to.be.revertedWith(
-        'ERC20: transfer amount exceeds balance',
-      );
+      await expect(customerToken.transfer(addr2.address, parseUnits('9001'))).to.be.revertedWith('Amount exceeds balance');
     });
     it('Can not transfer token to zero address', async function () {
-      await expect(customerToken.transfer(ethers.constants.AddressZero, parseUnits('5001'))).to.be.revertedWith(
-        'ERC20: transfer to the zero address',
+      await expect(customerToken.transfer(ethers.constants.AddressZero, parseUnits('1000'))).to.be.revertedWith(
+        'Transfer to zero address',
       );
+    });
+  });
+
+  describe('Approve', async () => {
+    it('Aprove to other', async function () {
+      await customerToken.approve(addr2.address, parseUnits('1000'));
+      expect(await customerToken.allowance(owner.address, addr2.address)).to.be.equal(parseUnits('1000'));
+      expect(await customerToken.allowance(owner.address, addr1.address)).to.be.equal(0);
+    });
+    it('Change allowance', async function () {
+      await customerToken.approve(addr2.address, parseUnits('2000'));
+      expect(await customerToken.allowance(owner.address, addr2.address)).to.be.equal(parseUnits('2000'));
+    });
+    it('Reset allowance', async function () {
+      await customerToken.approve(addr2.address, 0);
+      expect(await customerToken.allowance(owner.address, addr2.address)).to.be.equal(0);
+    });
+  });
+
+  describe('TransferFrom', async () => {
+    it('Can not transfer if allowance to small', async function () {
+      await expect(
+        customerToken.connect(addr2).transferFrom(owner.address, addr1.address, parseUnits('1000')),
+      ).to.be.revertedWith('Insufficient allowance');
+    });
+    it('Can transfer token', async function () {
+      await customerToken.approve(addr2.address, parseUnits('1000'));
+
+      expect(await customerToken.balanceOf(owner.address)).to.be.equal(parseUnits('9000'));
+      expect(await customerToken.balanceOf(addr1.address)).to.be.equal(parseUnits('1000'));
+
+      await customerToken.connect(addr2).transferFrom(owner.address, addr1.address, parseUnits('1000'));
+      expect(await customerToken.balanceOf(owner.address)).to.be.equal(parseUnits('8000'));
+      expect(await customerToken.balanceOf(addr1.address)).to.be.equal(parseUnits('2000'));
+    });
+    it('Can not transfer if allowance reset', async function () {
+      expect(await customerToken.allowance(owner.address, addr2.address)).to.be.equal(0);
+
+      await expect(customerToken.connect(addr2).transferFrom(owner.address, addr1.address, parseUnits('500'))).to.be.revertedWith(
+        'Insufficient allowance',
+      );
+    });
+    it('Revert if approve overflow', async function () {
+      ethers.constants.MaxUint256;
+
+      // expect(await customerToken.allowance(owner.address, addr2.address)).to.be.equal(0);
+
+      // await expect(await customerToken.approve(addr2.address, ethers.constants.MaxUint256.add('1000'))).to.be.revertedWith(
+      //   'Insufficient allowance',
+      // );
     });
   });
 });

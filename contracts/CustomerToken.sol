@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./ICustomerToken.sol";
+//https://github.com/Rari-Capital/solmate/blob/main/src/tokens/ERC20.sol LOW GAS
 
 contract CustomerToken is Ownable, ICustomerToken {
     string private _name;
@@ -60,8 +61,7 @@ contract CustomerToken is Ownable, ICustomerToken {
         override
         returns (bool)
     {
-        require(spender != address(0), "ERC20: approve to the zero address");
-
+        // require(spender != address(0), "Approve to zero address");
         _allowance[msg.sender][spender] = amount;
         emit Approval(msg.sender, spender, amount);
         return true;
@@ -72,24 +72,14 @@ contract CustomerToken is Ownable, ICustomerToken {
         address to,
         uint256 amount
     ) external override returns (bool) {
-        // require(from != address(0), "ERC20: transfer from the zero address");
-        require(to != address(0), "ERC20: transfer to the zero address");
-        // TODO underflow work ? require(_balanceOf[from] >= amount, "ERC20: transfer amount exceeds balance");
-
         uint256 allowed = _allowance[from][msg.sender];
-        require(allowed >= amount, "ERC20: insufficient allowance");
+        require(allowed >= amount, "Insufficient allowance");
 
         if (allowed != type(uint256).max)
             _allowance[from][msg.sender] = allowed - amount;
 
-        unchecked {
-            // TODO check if underflow works require(_balanceOf[from] >= amount)
-            _balanceOf[from] -= amount;
-            _balanceOf[to] += amount;
-        }
-
-        emit Transfer(from, to, amount);
-
+        _transfer(from, to, amount);
+        // it neccesary to return bool ?
         return true;
     }
 
@@ -98,26 +88,33 @@ contract CustomerToken is Ownable, ICustomerToken {
         override
         returns (bool)
     {
-        require(to != address(0), "ERC20: transfer to the zero address");
+        _transfer(msg.sender, to, amount);
+        // it neccesary to return bool ?
+        return true;
+    }
 
-        // TODO underflow work ? require(_balanceOf[msg.sender] >= amount, "ERC20: transfer amount exceeds balance");
-        uint256 balance = _balanceOf[msg.sender];
-        require(balance >= amount, "ERC20: transfer amount exceeds balance");
+    function _transfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal {
+        require(to != address(0), "Transfer to zero address");
+        require(to != address(this), "Transfer to this address");
+
+        uint256 balance = _balanceOf[from];
+        require(balance >= amount, "Amount exceeds balance");
 
         unchecked {
-            _balanceOf[msg.sender] -= amount;
+            _balanceOf[from] -= amount;
             _balanceOf[to] += amount;
         }
-
-        emit Transfer(msg.sender, to, amount);
-
-        return true;
+        emit Transfer(from, to, amount);
     }
 
     // change onlyOwner to owners
     function mint(address account, uint256 amount) external onlyOwner {
         // nie będzie możliwości by wywołąć tą funkcję do mintowani do adresu 0
-        require(account != address(0), "ERC20: mint to the zero address");
+        require(account != address(0), "Mint to zero address");
 
         unchecked {
             _balanceOf[account] += amount;
@@ -126,16 +123,16 @@ contract CustomerToken is Ownable, ICustomerToken {
         emit Transfer(address(0), account, amount);
     }
 
-    function burn(address account, uint256 amount) external {
-        require(account != address(0), "ERC20: burn from the zero address");
-
-        uint256 accountBalance = _balanceOf[account];
+    // anyone can burn ?
+    function burn(uint256 amount) external {
+        // require(account != address(0), "ERC20: burn from the zero address");
+        uint256 accountBalance = _balanceOf[msg.sender];
         require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
         unchecked {
-            _balanceOf[account] = accountBalance - amount;
+            _balanceOf[msg.sender] = accountBalance - amount;
             _totalSupply -= amount;
         }
 
-        emit Transfer(account, address(0), amount);
+        emit Transfer(msg.sender, address(0), amount);
     }
 }
