@@ -1,27 +1,32 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+// pragma solidity ^0.8.0;
+pragma solidity 0.8.13;
 
 import "./CustomerToken.sol";
 import "./AggregatorV3Interface.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+// import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
+// contract QoistipSign is Initializable, UUPSUpgradea/ble, OwnableUpgradeable {
+contract QoistipSign is Initializable, UUPSUpgradeable {
     //Use mapping to handle many address to handle many donate in time
     //Use lock !
-    address private _signerAdmin;
+    //check if can update to v3
     uint256 private _minValue;
-
-    mapping(address => address) private _tokenCustomer;
-    mapping(address => mapping(address => uint256))
-        private _addressToTokenToBalance;
-    mapping(address => uint256) private _balanceETH;
-
     // 0100=>1%  0010=>0,1%  0001=>0,01%  0300=>3%  0030=>0,3%
     uint256 private _donateFee;
+
+    bool private _paused;
+    address private _signerAdmin;
+    address private _owner;
+
+    mapping(address => uint256) private _balanceETH;
+    mapping(address => mapping(address => uint256))
+        private _addressToTokenToBalance;
+    mapping(address => address) private _tokenCustomer;
 
     AggregatorV3Interface constant usdcEthOracle =
         AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
@@ -42,8 +47,19 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     );
     event NewCustomer(address indexed customerAddress, address customerToken);
 
+    modifier onlyOwner() {
+        require(_owner == msg.sender, "Only owner");
+        _;
+    }
+
+    modifier notPaused() {
+        require(!_paused, "Smart Contract paused");
+        _;
+    }
+
     function initialize(address adminSigner) external initializer {
-        __Ownable_init();
+        _owner = msg.sender;
+        // __Ownable_init();
         _donateFee = 300;
         // 0.1$
         _minValue = 1e17;
@@ -52,6 +68,30 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
 
     // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
     function _authorizeUpgrade(address) internal override onlyOwner {}
+
+    function paused() external view returns (bool) {
+        return _paused;
+    }
+
+    function pause() external onlyOwner {
+        _paused = true;
+    }
+
+    function unPause() external onlyOwner {
+        _paused = false;
+    }
+
+    function owner() public view virtual returns (address) {
+        return _owner;
+    }
+
+    function changeOwner(address newOwner) external virtual onlyOwner {
+        require(
+            newOwner != address(0),
+            "New owner is zero address"
+        );
+        _owner = newOwner;
+    }
 
     function donateFee() external view returns (uint256) {
         return _donateFee;
@@ -94,7 +134,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     function registerCustomer(
         string memory tokenSymbol,
         string memory tokenName
-    ) external virtual {
+    ) external virtual notPaused{
         require(_tokenCustomer[msg.sender] == address(0), "Address registered");
 
         address _newToken = address(new CustomerToken(tokenSymbol, tokenName));
@@ -113,7 +153,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         address addressToDonate,
         address tokenAddress,
         address tokenCustomerAddress
-    ) external virtual {
+    ) external virtual notPaused{
         // donate worth check on backend
         //connect msg with onChain data with tx
 
@@ -179,7 +219,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     }
 
     //donateETH_Bej(): 0x00002206
-    function donateETH(address addressToDonate) external payable virtual {
+    function donateETH(address addressToDonate) external payable virtual notPaused{
         (, int256 price, , , ) = ethUsdOracle.latestRoundData();
         //mul by 10**10 becouse price is return in 8 digit
         // Delete multiple ? Wheather this multiplation is necessary, maybe difference is to small ?

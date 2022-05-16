@@ -37,7 +37,7 @@ module.exports = {
       // throwOnTransactionFailures: true,
       // allowUnlimitedContractSize: true,
       // loggingEnabled: true,
-      // throwOnCallFailures: true, 
+      // throwOnCallFailures: true,
       // },
       // rinkeby: {
       //   url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_RINKEBY_ID}`,
@@ -45,7 +45,7 @@ module.exports = {
     },
   },
   solidity: {
-    version: '0.8.4',
+    version: '0.8.13',
     settings: {
       optimizer: {
         enabled: true,

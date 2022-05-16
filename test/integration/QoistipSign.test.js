@@ -114,7 +114,6 @@ describe('QoistipSign', function () {
       const calculateExpectBalance = parseUnits('100').mul(sandPriceBN).div('1000000000000000000');
       expect(await customerToken1.balanceOf(sandHodler.address)).to.equal(calculateExpectBalance);
     });
-
     it('Check $SHIB balance before donate', async function () {
       expect(await qoistipSign.balanceERC20(customer1.address, shib.address)).to.equal(0);
     });
@@ -157,6 +156,49 @@ describe('QoistipSign', function () {
         Error,
       );
     });
+    it('Revert when smart contract locked', async function () {
+      await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('100'));
+
+      expect(await qoistipSign.paused()).to.be.false;
+      await expect(qoistipSign.connect(shibHodler).pause()).to.be.revertedWith('Only owner');
+      await qoistipSign.pause();
+      expect(await qoistipSign.paused()).to.be.true;
+
+      const { signature, signatureData } = await packDataToSign('100', 'SAND', customer1.address, customerToken1.address);
+
+      await expect(
+        qoistipSign
+          .connect(sandHodler)
+          .donateERC20(
+            signature,
+            signatureData.tokenAmountBN,
+            signatureData.amountToMint,
+            signatureData.tokenToCustomer,
+            signatureData.fee,
+            signatureData.timestamp,
+            customer1.address,
+            signatureData.tokenAddress,
+            signatureData.tokenCustomerAddress,
+          ),
+      ).to.be.revertedWith('Smart Contract paused');
+
+      await qoistipSign.unPause();
+
+      qoistipSign
+        .connect(sandHodler)
+        .donateERC20(
+          signature,
+          signatureData.tokenAmountBN,
+          signatureData.amountToMint,
+          signatureData.tokenToCustomer,
+          signatureData.fee,
+          signatureData.timestamp,
+          customer1.address,
+          signatureData.tokenAddress,
+          signatureData.tokenCustomerAddress,
+        );
+
+    });
     it('Revert when address to donate is 0x0...', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('100'));
 
@@ -196,14 +238,14 @@ describe('QoistipSign', function () {
   describe('Withdraw ERC20', async () => {
     it('One ERC20 Token', async function () {
       const sandBalance = await qoistipSign.balanceERC20(customer1.address, sand.address);
-      expect(sandBalance).to.equal(parseUnits('97'));
+      expect(sandBalance).to.equal(parseUnits('194'));
 
       await expect(qoistipSign.connect(customer1).withdrawERC20(sand.address))
         .to.emit(qoistipSign, 'Withdraw')
         .withArgs(customer1.address, sand.address, sandBalance);
 
       expect(await qoistipSign.balanceERC20(customer1.address, sand.address)).to.equal(0);
-      expect(await sand.balanceOf(customer1.address)).to.equal(parseUnits('97'));
+      expect(await sand.balanceOf(customer1.address)).to.equal(parseUnits('194'));
     });
     it('Many ERC20 Token', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('100'));
@@ -234,7 +276,7 @@ describe('QoistipSign', function () {
         .withArgs(customer1.address, shib.address, parseUnits('9700'));
 
       expect(await qoistipSign.balanceERC20(customer1.address, sand.address)).to.equal(0);
-      expect(await sand.balanceOf(customer1.address)).to.equal(parseUnits('97').mul('2'));
+      expect(await sand.balanceOf(customer1.address)).to.equal(parseUnits('97').mul('3'));
       expect(await qoistipSign.balanceERC20(customer1.address, shib.address)).to.equal(0);
       expect(await shib.balanceOf(customer1.address)).to.equal(parseUnits('9700'));
     });
@@ -306,9 +348,7 @@ describe('QoistipSign', function () {
       expect(await customerToken1.balanceOf(elonHodler.address)).to.equal(calculateExpectBalance);
     });
     it('Owner restriction still work', async function () {
-      await expect(qoistipSign.connect(adminSigner).setMinValue(10000)).to.be.revertedWith(
-        'Ownable: caller is not the owner',
-      );
+      await expect(qoistipSign.connect(adminSigner).setMinValue(10000)).to.be.revertedWith('Only owner');
       expect(await qoistipSign.connect(owner).setMinValue(10000));
     });
   });
