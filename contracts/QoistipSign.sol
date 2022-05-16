@@ -15,18 +15,18 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
     //Use mapping to handle many address to handle many donate in time
     //Use lock !
     //check if can update to v3
-    uint256 private _minValue;
+    uint256 internal _minValue;
     // 0100=>1%  0010=>0,1%  0001=>0,01%  0300=>3%  0030=>0,3%
-    uint256 private _donateFee;
+    uint256 internal _donateFee;
 
-    bool private _paused;
-    address private _signerAdmin;
-    address private _owner;
+    bool internal _paused;
+    address internal _signerAdmin;
+    address internal _owner;
 
-    mapping(address => uint256) private _balanceETH;
+    mapping(address => uint256) internal _balanceETH;
     mapping(address => mapping(address => uint256))
-        private _addressToTokenToBalance;
-    mapping(address => address) private _tokenCustomer;
+        internal _addressToTokenToBalance;
+    mapping(address => address) internal _tokenCustomer;
 
     AggregatorV3Interface constant usdcEthOracle =
         AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
@@ -69,15 +69,15 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
     // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
     function _authorizeUpgrade(address) internal override onlyOwner {}
 
-    function paused() external view returns (bool) {
+    function paused() external view virtual returns (bool) {
         return _paused;
     }
 
-    function pause() external onlyOwner {
+    function pause() external virtual onlyOwner {
         _paused = true;
     }
 
-    function unPause() external onlyOwner {
+    function unPause() external virtual onlyOwner {
         _paused = false;
     }
 
@@ -86,14 +86,11 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
     }
 
     function changeOwner(address newOwner) external virtual onlyOwner {
-        require(
-            newOwner != address(0),
-            "New owner is zero address"
-        );
+        require(newOwner != address(0), "New owner is zero address");
         _owner = newOwner;
     }
 
-    function donateFee() external view returns (uint256) {
+    function donateFee() external view virtual returns (uint256) {
         return _donateFee;
     }
 
@@ -103,13 +100,14 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         _donateFee = newFee;
     }
 
-    function setMinValue(uint256 newMinValue) external onlyOwner {
+    function setMinValue(uint256 newMinValue) external virtual onlyOwner {
         _minValue = newMinValue;
     }
 
     function tokenCustomer(address customerAddress)
         external
         view
+        virtual
         returns (address)
     {
         return _tokenCustomer[customerAddress];
@@ -118,6 +116,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
     function balanceERC20(address customerAddress, address tokenAddress)
         external
         view
+        virtual
         returns (uint256 balance)
     {
         return _addressToTokenToBalance[customerAddress][tokenAddress];
@@ -126,6 +125,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
     function balanceETH(address customerAddress)
         external
         view
+        virtual
         returns (uint256 balance)
     {
         return _balanceETH[customerAddress];
@@ -134,7 +134,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
     function registerCustomer(
         string memory tokenSymbol,
         string memory tokenName
-    ) external virtual notPaused{
+    ) external virtual notPaused {
         require(_tokenCustomer[msg.sender] == address(0), "Address registered");
 
         address _newToken = address(new CustomerToken(tokenSymbol, tokenName));
@@ -153,7 +153,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         address addressToDonate,
         address tokenAddress,
         address tokenCustomerAddress
-    ) external virtual notPaused{
+    ) external virtual notPaused {
         // donate worth check on backend
         //connect msg with onChain data with tx
 
@@ -219,7 +219,12 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
     }
 
     //donateETH_Bej(): 0x00002206
-    function donateETH(address addressToDonate) external payable virtual notPaused{
+    function donateETH(address addressToDonate)
+        external
+        payable
+        virtual
+        notPaused
+    {
         (, int256 price, , , ) = ethUsdOracle.latestRoundData();
         //mul by 10**10 becouse price is return in 8 digit
         // Delete multiple ? Wheather this multiplation is necessary, maybe difference is to small ?
@@ -253,7 +258,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         emit Withdraw(msg.sender, tokenAddress, _tokenBalance);
     }
 
-    function withdrawManyERC20(address[] calldata tokenAddress) external {
+    function withdrawManyERC20(address[] calldata tokenAddress) external virtual {
         uint256 _iteration = tokenAddress.length;
         for (uint256 _i = 0; _i != _iteration; ) {
             withdrawERC20(tokenAddress[_i]);

@@ -197,7 +197,6 @@ describe('QoistipSign', function () {
           signatureData.tokenAddress,
           signatureData.tokenCustomerAddress,
         );
-
     });
     it('Revert when address to donate is 0x0...', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('100'));
@@ -301,7 +300,7 @@ describe('QoistipSign', function () {
     });
   });
 
-  describe('Upgrade implementation', async () => {
+  describe('Upgrade implementation to V2', async () => {
     it('Upgrade', async function () {
       expect(await qoistipSign.version()).to.equal(1);
 
@@ -345,6 +344,58 @@ describe('QoistipSign', function () {
     it('Check $CT1 balance after donate', async function () {
       const elonPriceBN = parseUnits(Number.parseFloat(0.0000004991232343).toFixed(18));
       const calculateExpectBalance = parseUnits('1000000').mul(elonPriceBN).div('1000000000000000000');
+      expect(await customerToken1.balanceOf(elonHodler.address)).to.equal(calculateExpectBalance);
+    });
+    it('Owner restriction still work', async function () {
+      await expect(qoistipSign.connect(adminSigner).setMinValue(10000)).to.be.revertedWith('Only owner');
+      expect(await qoistipSign.connect(owner).setMinValue(10000));
+    });
+  });
+  describe('Upgrade implementation to V3', async () => {
+    it('Upgrade', async function () {
+      expect(await qoistipSign.version()).to.equal(2);
+
+      const QoistipSignV3 = await ethers.getContractFactory('QoistipSignV3');
+      qoistipSign = await upgrades.upgradeProxy(qoistipSign, QoistipSignV3);
+
+      expect(await qoistipSign.version()).to.equal(3);
+    });
+    it('Check $ELON balance before donate', async function () {
+      expect(await qoistipSign.balanceERC20(customer1.address, elon.address)).to.equal(parseUnits('970000'));
+    });
+    it('Send donate in $ELON and check emited event', async function () {
+      await elon.connect(elonHodler).approve(qoistipSign.address, parseUnits('1000000'));
+
+      expect(await qoistipSign.paused()).to.be.false;
+      await qoistipSign.pause();
+      expect(await qoistipSign.paused()).to.be.true;
+
+      const { signature, signatureData } = await packDataToSign('1000000', 'ELON', customer1.address, customerToken1.address);
+
+      await qoistipSign
+        .connect(elonHodler)
+        .donateERC20(
+          signature,
+          signatureData.tokenAmountBN,
+          signatureData.amountToMint,
+          signatureData.tokenToCustomer,
+          signatureData.fee,
+          signatureData.timestamp,
+          customer1.address,
+          signatureData.tokenAddress,
+          signatureData.tokenCustomerAddress,
+        );
+    });
+    it('Check $ELON balance after donate', async function () {
+      expect(await qoistipSign.balanceERC20(customer1.address, elon.address)).to.equal(parseUnits('970000').mul('2'));
+      expect(await qoistipSign.balanceERC20(qoistipSign.address, elon.address)).to.equal(
+        parseUnits('1000000').sub(parseUnits('970000')).mul('2'),
+      );
+      expect(await elon.balanceOf(qoistipSign.address)).to.equal(parseUnits('1000000').mul('2'));
+    });
+    it('Check $CT1 balance after donate', async function () {
+      const elonPriceBN = parseUnits(Number.parseFloat(0.0000004991232343).toFixed(18));
+      const calculateExpectBalance = parseUnits('1000000').mul(elonPriceBN).div('1000000000000000000').mul('2');
       expect(await customerToken1.balanceOf(elonHodler.address)).to.equal(calculateExpectBalance);
     });
     it('Owner restriction still work', async function () {
