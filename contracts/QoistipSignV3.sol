@@ -1,6 +1,7 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.13;
 
+// import "./CustomerToken.sol";
 import "./QoistipSignV2.sol";
 
 contract QoistipSignV3 is QoistipSignV2 {
@@ -99,6 +100,15 @@ contract QoistipSignV3 is QoistipSignV2 {
 
         // send value ? can i get it from transation ?
         emit Donate(msg.sender, addressToDonate, address(0), msg.value);
+    }
+
+    function changeTokenOwner(address customerAddress, address newOwner)
+        external
+        onlyOwner
+    {
+        bool success = CustomerToken(_tokenCustomer[customerAddress])
+            .changeOwner(newOwner);
+        require(success, "Owner not change");
     }
 
     function version() external pure virtual override returns (uint8) {

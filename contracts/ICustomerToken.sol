@@ -9,7 +9,7 @@ interface ICustomerToken {
         uint256 value
     );
 
-    function name() external view  returns (string memory);
+    function name() external view returns (string memory);
 
     function symbol() external view returns (string memory);
 
@@ -28,6 +28,10 @@ interface ICustomerToken {
         view
         returns (uint256);
 
+    function owner() external view returns (address);
+
+    function changeOwner(address newOwner) external returns (bool);
+
     function approve(address spender, uint256 amount) external returns (bool);
 
     function transferFrom(
@@ -35,12 +39,4 @@ interface ICustomerToken {
         address to,
         uint256 amount
     ) external returns (bool);
-
-    // function increaseAllowance(address spender, uint256 addedValue)
-    //     external
-    //     returns (bool);
-
-    // function decreaseAllowance(address spender, uint256 subtractedValue)
-    //     external
-    //     returns (bool);
 }

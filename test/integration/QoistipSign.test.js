@@ -67,7 +67,7 @@ describe('QoistipSign', function () {
 
     registerCustomerTransation.wait();
     const customerToken1Address = await qoistipSign.tokenCustomer(customer1.address);
-    customerToken1 = new ethers.Contract(customerToken1Address, CustomerToken.abi, ethers.provider);
+    customerToken1 = new ethers.Contract(customerToken1Address, CustomerToken.abi, owner);
   });
 
   // describe('Check fee', async () => {
@@ -401,6 +401,19 @@ describe('QoistipSign', function () {
     it('Owner restriction still work', async function () {
       await expect(qoistipSign.connect(adminSigner).setMinValue(10000)).to.be.revertedWith('Only owner');
       expect(await qoistipSign.connect(owner).setMinValue(10000));
+    });
+  });
+
+  describe('Change CustomerToken owner', async () => {
+    it('Anybody can not change owner of customer token', async () => {
+      expect(await customerToken1.owner()).to.be.equal(qoistipSign.address);
+      await expect(customerToken1.changeOwner(customer1.address)).to.be.revertedWith('Only owner');
+    });
+    it('Qoistip smart contract can change owner of customer token', async () => {
+      await qoistipSign.changeTokenOwner(customer1.address, customer1.address);
+      expect(await customerToken1.owner()).to.be.equal(customer1.address);
+
+      await expect(qoistipSign.changeTokenOwner(customer1.address, customer1.address)).to.be.revertedWith('Only owner');
     });
   });
 });

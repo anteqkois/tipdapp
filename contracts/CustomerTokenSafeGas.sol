@@ -1,22 +1,28 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.13;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "./ICustomerToken.sol";
 
 //https://github.com/Rari-Capital/solmate/blob/main/src/tokens/ERC20.sol LOW GAS
 
-contract CustomerTokenSafeGas is Ownable, ICustomerToken {
+contract CustomerTokenSafeGas is ICustomerToken {
     string private _name;
     string private _symbol;
     uint256 private _totalSupply;
+    address private _owner;
 
     mapping(address => mapping(address => uint256)) private _allowance;
     mapping(address => uint256) private _balanceOf;
 
+    modifier onlyOwner() {
+        require(_owner == msg.sender, "Only owner");
+        _;
+    }
+
     constructor(string memory symbol_, string memory name_) {
         _name = name_;
         _symbol = symbol_;
+        _owner = msg.sender;
     }
 
     function name() external view virtual override returns (string memory) {
@@ -45,14 +51,29 @@ contract CustomerTokenSafeGas is Ownable, ICustomerToken {
         return _balanceOf[account];
     }
 
-    function allowance(address owner, address spender)
+    function allowance(address tokenOwner, address spender)
         external
         view
         virtual
         override
         returns (uint256)
     {
-        return _allowance[owner][spender];
+        return _allowance[tokenOwner][spender];
+    }
+
+    function owner() external view virtual returns (address) {
+        return _owner;
+    }
+
+    function changeOwner(address newOwner)
+        external
+        virtual
+        onlyOwner
+        returns (bool)
+    {
+        require(newOwner != address(0), "New owner is zero address");
+        _owner = newOwner;
+        return true;
     }
 
     function approve(address spender, uint256 amount)

@@ -1,10 +1,10 @@
 //SPDX-License-Identifier: MIT
-// pragma solidity ^0.8.0;
+// CHANGE LICENSE !
 pragma solidity 0.8.13;
 
 import "./CustomerToken.sol";
 import "./AggregatorV3Interface.sol";
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 // import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
@@ -13,8 +13,6 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 // contract QoistipSign is Initializable, UUPSUpgradea/ble, OwnableUpgradeable {
 contract QoistipSign is Initializable, UUPSUpgradeable {
     //Use mapping to handle many address to handle many donate in time
-    //Use lock !
-    //check if can update to v3
     uint256 internal _minValue;
     // 0100=>1%  0010=>0,1%  0001=>0,01%  0300=>3%  0030=>0,3%
     uint256 internal _donateFee;
@@ -81,7 +79,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         _paused = false;
     }
 
-    function owner() public view virtual returns (address) {
+    function owner() external view virtual returns (address) {
         return _owner;
     }
 
