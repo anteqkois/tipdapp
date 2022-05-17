@@ -412,7 +412,7 @@ describe('QoistipSign', function () {
     it('Qoistip smart contract can change owner of customer token', async () => {
       await qoistipSign.changeTokenOwner(customer1.address, customer1.address);
       expect(await customerToken1.owner()).to.be.equal(customer1.address);
-
+      
       await expect(qoistipSign.changeTokenOwner(customer1.address, customer1.address)).to.be.revertedWith('Only owner');
     });
   });

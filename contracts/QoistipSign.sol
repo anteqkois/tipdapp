@@ -26,9 +26,6 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         internal _addressToTokenToBalance;
     mapping(address => address) internal _tokenCustomer;
 
-    AggregatorV3Interface constant usdcEthOracle =
-        AggregatorV3Interface(0x986b5E1e1755e3C2440e960477f25201B0a8bbD4);
-
     AggregatorV3Interface constant ethUsdOracle =
         AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
 
@@ -84,8 +81,13 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
     }
 
     function changeOwner(address newOwner) external virtual onlyOwner {
-        require(newOwner != address(0), "New owner is zero address");
+        // require(newOwner != address(0), "New owner is zero address");
         _owner = newOwner;
+    }
+
+    function changeSigner(address newSigner) external virtual onlyOwner {
+        // require(newSigner != address(0), "New owner is zero address");
+        _signerAdmin = newSigner;
     }
 
     function donateFee() external view virtual returns (uint256) {
@@ -256,7 +258,10 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         emit Withdraw(msg.sender, tokenAddress, _tokenBalance);
     }
 
-    function withdrawManyERC20(address[] calldata tokenAddress) external virtual {
+    function withdrawManyERC20(address[] calldata tokenAddress)
+        external
+        virtual
+    {
         uint256 _iteration = tokenAddress.length;
         for (uint256 _i = 0; _i != _iteration; ) {
             withdrawERC20(tokenAddress[_i]);
