@@ -5,12 +5,10 @@ pragma solidity 0.8.13;
 import "./CustomerToken.sol";
 import "./AggregatorV3Interface.sol";
 // import "hardhat/console.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-// import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "./IERC20Minimal.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-// contract QoistipSign is Initializable, UUPSUpgradea/ble, OwnableUpgradeable {
 contract QoistipSign is Initializable, UUPSUpgradeable {
     //Use mapping to handle many address to handle many donate in time
     uint256 internal _minValue;
@@ -202,7 +200,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
             "Wrong signature"
         );
 
-        IERC20(tokenAddress).transferFrom(
+        IERC20Minimal(tokenAddress).transferFrom(
             msg.sender,
             address(this),
             tokenAmount
@@ -252,7 +250,10 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         ];
         require(_tokenBalance != 0, "You have 0 tokens on balance");
         delete _addressToTokenToBalance[msg.sender][tokenAddress];
-        bool success = IERC20(tokenAddress).transfer(msg.sender, _tokenBalance);
+        bool success = IERC20Minimal(tokenAddress).transfer(
+            msg.sender,
+            _tokenBalance
+        );
         require(success, "Withdraw ERC20 not success");
 
         emit Withdraw(msg.sender, tokenAddress, _tokenBalance);

@@ -3,6 +3,7 @@ pragma solidity 0.8.13;
 
 // import "./CustomerToken.sol";
 import "./QoistipSignV2.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract QoistipSignV3 is QoistipSignV2 {
     function donateERC20(
@@ -109,6 +110,13 @@ contract QoistipSignV3 is QoistipSignV2 {
         bool success = CustomerToken(_tokenCustomer[customerAddress])
             .changeOwner(newOwner);
         require(success, "Owner not change");
+    }
+
+    function balanseOfSmartContractERC20(address tokenAddress)
+        external
+        returns (uint256)
+    {
+        return IERC20(tokenAddress).balanceOf(address(this));
     }
 
     function version() external pure virtual override returns (uint8) {

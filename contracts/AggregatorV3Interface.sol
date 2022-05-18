@@ -12,6 +12,6 @@ interface AggregatorV3Interface {
             uint256 updatedAt,
             uint80 answeredInRound
         );
-        function decimals() external view returns (uint8);
-        function owner() external view returns(address);
+        // function decimals() external view returns (uint8);
+        // function owner() external view returns(address);
 }

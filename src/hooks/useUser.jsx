@@ -1,43 +1,47 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import useEthers from './useEthers';
+// import useEthers from './useEthers';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
+import { useEthers } from '@usedapp/core';
 
 const useUser = () => {
-  const [isConnected, setIsConnected] = useState(false);
-  const { signer, connectWallet } = useEthers();
+  // const [isConnected, setIsConnected] = useState(false);
+  const { activateBrowserWallet, deactivate, active, account } = useEthers();
+  // const { signer, activateBrowserWallet } = useEthers();
   const router = useRouter();
 
   const login = async () => {
-    try {
-      if (!signer) {
-        const { signer: newSigner } = await connectWallet();
-        signer = newSigner;
-      }
+    console.log(activateBrowserWallet());
 
-      const walletAddress = await signer.getAddress();
+    // try {
+    //   if (!signer) {
+    //     const { signer: newSigner } = await activateBrowserWallet();
+    //     signer = newSigner;
+    //   }
 
-      const dataLogin = await axios('/api/auth/login', {
-        method: 'POST',
-        data: {
-          walletAddress,
-        },
-      });
-      const signature = await signer.signMessage(dataLogin.data.nonce);
+    //   const walletAddress = await signer.getAddress();
 
-      const dataAuth = await axios('/api/auth/authorization', {
-        method: 'POST',
-        data: {
-          walletAddress,
-          nonce: dataLogin.data.nonce,
-          signature,
-        },
-      });
-      dataAuth.status = 200 && toast.success('You are succesfully login');
-    } catch (error) {
-      toast.error(error.response.data);
-    }
+    //   const dataLogin = await axios('/api/auth/login', {
+    //     method: 'POST',
+    //     data: {
+    //       walletAddress,
+    //     },
+    //   });
+    //   const signature = await signer.signMessage(dataLogin.data.nonce);
+
+    //   const dataAuth = await axios('/api/auth/authorization', {
+    //     method: 'POST',
+    //     data: {
+    //       walletAddress,
+    //       nonce: dataLogin.data.nonce,
+    //       signature,
+    //     },
+    //   });
+    //   dataAuth.status = 200 && toast.success('You are succesfully login');
+    // } catch (error) {
+    //   toast.error(error.response.data);
+    // }
   };
 
   const logout = async () => {
@@ -53,7 +57,7 @@ const useUser = () => {
   const signIn = async ({ firstName, lastName, email, nick }) => {
     try {
       if (!signer) {
-        const { signer: newSigner } = await connectWallet();
+        const { signer: newSigner } = await activateBrowserWallet();
         signer = newSigner;
       }
 

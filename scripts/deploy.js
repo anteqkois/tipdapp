@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { signer, provider } = require('../server/ethersProvider');
 
-const saveDataToFrontend = async (tokenAddr, contractName) => {
+const saveDataToFrontend = async (tokenAddr, contractName, txDeploy) => {
   const contractsDir = path.join(__dirname, '..', '/src/artifacts');
 
   if (!fs.existsSync(contractsDir)) {
@@ -11,10 +11,11 @@ const saveDataToFrontend = async (tokenAddr, contractName) => {
   }
 
   fs.writeFileSync(
-    contractsDir + `/${contractName}-address.json`,
+    contractsDir + `/${hre.network.name}-${contractName}-address.json`,
     JSON.stringify(
       {
         tokenAddress: tokenAddr,
+        txDeploy,
       },
       undefined,
       2,
@@ -33,11 +34,13 @@ async function main() {
 
   const QoistipSign = await hre.ethers.getContractFactory('QoistipSign');
   const qoistipSign = await hre.upgrades.deployProxy(QoistipSign, [signer.address], { kind: 'uups' });
-  await qoistipSign.deployed();
+  const tx = await qoistipSign.deployed();
 
+  // console.log(tx.deployTransaction);
+  // console.log(tx.deployTransaction);
   console.log('Qoistip deployed to:', qoistipSign.address);
 
-  saveDataToFrontend(qoistipSign.address, 'Qoistip');
+  saveDataToFrontend(qoistipSign.address, 'Qoistip', tx.deployTransaction);
 
   // harhat 0xaB7B4c595d3cE8C85e16DA86630f2fc223B05057
   // localhost 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512

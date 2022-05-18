@@ -48,7 +48,12 @@
     },
     {
       "address": "0x1780bCf4103D3F501463AD3414c7f4b654bb7aFd",
-      "txHash": "0x9dc06025ea0fe976c5f739db93611acddb82f3ded14ec867b3310d2239771b05",
+      "txHash": "0x21d578445edff995c2384af62cf4cb40dc5f5f9d24501bd505e16d98fe07ba7f",
+      "kind": "uups"
+    },
+    {
+      "address": "0x5133BBdfCCa3Eb4F739D599ee4eC45cBCD0E16c5",
+      "txHash": "0x1d5f6ce0ecd8a9ebf3bf74bd53ee0a5f894a6571ce32af2a34a441ae9701cc03",
       "kind": "uups"
     }
   ],
@@ -175,172 +180,6 @@
           "t_bytes32": {
             "label": "bytes32",
             "numberOfBytes": "32"
-          },
-          "t_mapping(t_address,t_address)": {
-            "label": "mapping(address => address)",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_address,t_bytes32)": {
-            "label": "mapping(address => bytes32)",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
-            "label": "mapping(address => mapping(address => uint256))",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_address,t_uint256)": {
-            "label": "mapping(address => uint256)",
-            "numberOfBytes": "32"
-          },
-          "t_uint256": {
-            "label": "uint256",
-            "numberOfBytes": "32"
-          }
-        }
-      }
-    },
-    "fdfc0dee597669a90bf904e4362cfec027b9a3d68520d2640c253d347613d035": {
-      "address": "0x1780bCf4103D3F501463AD3414c7f4b654bb7aFd",
-      "txHash": "0xa65ca15d464c07222ce7f27814b4499d71e15563b4ffc431b8182801b732a066",
-      "layout": {
-        "storage": [
-          {
-            "label": "_initialized",
-            "offset": 0,
-            "slot": "0",
-            "type": "t_bool",
-            "contract": "Initializable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
-          },
-          {
-            "label": "_initializing",
-            "offset": 1,
-            "slot": "0",
-            "type": "t_bool",
-            "contract": "Initializable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
-          },
-          {
-            "label": "__gap",
-            "offset": 0,
-            "slot": "1",
-            "type": "t_array(t_uint256)50_storage",
-            "contract": "ERC1967UpgradeUpgradeable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:211"
-          },
-          {
-            "label": "__gap",
-            "offset": 0,
-            "slot": "51",
-            "type": "t_array(t_uint256)50_storage",
-            "contract": "UUPSUpgradeable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:107"
-          },
-          {
-            "label": "__gap",
-            "offset": 0,
-            "slot": "101",
-            "type": "t_array(t_uint256)50_storage",
-            "contract": "ContextUpgradeable",
-            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
-          },
-          {
-            "label": "_owner",
-            "offset": 0,
-            "slot": "151",
-            "type": "t_address",
-            "contract": "OwnableUpgradeable",
-            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
-          },
-          {
-            "label": "__gap",
-            "offset": 0,
-            "slot": "152",
-            "type": "t_array(t_uint256)49_storage",
-            "contract": "OwnableUpgradeable",
-            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
-          },
-          {
-            "label": "oracleData",
-            "offset": 0,
-            "slot": "201",
-            "type": "t_mapping(t_address,t_bytes32)",
-            "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:14"
-          },
-          {
-            "label": "_tokenCustomer",
-            "offset": 0,
-            "slot": "202",
-            "type": "t_mapping(t_address,t_address)",
-            "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:15"
-          },
-          {
-            "label": "addressToTokenToBalance",
-            "offset": 0,
-            "slot": "203",
-            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
-            "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:16"
-          },
-          {
-            "label": "BalanceETH",
-            "offset": 0,
-            "slot": "204",
-            "type": "t_mapping(t_address,t_uint256)",
-            "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:17"
-          },
-          {
-            "label": "_fee",
-            "offset": 0,
-            "slot": "205",
-            "type": "t_uint256",
-            "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:20"
-          },
-          {
-            "label": "_minValue",
-            "offset": 0,
-            "slot": "206",
-            "type": "t_uint256",
-            "contract": "Qoistip",
-            "src": "contracts/Qoistip.sol:22"
-          },
-          {
-            "label": "_qoistipPriceAggregator",
-            "offset": 0,
-            "slot": "207",
-            "type": "t_contract(QoistipPriceAggregator)2776",
-            "contract": "QoistipV2",
-            "src": "contracts/QoistipV2.sol:7"
-          }
-        ],
-        "types": {
-          "t_address": {
-            "label": "address",
-            "numberOfBytes": "20"
-          },
-          "t_array(t_uint256)49_storage": {
-            "label": "uint256[49]",
-            "numberOfBytes": "1568"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]",
-            "numberOfBytes": "1600"
-          },
-          "t_bool": {
-            "label": "bool",
-            "numberOfBytes": "1"
-          },
-          "t_bytes32": {
-            "label": "bytes32",
-            "numberOfBytes": "32"
-          },
-          "t_contract(QoistipPriceAggregator)2776": {
-            "label": "contract QoistipPriceAggregator",
-            "numberOfBytes": "20"
           },
           "t_mapping(t_address,t_address)": {
             "label": "mapping(address => address)",
@@ -1071,293 +910,9 @@
         }
       }
     },
-    "7eb4011bc147ad81e724c9246782a19e5652134d1665a6cff9c06956a8652b5f": {
-      "address": "0xeF31027350Be2c7439C1b0BE022d49421488b72C",
-      "txHash": "0xf9aaa8882d5e46bde3fd58a430972607f0f07c4fba55e6744a59408d0e490929",
-      "layout": {
-        "storage": [
-          {
-            "label": "_initialized",
-            "offset": 0,
-            "slot": "0",
-            "type": "t_bool",
-            "contract": "Initializable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
-          },
-          {
-            "label": "_initializing",
-            "offset": 1,
-            "slot": "0",
-            "type": "t_bool",
-            "contract": "Initializable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
-          },
-          {
-            "label": "__gap",
-            "offset": 0,
-            "slot": "1",
-            "type": "t_array(t_uint256)50_storage",
-            "contract": "ERC1967UpgradeUpgradeable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:211"
-          },
-          {
-            "label": "__gap",
-            "offset": 0,
-            "slot": "51",
-            "type": "t_array(t_uint256)50_storage",
-            "contract": "UUPSUpgradeable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:107"
-          },
-          {
-            "label": "_minValue",
-            "offset": 0,
-            "slot": "101",
-            "type": "t_uint256",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:16"
-          },
-          {
-            "label": "_donateFee",
-            "offset": 0,
-            "slot": "102",
-            "type": "t_uint256",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:18"
-          },
-          {
-            "label": "_paused",
-            "offset": 0,
-            "slot": "103",
-            "type": "t_bool",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:20"
-          },
-          {
-            "label": "_signerAdmin",
-            "offset": 1,
-            "slot": "103",
-            "type": "t_address",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:21"
-          },
-          {
-            "label": "_owner",
-            "offset": 0,
-            "slot": "104",
-            "type": "t_address",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:22"
-          },
-          {
-            "label": "_balanceETH",
-            "offset": 0,
-            "slot": "105",
-            "type": "t_mapping(t_address,t_uint256)",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:24"
-          },
-          {
-            "label": "_addressToTokenToBalance",
-            "offset": 0,
-            "slot": "106",
-            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:25"
-          },
-          {
-            "label": "_tokenCustomer",
-            "offset": 0,
-            "slot": "107",
-            "type": "t_mapping(t_address,t_address)",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:27"
-          },
-          {
-            "label": "number",
-            "offset": 0,
-            "slot": "108",
-            "type": "t_uint256",
-            "contract": "QoistipSignV2",
-            "src": "contracts/QoistipSignV2.sol:7"
-          }
-        ],
-        "types": {
-          "t_address": {
-            "label": "address",
-            "numberOfBytes": "20"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]",
-            "numberOfBytes": "1600"
-          },
-          "t_bool": {
-            "label": "bool",
-            "numberOfBytes": "1"
-          },
-          "t_mapping(t_address,t_address)": {
-            "label": "mapping(address => address)",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
-            "label": "mapping(address => mapping(address => uint256))",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_address,t_uint256)": {
-            "label": "mapping(address => uint256)",
-            "numberOfBytes": "32"
-          },
-          "t_uint256": {
-            "label": "uint256",
-            "numberOfBytes": "32"
-          }
-        }
-      }
-    },
-    "b60be06526b8e727b6e0ad59948e844142e40be0c9989ff4997e91c7c8d33cc6": {
-      "address": "0x9BcC604D4381C5b0Ad12Ff3Bf32bEdE063416BC7",
-      "txHash": "0x8eb11e405ecabb0a7c6b265a727fb3dda1ef4edd5944db754964653a3cf5e647",
-      "layout": {
-        "storage": [
-          {
-            "label": "_initialized",
-            "offset": 0,
-            "slot": "0",
-            "type": "t_bool",
-            "contract": "Initializable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
-          },
-          {
-            "label": "_initializing",
-            "offset": 1,
-            "slot": "0",
-            "type": "t_bool",
-            "contract": "Initializable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
-          },
-          {
-            "label": "__gap",
-            "offset": 0,
-            "slot": "1",
-            "type": "t_array(t_uint256)50_storage",
-            "contract": "ERC1967UpgradeUpgradeable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:211"
-          },
-          {
-            "label": "__gap",
-            "offset": 0,
-            "slot": "51",
-            "type": "t_array(t_uint256)50_storage",
-            "contract": "UUPSUpgradeable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:107"
-          },
-          {
-            "label": "_minValue",
-            "offset": 0,
-            "slot": "101",
-            "type": "t_uint256",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:16"
-          },
-          {
-            "label": "_donateFee",
-            "offset": 0,
-            "slot": "102",
-            "type": "t_uint256",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:18"
-          },
-          {
-            "label": "_paused",
-            "offset": 0,
-            "slot": "103",
-            "type": "t_bool",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:20"
-          },
-          {
-            "label": "_signerAdmin",
-            "offset": 1,
-            "slot": "103",
-            "type": "t_address",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:21"
-          },
-          {
-            "label": "_owner",
-            "offset": 0,
-            "slot": "104",
-            "type": "t_address",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:22"
-          },
-          {
-            "label": "_balanceETH",
-            "offset": 0,
-            "slot": "105",
-            "type": "t_mapping(t_address,t_uint256)",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:24"
-          },
-          {
-            "label": "_addressToTokenToBalance",
-            "offset": 0,
-            "slot": "106",
-            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:25"
-          },
-          {
-            "label": "_tokenCustomer",
-            "offset": 0,
-            "slot": "107",
-            "type": "t_mapping(t_address,t_address)",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:27"
-          },
-          {
-            "label": "number",
-            "offset": 0,
-            "slot": "108",
-            "type": "t_uint256",
-            "contract": "QoistipSignV2",
-            "src": "contracts/QoistipSignV2.sol:7"
-          }
-        ],
-        "types": {
-          "t_address": {
-            "label": "address",
-            "numberOfBytes": "20"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]",
-            "numberOfBytes": "1600"
-          },
-          "t_bool": {
-            "label": "bool",
-            "numberOfBytes": "1"
-          },
-          "t_mapping(t_address,t_address)": {
-            "label": "mapping(address => address)",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
-            "label": "mapping(address => mapping(address => uint256))",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_address,t_uint256)": {
-            "label": "mapping(address => uint256)",
-            "numberOfBytes": "32"
-          },
-          "t_uint256": {
-            "label": "uint256",
-            "numberOfBytes": "32"
-          }
-        }
-      }
-    },
     "b56d1e3b3c346dd7cfd7f0322401d4ac0e817669659f80a71c5d1436d42ef90c": {
-      "address": "0x821f3361D454cc98b7555221A06Be563a7E2E0A6",
-      "txHash": "0xc5c7d519437355bb789cd420e76dc9c9ed41721466e9c775c62b554c14e6d05f",
+      "address": "0x1780bCf4103D3F501463AD3414c7f4b654bb7aFd",
+      "txHash": "0x987f093bacb1c8752ecf146658ff10237fc0375fc9bcb7124ce27f0b57a5fbea",
       "layout": {
         "storage": [
           {
@@ -1398,7 +953,7 @@
             "slot": "101",
             "type": "t_uint256",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:16"
+            "src": "contracts/QoistipSign.sol:14"
           },
           {
             "label": "_donateFee",
@@ -1406,7 +961,7 @@
             "slot": "102",
             "type": "t_uint256",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:18"
+            "src": "contracts/QoistipSign.sol:16"
           },
           {
             "label": "_paused",
@@ -1414,7 +969,7 @@
             "slot": "103",
             "type": "t_bool",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:20"
+            "src": "contracts/QoistipSign.sol:18"
           },
           {
             "label": "_signerAdmin",
@@ -1422,7 +977,7 @@
             "slot": "103",
             "type": "t_address",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:21"
+            "src": "contracts/QoistipSign.sol:19"
           },
           {
             "label": "_owner",
@@ -1430,7 +985,7 @@
             "slot": "104",
             "type": "t_address",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:22"
+            "src": "contracts/QoistipSign.sol:20"
           },
           {
             "label": "_balanceETH",
@@ -1438,7 +993,7 @@
             "slot": "105",
             "type": "t_mapping(t_address,t_uint256)",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:24"
+            "src": "contracts/QoistipSign.sol:22"
           },
           {
             "label": "_addressToTokenToBalance",
@@ -1446,7 +1001,7 @@
             "slot": "106",
             "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:25"
+            "src": "contracts/QoistipSign.sol:23"
           },
           {
             "label": "_tokenCustomer",
@@ -1454,7 +1009,291 @@
             "slot": "107",
             "type": "t_mapping(t_address,t_address)",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:27"
+            "src": "contracts/QoistipSign.sol:25"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "441f0f2eff2cb83d2a194383648abdfdbf5f37742f9a06f72fba5217d1f2f5c9": {
+      "address": "0x12Bcb546bC60fF39F1Adfc7cE4605d5Bd6a6A876",
+      "txHash": "0x09ec8e56f1018bfb5a48b86fb4eb1acdb9756c261a0bf4fe850a1aa76bcc2c46",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC1967UpgradeUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:211"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "UUPSUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:107"
+          },
+          {
+            "label": "_minValue",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_uint256",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:14"
+          },
+          {
+            "label": "_donateFee",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_uint256",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:16"
+          },
+          {
+            "label": "_paused",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_bool",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:18"
+          },
+          {
+            "label": "_signerAdmin",
+            "offset": 1,
+            "slot": "103",
+            "type": "t_address",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:19"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_address",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:20"
+          },
+          {
+            "label": "_balanceETH",
+            "offset": 0,
+            "slot": "105",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:22"
+          },
+          {
+            "label": "_addressToTokenToBalance",
+            "offset": 0,
+            "slot": "106",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:23"
+          },
+          {
+            "label": "_tokenCustomer",
+            "offset": 0,
+            "slot": "107",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:25"
+          },
+          {
+            "label": "number",
+            "offset": 0,
+            "slot": "108",
+            "type": "t_uint256",
+            "contract": "QoistipSignV2",
+            "src": "contracts/QoistipSignV2.sol:7"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "c1d475dba1902a0735c8395496d968653aebc3ab85ded8da5c45bd6924e768e8": {
+      "address": "0x63fea6E447F120B8Faf85B53cdaD8348e645D80E",
+      "txHash": "0x8c0585fb6426033eeec5a6607d4c22e63dcbd163fc7f2eadd82c3d8c73e815fc",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC1967UpgradeUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:211"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "UUPSUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:107"
+          },
+          {
+            "label": "_minValue",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_uint256",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:14"
+          },
+          {
+            "label": "_donateFee",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_uint256",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:16"
+          },
+          {
+            "label": "_paused",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_bool",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:18"
+          },
+          {
+            "label": "_signerAdmin",
+            "offset": 1,
+            "slot": "103",
+            "type": "t_address",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:19"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_address",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:20"
+          },
+          {
+            "label": "_balanceETH",
+            "offset": 0,
+            "slot": "105",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:22"
+          },
+          {
+            "label": "_addressToTokenToBalance",
+            "offset": 0,
+            "slot": "106",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:23"
+          },
+          {
+            "label": "_tokenCustomer",
+            "offset": 0,
+            "slot": "107",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign.sol:25"
+          },
+          {
+            "label": "number",
+            "offset": 0,
+            "slot": "108",
+            "type": "t_uint256",
+            "contract": "QoistipSignV2",
+            "src": "contracts/QoistipSignV2.sol:7"
           }
         ],
         "types": {

@@ -13,7 +13,7 @@ switch (process.env.STATE) {
     provider = new ethers.providers.AlchemyProvider('rinkeby');
     break;
 
-  default:
+  case 'production':
     privateKey = process.env.WALLET_PRIVATE_KEY_LOCAL;
     provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/');
     break;

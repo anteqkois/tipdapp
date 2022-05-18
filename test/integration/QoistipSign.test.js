@@ -415,5 +415,9 @@ describe('QoistipSign', function () {
       
       await expect(qoistipSign.changeTokenOwner(customer1.address, customer1.address)).to.be.revertedWith('Only owner');
     });
+    it('QCan use another IERC20 interface', async () => {
+      // console.log(await qoistipSign.balanseOfSmartContractERC20(sand.address));
+      expect(await qoistipSign.balanseOfSmartContractERC20(sand.address));
+    });
   });
 });
