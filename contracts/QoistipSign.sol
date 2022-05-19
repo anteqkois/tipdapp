@@ -240,7 +240,6 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
             tokenToMint
         );
 
-        // send value ? can i get it from transation ?
         emit Donate(msg.sender, addressToDonate, address(0), msg.value);
     }
 
@@ -276,13 +275,8 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         uint256 _ethBalance = _balanceETH[msg.sender];
         require(_ethBalance != 0, "You have 0 ETH on balance");
         delete _balanceETH[msg.sender];
-        // _balanceETH[msg.sender] = 0;
         (bool sent, ) = address(msg.sender).call{value: _ethBalance}("");
         require(sent, "Failed to withdraw Ether");
         emit Withdraw(msg.sender, address(0), _ethBalance);
-    }
-
-    function version() external pure virtual returns (uint8) {
-        return 1;
     }
 }

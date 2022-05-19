@@ -1,5 +1,6 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+//SPDX-License-Identifier: MIT
+// CHANGE LICENSE !
+pragma solidity 0.8.13;
 
 import "./ICustomerToken.sol";
 
@@ -21,7 +22,6 @@ contract CustomerToken is ICustomerToken {
         _name = name_;
         _symbol = symbol_;
         _owner = msg.sender;
-        // _mint(msg.sender, 1_000 * 10**18);
     }
 
     function name() external view virtual override returns (string memory) {

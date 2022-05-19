@@ -11,10 +11,9 @@ const saveDataToFrontend = async (tokenAddr, contractName, txDeploy) => {
   }
 
   fs.writeFileSync(
-    contractsDir + `/${hre.network.name}-${contractName}-address.json`,
+    contractsDir + `/${contractName}-${hre.network.name}-txDeploy.json`,
     JSON.stringify(
       {
-        tokenAddress: tokenAddr,
         txDeploy,
       },
       undefined,
@@ -24,7 +23,10 @@ const saveDataToFrontend = async (tokenAddr, contractName, txDeploy) => {
 
   const TokenArtifact = artifacts.readArtifactSync(contractName);
 
-  fs.writeFileSync(contractsDir + `/${contractName}.json`, JSON.stringify(TokenArtifact, null, 2));
+  fs.writeFileSync(
+    contractsDir + `/${contractName}.json`,
+    JSON.stringify({ address: tokenAddr, abi: TokenArtifact.abi }, null, 2),
+  );
 };
 
 async function main() {

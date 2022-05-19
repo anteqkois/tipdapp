@@ -14,7 +14,7 @@ contract QoistipSignV2 is QoistipSign {
         return number;
     }
 
-    function version() external pure virtual override returns (uint8) {
+    function version() external pure virtual returns (uint8) {
         return 2;
     }
 }

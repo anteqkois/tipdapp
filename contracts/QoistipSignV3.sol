@@ -114,6 +114,7 @@ contract QoistipSignV3 is QoistipSignV2 {
 
     function balanseOfSmartContractERC20(address tokenAddress)
         external
+        view
         returns (uint256)
     {
         return IERC20(tokenAddress).balanceOf(address(this));

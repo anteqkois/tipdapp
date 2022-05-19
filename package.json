@@ -22,7 +22,7 @@
     "test-i": "STATE=dev-local npx hardhat test test/integration/*",
     "lint": "next lint",
     "release": "standard-version",
-    "flatten": "npx hardhat flatten ./contracts/QoistipSign.sol  > flattened.sol "
+    "flatten": "npx hardhat flatten ./contracts/QoistipSign.sol  > ./contracts/QoistipSignFlatten.sol "
   },
   "dependencies": {
     "@prisma/client": "^3.12.0",

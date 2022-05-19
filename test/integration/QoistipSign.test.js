@@ -302,8 +302,6 @@ describe('QoistipSign', function () {
 
   describe('Upgrade implementation to V2', async () => {
     it('Upgrade', async function () {
-      expect(await qoistipSign.version()).to.equal(1);
-
       const QoistipSignV2 = await ethers.getContractFactory('QoistipSignV2');
       qoistipSign = await upgrades.upgradeProxy(qoistipSign, QoistipSignV2, {
         call: { fn: 'setNumber', args: [10] },
@@ -412,7 +410,7 @@ describe('QoistipSign', function () {
     it('Qoistip smart contract can change owner of customer token', async () => {
       await qoistipSign.changeTokenOwner(customer1.address, customer1.address);
       expect(await customerToken1.owner()).to.be.equal(customer1.address);
-      
+
       await expect(qoistipSign.changeTokenOwner(customer1.address, customer1.address)).to.be.revertedWith('Only owner');
     });
     it('QCan use another IERC20 interface', async () => {
