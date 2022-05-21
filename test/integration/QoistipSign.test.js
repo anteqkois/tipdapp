@@ -300,6 +300,43 @@ describe('QoistipSign', function () {
     });
   });
 
+  describe('Withdraw Admin', async () => {
+    it('Others can not withdraw fees', async () => {
+      await expect(qoistipSign.connect(customer1).withdrawERC20Admin(sand.address)).to.be.revertedWith('Only owner');
+      await expect(qoistipSign.connect(customer1).withdrawManyERC20Admin([sand.address, shib.address])).to.be.revertedWith(
+        'Only owner',
+      );
+    });
+
+    it('One ERC20 Token', async function () {
+      const sandBalance = await qoistipSign.balanceERC20(qoistipSign.address, sand.address);
+      expect(sandBalance).to.equal(parseUnits('9'));
+
+      await qoistipSign.withdrawERC20Admin(sand.address);
+
+      expect(await qoistipSign.balanceERC20(qoistipSign.address, sand.address)).to.equal(0);
+      expect(await sand.balanceOf(owner.address)).to.equal(parseUnits('9'));
+    });
+    it('Many ERC20 Token', async function () {
+      expect(await qoistipSign.balanceERC20(qoistipSign.address, shib.address)).to.equal(parseUnits('300'));
+
+      await qoistipSign.withdrawManyERC20Admin([shib.address]);
+
+      expect(await qoistipSign.balanceERC20(qoistipSign.address, shib.address)).to.equal(0);
+      expect(await shib.balanceOf(owner.address)).to.equal(parseUnits('300'));
+    });
+    it('All ETH', async function () {
+      expect(await qoistipSign.balanceETH(qoistipSign.address)).to.equal(parseUnits('0.03'));
+
+      await expect(() => qoistipSign.withdrawETHAdmin()).to.changeEtherBalances(
+        [qoistipSign, owner],
+        [parseUnits('-0.03'), parseUnits('0.03')],
+      );
+
+      expect(await qoistipSign.balanceETH(qoistipSign.address)).to.equal(0);
+    });
+  });
+
   describe('Upgrade implementation to V2', async () => {
     it('Upgrade', async function () {
       const QoistipSignV2 = await ethers.getContractFactory('QoistipSignV2');

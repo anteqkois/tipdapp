@@ -5,7 +5,6 @@ pragma solidity 0.8.13;
 import "./CustomerToken.sol";
 import "./AggregatorV3Interface.sol";
 // import "hardhat/console.sol";
-import "./IERC20Minimal.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
@@ -79,12 +78,10 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
     }
 
     function changeOwner(address newOwner) external virtual onlyOwner {
-        // require(newOwner != address(0), "New owner is zero address");
         _owner = newOwner;
     }
 
     function changeSigner(address newSigner) external virtual onlyOwner {
-        // require(newSigner != address(0), "New owner is zero address");
         _signerAdmin = newSigner;
     }
 
@@ -155,7 +152,6 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         // donate worth check on backend
         //connect msg with onChain data with tx
 
-        // console.log('block.number ', block.number);
         require(
             timestampOffChain + 90 seconds > block.timestamp,
             "Signature time expired"
@@ -226,14 +222,18 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         (, int256 price, , , ) = ethUsdOracle.latestRoundData();
         //mul by 10**10 becouse price is return in 8 digit
         // Delete multiple ? Wheather this multiplation is necessary, maybe difference is to small ?
-        uint256 tokenToMint = (uint(price) * 10**10 * msg.value) / 1e18;
+        // uint256 tokenToMint = (uint(price) * 10**10 * msg.value) / 1e18;
+        uint256 tokenToMint = (uint(price) * msg.value) / 1e8;
 
         //set to hard number?
         require(tokenToMint >= _minValue, "Donate worth too little");
 
         uint256 fee = (msg.value * _donateFee) / 10000;
-        _balanceETH[address(this)] += fee;
-        _balanceETH[addressToDonate] += msg.value - fee;
+
+        unchecked {
+            _balanceETH[address(this)] += fee;
+            _balanceETH[addressToDonate] += msg.value - fee;
+        }
 
         CustomerToken(_tokenCustomer[addressToDonate]).mint(
             msg.sender,
@@ -279,4 +279,51 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         require(sent, "Failed to withdraw Ether");
         emit Withdraw(msg.sender, address(0), _ethBalance);
     }
+
+    function withdrawERC20Admin(address tokenAddress) public virtual onlyOwner {
+        uint256 _tokenBalance = _addressToTokenToBalance[address(this)][
+            tokenAddress
+        ];
+        delete _addressToTokenToBalance[address(this)][tokenAddress];
+        bool success = IERC20Minimal(tokenAddress).transfer(
+            msg.sender,
+            _tokenBalance
+        );
+        require(success, "Withdraw ERC20 not success");
+    }
+
+    function withdrawManyERC20Admin(address[] calldata tokenAddress)
+        external
+        virtual
+        onlyOwner
+    {
+        uint256 _iteration = tokenAddress.length;
+        for (uint256 _i = 0; _i != _iteration; ) {
+            withdrawERC20Admin(tokenAddress[_i]);
+            unchecked {
+                _i++;
+            }
+        }
+    }
+
+    function withdrawETHAdmin() external payable virtual onlyOwner {
+        uint256 _ethBalance = _balanceETH[address(this)];
+        delete _balanceETH[address(this)];
+        (bool sent, ) = address(msg.sender).call{value: _ethBalance}("");
+        require(sent, "Failed to withdraw Ether");
+    }
+}
+
+interface IERC20Minimal {
+    // function totalSupply() external view returns (uint256);
+    // function balanceOf(address account) external view returns (uint256);
+    function transfer(address to, uint256 amount) external returns (bool);
+
+    // function allowance(address owner, address spender) external view returns (uint256);
+    // function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) external returns (bool);
 }
