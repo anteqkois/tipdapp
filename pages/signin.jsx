@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import useUser from '../src/hooks/useUser';
 
-import Metamask from '../assets/metamask.svg';
+import Metamask from '../src/assets/metamask.svg';
 
 import Input from 'src/components/utils/Input';
 import Button from 'src/components/utils/Button';

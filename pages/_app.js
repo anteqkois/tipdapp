@@ -7,30 +7,27 @@ import Layout from '@/components/Layout.jsx';
 import { Mainnet, Hardhat, DAppProvider, useEtherBalance, useEthers, Config } from '@usedapp/core';
 import { getDefaultProvider } from 'ethers';
 
-let config;
+const config = {
+  readOnlyChainId: Hardhat.chainId,
+  readOnlyUrls: {
+    [Hardhat.chainId]: 'http://127.0.0.1:8545',
+  },
+};
 
-switch (process.env.STATE) {
-  case 'dev-local':
-    config = {
-      readOnlyChainId: Hardhat.chainId,
-      readOnlyUrls: {
-        [Hardhat.chainId]: 'http://127.0.0.1:8545',
-      },
-    };
-    break;
-  case 'production':
-    config = {
-      readOnlyChainId: Mainnet.chainId,
-      readOnlyUrls: {
-        [Mainnet.chainId]: getDefaultProvider('mainnet'),
-      },
-    };
-    break;
-}
+// const config = {
+//   readOnlyChainId: Mainnet.chainId,
+//   readOnlyUrls: {
+//     [Mainnet.chainId]: getDefaultProvider('mainnet'),
+//   },
+// };
 
 function MyApp({ Component, pageProps }) {
   if (Component.getLayout) {
-    return Component.getLayout(<Component {...pageProps} />);
+    return Component.getLayout(
+      <DAppProvider config={config}>
+        <Component {...pageProps} />
+      </DAppProvider>,
+    );
   }
 
   return (
