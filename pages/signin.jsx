@@ -1,13 +1,11 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import useUser from '../src/hooks/useUser';
+import useUser from '@/hooks/useUser';
+import Input from '@/components/utils/Input';
+import Button from '@/components/utils/Button';
+import { Toaster } from 'react-hot-toast';
 
 import Metamask from '../src/assets/metamask.svg';
-
-import Input from 'src/components/utils/Input';
-import Button from 'src/components/utils/Button';
-import { EthersProvider } from 'src/hooks/useEthers';
-import { Toaster } from 'react-hot-toast';
 
 const validate = (values) => {
   const errors = {};
@@ -97,9 +95,4 @@ const signin = () => {
 
 export default signin;
 
-signin.getLayout = (page) => (
-  <EthersProvider>
-    <Toaster position="top-center" reverseOrder={false} />
-    {page}
-  </EthersProvider>
-);
+signin.getLayout = (page) => <>{page}</>;

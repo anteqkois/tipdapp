@@ -5,15 +5,14 @@ import { useRouter } from 'next/router';
 import { useEthers } from '@usedapp/core';
 
 const useUser = () => {
-  const { activateBrowserWallet, deactivate, active, account, library } = useEthers();
+  const { activateBrowserWallet, deactivate, account, library } = useEthers();
   const router = useRouter();
 
-  const login = async () => {
+  const fetchNonceAndSign = async () => {
     try {
-      console.log(active);
       console.log(account);
 
-      if (!active) await activateBrowserWallet();
+      // if (!account) await activateBrowserWallet();
 
       const dataLogin = await axios('/api/auth/login', {
         method: 'POST',
@@ -39,6 +38,10 @@ const useUser = () => {
     }
   };
 
+  const login = async () => {
+    if (!account) await activateBrowserWallet();
+  };
+
   const logout = async () => {
     try {
       const dataLogout = await axios('/api/auth/logout');
@@ -52,7 +55,7 @@ const useUser = () => {
 
   const signIn = async ({ firstName, lastName, email, nick }) => {
     try {
-      if (!active) await activateBrowserWallet();
+      if (!account) await activateBrowserWallet();
 
       const dataSignIn = await axios('/api/auth/signin', {
         method: 'POST',

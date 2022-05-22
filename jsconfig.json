@@ -4,6 +4,7 @@
   "paths": {
    "@/prismaClient": ["prisma/client.js"],
    "@/components/*": ["src/components/*"],
+   "@/hooks/*": ["src/hooks/*"],
   }
  }
 }

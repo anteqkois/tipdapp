@@ -14,10 +14,10 @@ const Button = ({ children, onClick, className, type, ...props }) => {
             result += `px-4 py-3 bg-gradient-to-r from-pink-800 via-fuchsia-800 to-violet-800 hover:bg-purple-700 hover:from-pink-900 hover:via-fuchsia-900 hover:to-violet-900`;
             break;
           case 'minimalist':
-            result += `block text-fuchsia-100 underline decoration-2 decoration-fuchsia-500 lowercase`;
+            result += `block text-primary-100 underline decoration-2 decoration-primary-500 lowercase`;
             break;
           default:
-            result += `px-4 py-3 text-fuchsia-200 bg-gradient-to-r from-fuchsia-900/80 via-fuchsia-800/80 to-fuchsia-800/90 hover:text-fuchsia-300 hover:from-fuchsia-900/90 hover:via-fuchsia-800/90 hover:to-fuchsia-800`;
+            result += `px-4 py-3 text-primary-200 bg-gradient-to-r from-primary-900/80 via-primary-800/80 to-primary-800/90 hover:text-primary-300 hover:from-primary-900/90 hover:via-primary-800/90 hover:to-primary-800`;
             break;
         }
         return result;

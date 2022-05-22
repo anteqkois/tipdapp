@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from './Navbar/index';
 
-const Layout = ({ children }) => {
+const UserLayout = ({ children }) => {
   return (
     <>
       <Navbar />
@@ -10,4 +10,4 @@ const Layout = ({ children }) => {
   );
 };
 
-export default Layout;
+export default UserLayout;

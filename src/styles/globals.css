@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer components {
+/* 
+  :root{
+    --color-primary: 255, 255, 255;
+  } */
 
   .flex-center {
     @apply flex justify-center items-center;

@@ -4,8 +4,6 @@ import { useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 
-import { login } from '../src/redux/userSlice';
-import { EthersProvider } from 'src/hooks/useEthers';
 import { Toaster } from 'react-hot-toast';
 
 export default function Home() {
@@ -25,12 +23,3 @@ export default function Home() {
     </div>
   );
 }
-
-Home.getLayout = (page) => (
-  // <Provider store={store}>
-    <EthersProvider>
-      <Toaster position="top-center" reverseOrder={false} />
-      {page}
-    </EthersProvider>
-  // </Provider>
-);
