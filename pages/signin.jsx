@@ -40,9 +40,10 @@ const signin = () => {
     },
   });
   return (
-    <div className="position-center flex flex-col w-full p-3 rounded-lg border-2 border-gray-300 md:max-w-md md:p-5">
+    <div className="position-center flex flex-col w-full p-3 rounded-lg border-2 bg-neutral-50 shadow-xl shadow-neutral-200 md:max-w-md md:p-5">
       <h1 className="text-4xl text-center flex justify-center items-center gap-3">
-        Sign in <Metamask className="text-7xl" />
+        Sign in
+        {/* <Metamask className="text-7xl" /> */}
       </h1>
       <form onSubmit={formik.handleSubmit}>
         <Input
@@ -85,7 +86,7 @@ const signin = () => {
           value={formik.values.nick}
           error={formik.errors.nick}
         />
-        <Button type="submit" className="w-full mt-3">
+        <Button type="ghost" className="w-full mt-3">
           Sign in
         </Button>
       </form>

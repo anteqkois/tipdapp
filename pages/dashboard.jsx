@@ -8,8 +8,8 @@ const dashboard = ({ user }) => {
 
 export default dashboard;
 
-export const getServerSideProps = requireAuthPage(async (ctx) => {
-  return {
-    props: { user: ctx.req.user },
-  };
-});
+// export const getServerSideProps = requireAuthPage(async (ctx) => {
+//   return {
+//     props: { user: ctx.req.user },
+//   };
+// });

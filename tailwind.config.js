@@ -13,13 +13,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: colors.fuchsia,
-        // primary: withOpacity('--color-primary'),
-      },
-      textColor: {
-        // primary: withOpacity('--color-primary'),
-      },
-      backgroundColor: {
+        primary: colors.purple,
         // primary: withOpacity('--color-primary'),
       },
     },
