@@ -86,7 +86,7 @@ const signin = () => {
           value={formik.values.nick}
           error={formik.errors.nick}
         />
-        <Button type="ghost" className="w-full mt-3">
+        <Button className="w-full mt-3">
           Sign in
         </Button>
       </form>

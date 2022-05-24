@@ -14,6 +14,10 @@ module.exports = {
     extend: {
       colors: {
         primary: colors.purple,
+        secondary: colors.teal,
+        neutral: {
+          150: '#eeeeee',
+        },
         // primary: withOpacity('--color-primary'),
       },
     },
