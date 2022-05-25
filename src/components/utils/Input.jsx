@@ -14,10 +14,10 @@ const Input = ({ type, id, name, label, placeholder, onChange, value, error }) =
         value={value}
         placeholder={placeholder}
         className={`block p-2 w-full text-neutral-900 bg-gray-50 rounded-lg border ${
-          error ? 'border-red-600' : 'border-neutral-300'
+          error ? 'border-alert-600' : 'border-neutral-300'
         } shadow-sm focus:outline-none focus:border-primary-800 focus:ring focus:ring-primary-400 focus:ring-opacity-50`}
       ></input>
-      <p className="text-red-600 min-h-[24px]">{error && `* ${error}`}</p>
+      <p className="text-alert-600 min-h-[24px]">{error && `* ${error}`}</p>
     </div>
   );
 };
