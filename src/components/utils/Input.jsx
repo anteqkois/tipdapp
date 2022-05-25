@@ -3,7 +3,7 @@ import React from 'react';
 const Input = ({ type, id, name, label, placeholder, onChange, value, error }) => {
   return (
     <div className="my-3">
-      <label htmlFor={label} className="block mb-2 text-sm font-medium text-neutral-900">
+      <label htmlFor={label} className="block mb-2 text-sm font-medium text-neutral-800 first-letter:uppercase">
         {label}
       </label>
       <input
@@ -15,7 +15,7 @@ const Input = ({ type, id, name, label, placeholder, onChange, value, error }) =
         placeholder={placeholder}
         className={`block p-2 w-full text-neutral-900 bg-gray-50 rounded-lg border ${
           error ? 'border-red-600' : 'border-neutral-300'
-        } outline-2 outline-offset-2 focus:outline-primary-300 focus:border-primary-800`}
+        } shadow-sm focus:outline-none focus:border-primary-800 focus:ring focus:ring-primary-400 focus:ring-opacity-50`}
       ></input>
       <p className="text-red-600 min-h-[24px]">{error && `* ${error}`}</p>
     </div>

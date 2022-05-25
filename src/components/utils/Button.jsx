@@ -8,16 +8,22 @@ const Button = ({ children, onClick, className, type, ...props }) => {
         let result = `${className} rounded-lg uppercase font-semibold `;
         switch (type) {
           case 'ghost':
-            result += `mx-1 px-4 py-1.5 outline outline-neutral-800 outline-3 text-neutral-800 hover:bg-neutral-150`;
+            result += `px-3.5 py-1.5 border-2 border-neutral-800 outline-2 text-neutral-800 hover:bg-neutral-150`;
             break;
           case 'special':
-            result += `px-4 py-3 text-neutral-100 bg-gradient-to-r from-primary-700  via-primary-700 to-secondary-700 hover:from-primary-800 hover:via-primary-800 hover:to-secondary-800 transition-all duration-1000 ease-in-out`;
+            result += `px-4 py-2 text-neutral-100 bg-gradient-to-tr from-primary-700  via-primary-700 to-secondary-700 hover:from-primary-800 hover:via-primary-800 hover:to-secondary-800 transition-all duration-1000 ease-in-out`;
             break;
           case 'minimalist':
-            result += `block text-neutral-900 underline decoration-2 decoration-primary-500 lowercase`;
+            result += `block px-4 py-2 text-neutral-900 underline decoration-2 decoration-primary-500 lowercase hover:bg-neutral-150`;
+            break;
+          case 'success':
+            result += `px-4 py-2 text-primary-100 bg-gradient-to-tr from-success-600 via-success-600 to-success-700 hover:text-success-200 hover:from-success-700 hover:via-success-700 hover:to-success-800`;
+            break;
+          case 'alert':
+            result += `px-4 py-2 text-primary-100 bg-gradient-to-tr from-alert-600 via-alert-600 to-alert-700 hover:text-alert-200 hover:from-alert-700 hover:via-alert-700 hover:to-alert-800`;
             break;
           default:
-            result += `px-4 py-3 text-primary-100 bg-gradient-to-r from-primary-900/80 via-primary-800/90 to-primary-800/95 hover:text-primary-200 hover:from-primary-900 hover:via-primary-800 hover:to-primary-800`;
+            result += `px-4 py-2 text-primary-100 bg-gradient-to-tr from-primary-900/80 via-primary-800/90 to-primary-800/95 hover:text-primary-200 hover:from-primary-900 hover:via-primary-800 hover:to-primary-800`;
             break;
         }
         return result;
