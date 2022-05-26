@@ -12,42 +12,42 @@ datasource db {
 }
 
 model User {
-  id               String          @id @default(cuid())
-  cryptocurrencyId String?         @unique
-  widgetId         String?         @unique
-  walletAddress    String          @unique
-  email            String          @unique
-  firstName        String
-  lastName         String
-  nick             String          @unique
-  nonce            String?
-  linkToDonate     String?
-  linkToWidget     String?
+  id            String         @id @default(cuid())
+  walletAddress String         @unique
+  email         String         @unique
+  firstName     String
+  lastName      String
+  nick          String         @unique
+  nonce         String?
+  linkToDonate  String?
+  createdAt     DateTime       @default(now())
+  updateAt      DateTime       @updatedAt
+  token         Cryptocurrency @relation(fields: [tokenId], references: [id])
+  tokenId       String         @unique
+  widget        Widget         @relation(fields: [widgetId], references: [id])
+  widgetId      String         @unique
   //If it necessary (read speed?)
+  // linkToWidget  String?
   // allDonateCount String
   // allDonateValue String
   // allDonateWithdraw String
-  createdAt        DateTime        @default(now())
-  updateAt         DateTime        @updatedAt
-  Token            Cryptocurrency? @relation(fields: [cryptocurrencyId], references: [id])
-  widget           Widget?         @relation(fields: [widgetId], references: [id])
-  tips             Tip[]
+  Tip           Tip[]
 }
 
 model Tip {
-  id               String         @id @default(cuid()) // useTxHash ?
-  user             User           @relation(fields: [userId], references: [id])
-  userId           String
-  cryptocurrency   Cryptocurrency @relation(fields: [cryptocurrencyId], references: [id])
-  cryptocurrencyId String
-  tipper           Tipper         @relation(fields: [tipperId], references: [id])
-  tipperId         String
+  txHash           String         @id @default(cuid()) // useTxHash ?
   tokenAmount      Int
   value            Int
   message          String
   showed           Boolean
   tx               Json
   date             DateTime       @default(now())
+  user             User           @relation(fields: [userId], references: [id])
+  userId           String
+  cryptocurrency   Cryptocurrency @relation(fields: [cryptocurrencyId], references: [id])
+  cryptocurrencyId String
+  tipper           Tipper         @relation(fields: [tipperId], references: [id])
+  tipperId         String
 }
 
 model Cryptocurrency {
@@ -58,21 +58,23 @@ model Cryptocurrency {
   chainId Int
   // img
   // price Int?
-  Tip     Tip[]
   User    User?
+  Tip     Tip[]
 }
 
 model Tipper {
-  id           String @id @default(cuid())
-  address      String @unique
-  nick         String @unique
-  allTipsValue Int
-  Tip          Tip[]
+  id            String  @id @default(cuid())
+  walletAddress String  @unique
+  nick          String  @unique
+  nonce         String?
+  allTipsValue  Int
+  Tip           Tip[]
 }
 
 model Widget {
-  id String @id @default(cuid())
-  // song 
+  id              String  @id @default(cuid())
+  link            String
+  // song
   // background
   // nickColor
   // messageColor
@@ -80,9 +82,8 @@ model Widget {
   // showTime
   filterProfanity Boolean
   // filterWord WordList
-  voiceMessage Boolean
-
-  User User?
+  voiceMessage    Boolean
+  User            User?
 }
 
 //sudo -u postgres psql

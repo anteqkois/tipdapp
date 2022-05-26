@@ -91,7 +91,7 @@ describe('QoistipSign', function () {
 
       const { signature, signatureData } = await packDataToSign('100', 'SAND', customer1.address, customerToken1.address);
 
-      await qoistipSign
+      const tx = await qoistipSign
         .connect(sandHodler)
         .donateERC20(
           signature,
@@ -104,6 +104,8 @@ describe('QoistipSign', function () {
           signatureData.tokenAddress,
           signatureData.tokenCustomerAddress,
         );
+
+        console.log(tx);
     });
     it('Check $SAND balance after donate', async function () {
       expect(await qoistipSign.balanceERC20(customer1.address, sand.address)).to.equal(parseUnits('97'));
@@ -218,10 +220,14 @@ describe('QoistipSign', function () {
       expect(await qoistipSign.balanceETH(customer1.address)).to.be.equal(0);
     });
     it('Send donate in $ETH and if check balances were changed', async function () {
-      await expect(() => qoistipSign.donateETH(customer1.address, { value: parseUnits('1') })).to.changeEtherBalances(
-        [owner, qoistipSign],
-        [parseUnits('-1'), parseUnits('1')],
-      );
+      const tx = await qoistipSign.donateETH(customer1.address, { value: parseUnits('1') })
+      console.log(tx);
+      const txwait = tx.wait()
+      console.log(txwait);
+      // await expect(() => qoistipSign.donateETH(customer1.address, { value: parseUnits('1') })).to.changeEtherBalances(
+      //   [owner, qoistipSign],
+      //   [parseUnits('-1'), parseUnits('1')],
+      // );
     });
     it('Check $ETH balance after donate', async function () {
       expect(await qoistipSign.balanceETH(customer1.address)).to.be.equal(parseUnits('0.97'));
