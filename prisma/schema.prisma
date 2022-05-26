@@ -12,15 +12,77 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  walletAddress String   @unique
-  email         String   @unique
-  firstName     String
-  lastName      String
-  nick          String
-  nonce         String
-  createdAt     DateTime @default(now())
-  updateAt      DateTime @updatedAt
+  id               String          @id @default(cuid())
+  cryptocurrencyId String?         @unique
+  widgetId         String?         @unique
+  walletAddress    String          @unique
+  email            String          @unique
+  firstName        String
+  lastName         String
+  nick             String          @unique
+  nonce            String?
+  linkToDonate     String?
+  linkToWidget     String?
+  //If it necessary (read speed?)
+  // allDonateCount String
+  // allDonateValue String
+  // allDonateWithdraw String
+  createdAt        DateTime        @default(now())
+  updateAt         DateTime        @updatedAt
+  Token            Cryptocurrency? @relation(fields: [cryptocurrencyId], references: [id])
+  widget           Widget?         @relation(fields: [widgetId], references: [id])
+  tips             Tip[]
+}
+
+model Tip {
+  id               String         @id @default(cuid()) // useTxHash ?
+  user             User           @relation(fields: [userId], references: [id])
+  userId           String
+  cryptocurrency   Cryptocurrency @relation(fields: [cryptocurrencyId], references: [id])
+  cryptocurrencyId String
+  tipper           Tipper         @relation(fields: [tipperId], references: [id])
+  tipperId         String
+  tokenAmount      Int
+  value            Int
+  message          String
+  showed           Boolean
+  tx               Json
+  date             DateTime       @default(now())
+}
+
+model Cryptocurrency {
+  id      String @id @default(cuid())
+  address String @unique
+  symbol  String @unique
+  name    String @unique
+  chainId Int
+  // img
+  // price Int?
+  Tip     Tip[]
+  User    User?
+}
+
+model Tipper {
+  id           String @id @default(cuid())
+  address      String @unique
+  nick         String @unique
+  allTipsValue Int
+  Tip          Tip[]
+}
+
+model Widget {
+  id String @id @default(cuid())
+  // song 
+  // background
+  // nickColor
+  // messageColor
+  // valueColor
+  // showTime
+  filterProfanity Boolean
+  // filterWord WordList
+  voiceMessage Boolean
+
+  User User?
 }
 
 //sudo -u postgres psql
