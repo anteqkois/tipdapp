@@ -12,59 +12,58 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  walletAddress String         @unique
-  email         String         @unique
-  firstName     String
-  lastName      String
-  nick          String         @unique
-  nonce         String?
-  linkToDonate  String?
-  createdAt     DateTime       @default(now())
-  updateAt      DateTime       @updatedAt
-  token         Cryptocurrency @relation(fields: [tokenId], references: [id])
-  tokenId       String         @unique
-  widget        Widget         @relation(fields: [widgetId], references: [id])
-  widgetId      String         @unique
-  //If it necessary (read speed?)
-  // linkToWidget  String?
-  // allDonateCount String
-  // allDonateValue String
-  // allDonateWithdraw String
-  Tip           Tip[]
+  // id                String         @id @default(cuid())
+  walletAddress     String         @id @unique
+  email             String         @unique
+  firstName         String
+  lastName          String
+  nick              String         @unique
+  nonce             String?
+  linkToDonate      String?
+  // avatar            BLOB? img
+  createdAt         DateTime       @default(now())
+  updateAt          DateTime       @updatedAt
+  token             Cryptocurrency? @relation(fields: [tokenAddress], references: [address])
+  tokenAddress      String?         @unique
+  widget            Widget?         @relation(fields: [widgetId], references: [id])
+  widgetId          String?        @unique
+  //If it necessary below fields (read speed?)
+  allDonateCount    Int
+  allDonateValue    Int
+  allDonateWithdraw Int
+  Tip               Tip[]
+  Withdraw          Withdraw[]
 }
 
 model Tip {
-  txHash           String         @id @default(cuid()) // useTxHash ?
-  tokenAmount      Int
-  value            Int
-  message          String
-  showed           Boolean
-  tx               Json
-  date             DateTime       @default(now())
-  user             User           @relation(fields: [userId], references: [id])
-  userId           String
-  cryptocurrency   Cryptocurrency @relation(fields: [cryptocurrencyId], references: [id])
-  cryptocurrencyId String
-  tipper           Tipper         @relation(fields: [tipperId], references: [id])
-  tipperId         String
+  txHash                String         @id
+  tokenAmount           Int
+  value                 Int
+  message               String
+  showed                Boolean
+  date                  DateTime       @default(now())
+  user                  User           @relation(fields: [userWalletAddress], references: [walletAddress])
+  userWalletAddress     String
+  cryptocurrency        Cryptocurrency @relation(fields: [cryptocurrencyAddress], references: [address])
+  cryptocurrencyAddress String
+  tipper                Tipper         @relation(fields: [tipperWalletAddress], references: [walletAddress])
+  tipperWalletAddress   String
 }
 
 model Cryptocurrency {
-  id      String @id @default(cuid())
-  address String @unique
-  symbol  String @unique
-  name    String @unique
-  chainId Int
-  // img
-  // price Int?
-  User    User?
-  Tip     Tip[]
+  address     String     @id @unique
+  symbol      String     @unique
+  name        String     @unique
+  chainId     Int
+  imgPath     String
+  latestPrice Int
+  User        User?
+  Tip         Tip[]
+  Withdraw    Withdraw[]
 }
 
 model Tipper {
-  id            String  @id @default(cuid())
-  walletAddress String  @unique
+  walletAddress String  @id @unique
   nick          String  @unique
   nonce         String?
   allTipsValue  Int
@@ -74,16 +73,27 @@ model Tipper {
 model Widget {
   id              String  @id @default(cuid())
   link            String
-  // song
-  // background
-  // nickColor
-  // messageColor
-  // valueColor
-  // showTime
+  // song BLOB?
+  // background BLOB later ?
+  nickColor       String
+  messageColor    String
+  valueColor      String
+  showTime        Int
   filterProfanity Boolean
   // filterWord WordList
   voiceMessage    Boolean
   User            User?
+}
+
+model Withdraw {
+  id                    String         @id @default(cuid())
+  user                  User           @relation(fields: [userWalletAddress], references: [walletAddress])
+  userWalletAddress     String
+  amount                Int
+  cryptocurrency        Cryptocurrency @relation(fields: [cryptocurrencyAddress], references: [address])
+  cryptocurrencyAddress String
+  date                  DateTime       @default(now())
+  txHash                String         @unique
 }
 
 //sudo -u postgres psql
