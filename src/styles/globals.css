@@ -18,6 +18,10 @@
   * {
     @apply box-border;
   }
+
+  h6 {
+    @apply text-xl font-semibold;
+  }
 }
 
 @layer components {

@@ -5,7 +5,7 @@ import Input from '@/components/utils/Input';
 import Button from '@/components/utils/Button';
 import { Toaster } from 'react-hot-toast';
 
-import Metamask from '../src/assets/metamask.svg';
+// import Metamask from '../src/assets/metamask.svg';
 
 const validate = (values) => {
   const errors = {};

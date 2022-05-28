@@ -10,27 +10,27 @@ datasource db {
   url      = env("DATABASE_URL")
   // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
-
+// npm i --save-dev prisma@latest                       │
+// │    npm i @prisma/client@latest
 model User {
-  // id                String         @id @default(cuid())
-  walletAddress     String         @id @unique
-  email             String         @unique
+  walletAddress     String          @id @unique
+  email             String          @unique
   firstName         String
   lastName          String
-  nick              String         @unique
+  nick              String          @unique
   nonce             String?
   linkToDonate      String?
-  // avatar            BLOB? img
-  createdAt         DateTime       @default(now())
-  updateAt          DateTime       @updatedAt
+  avatarPath        String?
+  createdAt         DateTime        @default(now())
+  updateAt          DateTime        @updatedAt
   token             Cryptocurrency? @relation(fields: [tokenAddress], references: [address])
   tokenAddress      String?         @unique
   widget            Widget?         @relation(fields: [widgetId], references: [id])
-  widgetId          String?        @unique
+  widgetId          String?         @unique
   //If it necessary below fields (read speed?)
-  allDonateCount    Int
-  allDonateValue    Int
-  allDonateWithdraw Int
+  allDonateCount    Int             @default(0)
+  allDonateValue    Int             @default(0)
+  allDonateWithdraw Int             @default(0)
   Tip               Tip[]
   Withdraw          Withdraw[]
 }
@@ -73,8 +73,8 @@ model Tipper {
 model Widget {
   id              String  @id @default(cuid())
   link            String
-  // song BLOB?
-  // background BLOB later ?
+  songPath        String
+  backgroundPath  String
   nickColor       String
   messageColor    String
   valueColor      String

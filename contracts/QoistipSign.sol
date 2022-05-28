@@ -9,12 +9,12 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 contract QoistipSign is Initializable, UUPSUpgradeable {
-    //Use mapping to handle many address to handle many donate in time
     uint256 internal _minValue;
     // 0100=>1%  0010=>0,1%  0001=>0,01%  0300=>3%  0030=>0,3%
     uint256 internal _donateFee;
 
     bool internal _paused;
+    //Use mapping to handle many address to handle many donate in time
     address internal _signerAdmin;
     address internal _owner;
 
@@ -51,14 +51,12 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
 
     function initialize(address adminSigner) external initializer {
         _owner = msg.sender;
-        // __Ownable_init();
         _donateFee = 300;
         // 0.1$
         _minValue = 1e17;
         _signerAdmin = adminSigner;
     }
 
-    // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
     function _authorizeUpgrade(address) internal override onlyOwner {}
 
     function paused() external view virtual returns (bool) {
@@ -220,9 +218,6 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         notPaused
     {
         (, int256 price, , , ) = ethUsdOracle.latestRoundData();
-        //mul by 10**10 becouse price is return in 8 digit
-        // Delete multiple ? Wheather this multiplation is necessary, maybe difference is to small ?
-        // uint256 tokenToMint = (uint(price) * 10**10 * msg.value) / 1e18;
         uint256 tokenToMint = (uint(price) * msg.value) / 1e8;
 
         //set to hard number?

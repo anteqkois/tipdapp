@@ -5,7 +5,7 @@ const UserLayout = ({ children }) => {
   return (
     <>
       <Navbar />
-      <main className="">{children}</main>;
+      <main className="mt-12 lg:mt-24">{children}</main>
     </>
   );
 };

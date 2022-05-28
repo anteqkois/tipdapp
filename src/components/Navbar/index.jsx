@@ -18,11 +18,11 @@ const Navbar = () => {
     <>
       <div className="fixed top-0 left-0 w-full h-12 bg-neutral-50 px-2 grid grid-cols-[50px_auto_45px] gap-5 items-center z-50">
         <div className="flex-center">LOGO</div>
-        <p className="flex-center text-lg underline decoration-2 decoration-primary-700">anteqkois</p>
+        <p className="flex-center text-lg underline decoration-2 decoration-primary-600">anteqkois</p>
         <Hamburger isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
       <nav
-        className={`fixed top-12 -left-full p-2 w-full bg-neutral-50 duration-300 ${
+        className={`fixed top-12 -left-full p-2 w-full h-full bg-neutral-50 duration-300 shadow-md ${
           isOpen ? 'translate-x-full' : 'translate-y-0'
         }`}
       >
@@ -113,14 +113,14 @@ const Navbar = () => {
       </nav>
     </>
   ) : (
-    <div className="fixed top-0 left-0 w-full h-22 bg-neutral-50 px-2 grid grid-cols-[50px_auto_100px] gap-5 place-items-center z-50">
+    <div className="fixed top-0 left-0 w-full h-24 bg-neutral-50 shadow-md px-2 grid grid-cols-[50px_auto_100px] gap-5 place-items-center z-50">
       <div className="flex-center">LOGO</div>
       <nav>
         <ul className="flex w-fit rounded-xl m-3 p-1 bg-neutral-150">
           <li>
             <Navlink
               href="/dashboard"
-              classActive="bg-primary-700 hover:bg-primary-700"
+              classActive="bg-primary-600 hover:bg-primary-600"
               className="flex p-4 rounded-xl hover:cursor-pointer hover:bg-neutral-200"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -131,7 +131,7 @@ const Navbar = () => {
           <li>
             <Navlink
               href="/tips"
-              classActive="bg-primary-700 hover:bg-primary-700"
+              classActive="bg-primary-600 hover:bg-primary-600"
               className="flex p-4 rounded-xl hover:cursor-pointer hover:bg-neutral-200"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -142,7 +142,7 @@ const Navbar = () => {
           <li>
             <Navlink
               href="/creator"
-              classActive="bg-primary-700 hover:bg-primary-700"
+              classActive="bg-primary-600 hover:bg-primary-600"
               className="flex p-4 rounded-xl hover:cursor-pointer hover:bg-neutral-200"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -153,7 +153,7 @@ const Navbar = () => {
           <li>
             <Navlink
               href="/token"
-              classActive="bg-primary-700 hover:bg-primary-700"
+              classActive="bg-primary-600 hover:bg-primary-600"
               className="flex p-4 rounded-xl hover:cursor-pointer hover:bg-neutral-200"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -164,7 +164,7 @@ const Navbar = () => {
           <li>
             <Navlink
               href="/balance"
-              classActive="bg-primary-700 hover:bg-primary-700"
+              classActive="bg-primary-600 hover:bg-primary-600"
               className="flex p-4 rounded-xl hover:cursor-pointer hover:bg-neutral-200"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -175,7 +175,7 @@ const Navbar = () => {
           <li>
             <Navlink
               href="/settings"
-              classActive="bg-primary-700 hover:bg-primary-700"
+              classActive="bg-primary-600 hover:bg-primary-600"
               className="flex p-4 rounded-xl hover:cursor-pointer hover:bg-neutral-200"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
