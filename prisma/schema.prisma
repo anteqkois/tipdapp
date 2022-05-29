@@ -10,27 +10,29 @@ datasource db {
   url      = env("DATABASE_URL")
   // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
+
 // npm i --save-dev prisma@latest                       │
 // │    npm i @prisma/client@latest
 model User {
-  walletAddress     String          @id @unique
-  email             String          @unique
+  walletAddress     String           @id @unique
+  email             String           @unique
   firstName         String
   lastName          String
-  nick              String          @unique
+  nick              String           @unique
   nonce             String?
   linkToDonate      String?
   avatarPath        String?
-  createdAt         DateTime        @default(now())
-  updateAt          DateTime        @updatedAt
-  token             Cryptocurrency? @relation(fields: [tokenAddress], references: [address])
-  tokenAddress      String?         @unique
-  widget            Widget?         @relation(fields: [widgetId], references: [id])
-  widgetId          String?         @unique
+  createdAt         DateTime         @default(now())
+  updateAt          DateTime         @updatedAt
+  token             Token?           @relation(fields: [tokenAddress], references: [address])
+  tokenAddress      String?
+  widget            Widget?          @relation(fields: [widgetId], references: [id])
+  widgetId          String?          @unique
   //If it necessary below fields (read speed?)
-  allDonateCount    Int             @default(0)
-  allDonateValue    Int             @default(0)
-  allDonateWithdraw Int             @default(0)
+  allDonateCount    Int              @default(0)
+  allDonateValue    Int              @default(0)
+  allDonateWithdraw Int              @default(0)
+  Cryptocurrency    Cryptocurrency[]
   Tip               Tip[]
   Withdraw          Withdraw[]
 }
@@ -51,15 +53,25 @@ model Tip {
 }
 
 model Cryptocurrency {
-  address     String     @id @unique
-  symbol      String     @unique
-  name        String     @unique
-  chainId     Int
-  imgPath     String
-  latestPrice Int
-  User        User?
-  Tip         Tip[]
-  Withdraw    Withdraw[]
+  address           String     @id @unique
+  symbol            String     @unique
+  name              String     @unique
+  chainId           Int
+  imgPath           String
+  latestPrice       Int
+  Tip               Tip[]
+  Withdraw          Withdraw[]
+  User              User?      @relation(fields: [userWalletAddress], references: [walletAddress])
+  userWalletAddress String?
+}
+
+model Token {
+  address String @id @unique
+  symbol  String @unique
+  name    String @unique
+  chainId Int
+
+  User User[]
 }
 
 model Tipper {

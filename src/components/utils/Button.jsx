@@ -14,7 +14,7 @@ const Button = ({ children, onClick, className, type, ...props }) => {
             result += `px-4 py-2 text-neutral-100 bg-gradient-to-tr from-primary-600  via-primary-600 to-secondary-700 hover:from-primary-700 hover:via-primary-700 hover:to-secondary-800 transition-all duration-1000 ease-in-out`;
             break;
           case 'minimalist':
-            result += `block px-4 py-2 text-neutral-900 underline decoration-2 decoration-primary-600 lowercase hover:bg-neutral-150`;
+            result += `block text-neutral-900 underline decoration-2 decoration-primary-600 lowercase`;
             break;
           case 'success':
             result += `px-4 py-2 text-primary-100 bg-gradient-to-tr from-success-600 via-success-600 to-success-700 hover:text-success-200 hover:from-success-700 hover:via-success-700 hover:to-success-800`;
