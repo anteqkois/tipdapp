@@ -1,6 +1,9 @@
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { selectTipsIds } from 'src/redux/tipSlice';
+import { useGetTipsByUserWalletQuery } from 'src/redux/tipSlice';
 import Tip from '@/components/tip/tip';
 import Card from '@/components/utils/Card';
-import React from 'react';
 
 const tipsData = [
   {
@@ -49,6 +52,16 @@ const tipsData = [
 ];
 
 const tips = () => {
+  const { isLoading, isSuccess, isError, error } = useGetTipsByUserWalletQuery('0x4302c27398994a37d1cae83e5b49e40de9e3658d');
+
+  const orderTips = useSelector(selectTipsIds);
+
+  console.log('isLoading', isLoading);
+  // console.log('isSuccess', isLoading);
+  // console.log('isError', isError);
+  // console.log('error', error);
+  console.log('orderTips', orderTips);
+
   return (
     <section>
       <Card {...tipsData} className="flex flex-col gap-6">

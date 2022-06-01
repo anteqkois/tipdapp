@@ -1,25 +1,23 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "User" (
+    "walletAddress" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+    "nick" TEXT NOT NULL,
+    "nonce" TEXT,
+    "linkToDonate" TEXT,
+    "avatarPath" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" TIMESTAMP(3) NOT NULL,
+    "tokenAddress" TEXT,
+    "widgetId" TEXT,
+    "allDonateCount" INTEGER NOT NULL DEFAULT 0,
+    "allDonateValue" INTEGER NOT NULL DEFAULT 0,
+    "allDonateWithdraw" INTEGER NOT NULL DEFAULT 0,
 
-  - The primary key for the `User` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - You are about to drop the column `id` on the `User` table. All the data in the column will be lost.
-  - A unique constraint covering the columns `[nick]` on the table `User` will be added. If there are existing duplicate values, this will fail.
-  - A unique constraint covering the columns `[tokenAddress]` on the table `User` will be added. If there are existing duplicate values, this will fail.
-  - A unique constraint covering the columns `[widgetId]` on the table `User` will be added. If there are existing duplicate values, this will fail.
-
-*/
--- AlterTable
-ALTER TABLE "User" DROP CONSTRAINT "User_pkey",
-DROP COLUMN "id",
-ADD COLUMN     "allDonateCount" INTEGER NOT NULL DEFAULT 0,
-ADD COLUMN     "allDonateValue" INTEGER NOT NULL DEFAULT 0,
-ADD COLUMN     "allDonateWithdraw" INTEGER NOT NULL DEFAULT 0,
-ADD COLUMN     "avatarPath" TEXT,
-ADD COLUMN     "linkToDonate" TEXT,
-ADD COLUMN     "tokenAddress" TEXT,
-ADD COLUMN     "widgetId" TEXT,
-ALTER COLUMN "nonce" DROP NOT NULL,
-ADD CONSTRAINT "User_pkey" PRIMARY KEY ("walletAddress");
+    CONSTRAINT "User_pkey" PRIMARY KEY ("walletAddress")
+);
 
 -- CreateTable
 CREATE TABLE "Tip" (
@@ -27,7 +25,7 @@ CREATE TABLE "Tip" (
     "tokenAmount" INTEGER NOT NULL,
     "value" INTEGER NOT NULL,
     "message" TEXT NOT NULL,
-    "showed" BOOLEAN NOT NULL,
+    "displayed" BOOLEAN NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userWalletAddress" TEXT NOT NULL,
     "cryptocurrencyAddress" TEXT NOT NULL,
@@ -44,8 +42,19 @@ CREATE TABLE "Cryptocurrency" (
     "chainId" INTEGER NOT NULL,
     "imgPath" TEXT NOT NULL,
     "latestPrice" INTEGER NOT NULL,
+    "userWalletAddress" TEXT,
 
     CONSTRAINT "Cryptocurrency_pkey" PRIMARY KEY ("address")
+);
+
+-- CreateTable
+CREATE TABLE "Token" (
+    "address" TEXT NOT NULL,
+    "symbol" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "chainId" INTEGER NOT NULL,
+
+    CONSTRAINT "Token_pkey" PRIMARY KEY ("address")
 );
 
 -- CreateTable
@@ -87,6 +96,18 @@ CREATE TABLE "Withdraw" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_walletAddress_key" ON "User"("walletAddress");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_nick_key" ON "User"("nick");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_widgetId_key" ON "User"("widgetId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Cryptocurrency_address_key" ON "Cryptocurrency"("address");
 
 -- CreateIndex
@@ -94,6 +115,15 @@ CREATE UNIQUE INDEX "Cryptocurrency_symbol_key" ON "Cryptocurrency"("symbol");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Cryptocurrency_name_key" ON "Cryptocurrency"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Token_address_key" ON "Token"("address");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Token_symbol_key" ON "Token"("symbol");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Token_name_key" ON "Token"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Tipper_walletAddress_key" ON "Tipper"("walletAddress");
@@ -104,17 +134,8 @@ CREATE UNIQUE INDEX "Tipper_nick_key" ON "Tipper"("nick");
 -- CreateIndex
 CREATE UNIQUE INDEX "Withdraw_txHash_key" ON "Withdraw"("txHash");
 
--- CreateIndex
-CREATE UNIQUE INDEX "User_nick_key" ON "User"("nick");
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_tokenAddress_key" ON "User"("tokenAddress");
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_widgetId_key" ON "User"("widgetId");
-
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_tokenAddress_fkey" FOREIGN KEY ("tokenAddress") REFERENCES "Cryptocurrency"("address") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "User" ADD CONSTRAINT "User_tokenAddress_fkey" FOREIGN KEY ("tokenAddress") REFERENCES "Token"("address") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_widgetId_fkey" FOREIGN KEY ("widgetId") REFERENCES "Widget"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -127,6 +148,9 @@ ALTER TABLE "Tip" ADD CONSTRAINT "Tip_cryptocurrencyAddress_fkey" FOREIGN KEY ("
 
 -- AddForeignKey
 ALTER TABLE "Tip" ADD CONSTRAINT "Tip_tipperWalletAddress_fkey" FOREIGN KEY ("tipperWalletAddress") REFERENCES "Tipper"("walletAddress") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Cryptocurrency" ADD CONSTRAINT "Cryptocurrency_userWalletAddress_fkey" FOREIGN KEY ("userWalletAddress") REFERENCES "User"("walletAddress") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Withdraw" ADD CONSTRAINT "Withdraw_userWalletAddress_fkey" FOREIGN KEY ("userWalletAddress") REFERENCES "User"("walletAddress") ON DELETE RESTRICT ON UPDATE CASCADE;

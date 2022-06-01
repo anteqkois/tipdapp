@@ -14,7 +14,7 @@ datasource db {
 // npm i --save-dev prisma@latest                       │
 // │    npm i @prisma/client@latest
 model User {
-  walletAddress     String           @id @unique
+  walletAddress     String           @id @unique @db.VarChar(42)
   email             String           @unique
   firstName         String
   lastName          String
@@ -25,57 +25,56 @@ model User {
   createdAt         DateTime         @default(now())
   updateAt          DateTime         @updatedAt
   token             Token?           @relation(fields: [tokenAddress], references: [address])
-  tokenAddress      String?
+  tokenAddress      String?          @db.VarChar(42)
   widget            Widget?          @relation(fields: [widgetId], references: [id])
   widgetId          String?          @unique
   //If it necessary below fields (read speed?)
   allDonateCount    Int              @default(0)
-  allDonateValue    Int              @default(0)
-  allDonateWithdraw Int              @default(0)
+  allDonateValue    Decimal          @db.Decimal(78, 0)
+  allDonateWithdraw Decimal          @db.Decimal(78, 0)
   Cryptocurrency    Cryptocurrency[]
   Tip               Tip[]
   Withdraw          Withdraw[]
 }
 
 model Tip {
-  txHash                String         @id
-  tokenAmount           Int
-  value                 Int
+  txHash                String         @id @db.VarChar(48)
+  tokenAmount           Decimal        @db.Decimal(78, 0)
+  value                 Decimal        @db.Decimal(78, 0)
   message               String
-  showed                Boolean
+  displayed             Boolean
   date                  DateTime       @default(now())
   user                  User           @relation(fields: [userWalletAddress], references: [walletAddress])
-  userWalletAddress     String
+  userWalletAddress     String         @db.VarChar(42)
   cryptocurrency        Cryptocurrency @relation(fields: [cryptocurrencyAddress], references: [address])
-  cryptocurrencyAddress String
+  cryptocurrencyAddress String         @db.VarChar(42)
   tipper                Tipper         @relation(fields: [tipperWalletAddress], references: [walletAddress])
-  tipperWalletAddress   String
+  tipperWalletAddress   String         @db.VarChar(42)
 }
 
 model Cryptocurrency {
-  address           String     @id @unique
+  address           String     @id @unique @db.VarChar(42)
   symbol            String     @unique
   name              String     @unique
   chainId           Int
   imgPath           String
-  latestPrice       Int
+  latestPrice       Decimal @db.Decimal(78, 0)
   Tip               Tip[]
   Withdraw          Withdraw[]
   User              User?      @relation(fields: [userWalletAddress], references: [walletAddress])
-  userWalletAddress String?
+  userWalletAddress String? @db.VarChar(42)
 }
 
 model Token {
-  address String @id @unique
+  address String @id @unique @db.VarChar(42)
   symbol  String @unique
   name    String @unique
   chainId Int
-
   User User[]
 }
 
 model Tipper {
-  walletAddress String  @id @unique
+  walletAddress String  @id @unique @db.VarChar(42)
   nick          String  @unique
   nonce         String?
   allTipsValue  Int
@@ -100,12 +99,12 @@ model Widget {
 model Withdraw {
   id                    String         @id @default(cuid())
   user                  User           @relation(fields: [userWalletAddress], references: [walletAddress])
-  userWalletAddress     String
-  amount                Int
+  userWalletAddress     String         @db.VarChar(42)
+  amount                Decimal        @db.Decimal(78, 0)
   cryptocurrency        Cryptocurrency @relation(fields: [cryptocurrencyAddress], references: [address])
-  cryptocurrencyAddress String
+  cryptocurrencyAddress String         @db.VarChar(42)
   date                  DateTime       @default(now())
-  txHash                String         @unique
+  txHash                String         @unique @db.VarChar(48)
 }
 
 //sudo -u postgres psql

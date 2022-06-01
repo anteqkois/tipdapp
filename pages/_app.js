@@ -1,7 +1,9 @@
+import '../src/styles/globals.css';
 import { Mainnet, Hardhat, DAppProvider, useEtherBalance, useEthers, Config } from '@usedapp/core';
 import { getDefaultProvider } from 'ethers';
-import '../src/styles/globals.css';
 import { Toaster } from 'react-hot-toast';
+import store from 'src/redux/store';
+import { Provider } from 'react-redux';
 import UserLayout from '@/components/UserLayout.jsx';
 
 const config = {
@@ -30,9 +32,11 @@ function MyApp({ Component, pageProps }) {
       {Component.getLayout ? (
         Component.getLayout(<Component {...pageProps} />)
       ) : (
-        <UserLayout>
-          <Component {...pageProps} />
-        </UserLayout>
+        <Provider store={store}>
+          <UserLayout>
+            <Component {...pageProps} />
+          </UserLayout>
+        </Provider>
       )}
       {/* </DAppProvider> */}
     </>
