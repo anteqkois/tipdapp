@@ -22,12 +22,17 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
     //     result ? [...result.map(({ id }) => ({ type: 'Tip', id })), { type: 'Tip', id: 'LIST' }] : [{ type: 'Tip', id: 'LIST' }],
     // }),
     getTipsByUserWallet: builder.query({
-      query: (walletAddress) => `/tip/walletAddress/${walletAddress}`,
+      query: (queryParams) => ({
+        url: `/tip`,
+        params: {
+          ...queryParams,
+        },
+      }),
       transformResponse: (responseData) => {
         return tipsAdapter.setAll(initialState, responseData);
       },
       providesTags: (result, error, arg) => {
-        console.log(result, arg);
+        console.log(result);
         return [{ type: 'Tip', id: 'LIST' }];
         // return [...result.ids.map((txHash) => ({ type: 'Tip', id: txHash }))];
       },

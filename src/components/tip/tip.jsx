@@ -18,8 +18,7 @@ const Tip = ({
 }) => {
   const [details, setDetails] = useState(false);
   return (
-    <div className="flex gap-1 flex-wrap">
-      {/* <span className="hidden aspect-square max-w-20 bg-primary-800 rounded" /> */}
+    <div className="flex gap-1 flex-wrap py-2 overflow-visible">
       <div className="w-full flex items-center">
         <h6 className="inline-block text-purple-600 font-semibold">@{nick}</h6>
         <p className="inline-block mr-auto px-2 text-sm">{date}</p>
@@ -62,6 +61,7 @@ const Tip = ({
         </svg>
         <Button type="minimalist">details</Button>
       </div>
+      <span className="w-full bg-neutral-300 h-[1.5px]" />
     </div>
   );
 };

@@ -6,9 +6,6 @@ const { findByUserWalletAddress } = require('../controllers/tipController');
 
 //GET
 // router.get('/', authenticate, catchAsyncErrors(findByUserWalletAddress));
-router.get('/walletAddress/:walletAddress', catchAsyncErrors(findByUserWalletAddress));
-// router.get('/', (req, res) => {
-//   console.log(req.query);
-// });
+router.get('/', catchAsyncErrors(findByUserWalletAddress));
 
 module.exports = router;
