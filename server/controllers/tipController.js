@@ -6,9 +6,21 @@ const findByUserWalletAddress = async (req, res) => {
     where: {
       userWalletAddress: req.query?.userWalletAddress,
     },
+    include: {
+      cryptocurrency: {
+        select: {
+          name: true,
+          symbol: true,
+        },
+      },
+      tipper: {
+        select: {
+          nick: true,
+        },
+      },
+      // user: true,
+    },
   });
-
-  console.log(tips);
 
   if (tips) {
     return res.status(200).send(tips);

@@ -1,7 +1,38 @@
 import { ethers } from 'ethers';
 import React, { useState } from 'react';
+import moment from 'moment';
 import Button from '../utils/Button';
 // const { parseUnits, formatUnits } = ethers.utils;
+
+// cryptocurrency:
+// name: "SAND"
+// symbol: "SAND"
+// [[Prototype]]: Object
+// cryptocurrencyAddress: "0x3845badAde8e6dFF049820680d1F14bD3903a5d0"
+// date: "2022-06-03T21:19:42.357Z"
+// displayed: false
+// message: "It's test, maybe it's working ?"
+// tipper:
+// nick: "tiperOne"
+// [[Prototype]]: Object
+// tipperWalletAddress: "0xfdacb27dc605f21255108d4895bb91701a2c26cd"
+// tokenAmount: "2100000000000000"
+// txHash: "0xd55ac901ac86f1856839019bd4d031c9929ba60a"
+// userWalletAddress: "0x4302c27398994a37d1cae83e5b49e40de9e3658d"
+// value: "4300000000000000"
+
+// txHash: '0x05f40c178a69696d31ed6bd4ae72ec2655840c915e9e1f19f25f470e1cb4b26a',
+//     tokenAmount: '789356000000000000000000',
+//     value: '80000000000000000000',
+//     message:
+//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis quo provident error sunt? Voluptate atque, nihil illum voluptates autem, dolores tempora nisi aperiam aut iusto sunt debitis eveniet, eligendi laboriosam.',
+//     showed: true,
+//     date: '17 March 2022; 21.15',
+//     userWalletAddress: '0xd6454929839ff72b9db63aee5d6d08779bdb82e7',
+//     cryptocurrencyAddress: '0xd6454929839ff72b9db63aee5d6d08779bdb82e7',
+//     symbol: 'SHIB',
+//     tipperWalletAddress: '0xbaea370e859a7c6caaf6967e49c255b050c58c30',
+//     nick: 'rudy56',
 
 const Tip = ({
   txHash,
@@ -11,17 +42,16 @@ const Tip = ({
   showed,
   date,
   userWalletAddress,
-  nick,
-  cryptocurrencyAddress,
-  symbol,
+  tipper,
   tipperWalletAddress,
+  cryptocurrency,
 }) => {
   const [details, setDetails] = useState(false);
+  // console.log(moment(date).fromNow());
   return (
-    <div className="flex gap-1 flex-wrap py-2 overflow-visible">
-      <div className="w-full flex items-center">
-        <h6 className="inline-block text-purple-600 font-semibold">@{nick}</h6>
-        <p className="inline-block mr-auto px-2 text-sm">{date}</p>
+    <div className="flex flex-wrap py-2 overflow-visible">
+      <div className="w-full flex items-center justify-between">
+        <h6 className="inline-block  mr-3 text-purple-600 font-semibold">@{tipper.nick}</h6>
         <svg
           className={`inline-block w-6 mr-1 ${showed ? 'fill-secondary-600' : 'fill-neutral-300'}`}
           clipRule="evenodd"
@@ -37,14 +67,17 @@ const Tip = ({
           />
         </svg>
       </div>
-      <p className={!details && 'truncate'}>{message}</p>
+      <p className="inline-block -mt-0.5 mr-auto text-sm text-neutral-500">
+        {moment(date).format('MMMM Do YYYY, h:mm:ss a')} ({moment(date).fromNow()})
+      </p>
+      <p className={`w-full py-2 ${!details && 'truncate'}`}>{message}</p>
       <div>
-        <p className="font-medium">
-          {symbol}: {ethers.utils.formatEther(tokenAmount)}
+        <p>
+          {cryptocurrency.symbol}: {ethers.utils.formatEther(tokenAmount)}
           <span className="font-normal"> ({ethers.utils.formatEther(value)}$)</span>
         </p>
       </div>
-      <div className="h-7 w-full flex items-center center" onClick={() => setDetails((prev) => !prev)}>
+      <div className="h-7 w-full mb-2 flex items-center center" onClick={() => setDetails((prev) => !prev)}>
         <svg
           className={`h-10 -mx-1 origin-center duration-500 translate-y-0.5 ${details && 'rotate-180'}`}
           clipRule="evenodd"
