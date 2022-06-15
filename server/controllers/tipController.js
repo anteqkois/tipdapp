@@ -2,15 +2,13 @@ const { prismaClient } = require('../../prisma/client');
 const { createApiError } = require('../middlewares/error');
 
 const findByUserWalletAddress = async (req, res) => {
-  // console.log(req.params.walletAddress);
-  // console.log(req.params);
-  console.log(req.query);
-
   const tips = await prismaClient.tip.findMany({
-    where: req.query,
+    where: {
+      userWalletAddress: req.query?.userWalletAddress,
+    },
   });
 
-  // console.log(tips);
+  console.log(tips);
 
   if (tips) {
     return res.status(200).send(tips);

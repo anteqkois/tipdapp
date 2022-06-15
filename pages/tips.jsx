@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectTipsIds, selectAllTips } from 'src/redux/tipSlice';
-import { useGetTipsByUserWalletQuery } from 'src/redux/tipSlice';
+import { useGetTipsQuery, useGetTipsByUserWalletQuery } from 'src/redux/tipSlice';
 import Tip from '@/components/tip/tip';
 import Card from '@/components/utils/Card';
 import Button from '@/components/utils/Button';
@@ -53,21 +52,12 @@ const tipsData = [
 ];
 
 const tips = () => {
-  const { isLoading, isSuccess, isError, error } = useGetTipsByUserWalletQuery({
+
+  const { data } = useGetTipsByUserWalletQuery({
     userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d',
   });
 
-  // const orderTips = useSelector(selectTipsIds);
-  const orderTips = useSelector(selectAllTips);
-
-  // console.log('isLoading', isLoading);
-  // console.log('isSuccess', isLoading);
-  // console.log('isError', isError);
-  // console.log('error', error);
-
-  if (!orderTips) {
-    console.log('orderTips', orderTips);
-  }
+  console.log(data);
 
   return (
     <section>
