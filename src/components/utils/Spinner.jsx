@@ -4,7 +4,7 @@ const Spinner = () => {
   return (
       <svg
         role="status"
-        className="inline w-12 h-12 mx-auto text-neutral-300 animate-spin fill-primary-600"
+        className="inline w-12 h-12 mx-auto my-6 text-neutral-300 animate-spin fill-primary-600"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

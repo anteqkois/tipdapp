@@ -53,33 +53,43 @@ const tipsData = [
 ];
 
 const tips = () => {
-  const { data, isLoading, isError  } = useGetTipsByUserQuery({
+  const { data, isLoading, isError } = useGetTipsByUserQuery({
     userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d',
   });
 
-  console.log(data);
-  // const isLoading = true;
+  const handleMoreTips = () => {};
 
   return (
     <section>
-      <Card {...tipsData} className="flex flex-col">
-        <h5 className="">Your tips:</h5>
+      <Card {...tipsData} className="flex flex-col lg:p-8">
+        <h5 className="pb-4">Your tips:</h5>
+        <span className="w-[calc(100%+2rem)] -mx-4 bg-neutral-300 h-[1.5px] lg:w-[calc(100%+4rem)] lg:-mx-8" />
         {isLoading ? (
           <Spinner />
         ) : (
           <>
             {data.map((tip) => (
-              <Tip {...tip} key={tip.txHash} />
+              <>
+                <Tip {...tip} key={tip.txHash} />
+                <span className="w-[calc(100%+2rem)] -mx-4 bg-neutral-300 h-[1.5px] lg:w-[calc(100%+4rem)] lg:-mx-8" />
+              </>
             ))}
-            <div className="flex items-center justify-center" onClick={() => console.log('click')}>
+            <div className="flex items-center justify-center pt-4 text-lg" onClick={() => console.log('click')}>
               <div className="flex gap-1 py-2 items-center">
-                <svg className="w-5" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* <svg className="w-5" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M10 7.48946C8.61925 7.48946 7.5 6.37021 7.5 4.98946C7.5 3.60871 8.61925 2.48946 10 2.48946L30 2.48946C31.3807 2.48946 32.5 3.60871 32.5 4.98946C32.5 6.37021 31.3807 7.48946 30 7.48946L10 7.48946ZM20 38.525L10.7323 29.2572C9.756 28.2809 9.756 26.698 10.7323 25.7217C11.7085 24.7454 13.2915 24.7454 14.2678 25.7217L17.5 28.9539L17.5 12.4895C17.5 11.1087 18.6193 9.98946 20 9.98946C21.3807 9.98946 22.5 11.1087 22.5 12.4895L22.5 28.9539L25.7322 25.7217C26.7086 24.7454 28.2915 24.7454 29.2678 25.7217C30.2441 26.698 30.2441 28.2809 29.2678 29.2572L20 38.525Z"
                     fill="black"
                   />
-                </svg>
+                </svg> */}
                 <Button type="minimalist">See more your's tips</Button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="inline ml-1 w-4 h-4 mt-2 fill-neutral-700 cursor-pointer rotate-90"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M16 16v4l8-8-8-8v4h-8.929c-9.059 0-7.134 9.521-6.334 11.418.788-2.445 2.464-3.418 5.371-3.418h9.892z" />
+                </svg>
               </div>
             </div>
           </>

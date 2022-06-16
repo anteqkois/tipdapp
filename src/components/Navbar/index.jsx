@@ -22,7 +22,7 @@ const Navbar = () => {
         <Hamburger isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
       <nav
-        className={`fixed top-12 -left-full p-2 w-full h-full bg-neutral-50 duration-300 shadow-md ${
+        className={`fixed top-12 -left-full p-2 w-full h-full bg-neutral-50 duration-300 shadow-md z-50 ${
           isOpen ? 'translate-x-full' : 'translate-y-0'
         }`}
       >
