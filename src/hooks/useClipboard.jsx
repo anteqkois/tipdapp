@@ -10,6 +10,8 @@ const rejectedDefault = (data) => {
 const useClipboard = (initValue) => {
   const [value, setValue] = useState(initValue ?? '');
 
+  // useRef ?
+
   const pasteToClipboard = () => {
     navigator.clipboard.writeText(value).then(
       () => {

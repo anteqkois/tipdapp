@@ -62,7 +62,7 @@ const tips = () => {
   return (
     <section>
       <Card {...tipsData} className="flex flex-col lg:p-8">
-        <h5 className="pb-4">Your tips:</h5>
+          <h5 className="pb-4">Your tips:</h5>
         <span className="w-[calc(100%+2rem)] -mx-4 bg-neutral-300 h-[1.5px] lg:w-[calc(100%+4rem)] lg:-mx-8" />
         {isLoading ? (
           <Spinner />
