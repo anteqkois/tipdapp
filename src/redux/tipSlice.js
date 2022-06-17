@@ -15,7 +15,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         return responseData;
       },
       providesTags: (result, error, arg) => {
-        console.log(error)
+        // console.log(error)
         return [...result.map(({ txHash }) => ({ type: 'Tip', txHash }))]
       },
     }),

@@ -62,18 +62,20 @@ const tips = () => {
   return (
     <section>
       <Card {...tipsData} className="flex flex-col lg:p-8">
-          <h5 className="pb-4">Your tips:</h5>
+        <h5 className="pb-4">Your tips:</h5>
         <span className="w-[calc(100%+2rem)] -mx-4 bg-neutral-300 h-[1.5px] lg:w-[calc(100%+4rem)] lg:-mx-8" />
         {isLoading ? (
           <Spinner />
         ) : (
           <>
-            {data.map((tip) => (
-              <>
-                <Tip {...tip} key={tip.txHash} />
-                <span className="w-[calc(100%+2rem)] -mx-4 bg-neutral-300 h-[1.5px] lg:w-[calc(100%+4rem)] lg:-mx-8" />
-              </>
-            ))}
+            <ul>
+              {data.map((tip) => (
+                <li key={tip.txHash} className="w-full">
+                  <Tip {...tip} />
+                  <div className="w-[calc(100%+2rem)] -mx-4 bg-neutral-300 h-[1.5px] lg:w-[calc(100%+4rem)] lg:-mx-8" />
+                </li>
+              ))}
+            </ul>
             <div className="flex items-center justify-center pt-4 text-lg" onClick={() => console.log('click')}>
               <div className="flex gap-1 py-2 items-center">
                 {/* <svg className="w-5" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
