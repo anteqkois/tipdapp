@@ -59,6 +59,8 @@ const tips = () => {
 
   const handleMoreTips = () => {};
 
+  console.log(data);
+
   return (
     <section>
       <Card {...tipsData} className="flex flex-col lg:p-8">

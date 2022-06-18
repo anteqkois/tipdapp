@@ -22,8 +22,9 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         },
       }),
       transformResponse: (responseData) => {
-        const sorted = responseData.sort(sortByDate);
-        return sorted;
+        // const sorted = responseData.sort(sortByDate);
+        // return sorted;
+        return responseData.tips;
       },
       providesTags: (result, error, arg) => {
         // console.log(error)
