@@ -2,6 +2,16 @@ import { createSelector, createEntityAdapter } from '@reduxjs/toolkit';
 // import { sub } from 'date-fns';
 import { apiSlice } from './apiSlice';
 
+const sortByDate = (a, b) => {
+  if (a.date < b.date) {
+    return 1;
+  }
+  if (a.date > b.date) {
+    return -1;
+  }
+  return 0;
+};
+
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getTipsByUser: builder.query({
@@ -12,11 +22,12 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         },
       }),
       transformResponse: (responseData) => {
-        return responseData;
+        const sorted = responseData.sort(sortByDate);
+        return sorted;
       },
       providesTags: (result, error, arg) => {
         // console.log(error)
-        return [...result.map(({ txHash }) => ({ type: 'Tip', txHash }))]
+        return [...result.map(({ txHash }) => ({ type: 'Tip', txHash }))];
       },
     }),
     updateTip: builder.mutation({
@@ -58,5 +69,4 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetTipsByUserQuery, useSetNotDisplayedMutation, useUpdateTipMutation } =
-  extendedApiSlice;
+export const { useGetTipsByUserQuery, useSetNotDisplayedMutation, useUpdateTipMutation } = extendedApiSlice;

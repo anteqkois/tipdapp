@@ -60,18 +60,22 @@ const Tip = ({
         <h5 className="inline-block mr-3 text-purple-600 font-semibold z-40">@{tipper.nick}</h5>
         <div className="flex gap-1.5">
           <Tooltip content="Display again">
-            <svg className="w-6 h-6 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M13.5 2c-5.629 0-10.212 4.436-10.475 10h-3.025l4.537 5.917 4.463-5.917h-2.975c.26-3.902 3.508-7 7.475-7 4.136 0 7.5 3.364 7.5 7.5s-3.364 7.5-7.5 7.5c-2.381 0-4.502-1.119-5.876-2.854l-1.847 2.449c1.919 2.088 4.664 3.405 7.723 3.405 5.798 0 10.5-4.702 10.5-10.5s-4.702-10.5-10.5-10.5z" />
+            <svg
+              className="w-7 h-7 p-0.5 cursor-pointer bg-neutral-200 rounded-full hover:bg-neutral-150"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <path d="M9 12l-4.463 4.969-4.537-4.969h3c0-4.97 4.03-9 9-9 2.395 0 4.565.942 6.179 2.468l-2.004 2.231c-1.081-1.05-2.553-1.699-4.175-1.699-3.309 0-6 2.691-6 6h3zm10.463-4.969l-4.463 4.969h3c0 3.309-2.691 6-6 6-1.623 0-3.094-.65-4.175-1.699l-2.004 2.231c1.613 1.526 3.784 2.468 6.179 2.468 4.97 0 9-4.03 9-9h3l-4.537-4.969z" />
             </svg>
           </Tooltip>
-          <Flag flag={displayed} tooltip="Display" />
+          <Flag flag={displayed} tooltip="Display" className="w-7 h-7" />
         </div>
       </div>
-      <p className="inline-block -mt-0.5 mr-auto text-sm text-neutral-500">
+      <p className="w-full -mt-0.5 text-sm text-neutral-500">
         {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
       </p>
-      <p className={`w-full py-2 leading-tight ${!details && 'truncate'}`}>{message}</p>
-      <div>
+      <p className={`py-2 leading-tight max-w-4xl ${!details && 'truncate'}`}>{message}</p>
+      <div className="w-full">
         <h6 className="text-primary-600 text-base">Details:</h6>
         {details ? (
           <div className="text-sm text-neutral-500">
@@ -99,7 +103,7 @@ const Tip = ({
             </p>
             <p>
               <span className="text-neutral-900 font-medium">Displayed: </span>
-              <Flag className="w-5 h-5 -mt-1" flag={displayed} />
+              <Flag flag={displayed} className="w-5 h-5 -mt-1" />
             </p>
           </div>
         ) : (
@@ -109,11 +113,11 @@ const Tip = ({
           </p>
         )}
       </div>
-      <div className="h-7 w-full mb-2 flex items-center center" onClick={() => setDetails((prev) => !prev)}>
-        <Button type="minimalist">{details ? 'hide' : 'display'} details</Button>
+      <Button type="minimalist" className="h-7 my-1 cursor-pointer" onClick={() => setDetails((prev) => !prev)}>
+        {details ? 'hide' : 'display'} details
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`inline ml-1 w-4 h-4 fill-neutral-700 cursor-pointer ${details ? ' -rotate-90' : 'mt-2 rotate-90'}`}
+          className={`inline ml-1 w-4 h-4 fill-neutral-700 ${details ? ' -rotate-90' : 'translate-y-0.5 rotate-90'}`}
           viewBox="0 0 24 24"
         >
           {details ? (
@@ -122,7 +126,7 @@ const Tip = ({
             <path d="M16 16v4l8-8-8-8v4h-8.929c-9.059 0-7.134 9.521-6.334 11.418.788-2.445 2.464-3.418 5.371-3.418h9.892z" />
           )}
         </svg>
-      </div>
+      </Button>
     </div>
   );
 };

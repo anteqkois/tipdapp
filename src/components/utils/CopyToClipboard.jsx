@@ -14,7 +14,7 @@ const CopyToClipboard = ({ copyData }) => {
   return (
     <svg
       onClick={handleCopy}
-      className="fill-neutral-500 w-5 h-5 mx-1 inline cursor-pointer hover:fill-neutral-800"
+      className="fill-neutral-500 w-5 h-5 mx-1 -mt-1 inline cursor-pointer hover:fill-neutral-800"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >

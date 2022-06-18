@@ -8,7 +8,7 @@ const Tooltip = ({ children, content, placement = 'left' }) => {
       {children}
     </TooltipUI>
   ) : (
-    { children }
+    children
   );
 };
 
