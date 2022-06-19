@@ -1,6 +1,6 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { useGetTipsByUserQuery } from 'src/redux/tipSlice';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getTipsByUser, tipsSelectors } from 'src/redux/tipSlice';
 import Tip from '@/components/tip/tip';
 import Card from '@/components/utils/Card';
 import Button from '@/components/utils/Button';
@@ -53,13 +53,16 @@ const tipsData = [
 ];
 
 const tips = () => {
-  const { data, isLoading, isError } = useGetTipsByUserQuery({
-    userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d',
-  });
+  const dispatch = useDispatch();
+
+  const data = useSelector(tipsSelectors.selectAll);
+  const isLoading = useSelector((state) => state.tips.loading);
+
+  useEffect(() => {
+    dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d' }));
+  }, []);
 
   const handleMoreTips = () => {};
-
-  console.log(data);
 
   return (
     <section>
