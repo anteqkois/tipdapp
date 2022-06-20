@@ -55,12 +55,13 @@ const tipsData = [
 const tips = () => {
   const dispatch = useDispatch();
 
-  const data = useSelector(tipsSelectors.selectAll);
-  const isLoading = useSelector((state) => state.tips.loading);
-
   useEffect(() => {
-    dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d' }));
+    dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page: 1 }));
   }, []);
+
+  const data = useSelector(tipsSelectors.selectAll);
+  const status = useSelector((state) => state.tips.status);
+  // const status = true;
 
   const handleMoreTips = () => {};
 
@@ -69,9 +70,7 @@ const tips = () => {
       <Card {...tipsData} className="flex flex-col lg:p-8">
         <h5 className="pb-4">Your tips:</h5>
         <span className="w-[calc(100%+2rem)] -mx-4 bg-neutral-300 h-[1.5px] lg:w-[calc(100%+4rem)] lg:-mx-8" />
-        {isLoading ? (
-          <Spinner />
-        ) : (
+        {status === 'succeeded' ? (
           <>
             <ul>
               {data.map((tip) => (
@@ -94,6 +93,8 @@ const tips = () => {
               </div>
             </div>
           </>
+        ) : (
+          <Spinner />
         )}
       </Card>
     </section>

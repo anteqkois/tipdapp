@@ -1,14 +1,26 @@
 import { createAsyncThunk, createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 import api from './apiConfig';
 
-export const getTipsByUser = createAsyncThunk('tips/getTipsByUser', async ({ queryParams }, thunkAPI) => {
-  try {
-    const response = await api.get('tip', { params: { ...queryParams } });
-    return response.data.tips;
-  } catch (error) {
-    console.log(error);
-    return thunkAPI.rejectWithValue(error.response.data);
+export const getTipsByUser = createAsyncThunk('tips/getTipsByUser', async (queryParams, thunkAPI) => {
+  const state = thunkAPI.getState();
+  // console.log(state.tips.pagination);
+  console.log(state.tips.pagination.pages.hasOwnProperty(queryParams.page));
+
+  if (!state.tips.pagination.pages.hasOwnProperty(queryParams.page)) {
+    try {
+      console.log('fetched');
+      // console.log(state.tips.pagination.pages.hasOwnProperty(queryParams.page));
+      const response = await api.get('tip', { params: { ...queryParams } });
+      const ids = response.data.reduce((prev, curr) => [...prev, curr.txHash], []);
+      // const ids = response.data.tips.reduce((prev, curr) => [...prev, curr.txHash], []).flat();
+      // console.log(ids);
+      return { tips: response.data, ids };
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
   }
+  return;
 });
 
 const tipsAdapter = createEntityAdapter({
@@ -16,13 +28,20 @@ const tipsAdapter = createEntityAdapter({
   selectId: (tip) => tip.txHash,
 });
 
+const initialState = tipsAdapter.getInitialState({
+  currentPage: 0,
+  // fetchedPage: [],
+  status: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
+  error: null,
+  pagination: {
+    pages: {},
+  },
+  // elementsCount: 800,
+});
+
 const tipsSlice = createSlice({
   name: 'tips',
-  initialState: {
-    data: tipsAdapter.getInitialState([]),
-    error: null,
-    loading: true,
-  },
+  initialState,
   reducers: {
     // search: (state) => {
     //     // state.user = null;
@@ -32,15 +51,31 @@ const tipsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getTipsByUser.fulfilled, (state, action) => {
-      tipsAdapter.setAll(state.data, action.payload);
+    builder.addCase(getTipsByUser.pending, (state, arg) => {
+      // console.log(arg.meta.arg.page);
+      // state.pagination.pages[arg.meta.arg.page] = {
+      //   isFetching: true,
+      // };
+      state.status = 'loading';
+    });
+    builder.addCase(getTipsByUser.fulfilled, (state, action, arg) => {
+      console.log(action);
+      // console.log(action.meta.arg.page);
+      // console.log(arg);/
+      // console.log(arg.meta.arg.page);
+      tipsAdapter.upsertMany(state, action.payload.tips);
+      state.currentPage = action.meta.arg.page;
+      state.pagination.pages[action.meta.arg.page] = {
+        // lastUpdateTime: 1516177824891,
+        isFetching: false,
+        ids: action.payload.ids,
+      };
       state.error = null;
-      state.loading = false;
+      state.status = 'succeeded';
     });
     builder.addCase(getTipsByUser.rejected, (state, action) => {
-      console.log({ state, action });
       state.error = action.payload.error;
-      state.loading = false;
+      state.status = 'failed';
     });
   },
 });
@@ -48,7 +83,7 @@ const tipsSlice = createSlice({
 export const { resetError } = tipsSlice.actions;
 
 export const tipsSelectors = tipsAdapter.getSelectors((state) => {
-  return state.tips.data;
+  return state.tips;
 });
 
 export default tipsSlice.reducer;

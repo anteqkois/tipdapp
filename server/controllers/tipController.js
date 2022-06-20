@@ -1,9 +1,18 @@
 const { prismaClient } = require('../../prisma/client');
 const { createApiError } = require('../middlewares/error');
 
+const PAGE_SIZE = 2;
+
 const findByUserWalletAddress = async (req, res) => {
+  const page = req.query?.page ?? 0;
+  // console.log(page);
+  // console.log(req.query);
+
+  const skip = page * PAGE_SIZE - PAGE_SIZE;
+
   const tips = await prismaClient.tip.findMany({
-    take: 2,
+    skip,
+    take: PAGE_SIZE,
     where: {
       userWalletAddress: req.query?.userWalletAddress,
     },
@@ -29,10 +38,11 @@ const findByUserWalletAddress = async (req, res) => {
   // console.log(tips);
 
   if (tips) {
-    const lastTipsInResults = tips[1]; // Remember: zero-based index! :)
-    const cursor = lastTipsInResults.date; // Example: 29
+    // const lastTipsInResults = tips[1]; // Remember: zero-based index! :)
+    // const cursor = lastTipsInResults.date; // Example: 29
 
-    return res.status(200).send({ tips, cursor });
+    return res.status(200).send( tips );
+    // return res.status(200).send({ tips });
   } else {
     createApiError('No tips found.');
   }
