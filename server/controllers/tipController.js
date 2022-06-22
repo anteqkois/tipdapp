@@ -8,7 +8,8 @@ const findByUserWalletAddress = async (req, res) => {
   // console.log(page);
   // console.log(req.query);
 
-  const skip = page * PAGE_SIZE - PAGE_SIZE;
+  // const skip = page * PAGE_SIZE - PAGE_SIZE;
+  const skip = page * PAGE_SIZE;
 
   const tips = await prismaClient.tip.findMany({
     skip,
