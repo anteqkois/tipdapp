@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTipsByUser, STATUS, selectTipsPerPage, setCurrentPage } from 'src/redux/tipSlice';
 import ReactPaginate from 'react-paginate';
@@ -6,6 +6,7 @@ import Tip from '@/components/tip/tip';
 import Card from '@/components/utils/Card';
 import Button from '@/components/utils/Button';
 import Spinner from '@/components/utils/Spinner';
+import Pagination from '@/components/pagination';
 // import Pagination from '@/components/pagination';
 
 const tipsData = [
@@ -56,14 +57,14 @@ const tipsData = [
 
 const tips = () => {
   // const [currentItems, setCurrentItems] = useState(null);
-  const [pageCount, setPageCount] = useState(2);
+  // const [pageCount, setPageCount] = useState(5)
   // const [itemOffset, setItemOffset] = useState(0);
   // const [itemsPerPage, setItemsPerPage] = useState(2);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page: 0 }));
+    dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page: 1 }));
   }, []);
 
   // const data = useSelector(tipsSelectors.selectAll);
@@ -71,11 +72,18 @@ const tips = () => {
 
   //useMemo or useCalbackl
   const tips = useSelector(selectTipsPerPage);
-  console.log(tips);
+  const tipsAmount = useSelector((state) => state.tips.count);
+  const pageSize = useSelector((state) => state.tips.pageSize);
+  // console.log(tips);
 
-  const handlePageChange = (event) => {
-    console.log(event.selected);
-    dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page: event.selected }));
+  const pageCount = useMemo(() => tipsAmount / pageSize, [tipsAmount, pageSize]);
+
+  // console.log(pageCount);
+
+  const handlePageChange = (pageNumber) => {
+    console.log(pageNumber);
+    // dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page: event.selected }));
+    // dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page:3 }));
     // dispatch(setCurrentPage(event.selected));
   };
 
@@ -95,15 +103,25 @@ const tips = () => {
               ))}
             </ul>
             <div className="flex items-center justify-center pt-4 text-lg">
-              <ReactPaginate
+              <Pagination
+                previousLabel="previous"
+                nextLabel="next"
+                onPageChange={handlePageChange}
+                pageRangeDisplayed={2}
+                pageCount={pageCount}
+                renderOnZeroPageCount={null}
+              />
+              {/* <ReactPaginate
                 // breakLabel="..."
+                className="flex items-center justify-center pt-4 text-lg"
+                pageClassName="p-2"
                 nextLabel="next >"
+                previousLabel="< previous"
                 onPageChange={handlePageChange}
                 pageRangeDisplayed={5}
                 pageCount={pageCount}
-                previousLabel="< previous"
-                // renderOnZeroPageCount={null}
-              />
+                renderOnZeroPageCount={null}
+              /> */}
               {/* <Pagination
                 elements={[
                   { content: 1, onClick: () => handleMoreTips(1) },

@@ -11,20 +11,27 @@ export const STATUS = {
 export const getTipsByUser = createAsyncThunk(
   'tips/getTipsByUser',
   async (queryParams, thunkAPI) => {
+    //TODO! check if not fetched !
+    // const { pageSize = { tips } } = thunkAPI.getState();
+    const { tips } = thunkAPI.getState();
     try {
-      const response = await api.get('tip', { params: { ...queryParams } });
-      const ids = response.data.reduce((prev, curr) => [...prev, curr.txHash], []);
-      return { tips: response.data, ids };
+      const { data } = await api.get('tip', { params: { ...queryParams, pageSize: tips.pageSize } });
+      // console.log(response);
+      const ids = data.tips.reduce((prev, curr) => [...prev, curr.txHash], []);
+      return { tips: data.tips, ids, count: data.count };
     } catch (error) {
       console.log(error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   },
   {
-    condition: (queryParams, { getState, extra }) => {
-      const { tips } = getState();
-      return tips.pagination?.pages[queryParams.page]?.status !== STATUS.LOADING;
-    },
+    // when check condition ?
+    // condition: (queryParams, { getState, extra }) => {
+    //   const { tips } = getState();
+    //   // console.log(tips.pagination?.pages[queryParams.page]?.status);
+    //   // console.log(tips.pagination?.pages[queryParams.page]?.status !== STATUS.LOADING);
+    //   return tips.pagination?.pages[queryParams.page]?.status !== STATUS.LOADING;
+    // },
   },
 );
 
@@ -34,7 +41,9 @@ const tipsAdapter = createEntityAdapter({
 });
 
 const initialState = tipsAdapter.getInitialState({
-  currentPage: 0,
+  currentPage: 1,
+  pageSize: 1,
+  count: 0,
   fetchedPage: [],
   status: STATUS.IDLE, //'idle' | 'loading' | 'succeeded' | 'failed'
   error: null,
@@ -68,10 +77,13 @@ const tipsSlice = createSlice({
       state.status = STATUS.LOADING;
     });
     builder.addCase(getTipsByUser.fulfilled, (state, action, arg) => {
+      // console.log('first')
       tipsAdapter.upsertMany(state, action.payload.tips);
       state.error = null;
       state.status = STATUS.SUCCEEDED;
       state.currentPage = action.meta.arg.page;
+      state.count = action.payload.count;
+      //TODO! change, duplicate number
       state.fetchedPage.push(action.meta.arg.page);
       state.pagination.pages[action.meta.arg.page] = {
         // lastUpdateTime: 1516177824891,
