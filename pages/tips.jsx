@@ -104,43 +104,15 @@ const tips = () => {
             </ul>
             <div className="flex items-center justify-center pt-4 text-lg">
               <Pagination
+                onPageChange={handlePageChange}
+                //mobile
                 previousLabel="<"
                 nextLabel=">"
-                onPageChange={handlePageChange}
-                pageRangeDisplayed={2}
+                pageRangeDisplayed={1}
+                buttonsMarginPage={0}
                 pageCount={pageCount}
                 renderOnZeroPageCount={null}
               />
-              {/* <ReactPaginate
-                // breakLabel="..."
-                className="flex items-center justify-center pt-4 text-lg"
-                pageClassName="p-2"
-                nextLabel="next >"
-                previousLabel="< previous"
-                onPageChange={handlePageChange}
-                pageRangeDisplayed={5}
-                pageCount={pageCount}
-                renderOnZeroPageCount={null}
-              /> */}
-              {/* <Pagination
-                elements={[
-                  { content: 1, onClick: () => handleMoreTips(1) },
-                  { content: 2, onClick: () => handleMoreTips(2) },
-                  { content: 3, onClick: () => handleMoreTips(3) },
-                  { content: 4, onClick: () => handleMoreTips(4) },
-                  { content: 5, onClick: () => handleMoreTips(5) },
-                ]}
-              /> */}
-              {/* <div className="flex gap-1 py-2 items-center">
-                <Button type="minimalist">See more your's tips</Button>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="inline ml-1 w-4 h-4 mt-2 fill-neutral-700 cursor-pointer rotate-90"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M16 16v4l8-8-8-8v4h-8.929c-9.059 0-7.134 9.521-6.334 11.418.788-2.445 2.464-3.418 5.371-3.418h9.892z" />
-                </svg>
-              </div> */}
             </div>
           </>
         ) : (

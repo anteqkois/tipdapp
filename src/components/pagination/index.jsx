@@ -6,12 +6,13 @@ const Pagination = ({
   previousLabel = 'Previous',
   nextLabel = 'Next',
   onPageChange,
-  pageRangeDisplayed = 1,
-  buttonsMargin = 1,
+  pageRangeDisplayed = 2,
+  //TODO! not work buttonsMarginPage
+  buttonsMarginPage = 1,
   renderOnZeroPageCount,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [countPage, setCountPage] = useState(pageCount);
+  const [countPage, setCountPage] = useState(Math.ceil(pageCount));
 
   const allPaginationButtons = useMemo(
     () =>
@@ -34,46 +35,80 @@ const Pagination = ({
     if (countPage <= pageRangeDisplayed) {
       return allPaginationButtons;
     }
+
+    // Generate beginning of buttons
     const buttonToShow = Array(pageRangeDisplayed)
       .fill(0)
       .map((_, i) => allPaginationButtons[i]);
 
-    if (currentPage - 1 - buttonsMargin > pageRangeDisplayed)
+    // Generate first ...
+    console.log(currentPage - 1 - buttonsMarginPage > pageRangeDisplayed);
+    console.log(currentPage - 1 - buttonsMarginPage );
+    console.log(pageRangeDisplayed);
+    console.log(Math.ceil(currentPage / 2));
+    if (currentPage - 1 - buttonsMarginPage > pageRangeDisplayed)
       buttonToShow.push(
-        <PaginationButton key={'dotsFirst'} onClick={() => handlePageChange(parseInt(currentPage / 2))}>
+        <PaginationButton key={Math.ceil(currentPage / 2)} onClick={() => handlePageChange(Math.ceil(currentPage / 2))}>
           ...
         </PaginationButton>,
       );
 
-    buttonToShow.push(allPaginationButtons[currentPage - 2]);
+    // Generate the central part of buttons
+    buttonToShow.push(
+      ...Array(buttonsMarginPage)
+        .fill(0)
+        .map((_, i) => allPaginationButtons[currentPage - 2 - i]),
+    );
     buttonToShow.push(allPaginationButtons[currentPage - 1]);
-    buttonToShow.push(allPaginationButtons[currentPage]);
+    buttonToShow.push(
+      ...Array(buttonsMarginPage)
+        .fill(0)
+        .map((_, i) => allPaginationButtons[currentPage + i]),
+    );
 
-    if (currentPage + buttonsMargin < countPage - 1)
+    // Generate second ...
+    if (currentPage + buttonsMarginPage < countPage - 1)
       buttonToShow.push(
-        <PaginationButton key={'dotsSecond'} onClick={() => handlePageChange(parseInt((currentPage + countPage) / 2))}>
+        <PaginationButton
+          key={parseInt((currentPage + countPage) / 2)}
+          onClick={() => handlePageChange(parseInt((currentPage + countPage) / 2))}
+        >
           ...
         </PaginationButton>,
       );
 
+    // Generate ending of buttons
     buttonToShow.push(
       ...Array(pageRangeDisplayed)
         .fill(0)
         .map((_, i) => allPaginationButtons[countPage - i - 1]),
     );
 
+    // Remove repeating  buttons
     const uniqueIds = [];
-    const uniqueButtons = buttonToShow
-      .filter((button) => {
+    return buttonToShow
+      .map((button) => {
         if (!uniqueIds.includes(button?.key)) {
           uniqueIds.push(button?.key);
-          return true;
-        }
-        return false;
-      })
-      .sort((a, b) => a.key - b.key);
 
-    return uniqueButtons;
+          if (button?.key == currentPage) {
+            return (
+              <PaginationButton
+                active
+                key={button.key}
+                onClick={() => {
+                  handlePageChange(button.key);
+                }}
+              >
+                {button.key}
+              </PaginationButton>
+            );
+          }
+          return button;
+        }
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.key - b.key);
   };
 
   useEffect(() => {
@@ -94,28 +129,11 @@ const Pagination = ({
 
   return (
     <div>
-      {currentPage}
+      {/* {currentPage} */}
       <PaginationButton onClick={handlePreviousPage}>{previousLabel}</PaginationButton>
       <PaginationButtons />
       <PaginationButton onClick={handleNextPage}>{nextLabel}</PaginationButton>
     </div>
-    // <div>
-    //   {showedButton.map((element, index) => (
-    //     <PaginationButton
-
-    //       active={currentPage === element.content}
-    //       key={index}
-    //       onClick={() => {
-    //         setCurrentPage(element.content);
-    //         element.onClick();
-    //       }}
-    //     >
-    //       {element.content}
-    //     </PaginationButton>
-    //   ))}
-    //   <PaginationButton onClick={handleNextPage}>next page</PaginationButton>
-    //   {/* {<PaginationButton></PaginationButton>}  */}
-    // </div>
   );
 };
 
