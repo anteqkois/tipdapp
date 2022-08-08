@@ -1,19 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PaginationButton from './paginationButton';
 
 const Pagination = ({
   pageCount,
-  previousLabel,
-  nextLabel,
+  previousLabel = 'Previous',
+  nextLabel = 'Next',
   onPageChange,
-  pageRangeDisplayed,
-  renderOnZeroPageCount,
+  pageRangeDisplayed = 1,
   buttonsMargin = 1,
+  renderOnZeroPageCount,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [countPage, setCountPage] = useState(pageCount);
-  // const [showedButton, setShowedButton] = useState(elements.slice(0, 4));
-  // const id = useId();
 
   const allPaginationButtons = useMemo(
     () =>
@@ -23,8 +21,7 @@ const Pagination = ({
           <PaginationButton
             key={i}
             onClick={() => {
-              onPageChange(i);
-              setCurrentPage(i);
+              handlePageChange(i);
             }}
           >
             {++i}
@@ -41,21 +38,29 @@ const Pagination = ({
       .fill(0)
       .map((_, i) => allPaginationButtons[i]);
 
-    // <PaginationButton key={'...'} onClick={() => onPageChange()}>
-    //   ...
-    // </PaginationButton>,
+    if (currentPage - 1 - buttonsMargin > pageRangeDisplayed)
+      buttonToShow.push(
+        <PaginationButton key={'dotsFirst'} onClick={() => handlePageChange(parseInt(currentPage / 2))}>
+          ...
+        </PaginationButton>,
+      );
 
     buttonToShow.push(allPaginationButtons[currentPage - 2]);
     buttonToShow.push(allPaginationButtons[currentPage - 1]);
     buttonToShow.push(allPaginationButtons[currentPage]);
+
+    if (currentPage + buttonsMargin < countPage - 1)
+      buttonToShow.push(
+        <PaginationButton key={'dotsSecond'} onClick={() => handlePageChange(parseInt((currentPage + countPage) / 2))}>
+          ...
+        </PaginationButton>,
+      );
 
     buttonToShow.push(
       ...Array(pageRangeDisplayed)
         .fill(0)
         .map((_, i) => allPaginationButtons[countPage - i - 1]),
     );
-
-    console.log(buttonToShow);
 
     const uniqueIds = [];
     const uniqueButtons = buttonToShow
@@ -71,17 +76,28 @@ const Pagination = ({
     return uniqueButtons;
   };
 
+  useEffect(() => {
+    onPageChange(currentPage);
+  }, [currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handlePreviousPage = () => {
+    currentPage > 1 && setCurrentPage((prev) => --prev);
+  };
+
   const handleNextPage = () => {
-    // elements[currentPage + 1].onClick();
-    // setCurrentPage((prev) => prev++);
+    currentPage < pageCount && setCurrentPage((prev) => ++prev);
   };
 
   return (
     <div>
       {currentPage}
-      <PaginationButton>{previousLabel}</PaginationButton>
+      <PaginationButton onClick={handlePreviousPage}>{previousLabel}</PaginationButton>
       <PaginationButtons />
-      <PaginationButton>{nextLabel}</PaginationButton>
+      <PaginationButton onClick={handleNextPage}>{nextLabel}</PaginationButton>
     </div>
     // <div>
     //   {showedButton.map((element, index) => (

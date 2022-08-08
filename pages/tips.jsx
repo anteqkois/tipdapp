@@ -104,8 +104,8 @@ const tips = () => {
             </ul>
             <div className="flex items-center justify-center pt-4 text-lg">
               <Pagination
-                previousLabel="previous"
-                nextLabel="next"
+                previousLabel="<"
+                nextLabel=">"
                 onPageChange={handlePageChange}
                 pageRangeDisplayed={2}
                 pageCount={pageCount}
