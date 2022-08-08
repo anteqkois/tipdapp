@@ -1,3 +1,4 @@
+import useMediaQuery from '@/hooks/useMediaQuery';
 import React, { useEffect, useMemo, useState } from 'react';
 import PaginationButton from './paginationButton';
 
@@ -7,12 +8,20 @@ const Pagination = ({
   nextLabel = 'Next',
   onPageChange,
   pageRangeDisplayed = 2,
-  //TODO! not work buttonsMarginPage
   buttonsMarginPage = 1,
-  renderOnZeroPageCount,
+  renderOnZeroPageCount = false,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [countPage, setCountPage] = useState(Math.ceil(pageCount));
+
+  const isMobile = useMediaQuery('(max-width: 640px)', true);
+
+  if (isMobile) {
+    previousLabel = '<';
+    nextLabel = '>';
+    pageRangeDisplayed = 1;
+    buttonsMarginPage = 0;
+  }
 
   const allPaginationButtons = useMemo(
     () =>
@@ -42,10 +51,6 @@ const Pagination = ({
       .map((_, i) => allPaginationButtons[i]);
 
     // Generate first ...
-    console.log(currentPage - 1 - buttonsMarginPage > pageRangeDisplayed);
-    console.log(currentPage - 1 - buttonsMarginPage );
-    console.log(pageRangeDisplayed);
-    console.log(Math.ceil(currentPage / 2));
     if (currentPage - 1 - buttonsMarginPage > pageRangeDisplayed)
       buttonToShow.push(
         <PaginationButton key={Math.ceil(currentPage / 2)} onClick={() => handlePageChange(Math.ceil(currentPage / 2))}>
@@ -129,12 +134,23 @@ const Pagination = ({
 
   return (
     <div>
-      {/* {currentPage} */}
       <PaginationButton onClick={handlePreviousPage}>{previousLabel}</PaginationButton>
       <PaginationButtons />
       <PaginationButton onClick={handleNextPage}>{nextLabel}</PaginationButton>
     </div>
   );
+
+  //what if 0 page, 1 page ?
+  // return (
+  //   pageCount === 0 &&
+  //   !renderOnZeroPageCount && (
+  //     <div>
+  //       <PaginationButton onClick={handlePreviousPage}>{previousLabel}</PaginationButton>
+  //       <PaginationButtons />
+  //       <PaginationButton onClick={handleNextPage}>{nextLabel}</PaginationButton>
+  //     </div>
+  //   )
+  // );
 };
 
 export default Pagination;

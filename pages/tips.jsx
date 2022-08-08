@@ -105,13 +105,9 @@ const tips = () => {
             <div className="flex items-center justify-center pt-4 text-lg">
               <Pagination
                 onPageChange={handlePageChange}
-                //mobile
-                previousLabel="<"
-                nextLabel=">"
-                pageRangeDisplayed={1}
-                buttonsMarginPage={0}
+                pageRangeDisplayed={2}
+                buttonsMarginPage={1}
                 pageCount={pageCount}
-                renderOnZeroPageCount={null}
               />
             </div>
           </>
