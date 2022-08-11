@@ -1,6 +1,15 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTipsByUser, STATUS, selectTipsPerPage, setCurrentPage } from 'src/redux/tipSlice';
+import {
+  STATUS,
+  getTipsByUser,
+  selectTipsPerPage,
+  selectPageAmount,
+  selectPageSize,
+  selectTipsAmount,
+  selectStatus,
+  setCurrentPage,
+} from 'src/redux/tipSlice';
 import ReactPaginate from 'react-paginate';
 import Tip from '@/components/tip/tip';
 import Card from '@/components/utils/Card';
@@ -56,11 +65,6 @@ const tipsData = [
 ];
 
 const tips = () => {
-  // const [currentItems, setCurrentItems] = useState(null);
-  // const [pageCount, setPageCount] = useState(5)
-  // const [itemOffset, setItemOffset] = useState(0);
-  // const [itemsPerPage, setItemsPerPage] = useState(2);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -68,23 +72,15 @@ const tips = () => {
   }, []);
 
   // const data = useSelector(tipsSelectors.selectAll);
-  const status = useSelector((state) => state.tips.status);
 
-  //useMemo or useCalbackl
+  const status = useSelector(selectStatus);
   const tips = useSelector(selectTipsPerPage);
-  const tipsAmount = useSelector((state) => state.tips.count);
-  const pageSize = useSelector((state) => state.tips.pageSize);
-  // console.log(tips);
+  const tipsAmount = useSelector(selectTipsAmount);
+  const pageSize = useSelector(selectPageSize);
+  const pageAmount = useSelector(selectPageAmount);
 
-  const pageCount = useMemo(() => tipsAmount / pageSize, [tipsAmount, pageSize]);
-
-  // console.log(pageCount);
-
-  const handlePageChange = (pageNumber) => {
-    console.log(pageNumber);
-    // dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page: event.selected }));
-    // dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page:3 }));
-    // dispatch(setCurrentPage(event.selected));
+  const handlePageChange = (page) => {
+    dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page }));
   };
 
   return (
@@ -102,18 +98,18 @@ const tips = () => {
                 </li>
               ))}
             </ul>
-            <div className="flex items-center justify-center pt-4 text-lg">
-              <Pagination
-                onPageChange={handlePageChange}
-                pageRangeDisplayed={2}
-                buttonsMarginPage={1}
-                pageCount={pageCount}
-              />
-            </div>
           </>
         ) : (
           <Spinner />
         )}
+        <div className="flex items-center justify-center pt-4 text-lg">
+          <Pagination
+            onPageChange={handlePageChange}
+            pageRangeDisplayed={2}
+            buttonsMarginPage={1}
+            pageAmount={Math.ceil(tipsAmount / pageSize)}
+          />
+        </div>
       </Card>
     </section>
   );

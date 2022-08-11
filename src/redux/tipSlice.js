@@ -18,7 +18,7 @@ export const getTipsByUser = createAsyncThunk(
       const { data } = await api.get('tip', { params: { ...queryParams, pageSize: tips.pageSize } });
       // console.log(response);
       const ids = data.tips.reduce((prev, curr) => [...prev, curr.txHash], []);
-      return { tips: data.tips, ids, count: data.count };
+      return { tips: data.tips, ids, amount: data.count };
     } catch (error) {
       console.log(error);
       return thunkAPI.rejectWithValue(error.response.data);
@@ -26,12 +26,12 @@ export const getTipsByUser = createAsyncThunk(
   },
   {
     // when check condition ?
-    // condition: (queryParams, { getState, extra }) => {
-    //   const { tips } = getState();
-    //   // console.log(tips.pagination?.pages[queryParams.page]?.status);
-    //   // console.log(tips.pagination?.pages[queryParams.page]?.status !== STATUS.LOADING);
-    //   return tips.pagination?.pages[queryParams.page]?.status !== STATUS.LOADING;
-    // },
+    condition: (queryParams, { getState, extra }) => {
+      const { tips } = getState();
+      // console.log(tips.pagination?.pages[queryParams.page]?.status);
+      // console.log(tips.pagination?.pages[queryParams.page]?.status !== STATUS.LOADING);
+      return tips.pagination?.pages[queryParams.page]?.status !== STATUS.LOADING;
+    },
   },
 );
 
@@ -43,7 +43,7 @@ const tipsAdapter = createEntityAdapter({
 const initialState = tipsAdapter.getInitialState({
   currentPage: 1,
   pageSize: 2,
-  count: 0,
+  amount: 0,
   fetchedPage: [],
   status: STATUS.IDLE, //'idle' | 'loading' | 'succeeded' | 'failed'
   error: null,
@@ -82,7 +82,7 @@ const tipsSlice = createSlice({
       state.error = null;
       state.status = STATUS.SUCCEEDED;
       state.currentPage = action.meta.arg.page;
-      state.count = action.payload.count;
+      state.amount = action.payload.amount;
       //TODO! change, duplicate number
       state.fetchedPage.push(action.meta.arg.page);
       state.pagination.pages[action.meta.arg.page] = {
@@ -113,6 +113,13 @@ export const selectIdsPerPage = createSelector(
 
 export const selectTipsPerPage = createSelector([(state) => state.tips.entities, selectIdsPerPage], (entities, idsForPage) =>
   idsForPage.reduce((previousValue, id) => [...previousValue, entities[id]], []),
+);
+
+export const selectStatus = createSelector([(state) => state.tips.status], (status) => status);
+export const selectTipsAmount = createSelector([(state) => state.tips.amount], (amount) => amount);
+export const selectPageSize = createSelector([(state) => state.tips.pageSize], (pageSize) => pageSize);
+export const selectPageAmount = createSelector([selectTipsAmount, selectPageSize], (amount, pageSize) =>
+  Math.ceil(amount / pageSize),
 );
 
 // export const selectPage = (start, end) => (state) => state.tips.entities.slice(start, end);
