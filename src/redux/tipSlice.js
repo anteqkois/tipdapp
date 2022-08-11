@@ -12,11 +12,9 @@ export const getTipsByUser = createAsyncThunk(
   'tips/getTipsByUser',
   async (queryParams, thunkAPI) => {
     //TODO! check if not fetched !
-    // const { pageSize = { tips } } = thunkAPI.getState();
     const { tips } = thunkAPI.getState();
     try {
       const { data } = await api.get('tip', { params: { ...queryParams, pageSize: tips.pageSize } });
-      // console.log(response);
       const ids = data.tips.reduce((prev, curr) => [...prev, curr.txHash], []);
       return { tips: data.tips, ids, amount: data.count };
     } catch (error) {
@@ -25,13 +23,14 @@ export const getTipsByUser = createAsyncThunk(
     }
   },
   {
-    // when check condition ?
     condition: (queryParams, { getState, extra }) => {
       const { tips } = getState();
-      // console.log(tips.pagination?.pages[queryParams.page]?.status);
-      // console.log(tips.pagination?.pages[queryParams.page]?.status !== STATUS.LOADING);
-      return tips.pagination?.pages[queryParams.page]?.status !== STATUS.LOADING;
+      return (
+        tips.pagination?.pages[queryParams.page]?.status !== STATUS.LOADING &&
+        tips.pagination?.pages[queryParams.page]?.status !== STATUS.SUCCEEDED
+      );
     },
+    dispatchConditionRejection: true,
   },
 );
 
@@ -50,7 +49,6 @@ const initialState = tipsAdapter.getInitialState({
   pagination: {
     pages: {},
   },
-  // elementsCount: 800,
 });
 
 const tipsSlice = createSlice({
@@ -77,13 +75,11 @@ const tipsSlice = createSlice({
       state.status = STATUS.LOADING;
     });
     builder.addCase(getTipsByUser.fulfilled, (state, action, arg) => {
-      // console.log('first')
       tipsAdapter.upsertMany(state, action.payload.tips);
       state.error = null;
       state.status = STATUS.SUCCEEDED;
       state.currentPage = action.meta.arg.page;
       state.amount = action.payload.amount;
-      //TODO! change, duplicate number
       state.fetchedPage.push(action.meta.arg.page);
       state.pagination.pages[action.meta.arg.page] = {
         // lastUpdateTime: 1516177824891,
@@ -92,8 +88,12 @@ const tipsSlice = createSlice({
       };
     });
     builder.addCase(getTipsByUser.rejected, (state, action) => {
-      state.error = action.payload.error;
-      state.status = STATUS.FAILED;
+      if (action.error.name === 'ConditionError') {
+        state.currentPage = action.meta.arg.page;
+      } else {
+        state.error = action.payload;
+        state.status = STATUS.FAILED;
+      }
     });
   },
 });

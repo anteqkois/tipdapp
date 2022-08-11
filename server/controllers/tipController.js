@@ -43,12 +43,14 @@ const findByUserWalletAddress = async (req, res) => {
   if (tips) {
     // const lastTipsInResults = tips[1]; // Remember: zero-based index! :)
     // const cursor = lastTipsInResults.date; // Example: 29
+    // createApiError('Test', 404);
 
     return res.status(200).send({ tips, count });
     // return res.status(200).send({ tips, count });
     // return res.status(200).send({ tips });
   } else {
-    createApiError('No tips found.');
+    //TODO other error message 
+    createApiError('No tips found.', 404);
   }
 };
 

@@ -84,6 +84,7 @@ const tips = () => {
     dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page }));
   };
 
+  //TODO! useErrorBoundary
   return (
     <section>
       <Card className="flex flex-col lg:p-8">
