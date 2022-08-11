@@ -80,6 +80,7 @@ const tips = () => {
   const pageAmount = useSelector(selectPageAmount);
 
   const handlePageChange = (page) => {
+    // console.log('page', page);
     dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page }));
   };
 
@@ -103,12 +104,7 @@ const tips = () => {
           <Spinner />
         )}
         <div className="flex items-center justify-center pt-4 text-lg">
-          <Pagination
-            onPageChange={handlePageChange}
-            pageRangeDisplayed={2}
-            buttonsMarginPage={1}
-            pageAmount={Math.ceil(tipsAmount / pageSize)}
-          />
+          <Pagination onPageChange={handlePageChange} pageRangeDisplayed={2} buttonsMarginPage={2} pageAmount={pageAmount} />
         </div>
       </Card>
     </section>

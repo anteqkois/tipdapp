@@ -7,7 +7,6 @@ const findByUserWalletAddress = async (req, res) => {
   const page = parseInt(req.query?.page) ?? 1;
   const pageSize = parseInt(req.query?.pageSize) ?? 20;
 
-  // const skip = page * PAGE_SIZE - PAGE_SIZE;
   const skip = (page - 1) * pageSize;
 
   const count = await prismaClient.tip.count({
