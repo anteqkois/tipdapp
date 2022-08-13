@@ -60,6 +60,16 @@
       "address": "0x12Bcb546bC60fF39F1Adfc7cE4605d5Bd6a6A876",
       "txHash": "0xf1347841978a0fbe9c6bb10a9d0e2b92243af7eb0ddaf1925fa42fc40166685e",
       "kind": "uups"
+    },
+    {
+      "address": "0x9fD16eA9E31233279975D99D5e8Fc91dd214c7Da",
+      "txHash": "0xe06cffb7be6e4cb12bc3477947375719f9af5931db97a8510554bdf6a92d941b",
+      "kind": "uups"
+    },
+    {
+      "address": "0xCBBe2A5c3A22BE749D5DDF24e9534f98951983e2",
+      "txHash": "0x9b06e4ef4f66a9abcf56cde8bd263a07cbb660e994ce5c447de06d8ec772d2c0",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -1334,8 +1344,8 @@
       }
     },
     "42717905fd7db3c469d1afe2fef945fe12e5ca5178d8722ca02defcae6b1a660": {
-      "address": "0xeF31027350Be2c7439C1b0BE022d49421488b72C",
-      "txHash": "0xf530cc43804a0da76a0a6647821ad618e6788fdea0317e08369cb4440d649d8c",
+      "address": "0x9fD16eA9E31233279975D99D5e8Fc91dd214c7Da",
+      "txHash": "0x90d8edc6075e18605ab35745545bc7f39d85e41a8d4f8bf1c7ca7e0c10b51ede",
       "layout": {
         "storage": [
           {
@@ -1376,7 +1386,7 @@
             "slot": "101",
             "type": "t_uint256",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:13"
+            "src": "contracts/QoistipSign.sol:12"
           },
           {
             "label": "_donateFee",
@@ -1384,7 +1394,7 @@
             "slot": "102",
             "type": "t_uint256",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:15"
+            "src": "contracts/QoistipSign.sol:14"
           },
           {
             "label": "_paused",
@@ -1392,7 +1402,7 @@
             "slot": "103",
             "type": "t_bool",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:17"
+            "src": "contracts/QoistipSign.sol:16"
           },
           {
             "label": "_signerAdmin",
@@ -1468,8 +1478,8 @@
       }
     },
     "212cfc1a51a1a9c38de04ebc664533a1f7ebbe526e3a6148f6b330f9f664e139": {
-      "address": "0xf090f16dEc8b6D24082Edd25B1C8D26f2bC86128",
-      "txHash": "0x505acd7227d526cc1c92c1ec84711574b7949bef29e6622c2d6f813004430709",
+      "address": "0x572316aC11CB4bc5daf6BDae68f43EA3CCE3aE0e",
+      "txHash": "0x0e7ff5bf7d503398aaddb372422ca1f4074dae51fb2e3acaf2c6bfd3548a2cdc",
       "layout": {
         "storage": [
           {
@@ -1510,7 +1520,7 @@
             "slot": "101",
             "type": "t_uint256",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:13"
+            "src": "contracts/QoistipSign.sol:12"
           },
           {
             "label": "_donateFee",
@@ -1518,7 +1528,7 @@
             "slot": "102",
             "type": "t_uint256",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:15"
+            "src": "contracts/QoistipSign.sol:14"
           },
           {
             "label": "_paused",
@@ -1526,7 +1536,7 @@
             "slot": "103",
             "type": "t_bool",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:17"
+            "src": "contracts/QoistipSign.sol:16"
           },
           {
             "label": "_signerAdmin",
@@ -1610,8 +1620,8 @@
       }
     },
     "20c17849e87c8fba574617ec54d27298e45487891059377ec95aa956728ae20e": {
-      "address": "0xE8addD62feD354203d079926a8e563BC1A7FE81e",
-      "txHash": "0x83f0f50f0f61ab2fd2db38f24e5374e558070a30caebabacc91581c4837f4132",
+      "address": "0xCd7c00Ac6dc51e8dCc773971Ac9221cC582F3b1b",
+      "txHash": "0xf8fe85757dc0901d00d63c28ea24bf8ff2019bfeb76dc30b1599279b788cae8c",
       "layout": {
         "storage": [
           {
@@ -1652,7 +1662,7 @@
             "slot": "101",
             "type": "t_uint256",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:13"
+            "src": "contracts/QoistipSign.sol:12"
           },
           {
             "label": "_donateFee",
@@ -1660,7 +1670,7 @@
             "slot": "102",
             "type": "t_uint256",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:15"
+            "src": "contracts/QoistipSign.sol:14"
           },
           {
             "label": "_paused",
@@ -1668,7 +1678,7 @@
             "slot": "103",
             "type": "t_bool",
             "contract": "QoistipSign",
-            "src": "contracts/QoistipSign.sol:17"
+            "src": "contracts/QoistipSign.sol:16"
           },
           {
             "label": "_signerAdmin",

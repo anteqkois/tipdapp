@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import useUser from '@/hooks/useUser';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const login = () => {
   const { login, signIn, logout } = useUser();
@@ -41,6 +42,7 @@ const login = () => {
   return (
     <>
       {/* <button onClick={connectWallet}>Connect wallet</button> */}
+      <ConnectButton />
       <button onClick={login}>Login</button>
       <br />
       <button onClick={signIn}>signin</button>
@@ -57,8 +59,4 @@ const login = () => {
 
 export default login;
 
-login.getLayout = (page) => (
-  <>
-    {page}
-  </>
-);
+login.getLayout = (page) => <>{page}</>;

@@ -2,15 +2,15 @@ import { requireAuthPage } from '../utils/requireAuthPage';
 import React from 'react';
 import Card from '@/components/utils/Card';
 import Button from '@/components/utils/Button';
-import { useGetTipsByUserQuery } from 'src/redux/tipSlice';
+// import { useGetTipsByUserQuery } from 'src/redux/tipSlice';
 import Spinner from '@/components/utils/Spinner';
 import Tip from '@/components/tip/tip';
 import Link from 'next/link';
 
 const dashboard = ({ user }) => {
-  const { data, isLoading, isError } = useGetTipsByUserQuery({
-    userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d',
-  });
+  // const { data, isLoading, isError } = useGetTipsByUserQuery({
+  //   userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d',
+  // });
 
   return (
     <section className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-4">
@@ -28,7 +28,7 @@ const dashboard = ({ user }) => {
       <Card className="col-span-full lg:order-last lg:p-8">
         <h6>Latest tips</h6>
         <div className="w-[calc(100%+2rem)] mt-3 -mx-4 bg-neutral-300 h-[1.5px] lg:w-[calc(100%+4rem)] lg:-mx-8" />
-        {isLoading ? (
+        {/* {isLoading ? (
           <Spinner />
         ) : (
           <>
@@ -46,7 +46,7 @@ const dashboard = ({ user }) => {
               </Link>
             </div>
           </>
-        )}
+        )} */}
       </Card>
       <Card className="text-center">
         <p className="text-4xl font-semibold text-primary-600">13 092</p>
@@ -70,8 +70,8 @@ const dashboard = ({ user }) => {
 
 export default dashboard;
 
-// export const getServerSideProps = requireAuthPage(async (ctx) => {
-//   return {
-//     props: { user: ctx.req.user },
-//   };
-// });
+export const getServerSideProps = requireAuthPage(async (ctx) => {
+  return {
+    props: { user: ctx.req.user },
+  };
+});
