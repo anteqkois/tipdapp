@@ -6,29 +6,77 @@ import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 // import { useEthers } from '@usedapp/core';
 
+const ACTION = {
+  LOGIN: 'LOGIN',
+  SIGNIN: 'SIGNIN',
+  IDLE: 'IDLE',
+};
+
+const initialUserData = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  nick: '',
+};
+
 const useUser = () => {
-  // const { activateBrowserWallet, deactivate, account, library } = useEthers();
   const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
-  const { address, isConnecting, isDisconnected } = useAccount();
-   const { data, isError, isLoading, isSuccess, signMessageAsync } = useSignMessage();
-  // const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
+  const { address, isConnected } = useAccount({
+    onConnect() {},
+    onDisconnect() {
+      // message ? redirect to root path ?
+    },
+  });
+  const { data, isSuccess, signMessageAsync } = useSignMessage();
+  const [userData, setUserData] = useState(initialUserData);
+  const [action, setAction] = useState('');
   const router = useRouter();
 
   useEffect(() => {
-    console.log(address);
-    // console.log(isConnecting);
-    console.log(isDisconnected);
-    console.log(connect);
-    console.log(connectors);
-    console.log(error);
-    // console.log(pendingConnector);
-  }, [address]);
+    if (isConnected) {
+      if (action === ACTION.LOGIN) fetchNonceAndSign();
+      if (action === ACTION.SIGNIN) createUser();
+    }
+  }, [isConnected]);
+
+  const login = async () => {
+    if (isConnected) {
+      toast.success('You are already logged in');
+    } else {
+      await openConnectModal();
+      setAction(ACTION.LOGIN);
+    }
+  };
+
+  const signIn = async ({ firstName, lastName, email, nick }) => {
+    if (isConnected) {
+      toast.success('You are already logged in');
+    } else {
+      await openConnectModal();
+      setUserData({ firstName, lastName, email, nick });
+      setAction(ACTION.SIGNIN);
+    }
+  };
+
+  const logout = async () => {
+    if (isConnected) {
+      try {
+        const dataLogout = await axios('/api/auth/logout');
+        dataLogout.status = 200 && toast.success('You are succesfully logout');
+        await disconnect();
+        router.push('/login');
+      } catch (error) {
+        toast.error(error.response.data);
+      }
+    } else {
+      toast.success("You aren't login");
+    }
+  };
 
   const fetchNonceAndSign = async () => {
+    console.log('logggin');
     try {
-      // if (!account) await activateBrowserWallet();
-
       const dataLogin = await axios('/api/auth/login', {
         method: 'POST',
         data: {
@@ -36,10 +84,7 @@ const useUser = () => {
         },
       });
 
-      // const signer = library.getSigner();
-      // const signature = await signMessageAsync(dataLogin.data.nonce);
-      const signature = await signMessageAsync(dataLogin.data.nonce);
-      console.log(signature);
+      const signature = await signMessageAsync({ message: dataLogin.data.nonce });
 
       const dataAuth = await axios('/api/auth/authorization', {
         method: 'POST',
@@ -53,40 +98,25 @@ const useUser = () => {
     } catch (error) {
       toast.error(error.response.data);
     }
+    setAction(ACTION.IDLE);
   };
 
-  const login = async () => {
-    if (isDisconnected) await openConnectModal();
-  };
-
-  const logout = async () => {
+  const createUser = async () => {
     try {
-      const dataLogout = await axios('/api/auth/logout');
-      dataLogout.status = 200 && toast.success('You are succesfully logout');
-      await disconnect();
-      router.push('/login');
-    } catch (error) {
-      toast.error(error.response.data);
-    }
-  };
-
-  const signIn = async ({ firstName, lastName, email, nick }) => {
-    try {
-      if (isDisconnected) await openConnectModal();
-
       const dataSignIn = await axios('/api/auth/signin', {
         method: 'POST',
         data: {
           walletAddress: address,
-          firstName,
-          lastName,
-          email,
-          nick,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: userData.email,
+          nick: userData.nick,
         },
       });
 
-      // const signer = library.getSigner();
-      const signature = await signMessageAsync(dataSignIn.data.nonce);
+      const signature = await signMessageAsync({ message: dataSignIn.data.nonce });
+      console.log(signature);
+      console.log(data);
 
       const dataAuth = await axios('/api/auth/authorization', {
         method: 'POST',
@@ -97,12 +127,16 @@ const useUser = () => {
         },
       });
       dataAuth.status = 200 && toast.success('You are succesfully sign in');
+      router.push('/dashboard');
     } catch (error) {
+      // console.log(error);
+      // console.log(error.response);
       toast.error(error.response.data);
     }
+    setAction(ACTION.IDLE);
   };
 
-  return { login, signIn, logout };
+  return { login, signIn, logout, user: { ...userData, address } };
 };
 
 export default useUser;

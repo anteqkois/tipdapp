@@ -1,54 +1,59 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-export const login = createAsyncThunk('users/login', async ({ email, password }, thunkAPI) => {
-  try {
-    //Below is api call
-    // const response = await user.login({ email, password });
-    const data = {
-      username: 'anteqkois',
-      email: email,
-      role: 'admin',
-    };
-    return data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data);
-  }
-});
+// export const login = createAsyncThunk('users/login', async ({ email, password }, thunkAPI) => {
+//   try {
+//     //Below is api call
+//     // const response = await user.login({ email, password });
+//     const data = {
+//       username: 'anteqkois',
+//       email: email,
+//       role: 'admin',
+//     };
+//     return data;
+//   } catch (error) {
+//     return thunkAPI.rejectWithValue(error.response.data);
+//   }
+// });
 
-export const logout = createAsyncThunk('users/logout', async (thunkAPI) => {
-  try {
-    // const response = await user.logout();
-    return response.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data);
-  }
-});
+// export const logout = createAsyncThunk('users/logout', async (thunkAPI) => {
+//   try {
+//     // const response = await user.logout();
+//     return response.data;
+//   } catch (error) {
+//     return thunkAPI.rejectWithValue(error.response.data);
+//   }
+// });
 
-export const signup = createAsyncThunk('users/signup', async ({ username, email, password, role }, thunkAPI) => {
-  try {
-    // const response = await user.signup({ username, email, password, role });
-    const data = {
-      username: 'signup',
-      email: 'test@gmail.com',
-      role: 'admin',
-    };
-    return response.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data);
-  }
-});
+// export const signup = createAsyncThunk('users/signup', async ({ username, email, password, role }, thunkAPI) => {
+//   try {
+//     // const response = await user.signup({ username, email, password, role });
+//     const data = {
+//       username: 'signup',
+//       email: 'test@gmail.com',
+//       role: 'admin',
+//     };
+//     return response.data;
+//   } catch (error) {
+//     return thunkAPI.rejectWithValue(error.response.data);
+//   }
+// });
+
+const initialState = {
+  // user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
+  userData: {
+
+  },
+  error: null,
+}; 
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: {
-    // user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
-    user: null,
-    error: null,
-  },
+  initialState,
   reducers: {
     logout: (state) => {
       state.user = null;
     },
+    
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
