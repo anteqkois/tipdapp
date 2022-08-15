@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
-import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
+import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-// import { useEthers } from '@usedapp/core';
 
 const ACTION = {
   LOGIN: 'LOGIN',
@@ -31,14 +30,15 @@ const useUser = () => {
   const { data, isSuccess, signMessageAsync } = useSignMessage();
   const [userData, setUserData] = useState(initialUserData);
   const [action, setAction] = useState('');
+  const [error, setError] = useState();
   const router = useRouter();
 
   useEffect(() => {
     if (isConnected) {
-      if (action === ACTION.LOGIN) fetchNonceAndSign();
-      if (action === ACTION.SIGNIN) createUser();
+      if (action === ACTION.LOGIN) handleLogin();
+      if (action === ACTION.SIGNIN) handleSignIn();
     }
-  }, [isConnected]);
+  }, [isConnected, userData]);
 
   const login = async () => {
     if (isConnected) {
@@ -50,8 +50,11 @@ const useUser = () => {
   };
 
   const signIn = async ({ firstName, lastName, email, nick }) => {
-    if (isConnected) {
+    if (isConnected && !error) {
       toast.success('You are already logged in');
+    } else if (isConnected) {
+      setUserData({ firstName, lastName, email, nick });
+      setAction(ACTION.SIGNIN);
     } else {
       await openConnectModal();
       setUserData({ firstName, lastName, email, nick });
@@ -67,15 +70,14 @@ const useUser = () => {
         await disconnect();
         router.push('/login');
       } catch (error) {
-        toast.error(error.response.data);
+        toast.error(error.response.data.userMessage);
       }
     } else {
       toast.success("You aren't login");
     }
   };
 
-  const fetchNonceAndSign = async () => {
-    console.log('logggin');
+  const handleLogin = async () => {
     try {
       const dataLogin = await axios('/api/auth/login', {
         method: 'POST',
@@ -96,12 +98,12 @@ const useUser = () => {
       });
       dataAuth.status = 200 && toast.success('You are succesfully login');
     } catch (error) {
-      toast.error(error.response.data);
+      toast.error(error.response.data.userMessage);
     }
     setAction(ACTION.IDLE);
   };
 
-  const createUser = async () => {
+  const handleSignIn = async () => {
     try {
       const dataSignIn = await axios('/api/auth/signin', {
         method: 'POST',
@@ -115,8 +117,6 @@ const useUser = () => {
       });
 
       const signature = await signMessageAsync({ message: dataSignIn.data.nonce });
-      console.log(signature);
-      console.log(data);
 
       const dataAuth = await axios('/api/auth/authorization', {
         method: 'POST',
@@ -129,14 +129,12 @@ const useUser = () => {
       dataAuth.status = 200 && toast.success('You are succesfully sign in');
       router.push('/dashboard');
     } catch (error) {
-      // console.log(error);
-      // console.log(error.response);
-      toast.error(error.response.data);
+      error.response.data.errors ? setError(error.response.data.errors) : toast.error(error.response.data.userMessage);
     }
     setAction(ACTION.IDLE);
   };
 
-  return { login, signIn, logout, user: { ...userData, address } };
+  return { login, signIn, logout, user: { ...userData, address }, error };
 };
 
 export default useUser;

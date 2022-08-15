@@ -1,8 +1,10 @@
 const { randomUUID } = require('crypto');
 const { prismaClient } = require('../../prisma/client');
+const { PrismaClientKnownRequestError } = require('@prisma/client').Prisma;
 const { ethers } = require('ethers');
 const jwt = require('jsonwebtoken');
-const { createApiError } = require('../middlewares/error');
+const { createApiError, createValidationError, ValidationError } = require('../middlewares/error');
+const { capitalizeFirstLetter } = require('../utils/capitalizeFirstLetter');
 
 const authorization = async (req, res) => {
   if (req.cookies.JWT) {
@@ -112,11 +114,32 @@ const signin = async (req, res) => {
 
   if (!user) {
     const nonce = randomUUID();
-    const newUser = await prismaClient.user.create({ data: { walletAddress, email, firstName, lastName, nonce, nick } });
-    res.status(200).json({ nonce: nonce, user: newUser });
+    try {
+      const newUser = await prismaClient.user.create({ data: { walletAddress, email, firstName, lastName, nonce, nick } });
+      res.status(200).json({ nonce: nonce, user: newUser });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          const errors = [];
+
+          const validationError = new ValidationError(
+            error.meta.target[0],
+            `${capitalizeFirstLetter(error.meta.target[0])} used.`,
+            `${capitalizeFirstLetter(error.meta.target[0])} already used by someone.`,
+            `${error.meta.target}.unique`,
+          );
+
+          errors.push(validationError);
+
+          createValidationError(errors, 403);
+        }
+      } else {
+      }
+      createApiError('Something went wrong, you. Account not created.');
+    }
   } else {
     // next(createApiError('Account is already register. Login to acccount.', 305));
-    createApiError('Account is already register.');
+    createApiError('Account is already register.', 403);
   }
 };
 

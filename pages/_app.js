@@ -49,7 +49,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       {/* <DAppProvider config={config}> */}
-      <WagmiConfig client={wagmiClient}>
+      <WagmiConfig client={wagmiClient} >
         <RainbowKitProvider chains={chains}>
           <Toaster position="top-center" reverseOrder={false} />
           {Component.getLayout ? (

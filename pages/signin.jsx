@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import useUser from '@/hooks/useUser';
 import Input from '@/components/utils/Input';
@@ -13,15 +13,27 @@ const validate = (values) => {
     /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
   if (!emailRegex.test(values.email)) errors.email = 'Invalid e-mail';
-  if (values.firstName.length === 0) errors.firstName = 'Type your name';
-  if (values.lastName.length === 0) errors.lastName = 'Type your last name';
-  if (values.nick.length === 0) errors.nick = 'Type your nick';
+  // if (values.firstName.length === 0) errors.firstName = 'Type your name';
+  // if (values.lastName.length === 0) errors.lastName = 'Type your last name';
+  // if (values.nick.length === 0) errors.nick = 'Type your nick';
 
   return errors;
 };
 
 const signin = () => {
-  const { signIn } = useUser();
+  const { signIn, error } = useUser();
+
+  useEffect(() => {
+    if (error) {
+      const errors = {};
+
+      error.forEach((error) => {
+        errors[error.field] = error.userMessage;
+      });
+
+      formik.setErrors(errors);
+    }
+  }, [error]);
 
   const formik = useFormik({
     initialValues: {
@@ -32,16 +44,14 @@ const signin = () => {
     },
     validate,
     onSubmit: async (values) => {
-      // formik.errors.nick = 'Is registered';
-
       if (!Object.keys(formik.errors).length) {
-        signIn(values);
+        await signIn(values);
       }
     },
   });
   return (
-    <div className="position-center flex flex-col w-full p-3 rounded-lg border-2 bg-neutral-50 shadow-xl shadow-neutral-200 md:max-w-md md:p-5">
-      <h1 className="text-4xl text-center flex justify-center items-center gap-3">
+    <div className="flex flex-col w-full p-3 px-2 border-2 rounded-lg shadow-xl bg-neutral-50 shadow-neutral-200 md:max-w-md md:p-5 md:position-center">
+      <h1 className="flex items-center justify-center gap-3 text-4xl text-center">
         Sign in
         {/* <Metamask className="text-7xl" /> */}
       </h1>
@@ -86,7 +96,9 @@ const signin = () => {
           value={formik.values.nick}
           error={formik.errors.nick}
         />
-        <Button className="w-full mt-3">Sign in</Button>
+        <Button className="w-full mt-3" type="submit">
+          Sign in
+        </Button>
       </form>
     </div>
   );
@@ -94,4 +106,5 @@ const signin = () => {
 
 export default signin;
 
+//useOtherLayeout
 signin.getLayout = (page) => <>{page}</>;
