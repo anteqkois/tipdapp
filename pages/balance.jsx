@@ -1,8 +1,8 @@
-import { useEtherBalance, useEthers } from '@usedapp/core';
+// import { useEtherBalance, useEthers } from '@usedapp/core';
 import React from 'react';
 
 const balance = () => {
-  const { account, deactivate } = useEthers();
+  // const { account, deactivate } = useEthers();
   const etherBalance = useEtherBalance(account);
   
   return (

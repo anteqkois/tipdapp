@@ -1,13 +1,16 @@
 import { requireAuthPage } from '../utils/requireAuthPage';
 import React from 'react';
+import useUser from '@/hooks/useUser';
 import Card from '@/components/utils/Card';
 import Button from '@/components/utils/Button';
 // import { useGetTipsByUserQuery } from 'src/redux/tipSlice';
 import Spinner from '@/components/utils/Spinner';
-import Tip from '@/components/tip/tip';
+import Tip from '@/components/tip/Tip';
 import Link from 'next/link';
 
-const dashboard = ({ user }) => {
+const dashboard = () => {
+
+  useUser()
   // const { data, isLoading, isError } = useGetTipsByUserQuery({
   //   userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d',
   // });

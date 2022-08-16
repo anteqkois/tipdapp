@@ -55,9 +55,9 @@ const Tip = ({
   const [details, setDetails] = useState(false);
 
   return (
-    <div className="flex flex-wrap py-2 overflow-visible">
-      <div className="w-full flex items-center justify-between">
-        <h5 className="inline-block mr-3 text-purple-600 font-semibold z-40">@{tipper.nick}</h5>
+    <div className="flex flex-wrap py-3 overflow-visible lg:py-5">
+      <div className="flex items-center justify-between w-full">
+        <h5 className="z-40 inline-block mr-3 font-semibold text-purple-600">@{tipper.nick}</h5>
         <div className="flex gap-1.5">
           <Tooltip content="Display again">
             <svg
@@ -71,60 +71,65 @@ const Tip = ({
           <Flag flag={displayed} tooltip="Display" className="w-7 h-7" />
         </div>
       </div>
-      <p className="w-full -mt-0.5 text-sm text-neutral-500">
-        {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
-      </p>
-      <p className={`py-2 leading-tight max-w-4xl ${!details && 'truncate'}`}>{message}</p>
+      <p className={`pb-3 leading-tight max-w-4xl ${!details && 'truncate'}`}>{message}</p>
       <div className="w-full">
-        <h6 className="text-primary-600 text-base">Details:</h6>
+        <h6 className=" text-primary-600">Tip details:</h6>
         {details ? (
-          <div className="text-sm text-neutral-500">
+          <div className=" text-neutral-500">
             <p>
-              <span className="text-neutral-900 font-medium">Token Symbol: </span>
+              <span className="font-medium text-neutral-600">Date: </span>
+              {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
+            </p>
+            <p>
+              <span className="font-medium text-neutral-600">Token Symbol: </span>
               {cryptocurrency.symbol}
             </p>
             <p>
-              <span className="text-neutral-900 font-medium">Amount: </span>
+              <span className="font-medium text-neutral-600">Amount: </span>
               {ethers.utils.formatEther(tokenAmount)}
             </p>
             <p>
-              <span className="text-neutral-900 font-medium">Value: </span>
+              <span className="font-medium text-neutral-600">Value: </span>
               {ethers.utils.formatEther(value)}$
             </p>
-            <p>
-              <span className="text-neutral-900 font-medium">Transaction Hash: </span>
-              {txHash}
+            <p className="pt-1.5 leading-4 md:pt-0 md:leading-normal">
+              <span className="font-medium text-neutral-600 ">Transaction Hash: </span>
+              <span className="text-[13px] md:text-sm whitespace-nowrap">{txHash} </span>
               <CopyToClipboard copyData={txHash} />
             </p>
-            <p>
-              <span className="text-neutral-900 font-medium">Tipper Address: </span>
-              {tipperWalletAddress}
+            <p className="py-1.5 leading-none md:py-0 md:leading-normal">
+              <span className="font-medium text-neutral-600">Tipper Address: </span>
+              <span className="text-[13px] md:text-sm">{tipperWalletAddress}</span>
               <CopyToClipboard copyData={tipperWalletAddress} />
             </p>
             <p>
-              <span className="text-neutral-900 font-medium">Displayed: </span>
+              <span className="font-medium text-neutral-600">Displayed: </span>
               <Flag flag={displayed} className="w-5 h-5 -mt-1" />
             </p>
           </div>
         ) : (
-          <p className="text-sm font-medium">
-            {cryptocurrency.symbol}: {ethers.utils.formatEther(tokenAmount)}
-            <span className="font-normal text-neutral-500"> ({ethers.utils.formatEther(value)}$)</span>
-          </p>
+          <>
+            <p>
+              <span className="font-medium text-neutral-600">Date: </span>
+              {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
+            </p>
+            <p className="font-medium text-neutral-600">
+              {cryptocurrency.symbol}: {ethers.utils.formatEther(tokenAmount)}
+              <span className="font-normal text-neutral-500"> ({ethers.utils.formatEther(value)}$)</span>
+            </p>
+          </>
         )}
       </div>
-      <Button type="minimalist" className="h-7 my-1 cursor-pointer" onClick={() => setDetails((prev) => !prev)}>
-        {details ? 'hide' : 'display'} details
+      <Button type="minimalist" className="cursor-pointer h-7" onClick={() => setDetails((prev) => !prev)}>
+        {details ? 'hide' : 'display more'} details
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className={`inline ml-1 w-4 h-4 fill-neutral-700 ${details ? ' -rotate-90' : 'translate-y-0.5 rotate-90'}`}
+          className={`inline ml-1 w-6 h-6 stroke-neutral-700 ${details ? ' -rotate-90' : ' rotate-90'}`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
           viewBox="0 0 24 24"
         >
-          {details ? (
-            <path d="M16 8v-4l8 8-8 8v-4h-8.929c-9.059 0-7.134-9.521-6.335-11.418.789 2.445 2.465 3.418 5.372 3.418h9.892z" />
-          ) : (
-            <path d="M16 16v4l8-8-8-8v4h-8.929c-9.059 0-7.134 9.521-6.334 11.418.788-2.445 2.464-3.418 5.371-3.418h9.892z" />
-          )}
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </Button>
     </div>

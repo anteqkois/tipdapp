@@ -25,6 +25,9 @@
   h5 {
     @apply text-2xl font-semibold;
   }
+  h4 {
+    @apply text-3xl font-semibold;
+  }
 }
 
 @layer components {

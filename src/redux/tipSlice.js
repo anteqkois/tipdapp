@@ -41,7 +41,7 @@ const tipsAdapter = createEntityAdapter({
 
 const initialState = tipsAdapter.getInitialState({
   currentPage: 1,
-  pageSize: 2,
+  pageSize: 4,
   amount: 0,
   fetchedPage: [],
   status: STATUS.IDLE, //'idle' | 'loading' | 'succeeded' | 'failed'

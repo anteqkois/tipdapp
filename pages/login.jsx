@@ -6,11 +6,10 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const login = () => {
   const { login, signIn, logout } = useUser();
-
-  const getUserdata = async () => {
-    const data = await axios('/api/user');
-    console.log(data);
-  };
+  // const getUserdata = async () => {
+  //   const data = await axios('/api/user');
+  //   console.log(data);
+  // };
 
   // const auth = async () => {
   //   try {
@@ -49,8 +48,8 @@ const login = () => {
       <br />
       <button onClick={logout}>logout</button>
       <br />
-      <button onClick={getUserdata}>getUserdata</button>
-      <br />
+      {/* <button onClick={getUserdata}>getUserdata</button> */}
+      {/* <br /> */}
       {/* <button onClick={auth}>auth</button> */}
       {/* <button onClick={handlePostRequest}>handlePostRequest</button> */}
     </>

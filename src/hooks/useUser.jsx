@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import useLocalStorage from './useLocalStorage';
 
 const ACTION = {
   LOGIN: 'LOGIN',
@@ -11,12 +12,12 @@ const ACTION = {
   IDLE: 'IDLE',
 };
 
-const initialUserData = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  nick: '',
-};
+// const initialUserData = {
+//   firstName: '',
+//   lastName: '',
+//   email: '',
+//   nick: '',
+// };
 
 const useUser = () => {
   const { openConnectModal } = useConnectModal();
@@ -28,10 +29,22 @@ const useUser = () => {
     },
   });
   const { data, isSuccess, signMessageAsync } = useSignMessage();
-  const [userData, setUserData] = useState(initialUserData);
+  // const [userData, setUserData] = useState(initialUserData);
   const [action, setAction] = useState('');
   const [error, setError] = useState();
+
+  // userData
+  const [userData, setUserData] = useLocalStorage('userData', null);
+  // const [firstName, setFirstName] = useLocalStorage('firstName', '');
+  // const [lastName, setLastName] = useLocalStorage('lastName', '');
+  // const [email, setEmail] = useLocalStorage('email', '');
+  // const [nick, setNick] = useLocalStorage('nick', '');
+
   const router = useRouter();
+
+  useEffect(() => {
+    //TODO! load data from localstorage
+  }, []);
 
   useEffect(() => {
     if (isConnected) {
@@ -63,17 +76,14 @@ const useUser = () => {
   };
 
   const logout = async () => {
-    if (isConnected) {
-      try {
-        const dataLogout = await axios('/api/auth/logout');
-        dataLogout.status = 200 && toast.success('You are succesfully logout');
-        await disconnect();
-        router.push('/login');
-      } catch (error) {
-        toast.error(error.response.data.userMessage);
-      }
-    } else {
-      toast.success("You aren't login");
+    try {
+      const dataLogout = await axios('/api/auth/logout');
+      await disconnect();
+      setUserData(null);
+      dataLogout.status = 200 && toast.success('You are succesfully logout');
+      router.push('/login');
+    } catch (error) {
+      toast.error(error.response.data.userMessage);
     }
   };
 
@@ -96,9 +106,19 @@ const useUser = () => {
           signature,
         },
       });
+
+      setUserData(dataLogin.data.user);
+
+      console.log(window.history.length > 1 && document.referrer.indexOf(window.location.host) !== -1);
+      // console.log(document.referrer.indexOf(window.location.host))
       dataAuth.status = 200 && toast.success('You are succesfully login');
+
+      window.history.length > 1 && document.referrer.indexOf(window.location.host) !== -1
+        ? router.back()
+        : router.push('/dashboard');
     } catch (error) {
-      toast.error(error.response.data.userMessage);
+      console.log(error);
+      toast.error(error.response?.data?.userMessage);
     }
     setAction(ACTION.IDLE);
   };

@@ -68,8 +68,6 @@ const createApiError = (message, status) => {
 };
 
 const handleErrors = (err, req, res, next) => {
-  console.log(err.message);
-  console.log(err.userMessage);
   console.table(err);
 
   if (err instanceof ApiError) {

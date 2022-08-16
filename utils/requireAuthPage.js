@@ -5,6 +5,7 @@ const redirectToLogin = () => {
     redirect: {
       permanent: false,
       destination: '/login',
+      
     },
   };
 };

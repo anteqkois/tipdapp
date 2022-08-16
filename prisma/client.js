@@ -14,11 +14,26 @@
 
 // export default prisma;
 
-// import { PrismaClient } from '@prisma/client';
+// const { PrismaClient } = require('@prisma/client');
+// // const prismaClient = new PrismaClient({log: ['query']});
 // const prismaClient = new PrismaClient();
-// export default prismaClient;
+// module.exports = { prismaClient };
+
+// declare global {
+// eslint-disable-next-line no-var
+// var prisma: PrismaClient | undefined;
+// }
 
 const { PrismaClient } = require('@prisma/client');
-// const prismaClient = new PrismaClient({log: ['query']});
-const prismaClient = new PrismaClient();
+
+const prismaClient =
+  global.prismaClient ||
+  new PrismaClient({
+    // log: ['query'],
+  });
+
+if (process.env.NODE_ENV !== 'production') {
+  global.prismaClient = prismaClient;
+}
+
 module.exports = { prismaClient };

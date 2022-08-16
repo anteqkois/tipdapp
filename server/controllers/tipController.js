@@ -49,7 +49,7 @@ const findByUserWalletAddress = async (req, res) => {
     // return res.status(200).send({ tips, count });
     // return res.status(200).send({ tips });
   } else {
-    //TODO other error message 
+    //TODO other error message
     createApiError('No tips found.', 404);
   }
 };

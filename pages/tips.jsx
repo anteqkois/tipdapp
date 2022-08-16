@@ -10,13 +10,14 @@ import {
   selectStatus,
   setCurrentPage,
 } from 'src/redux/tipSlice';
-import ReactPaginate from 'react-paginate';
-import Tip from '@/components/tip/tip';
+import useUser from '@/hooks/useUser';
+import Tip from '@/components/tip/Tip';
 import Card from '@/components/utils/Card';
 import Button from '@/components/utils/Button';
 import Spinner from '@/components/utils/Spinner';
 import Pagination from '@/components/pagination';
-// import Pagination from '@/components/pagination';
+import TipsDefault from '@/components/tip/TipsDefault';
+import { requireAuthPage } from 'utils/requireAuthPage';
 
 const tipsData = [
   {
@@ -64,46 +65,29 @@ const tipsData = [
   },
 ];
 
-const tips = () => {
+const tips = ({ user }) => {
   const dispatch = useDispatch();
-
+  // const { user } = useUser();
+  console.log(user);
   useEffect(() => {
-    dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page: 1 }));
+    dispatch(getTipsByUser({ userWalletAddress: user.address, page: 1 }));
   }, []);
-
-  // const data = useSelector(tipsSelectors.selectAll);
 
   const status = useSelector(selectStatus);
   const tips = useSelector(selectTipsPerPage);
-  const tipsAmount = useSelector(selectTipsAmount);
   const pageSize = useSelector(selectPageSize);
   const pageAmount = useSelector(selectPageAmount);
 
   const handlePageChange = (page) => {
-    // console.log('page', page);
-    dispatch(getTipsByUser({ userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d', page }));
+    dispatch(getTipsByUser({ userWalletAddress: user.address, page }));
   };
 
   //TODO! useErrorBoundary
   return (
     <section>
       <Card className="flex flex-col lg:p-8">
-        <h5 className="pb-4">Your tips:</h5>
-        <span className="w-[calc(100%+2rem)] -mx-4 bg-neutral-300 h-[1.5px] lg:w-[calc(100%+4rem)] lg:-mx-8" />
-        {status === STATUS.SUCCEEDED ? (
-          <>
-            <ul>
-              {tips.map((tip) => (
-                <li key={tip.txHash} className="w-full">
-                  <Tip {...tip} />
-                  <div className="w-[calc(100%+2rem)] -mx-4 bg-neutral-300 h-[1.5px] lg:w-[calc(100%+4rem)] lg:-mx-8" />
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <Spinner />
-        )}
+        <h4 className="pb-4">Your tips:</h4>
+        {status === STATUS.SUCCEEDED ? <TipsDefault tips={tips} /> : <Spinner />}
         <div className="flex items-center justify-center pt-4 text-lg">
           <Pagination onPageChange={handlePageChange} pageRangeDisplayed={2} buttonsMarginPage={2} pageAmount={pageAmount} />
         </div>
@@ -113,3 +97,9 @@ const tips = () => {
 };
 
 export default tips;
+
+export const getServerSideProps = requireAuthPage(async (ctx) => {
+  return {
+    props: { user: ctx.req.user },
+  };
+});
