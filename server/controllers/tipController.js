@@ -9,9 +9,11 @@ const findByUserWalletAddress = async (req, res) => {
 
   const skip = (page - 1) * pageSize;
 
+  typeof req.query?.userWalletAddress === 'undefined' && createApiError('Missing user address.')
+
   const count = await prismaClient.tip.count({
     where: {
-      userWalletAddress: req.query?.userWalletAddress,
+      userWalletAddress: req.query.userWalletAddress,
     },
   });
 
@@ -19,7 +21,7 @@ const findByUserWalletAddress = async (req, res) => {
     skip,
     take: pageSize,
     where: {
-      userWalletAddress: req.query?.userWalletAddress,
+      userWalletAddress: req.query.userWalletAddress,
     },
     orderBy: {
       date: 'asc',

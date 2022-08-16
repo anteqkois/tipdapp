@@ -15,13 +15,6 @@ const Navbar = () => {
   const isMobile = useMediaQuery('(max-width: 1024px)', true);
   const { logout, user } = useUser();
 
-  const [isSSR, setIsSSR] = useState(true);
-
-  // useEffect(() => {
-  //   setIsSSR(false);
-  // }, []);
-  // console.log(user);
-
   return isMobile ? (
     <>
       <div className="fixed top-0 left-0 w-full h-12 bg-neutral-50 px-2 grid grid-cols-[50px_auto_45px] gap-5 items-center z-50">

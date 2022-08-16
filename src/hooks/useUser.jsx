@@ -29,17 +29,10 @@ const useUser = () => {
     },
   });
   const { data, isSuccess, signMessageAsync } = useSignMessage();
-  // const [userData, setUserData] = useState(initialUserData);
+
   const [action, setAction] = useState('');
   const [error, setError] = useState();
-
-  // userData
   const [userData, setUserData] = useLocalStorage('userData', null);
-  // const [firstName, setFirstName] = useLocalStorage('firstName', '');
-  // const [lastName, setLastName] = useLocalStorage('lastName', '');
-  // const [email, setEmail] = useLocalStorage('email', '');
-  // const [nick, setNick] = useLocalStorage('nick', '');
-
   const router = useRouter();
 
   useEffect(() => {
@@ -109,15 +102,14 @@ const useUser = () => {
 
       setUserData(dataLogin.data.user);
 
-      console.log(window.history.length > 1 && document.referrer.indexOf(window.location.host) !== -1);
-      // console.log(document.referrer.indexOf(window.location.host))
+      if (window.history.length > 1 && document.referrer.indexOf(window.location.host) !== -1) {
+        router.back();
+      } else {
+        router.push('/dashboard');
+      }
       dataAuth.status = 200 && toast.success('You are succesfully login');
-
-      window.history.length > 1 && document.referrer.indexOf(window.location.host) !== -1
-        ? router.back()
-        : router.push('/dashboard');
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(error.response?.data?.userMessage);
     }
     setAction(ACTION.IDLE);

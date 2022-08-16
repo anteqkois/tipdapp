@@ -90,6 +90,9 @@ const tipsSlice = createSlice({
     builder.addCase(getTipsByUser.rejected, (state, action) => {
       if (action.error.name === 'ConditionError') {
         state.currentPage = action.meta.arg.page;
+      } else if (action.payload.name === 'ApiError') {
+        state.error = action.payload.userMessage;
+        state.status = STATUS.FAILED;
       } else {
         state.error = action.payload;
         state.status = STATUS.FAILED;
@@ -115,6 +118,7 @@ export const selectTipsPerPage = createSelector([(state) => state.tips.entities,
   idsForPage.reduce((previousValue, id) => [...previousValue, entities[id]], []),
 );
 
+export const selectError = createSelector([(state) => state.tips.error], (error) => error);
 export const selectStatus = createSelector([(state) => state.tips.status], (status) => status);
 export const selectTipsAmount = createSelector([(state) => state.tips.amount], (amount) => amount);
 export const selectPageSize = createSelector([(state) => state.tips.pageSize], (pageSize) => pageSize);

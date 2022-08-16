@@ -48,10 +48,6 @@ const login = () => {
       <br />
       <button onClick={logout}>logout</button>
       <br />
-      {/* <button onClick={getUserdata}>getUserdata</button> */}
-      {/* <br /> */}
-      {/* <button onClick={auth}>auth</button> */}
-      {/* <button onClick={handlePostRequest}>handlePostRequest</button> */}
     </>
   );
 };
