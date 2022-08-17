@@ -1,34 +1,29 @@
-// import { useEtherBalance, useEthers } from '@usedapp/core';
+import { chain } from 'wagmi';
+import TokenBalance from '@/components/Token/TokenBalance';
+import Card from '@/components/utils/Card';
 import useUser from '@/hooks/useUser';
-import React from 'react';
-import { useBalance } from 'wagmi';
+import { requireAuthPage } from 'utils/requireAuthPage';
 
-const balance = () => {
-  // const { account, deactivate } = useEthers();
-  // const etherBalance = useEtherBalance(account);
+const balance = ({}) => {
   const { user } = useUser();
 
-  // const { data, isLoading }, balance = useBalance({
-  const  balance = useBalance({
-    addressOrName: user.address,
-    formatUnits: 'ether',
-  });
-
-  console.log(balance)
-
   return (
-    <div>
-      {/* {account && <button onClick={() => deactivate()}>Disconnect</button>} */}
-      {/* {data && (
-        <div className="balance">
-          <br />
-          Balance:
-          <p className="bold">{data}</p>
-        </div>
-      )} */}
-      {/* │ Run the following to update │ │ npm i --save-dev prisma@latest │ │ npm i @prisma/client@latest */}
-    </div>
+    <Card>
+      <TokenBalance walletAddress={user.walletAddress} chainId={chain.mainnet.id} tokenAddress />
+      <TokenBalance walletAddress={user.walletAddress} chainId={chain.polygon.id} tokenAddress />
+      <TokenBalance walletAddress={user.walletAddress} chainId={chain.optimism.id} tokenAddress />
+      <TokenBalance walletAddress={user.walletAddress} chainId={chain.hardhat.id} tokenAddress />
+    </Card>
   );
 };
 
+{
+  /* │ Run the following to update │ │ npm i --save-dev prisma@latest │ │ npm i @prisma/client@latest */
+}
 export default balance;
+
+export const getServerSideProps = requireAuthPage(async (ctx) => {
+  return {
+    props: { user: ctx.req.user },
+  };
+});

@@ -12,12 +12,23 @@ const ACTION = {
   IDLE: 'IDLE',
 };
 
-// const initialUserData = {
-//   firstName: '',
-//   lastName: '',
-//   email: '',
-//   nick: '',
-// };
+const initialUserData = {
+  allDonateCount: 0,
+  allDonateValue: '0',
+  allDonateWithdraw: '0',
+  avatarPath: null,
+  createdAt: null,
+  email: null,
+  firstName: null,
+  lastName: null,
+  linkToDonate: null,
+  nick: null,
+  nonce: null,
+  tokenAddress: null,
+  updateAt: null,
+  walletAddress: null,
+  widgetId: null,
+};
 
 const useUser = () => {
   const { openConnectModal } = useConnectModal();
@@ -32,22 +43,18 @@ const useUser = () => {
 
   const [action, setAction] = useState('');
   const [error, setError] = useState();
-  const [userData, setUserData] = useLocalStorage('userData', null);
+  const [user, setUser] = useLocalStorage('user', initialUserData);
   const router = useRouter();
-
-  useEffect(() => {
-    //TODO! load data from localstorage
-  }, []);
 
   useEffect(() => {
     if (isConnected) {
       if (action === ACTION.LOGIN) handleLogin();
       if (action === ACTION.SIGNIN) handleSignIn();
     }
-  }, [isConnected, userData]);
+  }, [isConnected, user]);
 
   const login = async () => {
-    if (isConnected) {
+    if (isConnected && user.walletAddress) {
       toast.success('You are already logged in');
     } else {
       await openConnectModal();
@@ -59,11 +66,11 @@ const useUser = () => {
     if (isConnected && !error) {
       toast.success('You are already logged in');
     } else if (isConnected) {
-      setUserData({ firstName, lastName, email, nick });
+      setUser({ firstName, lastName, email, nick });
       setAction(ACTION.SIGNIN);
     } else {
       await openConnectModal();
-      setUserData({ firstName, lastName, email, nick });
+      setUser({ firstName, lastName, email, nick });
       setAction(ACTION.SIGNIN);
     }
   };
@@ -72,8 +79,8 @@ const useUser = () => {
     try {
       const dataLogout = await axios('/api/auth/logout');
       await disconnect();
-      setUserData(null);
       dataLogout.status = 200 && toast.success('You are succesfully logout');
+      setUser(initialUserData);
       router.push('/login');
     } catch (error) {
       toast.error(error.response.data.userMessage);
@@ -100,7 +107,8 @@ const useUser = () => {
         },
       });
 
-      setUserData(dataLogin.data.user);
+      // console.log(dataLogin.data.user);
+      setUser(dataLogin.data.user);
 
       if (window.history.length > 1 && document.referrer.indexOf(window.location.host) !== -1) {
         router.back();
@@ -121,10 +129,10 @@ const useUser = () => {
         method: 'POST',
         data: {
           walletAddress: address,
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          email: userData.email,
-          nick: userData.nick,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          nick: user.nick,
         },
       });
 
@@ -138,7 +146,9 @@ const useUser = () => {
           signature,
         },
       });
+
       dataAuth.status = 200 && toast.success('You are succesfully sign in');
+      setUser(dataAuth.data.user);
       router.push('/dashboard');
     } catch (error) {
       error.response.data.errors ? setError(error.response.data.errors) : toast.error(error.response.data.userMessage);
@@ -146,7 +156,7 @@ const useUser = () => {
     setAction(ACTION.IDLE);
   };
 
-  return { login, signIn, logout, user: { ...userData, address }, error };
+  return { login, signIn, logout, user, error };
 };
 
 export default useUser;

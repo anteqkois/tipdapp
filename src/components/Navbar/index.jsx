@@ -17,7 +17,7 @@ const Navbar = () => {
 
   return isMobile ? (
     <>
-      <div className="fixed top-0 left-0 w-full h-12 bg-neutral-50 px-2 grid grid-cols-[50px_auto_45px] gap-5 items-center z-50">
+      <div className="fixed top-0 left-0 w-full h-12 bg-neutral-50 px-2 grid grid-cols-[50px_auto_45px] gap-5 items-center z-50 shadow-md">
         <div className="flex-center">LOGO</div>
         <p className="text-lg underline flex-center decoration-2 decoration-primary-600">{user.nick}</p>
         <Hamburger isOpen={isOpen} setIsOpen={setIsOpen} />

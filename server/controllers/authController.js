@@ -57,7 +57,7 @@ const authorization = async (req, res) => {
       httpOnly: true,
     });
 
-    res.status(200).json({ message: 'You are authorizated' });
+    res.status(200).json({ message: 'You are authorizated', user: { ...user, nonce: '' } });
   } else {
     createApiError('Account not registered. Sign in first.');
   }

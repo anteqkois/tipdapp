@@ -23,10 +23,10 @@ import { requireAuthPage } from 'utils/requireAuthPage';
 const tips = () => {
   const dispatch = useDispatch();
   const { user } = useUser();
-  
+
   useEffect(() => {
-    dispatch(getTipsByUser({ userWalletAddress: user.address, page: 1 }));
-  }, []);
+    user.walletAddress && dispatch(getTipsByUser({ userWalletAddress: user.walletAddress, page: 1 }));
+  }, [user.walletAddress]);
 
   const error = useSelector(selectError);
   const status = useSelector(selectStatus);
@@ -35,7 +35,7 @@ const tips = () => {
   const pageAmount = useSelector(selectPageAmount);
 
   const handlePageChange = (page) => {
-    dispatch(getTipsByUser({ userWalletAddress: user.address, page }));
+    dispatch(getTipsByUser({ userWalletAddress: user.walletAddress, page }));
   };
 
   //TODO! useErrorBoundary
