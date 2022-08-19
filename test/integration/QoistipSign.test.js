@@ -7,7 +7,7 @@ const {
   CHAILINK_PRICE_ORACLE_ADDRESS_USD,
   ERC20_TOKEN_ADDRESS,
   CHAILINK_PRICE_ORACLE_ADDRESS_ETH,
-} = require('../../utils/constant');
+} = require('../../src/utils/constant');
 const { packDataToSign } = require('../mocks/packDataToSign');
 const CustomerToken = require('../../artifacts/contracts/CustomerToken.sol/CustomerToken.json');
 const sandABI = require('../../src/artifacts/SAND.json');

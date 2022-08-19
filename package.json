@@ -1,81 +1,82 @@
 {
-  "name": "qoisdapp",
-  "version": "0.1.4",
-  "node": "17.6.0",
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/anteqkois/qoisdapp.git"
-  },
-  "author": "Antek Kois",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/anteqkois/qoisdapp/issues"
-  },
-  "scripts": {
-    "dev": "STATE=dev-local nodemon server.js",
-    "start": "NODE_ENV=production node start",
-    "build": "next build",
-    "commit": "git add . && cz",
-    "postcommit": "git push",
-    "test-u": "STATE=dev-local npx hardhat test test/unit/*",
-    "test-integration": "npx hardhat node & STATE=dev-local npx hardhat test test/integration/* && kill $(lsof -Pi | grep :8545 | awk '{ print $2}')",
-    "lint": "next lint",
-    "release": "standard-version",
-    "flatten": "npx hardhat flatten ./contracts/QoistipSign.sol  > ./contracts/QoistipSignFlatten.sol",
-    "postgres": "[ ! -f .env ] || export $(grep -v '^#' .env | xargs) | sudo service postgresql start | $DATABASE_PASSWORD"
-  },
-  "dependencies": {
-    "@prisma/client": "^3.14.0",
-    "@rainbow-me/rainbowkit": "^0.4.6",
-    "@reduxjs/toolkit": "^1.8.0",
-    "axios": "^0.26.0",
-    "body-parser": "^1.20.0",
-    "chai-as-promised": "^7.1.1",
-    "cookie-parser": "^1.4.6",
-    "dayjs": "^1.11.3",
-    "dotenv": "^16.0.0",
-    "express": "^4.17.3",
-    "formik": "^2.2.9",
-    "jsonwebtoken": "^8.5.1",
-    "next": "^12.1.5",
-    "rc-tooltip": "^5.1.1",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-hot-toast": "^2.2.0",
-    "react-redux": "^7.2.6",
-    "redux-devtools-extension": "^2.13.9",
-    "wagmi": "^0.6.3"
-  },
-  "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.0.5",
-    "@nomiclabs/hardhat-waffle": "^2.0.3",
-    "@openzeppelin/contracts": "^4.5.0",
-    "@openzeppelin/contracts-upgradeable": "^4.5.2",
-    "@openzeppelin/hardhat-upgrades": "^1.17.0",
-    "@svgr/webpack": "^6.2.1",
-    "@uniswap/v2-core": "^1.0.1",
-    "autoprefixer": "^10.4.2",
-    "chai": "^4.3.6",
-    "cz-conventional-changelog": "^3.3.0",
-    "eslint": "8.10.0",
-    "eslint-config-next": "12.1.0",
-    "ethereum-waffle": "^3.4.0",
-    "ethers": "^5.6.9",
-    "hardhat": "^2.9.1",
-    "hardhat-gas-reporter": "^1.0.8",
-    "nodemon": "^2.0.15",
-    "postcss": "^8.4.7",
-    "prisma": "^3.14.0",
-    "standard-version": "^9.3.2",
-    "tailwindcss": "^3.0.23"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+    "name": "qoisdapp",
+    "version": "0.1.4",
+    "node": "17.6.0",
+    "type": "module",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/anteqkois/qoisdapp.git"
+    },
+    "author": "Antek Kois",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/anteqkois/qoisdapp/issues"
+    },
+    "scripts": {
+        "dev": "STATE=dev-local nodemon src/server.js",
+        "start": "NODE_ENV=production node src/server.js",
+        "build": "next build",
+        "commit": "git add . && cz",
+        "postcommit": "git push",
+        "test-u": "STATE=dev-local npx hardhat test test/unit/*",
+        "test-integration": "npx hardhat node & STATE=dev-local npx hardhat test test/integration/* && kill $(lsof -Pi | grep :8545 | awk '{ print $2}')",
+        "lint": "next lint",
+        "release": "standard-version",
+        "flatten": "npx hardhat flatten ./contracts/QoistipSign.sol  > ./contracts/QoistipSignFlatten.sol",
+        "postgres": "[ ! -f .env ] || export $(grep -v '^#' .env | xargs) | sudo service postgresql start | $DATABASE_PASSWORD"
+    },
+    "dependencies": {
+        "@prisma/client": "^3.14.0",
+        "@rainbow-me/rainbowkit": "^0.4.6",
+        "@reduxjs/toolkit": "^1.8.0",
+        "axios": "^0.26.0",
+        "body-parser": "^1.20.0",
+        "chai-as-promised": "^7.1.1",
+        "cookie-parser": "^1.4.6",
+        "dayjs": "^1.11.3",
+        "dotenv": "^16.0.0",
+        "express": "^4.17.3",
+        "formik": "^2.2.9",
+        "jsonwebtoken": "^8.5.1",
+        "next": "^12.1.5",
+        "rc-tooltip": "^5.1.1",
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "react-hot-toast": "^2.2.0",
+        "react-redux": "^7.2.6",
+        "redux-devtools-extension": "^2.13.9",
+        "wagmi": "^0.6.3"
+    },
+    "devDependencies": {
+        "@nomiclabs/hardhat-ethers": "^2.0.5",
+        "@nomiclabs/hardhat-waffle": "^2.0.3",
+        "@openzeppelin/contracts": "^4.5.0",
+        "@openzeppelin/contracts-upgradeable": "^4.5.2",
+        "@openzeppelin/hardhat-upgrades": "^1.17.0",
+        "@svgr/webpack": "^6.2.1",
+        "@uniswap/v2-core": "^1.0.1",
+        "autoprefixer": "^10.4.2",
+        "chai": "^4.3.6",
+        "cz-conventional-changelog": "^3.3.0",
+        "eslint": "8.10.0",
+        "eslint-config-next": "12.1.0",
+        "ethereum-waffle": "^3.4.0",
+        "ethers": "^5.6.9",
+        "hardhat": "^2.9.1",
+        "hardhat-gas-reporter": "^1.0.8",
+        "nodemon": "^2.0.15",
+        "postcss": "^8.4.7",
+        "prisma": "^3.14.0",
+        "standard-version": "^9.3.2",
+        "tailwindcss": "^3.0.23"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    },
+    "prisma": {
+        "seed": "node prisma/seed.js"
     }
-  },
-  "prisma": {
-    "seed": "node prisma/seed.js"
-  }
 }

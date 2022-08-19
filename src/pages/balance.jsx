@@ -22,7 +22,7 @@ const balance = ({}) => {
 }
 export default balance;
 
-export const getServerSideProps = requireAuthPage(async (ctx) => {
+export const getServerSideProps = requireAuthPage((ctx) => {
   return {
     props: { user: ctx.req.user },
   };
