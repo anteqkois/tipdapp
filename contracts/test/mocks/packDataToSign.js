@@ -1,9 +1,9 @@
 const { ethers } = require('ethers');
-const { signer, provider } = require('../../server/ethersProvider');
+const { signer, provider } = require('../../utils/ethersProvider');
 const { ERC20_TOKEN_ADDRESS } = require('../../utils/constant');
 const { parseUnits, formatUnits } = ethers.utils;
 
-const customerAddressToCustomerTokenAddress = {
+const userAddressToUserTokenAddress = {
   '0x70997970C51812dc3A010C7d01b50e0d17dc79C8': '0x7542002642420d2eea9164caa79a536dee18ae7f',
 };
 
@@ -14,7 +14,7 @@ const tokenPrice = {
 };
 
 // FINAL -> string tokenAmount, string tokenQuote, string addressToDonate
-const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, customerTokenAddress) => {
+const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, userTokenAddress) => {
   if (addressToDonate === ethers.constants.AddressZero) {
     throw new Error('Address to donate is zero address');
   }
@@ -22,10 +22,10 @@ const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, customer
 
   //TODO* FROM DB, if not in DB throw error
   const tokenAddress = ERC20_TOKEN_ADDRESS[tokenQuote];
-  // const tokenCustomerAddress = customerAddressToCustomerTokenAddress[addressToDonate];
+  // const tokenUserAddress = userAddressToUserTokenAddress[addressToDonate];
   
   //TODO* FROM DB, if not in DB throw error
-  const tokenCustomerAddress = customerTokenAddress;
+  const tokenUserAddress = userTokenAddress;
 
   //TODO* FROM DB OR COINMARKETCAP
   const price = tokenPrice[tokenQuote];
@@ -37,16 +37,16 @@ const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, customer
   }
 
   const fee = tokenAmountBN.mul('0300').div('10000');
-  const tokenToCustomer = tokenAmountBN.sub(fee);
+  const tokenToUser = tokenAmountBN.sub(fee);
 
   const block = await provider.getBlock();
   const timestamp = block.timestamp;
   // const timestamp = Math.floor(Date.now() / 1000);
 
-  // donatedTokenAmount - amountToMint - AmountToCustomer - amountToAdmin - tokenDonateAddress - customerTokenAddress
+  // donatedTokenAmount - amountToMint - AmountToUser - amountToAdmin - tokenDonateAddress - userTokenAddress
   const hashData = ethers.utils.solidityKeccak256(
     ['uint256', 'uint256', 'uint256', 'uint256', 'uint256', 'address', 'address'],
-    [tokenAmountBN, amountToMint, tokenToCustomer, fee, timestamp, tokenAddress, tokenCustomerAddress],
+    [tokenAmountBN, amountToMint, tokenToUser, fee, timestamp, tokenAddress, tokenUserAddress],
   );
 
   const hashDataBinary = ethers.utils.arrayify(hashData);
@@ -57,11 +57,11 @@ const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, customer
     signatureData: {
       tokenAmountBN,
       amountToMint,
-      tokenToCustomer,
+      tokenToUser,
       fee,
       timestamp,
       tokenAddress,
-      tokenCustomerAddress,
+      tokenUserAddress,
     },
   };
 };

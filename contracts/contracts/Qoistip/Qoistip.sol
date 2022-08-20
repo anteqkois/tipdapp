@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./CustomerToken.sol";
+import "../UserToken/UserToken.sol";
 import "./AggregatorV3Interface.sol";
 // import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -11,7 +11,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     mapping(address => bytes32) oracleData;
-    mapping(address => address) private _tokenCustomer;
+    mapping(address => address) private _tokenUser;
     mapping(address => mapping(address => uint256)) addressToTokenToBalance;
     mapping(address => uint256) BalanceETH;
 
@@ -32,11 +32,11 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         uint256 tokenAmount
     );
     event Withdraw(
-        address indexed customer,
+        address indexed user,
         address tokenAddress,
         uint256 tokenAmount
     );
-    event NewCustomer(address indexed customerAddress, address customerToken);
+    event NewUser(address indexed userAddress, address userToken);
 
     function initialize() external initializer {
         __Ownable_init();
@@ -61,44 +61,44 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         _minValue = _newMinValue;
     }
 
-    function tokenCustomer(address _customerAddress)
+    function tokenUser(address _userAddress)
         external
         view
         returns (address)
     {
-        return _tokenCustomer[_customerAddress];
+        return _tokenUser[_userAddress];
     }
 
-    function balanceOfERC20(address _customerAddress, address _tokenAddress)
+    function balanceOfERC20(address _userAddress, address _tokenAddress)
         external
         view
         returns (uint256 balance)
     {
-        return addressToTokenToBalance[_customerAddress][_tokenAddress];
+        return addressToTokenToBalance[_userAddress][_tokenAddress];
     }
 
-    function balanceOfETH(address _customerAddress)
+    function balanceOfETH(address _userAddress)
         external
         view
         returns (uint256 balance)
     {
-        return BalanceETH[_customerAddress];
+        return BalanceETH[_userAddress];
     }
 
-    function registerCustomer(
+    function registerUser(
         string memory _tokenSymbol,
         string memory _tokenName
     ) external virtual {
         require(
-            _tokenCustomer[msg.sender] == address(0),
+            _tokenUser[msg.sender] == address(0),
             "This address has been already registered"
         );
 
         address _newToken = address(
-            new CustomerToken(_tokenSymbol, _tokenName)
+            new UserToken(_tokenSymbol, _tokenName)
         );
-        _tokenCustomer[msg.sender] = _newToken;
-        emit NewCustomer(msg.sender, _newToken);
+        _tokenUser[msg.sender] = _newToken;
+        emit NewUser(msg.sender, _newToken);
     }
 
     function setPriceOracle(address _tokenAddress, bytes32 _priceOracleData)
@@ -144,9 +144,9 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         address _tokenAddress,
         uint256 _tokenAmount
     ) external virtual {
-        address tokenCustomerAddress = _tokenCustomer[_addressToDonate];
+        address tokenUserAddress = _tokenUser[_addressToDonate];
         require(
-            tokenCustomerAddress != address(0),
+            tokenUserAddress != address(0),
             "Address to donate was not registered"
         );
         uint256 _tokenToMint = (_getPrice(_tokenAddress) * _tokenAmount) / 1e18;
@@ -171,7 +171,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         addressToTokenToBalance[address(this)][_tokenAddress] =
             _tokenAmount -
             _withFee;
-        CustomerToken(tokenCustomerAddress).mint(msg.sender, _tokenToMint);
+        UserToken(tokenUserAddress).mint(msg.sender, _tokenToMint);
 
         // Emiting events is neccesary ?
         emit Donate(msg.sender, _addressToDonate, _tokenAddress, _tokenAmount);
@@ -194,7 +194,7 @@ contract Qoistip is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         BalanceETH[_addressToDonate] = _withFee;
         BalanceETH[address(this)] = msg.value - _withFee;
 
-        CustomerToken(_tokenCustomer[_addressToDonate]).mint(
+        UserToken(_tokenUser[_addressToDonate]).mint(
             msg.sender,
             _tokenToMint
         );

@@ -2,11 +2,25 @@
 // CHANGE LICENSE !
 pragma solidity 0.8.13;
 
-import "./CustomerToken.sol";
+import "../UserToken/UserToken.sol";
 import "./AggregatorV3Interface.sol";
 // import "hardhat/console.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+
+interface IERC20Minimal {
+    // function totalSupply() external view returns (uint256);
+    // function balanceOf(address account) external view returns (uint256);
+    function transfer(address to, uint256 amount) external returns (bool);
+
+    // function allowance(address owner, address spender) external view returns (uint256);
+    // function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) external returns (bool);
+}
 
 contract QoistipSign is Initializable, UUPSUpgradeable {
     uint256 internal _minValue;
@@ -21,7 +35,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
     mapping(address => uint256) internal _balanceETH;
     mapping(address => mapping(address => uint256))
         internal _addressToTokenToBalance;
-    mapping(address => address) internal _tokenCustomer;
+    mapping(address => address) internal _tokenUser;
 
     AggregatorV3Interface constant ethUsdOracle =
         AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
@@ -33,11 +47,11 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         uint256 tokenAmount
     );
     event Withdraw(
-        address indexed customer,
+        address indexed user,
         address tokenAddress,
         uint256 tokenAmount
     );
-    event NewCustomer(address indexed customerAddress, address customerToken);
+    event NewUser(address indexed userAddress, address userToken);
 
     modifier onlyOwner() {
         require(_owner == msg.sender, "Only owner");
@@ -97,42 +111,43 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         _minValue = newMinValue;
     }
 
-    function tokenCustomer(address customerAddress)
+    function tokenUser(address userAddress)
         external
         view
         virtual
         returns (address)
     {
-        return _tokenCustomer[customerAddress];
+        return _tokenUser[userAddress];
     }
 
-    function balanceERC20(address customerAddress, address tokenAddress)
+    function balanceERC20(address userAddress, address tokenAddress)
         external
         view
         virtual
         returns (uint256 balance)
     {
-        return _addressToTokenToBalance[customerAddress][tokenAddress];
+        return _addressToTokenToBalance[userAddress][tokenAddress];
     }
 
-    function balanceETH(address customerAddress)
+    function balanceETH(address userAddress)
         external
         view
         virtual
         returns (uint256 balance)
     {
-        return _balanceETH[customerAddress];
+        return _balanceETH[userAddress];
     }
 
-    function registerCustomer(
-        string memory tokenSymbol,
-        string memory tokenName
-    ) external virtual notPaused {
-        require(_tokenCustomer[msg.sender] == address(0), "Address registered");
+    function registerUser(string memory tokenSymbol, string memory tokenName)
+        external
+        virtual
+        notPaused
+    {
+        require(_tokenUser[msg.sender] == address(0), "Address registered");
 
-        address _newToken = address(new CustomerToken(tokenSymbol, tokenName));
-        _tokenCustomer[msg.sender] = _newToken;
-        emit NewCustomer(msg.sender, _newToken);
+        address _newToken = address(new UserToken(tokenSymbol, tokenName));
+        _tokenUser[msg.sender] = _newToken;
+        emit NewUser(msg.sender, _newToken);
     }
 
     //donateERC20_K3u(): 0x0000701f
@@ -140,12 +155,12 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         bytes calldata signature,
         uint256 tokenAmount,
         uint256 mintTokenAmount,
-        uint256 toCustomer,
+        uint256 toUser,
         uint256 fee,
         uint256 timestampOffChain,
         address addressToDonate,
         address tokenAddress,
-        address tokenCustomerAddress
+        address tokenUserAddress
     ) external virtual notPaused {
         // donate worth check on backend
         //connect msg with onChain data with tx
@@ -178,11 +193,11 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
                             abi.encodePacked(
                                 tokenAmount,
                                 mintTokenAmount,
-                                toCustomer,
+                                toUser,
                                 fee,
                                 timestampOffChain,
                                 tokenAddress,
-                                tokenCustomerAddress
+                                tokenUserAddress
                             )
                         )
                     )
@@ -201,13 +216,11 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         );
 
         unchecked {
-            _addressToTokenToBalance[addressToDonate][
-                tokenAddress
-            ] += toCustomer;
+            _addressToTokenToBalance[addressToDonate][tokenAddress] += toUser;
             _addressToTokenToBalance[address(this)][tokenAddress] += fee;
         }
 
-        CustomerToken(tokenCustomerAddress).mint(msg.sender, mintTokenAmount);
+        UserToken(tokenUserAddress).mint(msg.sender, mintTokenAmount);
     }
 
     //donateETH_Bej(): 0x00002206
@@ -230,10 +243,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
             _balanceETH[addressToDonate] += msg.value - fee;
         }
 
-        CustomerToken(_tokenCustomer[addressToDonate]).mint(
-            msg.sender,
-            tokenToMint
-        );
+        UserToken(_tokenUser[addressToDonate]).mint(msg.sender, tokenToMint);
 
         emit Donate(msg.sender, addressToDonate, address(0), msg.value);
     }
@@ -307,18 +317,4 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         (bool sent, ) = address(msg.sender).call{value: _ethBalance}("");
         require(sent, "Failed to withdraw Ether");
     }
-}
-
-interface IERC20Minimal {
-    // function totalSupply() external view returns (uint256);
-    // function balanceOf(address account) external view returns (uint256);
-    function transfer(address to, uint256 amount) external returns (bool);
-
-    // function allowance(address owner, address spender) external view returns (uint256);
-    // function approve(address spender, uint256 amount) external returns (bool);
-    function transferFrom(
-        address from,
-        address to,
-        uint256 amount
-    ) external returns (bool);
 }

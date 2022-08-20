@@ -1,0 +1,21 @@
+{
+    "name": "contracts",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test-unit": "STATE=dev-local npx hardhat test test/unit/*",
+        "test-integration": "npx hardhat node & STATE=dev-local npx hardhat test test/integration/*",
+        "posttest-integration:": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}')",
+        "flatten": "npx hardhat flatten ./contracts/QoistipSign/QoistipSign.sol  > ./contracts/QoistipSign/QoistipSignFlatten.sol"
+    },
+    "author": "Antek Kois",
+    "license": "ISC",
+    "devDependencies": {
+        "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+        "@openzeppelin/contracts": "^4.7.3",
+        "@openzeppelin/contracts-upgradeable": "^4.7.3",
+        "@openzeppelin/hardhat-upgrades": "^1.20.0",
+        "chai": "^4.3.6"
+    }
+}

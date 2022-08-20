@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-// import "./CustomerToken.sol";
+// import "./UserToken.sol";
 import "./QoistipSignV2.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
@@ -10,12 +10,12 @@ contract QoistipSignV3 is QoistipSignV2 {
         bytes calldata signature,
         uint256 tokenAmount,
         uint256 mintTokenAmount,
-        uint256 toCustomer,
+        uint256 toUser,
         uint256 fee,
         uint256 timestampOffChain,
         address addressToDonate,
         address tokenAddress,
-        address tokenCustomerAddress
+        address tokenUserAddress
     ) external virtual override {
         require(
             timestampOffChain + 90 seconds > block.timestamp,
@@ -44,11 +44,11 @@ contract QoistipSignV3 is QoistipSignV2 {
                             abi.encodePacked(
                                 tokenAmount,
                                 mintTokenAmount,
-                                toCustomer,
+                                toUser,
                                 fee,
                                 timestampOffChain,
                                 tokenAddress,
-                                tokenCustomerAddress
+                                tokenUserAddress
                             )
                         )
                     )
@@ -69,11 +69,11 @@ contract QoistipSignV3 is QoistipSignV2 {
         unchecked {
             _addressToTokenToBalance[addressToDonate][
                 tokenAddress
-            ] += toCustomer;
+            ] += toUser;
             _addressToTokenToBalance[address(this)][tokenAddress] += fee;
         }
 
-        CustomerToken(tokenCustomerAddress).mint(msg.sender, mintTokenAmount);
+        UserToken(tokenUserAddress).mint(msg.sender, mintTokenAmount);
     }
 
     function donateETH(address addressToDonate)
@@ -94,7 +94,7 @@ contract QoistipSignV3 is QoistipSignV2 {
         _balanceETH[address(this)] += fee;
         _balanceETH[addressToDonate] += msg.value - fee;
 
-        CustomerToken(_tokenCustomer[addressToDonate]).mint(
+        UserToken(_tokenUser[addressToDonate]).mint(
             msg.sender,
             tokenToMint
         );
@@ -103,11 +103,11 @@ contract QoistipSignV3 is QoistipSignV2 {
         emit Donate(msg.sender, addressToDonate, address(0), msg.value);
     }
 
-    function changeTokenOwner(address customerAddress, address newOwner)
+    function changeTokenOwner(address userAddress, address newOwner)
         external
         onlyOwner
     {
-        bool success = CustomerToken(_tokenCustomer[customerAddress])
+        bool success = UserToken(_tokenUser[userAddress])
             .changeOwner(newOwner);
         require(success, "Owner not change");
     }

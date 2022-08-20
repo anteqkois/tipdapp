@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "./ICustomerToken.sol";
+import "./IUserToken.sol";
 
 //https://github.com/Rari-Capital/solmate/blob/main/src/tokens/ERC20.sol LOW GAS
 
-contract CustomerTokenSafeGas is ICustomerToken {
+contract UserTokenSafeGas is IUserToken {
     string private _name;
     string private _symbol;
     uint256 private _totalSupply;

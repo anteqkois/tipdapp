@@ -2,9 +2,9 @@
 // CHANGE LICENSE !
 pragma solidity 0.8.13;
 
-import "./ICustomerToken.sol";
+import "./IUserToken.sol";
 
-contract CustomerToken is ICustomerToken {
+contract UserToken is IUserToken {
     string private _name;
     string private _symbol;
     uint256 private _totalSupply;

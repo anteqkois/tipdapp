@@ -1,4 +1,3 @@
-import React from 'react'
 import Tip from './Tip';
 
 const TipsDefault = ({ tips }) => {
