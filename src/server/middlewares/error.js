@@ -70,6 +70,7 @@ const createApiError = (message, status) => {
 };
 
 const handleErrors = (err, req, res, next) => {
+    console.log(err);
     console.table(err);
     if (err instanceof ApiError) {
         return res.status(err.status || 500).json(err);

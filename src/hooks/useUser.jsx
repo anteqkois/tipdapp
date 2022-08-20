@@ -54,12 +54,12 @@ const useUser = () => {
   }, [isConnected, user]);
 
   const login = async () => {
-    if (isConnected && user.walletAddress) {
-      toast.success('You are already logged in');
-    } else {
+  //   if (isConnected && user.walletAddress) {
+  //     toast.success('You are already logged in');
+  //   } else {
       await openConnectModal();
       setAction(ACTION.LOGIN);
-    }
+    // }
   };
 
   const signIn = async ({ firstName, lastName, email, nick }) => {
@@ -110,11 +110,11 @@ const useUser = () => {
       // console.log(dataLogin.data.user);
       setUser(dataLogin.data.user);
 
-      if (window.history.length > 1 && document.referrer.indexOf(window.location.host) !== -1) {
-        router.back();
-      } else {
+      // if (window.history.length > 1 && document.referrer.indexOf(window.location.host) !== -1) {
+      //   router.back();
+      // } else {
         router.push('/dashboard');
-      }
+      // }
       dataAuth.status = 200 && toast.success('You are succesfully login');
     } catch (error) {
       // console.log(error);
