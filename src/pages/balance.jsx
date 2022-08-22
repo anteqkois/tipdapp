@@ -1,8 +1,8 @@
-import { chain } from 'wagmi';
 import TokenBalance from '@/components/Token/TokenBalance';
 import Card from '@/components/utils/Card';
 import useUser from '@/hooks/useUser';
-import { requireAuthPage } from 'utils/requireAuthPage';
+import { requireAuthPage } from '@/utils/requireAuthPage';
+import { chain } from 'wagmi';
 
 const balance = ({}) => {
   const { user } = useUser();
@@ -17,9 +17,6 @@ const balance = ({}) => {
   );
 };
 
-{
-  /* │ Run the following to update │ │ npm i --save-dev prisma@latest │ │ npm i @prisma/client@latest */
-}
 export default balance;
 
 export const getServerSideProps = requireAuthPage((ctx) => {

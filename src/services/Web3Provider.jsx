@@ -36,7 +36,7 @@ const Web3Provider = ({ children }) => {
 
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains} modalSize={isMobile ? 'compact' : 'wide'}>
+      <RainbowKitProvider coolMode chains={chains} modalSize={isMobile ? 'compact' : 'wide'}>
         <Toaster position="top-center" reverseOrder={false} />
         {children}
       </RainbowKitProvider>

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/router';
-import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
 import useLocalStorage from './useLocalStorage';
 
 const ACTION = {
@@ -26,7 +26,7 @@ const initialUserData = {
   nonce: null,
   tokenAddress: null,
   updateAt: null,
-  walletAddress: null,
+  walletAddress: '',
   widgetId: null,
 };
 
@@ -36,6 +36,7 @@ const useUser = () => {
   const { address, isConnected } = useAccount({
     onConnect() {},
     onDisconnect() {
+      // logout();
       // message ? redirect to root path ?
     },
   });
@@ -54,11 +55,11 @@ const useUser = () => {
   }, [isConnected, user]);
 
   const login = async () => {
-  //   if (isConnected && user.walletAddress) {
-  //     toast.success('You are already logged in');
-  //   } else {
-      await openConnectModal();
-      setAction(ACTION.LOGIN);
+    //   if (isConnected && user.walletAddress) {
+    //     toast.success('You are already logged in');
+    //   } else {
+    await openConnectModal();
+    setAction(ACTION.LOGIN);
     // }
   };
 
@@ -113,7 +114,7 @@ const useUser = () => {
       // if (window.history.length > 1 && document.referrer.indexOf(window.location.host) !== -1) {
       //   router.back();
       // } else {
-        router.push('/dashboard');
+      router.push('/dashboard');
       // }
       dataAuth.status = 200 && toast.success('You are succesfully login');
     } catch (error) {

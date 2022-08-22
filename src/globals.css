@@ -14,6 +14,10 @@
     @apply p-2 mx-auto mt-12 bg-neutral-150 text-neutral-800 max-w-6xl lg:p-8 lg:mt-24;
   }
 
+  path {
+    /* @apply stroke-neutral-600 hover:stroke-neutral-900; */
+  }
+
   a {
     @apply text-inherit;
     text-decoration: none;

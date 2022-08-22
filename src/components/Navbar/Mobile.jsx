@@ -11,7 +11,7 @@ import { useState } from 'react';
 import Hamburger from './Hamburger';
 import Navlink from './Navlink';
 
-const classOption =
+const optionStyle =
   'flex items-center gap-3 p-4 font-semibold uppercase group rounded-xl text-neutral-600 hover:text-neutral-900 hover:cursor-pointer hover:bg-neutral-150';
 
 const navigationOption = [
@@ -19,37 +19,37 @@ const navigationOption = [
     label: 'dashboard',
     href: '/dashboard',
     icon: <TemplateIcon className="w-7" />,
-    className: classOption,
+    className: optionStyle,
   },
   {
     label: 'tips',
     href: '/tips',
     icon: <AnnotationIcon className="w-7" />,
-    className: classOption,
+    className: optionStyle,
   },
   {
     label: 'creator',
     href: '/creator',
     icon: <AdjustmentsIcon className="w-7" />,
-    className: classOption,
+    className: optionStyle,
   },
   {
     label: 'token',
     href: '/token',
     icon: <CurrencyDollarIcon className="w-7" />,
-    className: classOption,
+    className: optionStyle,
   },
   {
     label: 'balance',
     href: '/balance',
     icon: <CashIcon className="w-7" />,
-    className: classOption,
+    className: optionStyle,
   },
   {
     label: 'settings',
     href: '/settings',
     icon: <CogIcon className="w-7" />,
-    className: classOption,
+    className: optionStyle,
   },
 ];
 
@@ -70,7 +70,7 @@ const Mobile = ({ user, logout }) => {
       >
         <ul>
           {navigationOption.map(({ label, href, icon, className }) => (
-            <li onClick={() => setIsOpen(false)}>
+            <li key={href} onClick={() => setIsOpen(false)}>
               <Navlink href={href} className={className}>
                 {icon}
                 {label}
@@ -84,7 +84,7 @@ const Mobile = ({ user, logout }) => {
             }}
           >
             <div
-              className={classOption}
+              className={optionStyle}
             >
               <LogoutIcon className="w-7 ml-0.5 -mr-0.5" />
               logout
