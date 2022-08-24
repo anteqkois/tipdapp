@@ -1,10 +1,12 @@
 import Card from '@/components/utils/Card';
+import useModal from '@/hooks/useModal';
 import useUser from '@/hooks/useUser';
 import { requireAuthPage } from '@/utils/requireAuthPage';
 // import { useGetTipsByUserQuery } from 'src/redux/tipSlice';
 
-const dashboard = () => {
+const Dashboard = () => {
   const { user } = useUser();
+  const [ setShowModal, Modal ] = useModal();
   // const { data, isLoading, isError } = useGetTipsByUserQuery({
   //   userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d',
   // });
@@ -15,7 +17,7 @@ const dashboard = () => {
         <div className="hidden bg-red-700 w-36 h-36 aspect-square lg:block"></div>
         <div>
           <h6>
-            Hey <span className="underline decoration-2 decoration-primary-600">{user.nick}</span> !
+            Hey <span className="underline decoration-2 decoration-primary-600 ">{user.nick}</span> !
           </h6>
           <p>
             You are connected from{' '}
@@ -65,11 +67,19 @@ const dashboard = () => {
         <p className="text-4xl font-semibold">12</p>
         <h6>Handled tokens by you</h6>
       </Card>
+      <button onClick={() => setShowModal(true)}>show modal</button>
+      <Modal title='Tip detatils'>
+        <div>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur iusto cumque officia quo eum commodi deserunt unde
+          consequuntur velit ex ut obcaecati voluptate saepe, aliquid doloribus? Perferendis tempore cumque incidunt!
+        </div>
+        <button onClick={() => setShowModal(false)}>Cancel</button>
+      </Modal>
     </section>
   );
 };
 
-export default dashboard;
+export default Dashboard;
 
 export const getServerSideProps = requireAuthPage(async (ctx) => {
   return {

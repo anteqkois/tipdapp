@@ -58,13 +58,13 @@ const Mobile = ({ user, logout }) => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 w-full h-12 bg-neutral-50 px-2 grid grid-cols-[50px_auto_45px] gap-5 items-center z-50 shadow-md">
+      <div className="fixed top-0 left-0 w-full h-12 bg-neutral-50 px-2 grid grid-cols-[50px_auto_45px] gap-5 items-center z-30 shadow-md">
         <div className="flex-center">LOGO</div>
         <p className="text-lg underline flex-center decoration-2 decoration-primary-600">{user.nick}</p>
         <Hamburger isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
       <nav
-        className={`fixed top-12 -left-full p-2 w-full h-full bg-neutral-50 duration-300 shadow-md z-50 ${
+        className={`fixed top-12 -left-full p-2 w-full h-full bg-neutral-50 duration-300 shadow-md z-30 ${
           isOpen ? 'translate-x-full' : 'translate-y-0'
         }`}
       >
@@ -83,9 +83,7 @@ const Mobile = ({ user, logout }) => {
               logout();
             }}
           >
-            <div
-              className={optionStyle}
-            >
+            <div className={optionStyle}>
               <LogoutIcon className="w-7 ml-0.5 -mr-0.5" />
               logout
             </div>

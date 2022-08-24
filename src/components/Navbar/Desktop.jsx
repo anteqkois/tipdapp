@@ -48,7 +48,7 @@ const navigationOption = [
 
 const Desktop = ({ user, logout }) => {
   return (
-    <div className="fixed top-0 left-0 w-full h-32 bg-neutral-50 shadow-md px-2 grid grid-cols-[170px_auto_170px] gap-5 place-items-center z-50">
+    <div className="fixed top-0 left-0 w-full h-32 bg-neutral-50 shadow-md px-2 grid grid-cols-[170px_auto_170px] gap-5 place-items-center z-30">
       <div className="flex-center">LOGO</div>
       <nav>
         <ul className="flex shadow-md p-2 m-3 w-fit rounded-xl bg-neutral-100">

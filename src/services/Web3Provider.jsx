@@ -1,7 +1,6 @@
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
-import { Toaster } from 'react-hot-toast';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
@@ -26,7 +25,7 @@ const { connectors } = getDefaultWallets({
 });
 
 const wagmiClient = createClient({
-  // autoConnect: true,
+  autoConnect: true,
   connectors,
   provider,
 });
@@ -37,7 +36,6 @@ const Web3Provider = ({ children }) => {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider coolMode chains={chains} modalSize={isMobile ? 'compact' : 'wide'}>
-        <Toaster position="top-center" reverseOrder={false} />
         {children}
       </RainbowKitProvider>
     </WagmiConfig>
