@@ -58,6 +58,7 @@ const useUser = () => {
     //   if (isConnected && user.walletAddress) {
     //     toast.success('You are already logged in');
     //   } else {
+    disconnect();
     await openConnectModal();
     setAction(ACTION.LOGIN);
     // }

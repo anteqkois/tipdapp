@@ -26,6 +26,7 @@
         "sc:test-u": "cd contracts && npm run test-unit"
     },
     "dependencies": {
+        "@headlessui/react": "^1.6.6",
         "@heroicons/react": "^1.0.6",
         "@prisma/client": "^4.2.1",
         "@rainbow-me/rainbowkit": "^0.4.6",
