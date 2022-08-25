@@ -29,6 +29,7 @@
         "@headlessui/react": "^1.6.6",
         "@heroicons/react": "^1.0.6",
         "@prisma/client": "^4.2.1",
+        "@radix-ui/react-dialog": "^1.0.0",
         "@rainbow-me/rainbowkit": "^0.4.6",
         "@reduxjs/toolkit": "^1.8.0",
         "axios": "^0.26.0",

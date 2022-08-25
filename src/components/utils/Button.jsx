@@ -1,9 +1,12 @@
-const Button = ({ children, onClick, className, option, ...props }) => {
+import { forwardRef } from 'react';
+
+const Button = forwardRef(({ children, className, option, ...props }, ref) => {
   return (
     <button
       {...props}
+      ref={ref}
       className={(() => {
-        let result = `${className} rounded-lg font-semibold `;
+        let result = `${className} rounded-lg font-semibold state-focus `;
         switch (option) {
           case 'overlay':
             result += `px-3.5 py-1.5 bg-neutral-100 text-neutral-800 shadow-md hover:bg-neutral-150`;
@@ -29,11 +32,12 @@ const Button = ({ children, onClick, className, option, ...props }) => {
         }
         return result;
       })()}
-      onClick={onClick}
     >
       {children}
     </button>
   );
-};
+});
+
+Button.displayName = 'Button';
 
 export default Button;

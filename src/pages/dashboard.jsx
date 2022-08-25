@@ -6,7 +6,7 @@ import { requireAuthPage } from '@/utils/requireAuthPage';
 
 const Dashboard = () => {
   const { user } = useUser();
-  const [ setShowModal, Modal ] = useModal();
+  const [setShowModal, Modal] = useModal();
   // const { data, isLoading, isError } = useGetTipsByUserQuery({
   //   userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d',
   // });
@@ -67,14 +67,16 @@ const Dashboard = () => {
         <p className="text-4xl font-semibold">12</p>
         <h6>Handled tokens by you</h6>
       </Card>
-      <button onClick={() => setShowModal(true)}>show modal</button>
-      <Modal title='Tip detatils'>
-        <div>
+      {/* <Modal title="Tip detatils" openButtonText="Expand tip details">
+        <div className="text-sm">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur iusto cumque officia quo eum commodi deserunt unde
           consequuntur velit ex ut obcaecati voluptate saepe, aliquid doloribus? Perferendis tempore cumque incidunt!
         </div>
-        <button onClick={() => setShowModal(false)}>Cancel</button>
-      </Modal>
+        <div className="text-sm">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur iusto cumque officia quo eum commodi deserunt unde
+          consequuntur velit ex ut obcaecati voluptate saepe, aliquid doloribus? Perferendis tempore cumque incidunt!
+        </div>
+      </Modal> */}
     </section>
   );
 };
