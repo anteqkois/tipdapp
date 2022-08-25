@@ -1,4 +1,4 @@
-import { AdjustmentsIcon, AnnotationIcon, CashIcon, CogIcon, CurrencyDollarIcon, TemplateIcon } from '@heroicons/react/outline';
+import { AdjustmentsHorizontalIcon, ChatBubbleBottomCenterTextIcon, BanknotesIcon, Cog6ToothIcon, CurrencyDollarIcon, RectangleGroupIcon } from '@heroicons/react/24/outline';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { CustomConnectButton } from '../utils/CustomConnectButton';
 import Tooltip from '../utils/Tooltip';
@@ -11,19 +11,19 @@ const navigationOption = [
   {
     tooltipLabel: 'Dashboard',
     href: '/dashboard',
-    icon: <TemplateIcon className="w-8" />,
+    icon: <RectangleGroupIcon className="w-8" />,
     className: optionStyle,
   },
   {
     tooltipLabel: 'tips',
     href: '/tips',
-    icon: <AnnotationIcon className="w-8" />,
+    icon: <ChatBubbleBottomCenterTextIcon className="w-8" />,
     className: optionStyle,
   },
   {
     tooltipLabel: 'Widget creator',
     href: '/creator',
-    icon: <AdjustmentsIcon className="w-8" />,
+    icon: <AdjustmentsHorizontalIcon className="w-8" />,
     className: optionStyle,
   },
   {
@@ -35,13 +35,13 @@ const navigationOption = [
   {
     tooltipLabel: 'Tokens balance',
     href: '/balance',
-    icon: <CashIcon className="w-8" />,
+    icon: <BanknotesIcon className="w-8" />,
     className: optionStyle,
   },
   {
     tooltipLabel: 'Settings',
     href: '/settings',
-    icon: <CogIcon className="w-8" />,
+    icon: <Cog6ToothIcon className="w-8" />,
     className: optionStyle,
   },
 ];

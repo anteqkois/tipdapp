@@ -1,8 +1,15 @@
 import PageLayout from '@/components/PageLayout';
 import useUser from '@/hooks/useUser';
+// import { useEffect } from 'react';
+// import { useDisconnect } from 'wagmi';
 
 const Login = () => {
   const { login, signIn, logout } = useUser();
+  // const { disconnect } = useDisconnect();
+
+  // useEffect(() => {
+  //   disconnect();
+  // }, []);
 
   // const getUserdata = async () => {
   //   const data = await axios('/api/user');

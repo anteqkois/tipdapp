@@ -32,7 +32,7 @@ const initialUserData = {
 
 const useUser = () => {
   const { openConnectModal } = useConnectModal();
-  const { disconnect } = useDisconnect();
+  const { disconnectAsync } = useDisconnect();
   const { address, isConnected } = useAccount({
     onConnect() {},
     onDisconnect() {
@@ -58,7 +58,7 @@ const useUser = () => {
     //   if (isConnected && user.walletAddress) {
     //     toast.success('You are already logged in');
     //   } else {
-    disconnect();
+    await disconnectAsync();
     await openConnectModal();
     setAction(ACTION.LOGIN);
     // }
@@ -80,7 +80,7 @@ const useUser = () => {
   const logout = async () => {
     try {
       const dataLogout = await axios('/api/auth/logout');
-      await disconnect();
+      await disconnectAsync();
       dataLogout.status = 200 && toast.success('You are succesfully logout');
       setUser(initialUserData);
       router.push('/login');

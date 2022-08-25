@@ -30,7 +30,6 @@ const Dashboard = () => {
       </Card>
       <Card className="col-span-full lg:order-last lg:p-8">
         <h6>Latest tips</h6>
-        <div className="w-[calc(100%+2rem)] mt-3 -mx-4 bg-neutral-300 h-[1.5px] lg:w-[calc(100%+4rem)] lg:-mx-8" />
         {/* {isLoading ? (
           <Spinner />
         ) : (

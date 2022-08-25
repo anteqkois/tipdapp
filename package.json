@@ -1,74 +1,74 @@
 {
-    "name": "qoisdapp",
-    "version": "0.1.4",
-    "node": "17.6.0",
-    "type": "module",
-    "private": true,
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/anteqkois/qoisdapp.git"
-    },
-    "author": "Antek Kois",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/anteqkois/qoisdapp/issues"
-    },
-    "scripts": {
-        "dev": "sudo service postgresql start && STATE=dev-local nodemon src/server.js & cd contracts && npx hardhat node",
-        "start": "NODE_ENV=production node src/server.js",
-        "build": "next build",
-        "commit": "git add . && cz",
-        "postcommit": "git push",
-        "lint": "next lint",
-        "release": "standard-version",
-        "postgres": "[ ! -f .env ] || export $(grep -v '^#' .env | xargs) | sudo service postgresql start | $DATABASE_PASSWORD",
-        "sc:test-i": "cd contracts && npm run test-integration",
-        "sc:test-u": "cd contracts && npm run test-unit"
-    },
-    "dependencies": {
-        "@headlessui/react": "^1.6.6",
-        "@heroicons/react": "^1.0.6",
-        "@prisma/client": "^4.2.1",
-        "@radix-ui/react-dialog": "^1.0.0",
-        "@rainbow-me/rainbowkit": "^0.4.6",
-        "@reduxjs/toolkit": "^1.8.0",
-        "axios": "^0.26.0",
-        "body-parser": "^1.20.0",
-        "chai-as-promised": "^7.1.1",
-        "cookie-parser": "^1.4.6",
-        "dayjs": "^1.11.3",
-        "dotenv": "^16.0.0",
-        "express": "^4.17.3",
-        "formik": "^2.2.9",
-        "jsonwebtoken": "^8.5.1",
-        "next": "^12.1.5",
-        "rc-tooltip": "^5.1.1",
-        "react": "^18.0.0",
-        "react-dom": "^18.0.0",
-        "react-hot-toast": "^2.2.0",
-        "react-redux": "^7.2.6",
-        "redux-devtools-extension": "^2.13.9",
-        "wagmi": "^0.6.3"
-    },
-    "devDependencies": {
-        "@svgr/webpack": "^6.2.1",
-        "autoprefixer": "^10.4.2",
-        "cz-conventional-changelog": "^3.3.0",
-        "eslint": "8.10.0",
-        "eslint-config-next": "12.1.0",
-        "ethers": "^5.6.9",
-        "nodemon": "^2.0.15",
-        "postcss": "^8.4.7",
-        "prisma": "^4.2.1",
-        "standard-version": "^9.3.2",
-        "tailwindcss": "^3.0.23"
-    },
-    "config": {
-        "commitizen": {
-            "path": "./node_modules/cz-conventional-changelog"
-        }
-    },
-    "prisma": {
-        "seed": "node prisma/seed.js"
+  "name": "qoisdapp",
+  "version": "0.1.4",
+  "node": "17.6.0",
+  "type": "module",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anteqkois/qoisdapp.git"
+  },
+  "author": "Antek Kois",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anteqkois/qoisdapp/issues"
+  },
+  "scripts": {
+    "dev": "sudo service postgresql start && STATE=dev-local nodemon src/server.js & cd contracts && npx hardhat node",
+    "start": "NODE_ENV=production node src/server.js",
+    "build": "next build",
+    "commit": "git add . && cz",
+    "postcommit": "git push",
+    "lint": "next lint",
+    "release": "standard-version",
+    "postgres": "[ ! -f .env ] || export $(grep -v '^#' .env | xargs) | sudo service postgresql start | $DATABASE_PASSWORD",
+    "sc:test-i": "cd contracts && npm run test-integration",
+    "sc:test-u": "cd contracts && npm run test-unit"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.6.6",
+    "@heroicons/react": "^2.0.7",
+    "@prisma/client": "^4.2.1",
+    "@radix-ui/react-dialog": "^1.0.0",
+    "@rainbow-me/rainbowkit": "^0.4.6",
+    "@reduxjs/toolkit": "^1.8.0",
+    "axios": "^0.26.0",
+    "body-parser": "^1.20.0",
+    "chai-as-promised": "^7.1.1",
+    "cookie-parser": "^1.4.6",
+    "dayjs": "^1.11.3",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "formik": "^2.2.9",
+    "jsonwebtoken": "^8.5.1",
+    "next": "^12.1.5",
+    "rc-tooltip": "^5.1.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-hot-toast": "^2.2.0",
+    "react-redux": "^7.2.6",
+    "redux-devtools-extension": "^2.13.9",
+    "wagmi": "^0.6.3"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^6.2.1",
+    "autoprefixer": "^10.4.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "8.10.0",
+    "eslint-config-next": "12.1.0",
+    "ethers": "^5.6.9",
+    "nodemon": "^2.0.15",
+    "postcss": "^8.4.7",
+    "prisma": "^4.2.1",
+    "standard-version": "^9.3.2",
+    "tailwindcss": "^3.0.23"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  }
 }

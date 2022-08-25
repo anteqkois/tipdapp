@@ -1,12 +1,12 @@
 import {
-  AdjustmentsIcon,
-  AnnotationIcon,
-  CashIcon,
-  CogIcon,
+  AdjustmentsHorizontalIcon,
+  ChatBubbleBottomCenterTextIcon,
+  BanknotesIcon,
+  Cog6ToothIcon,
   CurrencyDollarIcon,
-  LogoutIcon,
-  TemplateIcon,
-} from '@heroicons/react/outline';
+  ArrowRightOnRectangleIcon,
+  RectangleGroupIcon
+} from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import Hamburger from './Hamburger';
 import Navlink from './Navlink';
@@ -18,19 +18,19 @@ const navigationOption = [
   {
     label: 'dashboard',
     href: '/dashboard',
-    icon: <TemplateIcon className="w-7" />,
+    icon: <RectangleGroupIcon className="w-7" />,
     className: optionStyle,
   },
   {
     label: 'tips',
     href: '/tips',
-    icon: <AnnotationIcon className="w-7" />,
+    icon: <ChatBubbleBottomCenterTextIcon className="w-7" />,
     className: optionStyle,
   },
   {
     label: 'creator',
     href: '/creator',
-    icon: <AdjustmentsIcon className="w-7" />,
+    icon: <AdjustmentsHorizontalIcon className="w-7" />,
     className: optionStyle,
   },
   {
@@ -42,13 +42,13 @@ const navigationOption = [
   {
     label: 'balance',
     href: '/balance',
-    icon: <CashIcon className="w-7" />,
+    icon: <BanknotesIcon className="w-7" />,
     className: optionStyle,
   },
   {
     label: 'settings',
     href: '/settings',
-    icon: <CogIcon className="w-7" />,
+    icon: <Cog6ToothIcon className="w-7" />,
     className: optionStyle,
   },
 ];
@@ -84,7 +84,7 @@ const Mobile = ({ user, logout }) => {
             }}
           >
             <div className={optionStyle}>
-              <LogoutIcon className="w-7 ml-0.5 -mr-0.5" />
+              <ArrowRightOnRectangleIcon className="w-7 ml-0.5 -mr-0.5" />
               logout
             </div>
           </li>

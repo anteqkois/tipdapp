@@ -1,5 +1,5 @@
 import useUser from '@/hooks/useUser';
-import { ChevronDownIcon, LogoutIcon } from '@heroicons/react/outline';
+import { ArrowRightOnRectangleIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Button from './Button';
 import Tooltip from './Tooltip';
@@ -62,9 +62,8 @@ export const CustomConnectButton = () => {
                       type="button"
                       option="overlay"
                     >
-                      {}
                       {account.displayName}
-                      <LogoutIcon className="w-6 h-6" />
+                      <ArrowRightOnRectangleIcon className="w-6 h-6" />
                       {/* {account.displayBalance ? ` (${account.displayBalance})` : ''} */}
                     </Button>
                   </Tooltip>
