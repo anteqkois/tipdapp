@@ -1,46 +1,40 @@
 import Card from '@/components/utils/Card';
 import Flag from '@/components/utils/Flag';
 import Tooltip from '@/components/utils/Tooltip';
+import useClipboard from '@/hooks/useClipboard';
 import useModal from '@/hooks/useModal';
+import cutAddress from '@/utils/cutAddress';
 import { ArrowPathIcon, ArrowsPointingOutIcon, AtSymbolIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ethers } from 'ethers';
+import { useEffect } from 'react';
 import Button from '../utils/Button';
-import CopyToClipboard from '../utils/CopyToClipboard';
+// import CopyToClipboard from '../utils/CopyToClipboard';
 // const { parseUnits, formatUnits } = ethers.utils;
 
 dayjs.extend(relativeTime);
 
-// cryptocurrency:
-// name: "SAND"
-// symbol: "SAND"
-// [[Prototype]]: Object
-// cryptocurrencyAddress: "0x3845badAde8e6dFF049820680d1F14bD3903a5d0"
-// date: "2022-06-03T21:19:42.357Z"
-// displayed: false
-// message: "It's test, maybe it's working ?"
-// tipper:
-// nick: "tiperOne"
-// [[Prototype]]: Object
-// tipperWalletAddress: "0xfdacb27dc605f21255108d4895bb91701a2c26cd"
-// tokenAmount: "2100000000000000"
-// txHash: "0xd55ac901ac86f1856839019bd4d031c9929ba60a"
-// userWalletAddress: "0x4302c27398994a37d1cae83e5b49e40de9e3658d"
-// value: "4300000000000000"
-
-// txHash: '0x05f40c178a69696d31ed6bd4ae72ec2655840c915e9e1f19f25f470e1cb4b26a',
-//     tokenAmount: '789356000000000000000000',
-//     value: '80000000000000000000',
-//     message:
-//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis quo provident error sunt? Voluptate atque, nihil illum voluptates autem, dolores tempora nisi aperiam aut iusto sunt debitis eveniet, eligendi laboriosam.',
-//     showed: true,
-//     date: '17 March 2022; 21.15',
-//     userWalletAddress: '0xd6454929839ff72b9db63aee5d6d08779bdb82e7',
-//     cryptocurrencyAddress: '0xd6454929839ff72b9db63aee5d6d08779bdb82e7',
-//     symbol: 'SHIB',
-//     tipperWalletAddress: '0xbaea370e859a7c6caaf6967e49c255b050c58c30',
-//     nick: 'rudy56',
+[
+  {
+    txHash: '0xd12ac901ac86f1856839019bd4d031c9929bafd4',
+    tokenAmount: '900000000000000000',
+    value: '562000000000000000000',
+    message: '4 New wallet !',
+    displayed: false,
+    date: '2022-09-11T07:09:01.124Z',
+    userWalletAddress: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+    cryptocurrencyAddress: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
+    tipperWalletAddress: '0xfdacb27dc605f21255108d4895bb91701a2c26cd',
+    cryptocurrency: {
+      name: 'SAND',
+      symbol: 'SAND',
+    },
+    tipper: {
+      nick: 'tiperOne',
+    },
+  },
+];
 
 const Tip = ({
   txHash,
@@ -54,17 +48,12 @@ const Tip = ({
   tipperWalletAddress,
   cryptocurrency,
 }) => {
-  // const [details, setDetails] = useState(false);
-  // const DisplayDetailsButton = () => {
-  //   return (
-  //     <Button option="minimalist" className="cursor-pointer h-7 animate-action hover:scale-[1.02] origin-top-left">
-  //       <ArrowsPointingOutIcon className="inline w-5 mr-1" />
-  //       display details
-  //     </Button>
-  //   );
-  // };
-
   const [DetailsModal, DetailsContent, DetailsTrigger, setShowDetails, showDetails] = useModal();
+  const { ClipboardIcon, handleCopy } = useClipboard();
+
+  useEffect(() => {
+    setShowDetails(true);
+  }, []);
 
   return (
     <Card>
@@ -130,7 +119,7 @@ const Tip = ({
         </>
         {/* )} */}
       </div>
-
+      {/* arrow-top-right-on-sq clipboard-document document-duplicate*/}
       <DetailsModal>
         <DetailsTrigger>
           <Button option="minimalist" className="cursor-pointer h-7 animate-action hover:scale-[1.02] origin-top-left">
@@ -139,15 +128,55 @@ const Tip = ({
           </Button>
         </DetailsTrigger>
         <DetailsContent title="Tip details">
-          <p className="flex items-end">
-            <span className="font-medium text-neutral-600 mr-1">Tiper: </span>
-            <AtSymbolIcon className="w-5" />
-            {tipper.nick}
-          </p>
-          <p>
-            <span className="font-medium text-neutral-600">Date: </span>
-            {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
-          </p>
+          <Card className="shadow-none text-neutral-600">
+            <h6>Transaction</h6>
+            <p>
+              <span className="font-medium text-neutral-600">Date: </span>
+              {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
+            </p>
+            <p className="flex items-center  gap-1">
+              <span className="font-medium ">Transaction Hash: </span>
+              {cutAddress(txHash)}
+              <ClipboardIcon copyData={txHash} message="Transaction hash copied !" />
+            </p>
+            <p className="flex items-end">
+              <a
+                tabIndex="-1"
+                href="https://zksync2-testnet.zkscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266/transactions"
+                target={'_blank'}
+                rel="noreferrer"
+              >
+                <Button option="link" className="font-medium text-neutral-600 mr-1">
+                  View on Explorer
+                </Button>
+              </a>
+            </p>
+          </Card>
+          <Card className="shadow-none text-neutral-600">
+            <h6>Tiper</h6>
+            <p className="flex items-end ">
+              <span className="font-medium mr-1">Nick: </span>
+              <AtSymbolIcon className="w-5" />
+              {tipper.nick}
+            </p>
+            <p className="flex items-center  gap-1">
+              <span className="font-medium ">Address: </span>
+              {cutAddress(tipperWalletAddress)}
+              <ClipboardIcon copyData={tipperWalletAddress} message="Address copied !" />
+            </p>
+            <p className="flex items-end">
+              <a
+                tabIndex="-1"
+                href="https://zksync2-testnet.zkscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266/transactions"
+                target={'_blank'}
+                rel="noreferrer"
+              >
+                <Button option="link" className="font-medium text-neutral-600 mr-1">
+                  View on Explorer
+                </Button>
+              </a>
+            </p>
+          </Card>
           <p>
             <span className="font-medium text-neutral-600">Token Symbol: </span>
             {cryptocurrency.symbol}
@@ -159,16 +188,6 @@ const Tip = ({
           <p>
             <span className="font-medium text-neutral-600">Value: </span>
             {ethers.utils.formatEther(value)}$
-          </p>
-          <p className="pt-1.5 leading-4 md:pt-0 md:leading-normal">
-            <span className="font-medium text-neutral-600 ">Transaction Hash: </span>
-            <span className="text-[13px] md:text-sm whitespace-nowrap">{txHash} </span>
-            <CopyToClipboard copyData={txHash} />
-          </p>
-          <p className="py-1.5 leading-none md:py-0 md:leading-normal">
-            <span className="font-medium text-neutral-600">Tipper Address: </span>
-            <span className="text-[13px] md:text-sm">{tipperWalletAddress}</span>
-            <CopyToClipboard copyData={tipperWalletAddress} />
           </p>
           <p>
             <span className="font-medium text-neutral-600">Displayed: </span>

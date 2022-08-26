@@ -28,13 +28,13 @@
   }
 
   h6 {
-    @apply text-xl font-semibold;
+    @apply text-xl font-semibold text-neutral-800;
   }
   h5 {
-    @apply text-2xl font-semibold;
+    @apply text-2xl font-semibold text-neutral-800;
   }
   h4 {
-    @apply text-3xl font-semibold;
+    @apply text-3xl font-semibold text-neutral-800;
   }
 }
 

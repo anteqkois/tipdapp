@@ -1,13 +1,20 @@
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 import { forwardRef } from 'react';
 
 const Button = forwardRef(({ children, className, option, ...props }, ref) => {
   return (
     <button
-      {...props}
+    {...props}
+    // onKeyDown={(key) => key.code === 'Enter' && props.onClick()}
+    // tabIndex='0'
       ref={ref}
       className={(() => {
         let result = `${className} rounded-lg font-semibold state-focus `;
         switch (option) {
+          case 'link':
+            result += `flex items-center gap-1 underline decoration-1.5 decoration-primary-500`;
+            break;
           case 'overlay':
             result += `px-3.5 py-1.5 bg-neutral-100 text-neutral-800 shadow-md hover:bg-neutral-150`;
             break;
@@ -34,6 +41,7 @@ const Button = forwardRef(({ children, className, option, ...props }, ref) => {
       })()}
     >
       {children}
+      {option === 'link' && <ArrowTopRightOnSquareIcon className="w-5" />}
     </button>
   );
 });

@@ -40,8 +40,8 @@ const useModal = () => {
           >
             <div className="flex justify-between mb-4">
               <Dialog.Title className="text-lg font-medium underline decoration-2 decoration-primary-600">{title}</Dialog.Title>
-              <Dialog.Close className="rounded-full state-focus w-6 h-6">
-                <XMarkIcon className="p-1 ease-in-out    w-6 h-6 stroke-neutral-600 animate-action" />
+              <Dialog.Close className="rounded-full bg-neutral-200 state-focus w-6 h-6 animate-action">
+                <XMarkIcon className="p-1 ease-in-out w-6 h-6 stroke-neutral-600" />
               </Dialog.Close>
             </div>
             <Dialog.Description className="text-sm">{description}</Dialog.Description>

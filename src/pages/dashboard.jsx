@@ -1,6 +1,7 @@
 import Card from '@/components/utils/Card';
 import useModal from '@/hooks/useModal';
 import useUser from '@/hooks/useUser';
+import cutAddress from '@/utils/cutAddress';
 import { requireAuthPage } from '@/utils/requireAuthPage';
 // import { useGetTipsByUserQuery } from 'src/redux/tipSlice';
 
@@ -22,7 +23,8 @@ const Dashboard = () => {
           <p>
             You are connected from{' '}
             <span className="font-medium">
-              {user.walletAddress.substr(0, 5)}...{user.walletAddress.substr(-4, 4)}
+              {/* {user.walletAddress.substr(0, 5)}...{user.walletAddress.substr(-4, 4)} */}
+              {cutAddress(user.walletAddress)}
             </span>{' '}
             account
           </p>

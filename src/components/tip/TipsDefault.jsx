@@ -1,6 +1,7 @@
 import Tip from './Tip';
 
 const TipsDefault = ({ tips }) => {
+
   return (
     <ul className='space-y-3'>
       {tips.length > 0 ? (
