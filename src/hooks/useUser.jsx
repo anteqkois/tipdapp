@@ -59,6 +59,7 @@ const useUser = () => {
     //     toast.success('You are already logged in');
     //   } else {
     await disconnectAsync();
+    console.log(openConnectModal);
     await openConnectModal();
     setAction(ACTION.LOGIN);
     // }

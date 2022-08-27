@@ -18,7 +18,7 @@ const Dashboard = () => {
         <div className="hidden bg-red-700 w-36 h-36 aspect-square lg:block"></div>
         <div>
           <h6>
-            Hey <span className="underline decoration-2 decoration-primary-600 ">{user.nick}</span> !
+            Hey <span className="underline decoration-2 decoration-primary ">{user.nick}</span> !
           </h6>
           <p>
             You are connected from{' '}
@@ -53,7 +53,7 @@ const Dashboard = () => {
         )} */}
       </Card>
       <Card className="text-center">
-        <p className="text-4xl font-semibold text-primary-600">13 092</p>
+        <p className="text-4xl font-semibold text-primary">13 092</p>
         <h6>All tips amount</h6>
       </Card>
       <Card className="text-center">

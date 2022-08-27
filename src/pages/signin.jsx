@@ -20,7 +20,7 @@ const validate = (values) => {
   return errors;
 };
 
-const signin = () => {
+const Signin = () => {
   const { signIn, error } = useUser();
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const signin = () => {
     },
   });
   return (
-    <div className="flex flex-col w-full p-3 px-2 border-2 rounded-lg shadow-xl bg-neutral-50 shadow-neutral-200 md:max-w-md md:p-5 md:position-center">
+    <div className="flex flex-col w-full p-3 px-2 border-2 rounded shadow-xl bg-neutral-50 shadow-neutral-200 md:max-w-md md:p-5 md:position-center">
       <h1 className="flex items-center justify-center gap-3 text-4xl text-center">
         Sign in
         {/* <Metamask className="text-7xl" /> */}
@@ -104,7 +104,7 @@ const signin = () => {
   );
 };
 
-export default signin;
+export default Signin;
 
 //useOtherLayeout
-signin.getLayout = (page) => <>{page}</>;
+Signin.getLayout = (page) => <>{page}</>;

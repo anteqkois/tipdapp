@@ -8,7 +8,6 @@ import { ArrowPathIcon, ArrowsPointingOutIcon, AtSymbolIcon } from '@heroicons/r
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ethers } from 'ethers';
-import { useEffect } from 'react';
 import Button from '../utils/Button';
 // import CopyToClipboard from '../utils/CopyToClipboard';
 // const { parseUnits, formatUnits } = ethers.utils;
@@ -46,21 +45,26 @@ const Tip = ({
   userWalletAddress,
   tipper,
   tipperWalletAddress,
+  cryptocurrencyAddress,
   cryptocurrency,
 }) => {
   const [DetailsModal, DetailsContent, DetailsTrigger, setShowDetails, showDetails] = useModal();
   const { ClipboardIcon, handleCopy } = useClipboard();
 
-  useEffect(() => {
-    setShowDetails(true);
-  }, []);
-
   return (
     <Card>
+      {/* <h1>Lorem ipsum dolor sit, elit SAND</h1>
+      <h2>Lorem ipsum dolor sit, elit SAND</h2>
+      <h3>Lorem ipsum dolor sit, elit SAND</h3>
+      <h4>Lorem ipsum dolor sit, elit SAND</h4>
+      <h5>Lorem ipsum dolor sit, elit SAND</h5>
+      <h6>Lorem ipsum dolor sit, elit SAND</h6> */}
       <div className="flex items-center justify-between w-full flex-wrap gap-1">
-        <h5 className="text-xl flex items-end mr-3 font-semibold text-purple-600 lg:text-2xl">
-          <AtSymbolIcon className="w-6 lg:w-7 " />
-          {tipper.nick}
+        <h5 className=" mr-3 lg:text-2xl">
+          <AtSymbolIcon className="inline text-primary w-6 lg:w-7 " />
+          <i className="text-primary">{tipper.nick} </i>
+          sent {ethers.utils.formatEther(tokenAmount)}
+          <i className="text-secondary "> ${cryptocurrency.symbol}</i>:
         </h5>
         <div className="flex gap-1.5">
           <Tooltip content="Display again">
@@ -70,90 +74,64 @@ const Tip = ({
         </div>
       </div>
       <p className="pt-2 pb-3 leading-tight max-w-4xl truncate">{message}</p>
-      {/* <p className={`pt-2 pb-3 leading-tight max-w-4xl ${!showDetails && 'truncate'}`}>{message}</p> */}
       <div className="w-full mb-2">
-        <h6 className=" text-primary-600">Tip details:</h6>
-        {/* {details ? (
-          <div className=" text-neutral-500">
-            <p>
-              <span className="font-medium text-neutral-600">Date: </span>
-              {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
-            </p>
-            <p>
-              <span className="font-medium text-neutral-600">Token Symbol: </span>
-              {cryptocurrency.symbol}
-            </p>
-            <p>
-              <span className="font-medium text-neutral-600">Amount: </span>
-              {ethers.utils.formatEther(tokenAmount)}
-            </p>
-            <p>
-              <span className="font-medium text-neutral-600">Value: </span>
-              {ethers.utils.formatEther(value)}$
-            </p>
-            <p className="pt-1.5 leading-4 md:pt-0 md:leading-normal">
-              <span className="font-medium text-neutral-600 ">Transaction Hash: </span>
-              <span className="text-[13px] md:text-sm whitespace-nowrap">{txHash} </span>
-              <CopyToClipboard copyData={txHash} />
-            </p>
-            <p className="py-1.5 leading-none md:py-0 md:leading-normal">
-              <span className="font-medium text-neutral-600">Tipper Address: </span>
-              <span className="text-[13px] md:text-sm">{tipperWalletAddress}</span>
-              <CopyToClipboard copyData={tipperWalletAddress} />
-            </p>
-            <p>
-              <span className="font-medium text-neutral-600">Displayed: </span>
-              <Flag flag={displayed} className="w-5 h-5 -mt-1" />
-            </p>
-          </div>
-        ) : ( */}
-        <>
-          <p>
-            <span className="font-medium text-neutral-600">Date: </span>
-            {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
-          </p>
-          <p className="font-medium text-neutral-600">
-            {cryptocurrency.symbol}: {ethers.utils.formatEther(tokenAmount)}
-            <span className="font-normal text-neutral-500"> ({ethers.utils.formatEther(value)}$)</span>
-          </p>
-        </>
-        {/* )} */}
+        <h6 className=" text-primary font-semibold">Tip details:</h6>
+        <p>
+          <span className="font-medium text-neutral-light">Date: </span>
+          {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
+        </p>
+        <p className="font-medium text-neutral-light">
+          Token:
+          <span className="font-normal text-neutral-500">
+            {' '}
+            {ethers.utils.formatEther(tokenAmount)} {cryptocurrency.symbol} ({ethers.utils.formatEther(value)}$)
+          </span>
+        </p>
       </div>
-      {/* arrow-top-right-on-sq clipboard-document document-duplicate*/}
       <DetailsModal>
         <DetailsTrigger>
-          <Button option="minimalist" className="cursor-pointer h-7 animate-action hover:scale-[1.02] origin-top-left">
+          <Button option="minimalist" className="h-7">
             <ArrowsPointingOutIcon className="inline w-5 mr-1" />
             display details
           </Button>
         </DetailsTrigger>
-        <DetailsContent title="Tip details">
-          <Card className="shadow-none text-neutral-600">
-            <h6>Transaction</h6>
+        <DetailsContent title="Tip details" className="space-y-2">
+          <Card className="shadow-none text-neutral-800 !p-2">
+            <h6 className="text-primary">Tipper&apos;s Message</h6>
+            <p className="p-1 leading-tight max-w-4xl">{message}</p>
+          </Card>
+          <Card className="shadow-none text-neutral-800 !p-2">
+            <h6 className="text-primary">Value and Token</h6>
             <p>
-              <span className="font-medium text-neutral-600">Date: </span>
-              {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
+              <span className="font-medium text-neutral-700">Value: </span>
+              {ethers.utils.formatEther(value)}$
+            </p>
+            <p>
+              <span className="font-medium text-neutral-700">Symbol: </span>
+              {cryptocurrency.symbol}
+            </p>
+            <p>
+              <span className="font-medium text-neutral-700">Amount: </span>
+              {ethers.utils.formatEther(tokenAmount)}
             </p>
             <p className="flex items-center  gap-1">
-              <span className="font-medium ">Transaction Hash: </span>
-              {cutAddress(txHash)}
-              <ClipboardIcon copyData={txHash} message="Transaction hash copied !" />
+              <span className="font-medium ">Address: </span>
+              {cutAddress(cryptocurrencyAddress)}
+              <ClipboardIcon copyData={cryptocurrencyAddress} message="Address copied !" />
             </p>
-            <p className="flex items-end">
-              <a
-                tabIndex="-1"
-                href="https://zksync2-testnet.zkscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266/transactions"
-                target={'_blank'}
-                rel="noreferrer"
-              >
-                <Button option="link" className="font-medium text-neutral-600 mr-1">
-                  View on Explorer
-                </Button>
-              </a>
-            </p>
+            <a
+              tabIndex="-1"
+              href="https://zksync2-testnet.zkscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266/transactions"
+              target={'_blank'}
+              rel="noreferrer"
+            >
+              <Button option="link" className="font-medium text-neutral-700 mr-1">
+                View token on Explorer
+              </Button>
+            </a>
           </Card>
-          <Card className="shadow-none text-neutral-600">
-            <h6>Tiper</h6>
+          <Card className="shadow-none text-neutral-800 !p-2">
+            <h6 className="text-primary">Tipper</h6>
             <p className="flex items-end ">
               <span className="font-medium mr-1">Nick: </span>
               <AtSymbolIcon className="w-5" />
@@ -171,28 +149,53 @@ const Tip = ({
                 target={'_blank'}
                 rel="noreferrer"
               >
-                <Button option="link" className="font-medium text-neutral-600 mr-1">
+                <Button option="link" className="font-medium text-neutral-700 mr-1">
                   View on Explorer
                 </Button>
               </a>
             </p>
           </Card>
-          <p>
-            <span className="font-medium text-neutral-600">Token Symbol: </span>
-            {cryptocurrency.symbol}
-          </p>
-          <p>
-            <span className="font-medium text-neutral-600">Amount: </span>
-            {ethers.utils.formatEther(tokenAmount)}
-          </p>
-          <p>
-            <span className="font-medium text-neutral-600">Value: </span>
-            {ethers.utils.formatEther(value)}$
-          </p>
-          <p>
-            <span className="font-medium text-neutral-600">Displayed: </span>
-            <Flag flag={displayed} className="w-5 h-5 -mt-1" />
-          </p>
+          <Card className="shadow-none text-neutral-800 !p-2">
+            <h6 className="text-primary">Transaction</h6>
+            <p>
+              <span className="font-medium text-neutral-700">Date: </span>
+              {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
+            </p>
+            <p className="flex items-center  gap-1">
+              <span className="font-medium ">Transaction Hash: </span>
+              {cutAddress(txHash)}
+              <ClipboardIcon copyData={txHash} message="Transaction hash copied !" />
+            </p>
+            <p className="flex items-end">
+              <a
+                tabIndex="-1"
+                href="https://zksync2-testnet.zkscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266/transactions"
+                target={'_blank'}
+                rel="noreferrer"
+              >
+                <Button option="link" className="font-medium text-neutral-700 mr-1">
+                  View on Explorer
+                </Button>
+              </a>
+            </p>
+          </Card>
+          <div className="flex justify-between !mt-4">
+            <p className="flex items-center gap-1">
+              <span className="ml-2">
+                <Flag flag={displayed} className="w-5" />
+              </span>
+              <span className="font-medium text-neutral-700">Display status </span>
+            </p>
+            <div className="flex gap-1">
+              <Button className="flex gap-2 items-center">
+                <ArrowPathIcon className="w-7" />
+                Display
+              </Button>
+              <Button onClick={() => setShowDetails(false)} option="alert" className="flex gap-2 items-center">
+                Close
+              </Button>
+            </div>
+          </div>
         </DetailsContent>
       </DetailsModal>
     </Card>

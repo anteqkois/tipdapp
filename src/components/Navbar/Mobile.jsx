@@ -5,14 +5,14 @@ import {
   Cog6ToothIcon,
   CurrencyDollarIcon,
   ArrowRightOnRectangleIcon,
-  RectangleGroupIcon
+  RectangleGroupIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import Hamburger from './Hamburger';
 import Navlink from './Navlink';
 
 const optionStyle =
-  'flex items-center gap-3 p-4 font-semibold uppercase group rounded-xl text-neutral-600 hover:text-neutral-900 hover:cursor-pointer hover:bg-neutral-150';
+  'flex items-center gap-3 p-4 font-semibold uppercase group rounded text-neutral-600 hover:text-neutral-900 hover:cursor-pointer hover:bg-neutral-150';
 
 const navigationOption = [
   {
@@ -60,7 +60,7 @@ const Mobile = ({ user, logout }) => {
     <>
       <div className="fixed top-0 left-0 w-full h-12 bg-neutral-50 px-2 grid grid-cols-[50px_auto_45px] gap-5 items-center z-30 shadow-md">
         <div className="flex-center">LOGO</div>
-        <p className="text-lg underline flex-center decoration-2 decoration-primary-600">{user.nick}</p>
+        <p className="text-lg underline flex-center decoration-2 decoration-primary">{user.nick}</p>
         <Hamburger isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
       <nav

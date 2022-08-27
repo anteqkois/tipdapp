@@ -1,10 +1,8 @@
-import React from 'react';
-
 const Spinner = () => {
   return (
     <svg
       role="status"
-      className="w-12 h-12 mx-auto my-6 text-neutral-300 animate-spin fill-primary-600"
+      className="w-12 h-12 mx-auto my-6 text-neutral-300 animate-spin fill-primary"
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

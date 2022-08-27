@@ -11,11 +11,30 @@ const colors = require('tailwindcss/colors');
 module.exports = {
   content: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}', './src/hooks/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    fontFamily: {
+      poppins: ['Poppins', 'sans-serif'],
+    },
     extend: {
+      borderRadius: {
+        DEFAULT: '.75rem',
+      },
       colors: {
-        primary: colors.purple,
-        secondary: colors.teal,
+        primary: {
+          ...colors.purple,
+          light: colors.purple[600],
+          DEFAULT: colors.purple[700],
+          dark: colors.purple[800],
+        },
+        secondary: {
+          light: colors.teal[600],
+          DEFAULT: colors.teal[700],
+          dark: colors.teal[800],
+          ...colors.teal,
+        },
         neutral: {
+          light: colors.neutral[600],
+          DEFAULT: colors.neutral[800],
+          dark: colors.neutral[800],
           150: '#EEEEEE',
         },
         success: {

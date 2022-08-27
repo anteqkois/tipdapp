@@ -28,19 +28,21 @@ const useModal = () => {
     );
   };
 
-  const ModalContent = React.forwardRef(({ children, title, description, ...props }, forwardedRef) => {
+  const ModalContent = React.forwardRef(({ children, title, description, className, ...props }, forwardedRef) => {
     return mounted ? (
       <Dialog.Portal>
         <Dialog.Overlay className="fixed flex-center inset-0 z-40 p-2 bg-neutral-800/40" forceMount>
           <Dialog.Content
-            className="z-50 w-full p-4 overflow-hidden max-w-lg break-word  text-left align-middle rounded-lg shadow-md bg-neutral-50"
+            className={`z-50 w-full p-4 overflow-hidden max-w-md break-word rounded shadow-md bg-neutral-50 ${className}`}
             forceMount
             {...props}
             ref={forwardedRef}
           >
             <div className="flex justify-between mb-4">
-              <Dialog.Title className="text-lg font-medium underline decoration-2 decoration-primary-600">{title}</Dialog.Title>
-              <Dialog.Close className="rounded-full bg-neutral-200 state-focus w-6 h-6 animate-action">
+              <Dialog.Title>
+                <h6 className="">{title}</h6>
+              </Dialog.Title>
+              <Dialog.Close className="rounded-full bg-neutral-150 state-focus w-6 h-6 animate-action">
                 <XMarkIcon className="p-1 ease-in-out w-6 h-6 stroke-neutral-600" />
               </Dialog.Close>
             </div>
