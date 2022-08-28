@@ -5,11 +5,11 @@ import useUser from '@/hooks/useUser';
 
 const Login = () => {
   const { login, signIn, logout } = useUser();
-  // const { disconnect } = useDisconnect();
+  const { disconnectAsync } = useDisconnect();
 
-  // useEffect(() => {
-  //   disconnect();
-  // }, []);
+  useEffect(async () => {
+    await disconnectAsync();
+  }, []);
 
   // const getUserdata = async () => {
   //   const data = await axios('/api/user');

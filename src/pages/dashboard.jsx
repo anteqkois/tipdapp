@@ -1,16 +1,27 @@
+import TipsDefault from '@/components/tip/TipsDefault';
+import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
-import useModal from '@/hooks/useModal';
+import Spinner from '@/components/utils/Spinner';
 import useUser from '@/hooks/useUser';
 import cutAddress from '@/utils/cutAddress';
 import { requireAuthPage } from '@/utils/requireAuthPage';
+import Link from 'next/link';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getTipsByUser, selectError, selectStatus, selectTipsPerPage, STATUS } from 'src/redux/tipSlice';
 // import { useGetTipsByUserQuery } from 'src/redux/tipSlice';
 
 const Dashboard = () => {
   const { user } = useUser();
-  const [setShowModal, Modal] = useModal();
-  // const { data, isLoading, isError } = useGetTipsByUserQuery({
-  //   userWalletAddress: '0x4302c27398994a37d1cae83e5b49e40de9e3658d',
-  // });
+  const dispatch = useDispatch();
+
+  const error = useSelector(selectError);
+  const status = useSelector(selectStatus);
+  const tips = useSelector(selectTipsPerPage);
+
+  useEffect(() => {
+    user.walletAddress && dispatch(getTipsByUser({ userWalletAddress: user.walletAddress, page: 1 }));
+  }, [user.walletAddress]);
 
   return (
     <section className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-4">
@@ -21,36 +32,9 @@ const Dashboard = () => {
             Hey <span className="underline decoration-2 decoration-primary ">{user.nick}</span> !
           </h6>
           <p>
-            You are connected from{' '}
-            <span className="font-medium">
-              {/* {user.walletAddress.substr(0, 5)}...{user.walletAddress.substr(-4, 4)} */}
-              {cutAddress(user.walletAddress)}
-            </span>{' '}
-            account
+            You are connected from <span className="font-medium">{cutAddress(user.walletAddress)}</span> account
           </p>
         </div>
-      </Card>
-      <Card className="col-span-full lg:order-last lg:p-8">
-        <h6>Latest tips</h6>
-        {/* {isLoading ? (
-          <Spinner />
-        ) : (
-          <>
-            <ul>
-              {data.map((tip) => (
-                <li key={tip.txHash} className="w-full">
-                  <Tip {...tip} />
-                  <div className="w-[calc(100%+2rem)] -mx-4 bg-neutral-300 h-[1.5px] lg:w-[calc(100%+4rem)] lg:-mx-8" />
-                </li>
-              ))}
-            </ul>
-            <div className="flex items-center justify-center pt-4 text-lg" onClick={() => console.log('click')}>
-              <Link href={'tips'}>
-                <Button>See more your's tips</Button>
-              </Link>
-            </div>
-          </>
-        )} */}
       </Card>
       <Card className="text-center">
         <p className="text-4xl font-semibold text-primary">13 092</p>
@@ -68,16 +52,15 @@ const Dashboard = () => {
         <p className="text-4xl font-semibold">12</p>
         <h6>Handled tokens by you</h6>
       </Card>
-      {/* <Modal title="Tip detatils" openButtonText="Expand tip details">
-        <div className="text-sm">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur iusto cumque officia quo eum commodi deserunt unde
-          consequuntur velit ex ut obcaecati voluptate saepe, aliquid doloribus? Perferendis tempore cumque incidunt!
+      <Card className="col-span-full lg:p-8">
+        <h4 className="mb-4">Latest tips:</h4>
+        {status === STATUS.SUCCEEDED ? <TipsDefault tips={tips} /> : status === STATUS.FAILED ? error : <Spinner />}
+        <div className="flex justify-end">
+          <Button className="mt-4">
+            <Link href="/tips">See more tips</Link>
+          </Button>
         </div>
-        <div className="text-sm">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur iusto cumque officia quo eum commodi deserunt unde
-          consequuntur velit ex ut obcaecati voluptate saepe, aliquid doloribus? Perferendis tempore cumque incidunt!
-        </div>
-      </Modal> */}
+      </Card>
     </section>
   );
 };

@@ -53,20 +53,14 @@ const Tip = ({
 
   return (
     <Card>
-      {/* <h1>Lorem ipsum dolor sit, elit SAND</h1>
-      <h2>Lorem ipsum dolor sit, elit SAND</h2>
-      <h3>Lorem ipsum dolor sit, elit SAND</h3>
-      <h4>Lorem ipsum dolor sit, elit SAND</h4>
-      <h5>Lorem ipsum dolor sit, elit SAND</h5>
-      <h6>Lorem ipsum dolor sit, elit SAND</h6> */}
-      <div className="flex items-center justify-between w-full flex-wrap gap-1">
+      <div className="flex items-top justify-between w-full gap-1">
         <h5 className=" mr-3 lg:text-2xl">
           <AtSymbolIcon className="inline text-primary w-6 lg:w-7 " />
           <i className="text-primary">{tipper.nick} </i>
           sent {ethers.utils.formatEther(tokenAmount)}
           <i className="text-secondary "> ${cryptocurrency.symbol}</i>:
         </h5>
-        <div className="flex gap-1.5">
+        <div className="flex gap-1.5 max-h-7">
           <Tooltip content="Display again">
             <ArrowPathIcon className="w-7 p-0.5 rounded-full bg-neutral-150 animate-action" />
           </Tooltip>
