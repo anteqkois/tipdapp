@@ -1,13 +1,12 @@
-import React from 'react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Navlink = ({ className, classActive, href, children, ...props }) => {
   const router = useRouter();
 
   return (
     <Link {...props} href={href}>
-      <p className={`${className} ${router.pathname.includes(href) && classActive}`}>{children}</p>
+      <a className={`${className} ${router.pathname.includes(href) && classActive}`}>{children}</a>
     </Link>
   );
 };

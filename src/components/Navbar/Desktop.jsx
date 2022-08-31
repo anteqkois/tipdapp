@@ -1,5 +1,12 @@
-import { AdjustmentsHorizontalIcon, ChatBubbleBottomCenterTextIcon, BanknotesIcon, Cog6ToothIcon, CurrencyDollarIcon, RectangleGroupIcon } from '@heroicons/react/24/outline';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import {
+  AdjustmentsHorizontalIcon,
+  BanknotesIcon,
+  ChatBubbleBottomCenterTextIcon,
+  Cog6ToothIcon,
+  ComputerDesktopIcon,
+  CurrencyDollarIcon,
+  RectangleGroupIcon,
+} from '@heroicons/react/24/outline';
 import { CustomConnectButton } from '../utils/CustomConnectButton';
 import Tooltip from '../utils/Tooltip';
 import Navlink from './Navlink';
@@ -30,6 +37,12 @@ const navigationOption = [
     tooltipLabel: 'Your token settings',
     href: '/token',
     icon: <CurrencyDollarIcon className="w-8" />,
+    className: optionStyle,
+  },
+  {
+    tooltipLabel: 'Your page',
+    href: '/page',
+    icon: <ComputerDesktopIcon className="w-8" />,
     className: optionStyle,
   },
   {

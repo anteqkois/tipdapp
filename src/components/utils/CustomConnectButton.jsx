@@ -1,11 +1,12 @@
 import useUser from '@/hooks/useUser';
 import { ArrowRightOnRectangleIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Avatar from './Avatar';
 import Button from './Button';
 import Tooltip from './Tooltip';
 
 export const CustomConnectButton = () => {
-  const { logout } = useUser();
+  const { logout, user } = useUser();
 
   return (
     <ConnectButton.Custom>
@@ -56,15 +57,16 @@ export const CustomConnectButton = () => {
                   </Tooltip>
                   <Tooltip content="Disconnect / Copy">
                     <Button
-                      // onClick={openAccountModal}
-                      onClick={logout}
+                      onClick={openAccountModal}
+                      //TODO handle logout 
+                      // onClick={logout}
                       className="flex items-center justify-between gap-2"
                       type="button"
                       option="overlay"
                     >
+                      <Avatar avatarPath={user} walletAddress={user.walletAddress} className="w-6 h-6" />
                       {account.displayName}
                       <ArrowRightOnRectangleIcon className="w-6 h-6" />
-                      {/* {account.displayBalance ? ` (${account.displayBalance})` : ''} */}
                     </Button>
                   </Tooltip>
                 </div>

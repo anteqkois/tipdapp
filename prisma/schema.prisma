@@ -11,23 +11,29 @@ datasource db {
   // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-// npm i --save-dev prisma@latest                       │
-// │    npm i @prisma/client@latest
+enum Role {
+  STREAMER
+  CHARITY
+  SHOP
+}
+
 model User {
   walletAddress     String           @id @unique @db.VarChar(42)
   email             String           @unique
   firstName         String
   lastName          String
+  role              Role             @default(STREAMER)
   nick              String           @unique
   nonce             String?
-  linkToDonate      String?
+  verified          Boolean          @default(false)
+  urlTip            String           @db.VarChar(60)
+  description       String           @default("") @db.VarChar(150)
   avatarPath        String?
   createdAt         DateTime         @default(now())
   updateAt          DateTime         @updatedAt
   token             Token?           @relation(fields: [tokenAddress], references: [address])
   tokenAddress      String?          @db.VarChar(42)
-  widget            Widget?          @relation(fields: [widgetId], references: [id])
-  widgetId          String?          @unique
+  Widget            Widget[]
   //If it necessary below fields (read speed?)
   allDonateCount    Int              @default(0)
   allDonateValue    Decimal          @default(0) @db.Decimal(78, 0)
@@ -84,18 +90,19 @@ model Tipper {
 }
 
 model Widget {
-  id              String  @id @default(cuid())
-  link            String
-  songPath        String
-  backgroundPath  String
-  nickColor       String
-  messageColor    String
-  valueColor      String
-  showTime        Int
-  filterProfanity Boolean
+  id                String  @id @default(cuid())
+  link              String
+  songPath          String
+  backgroundPath    String
+  nickColor         String
+  messageColor      String
+  valueColor        String
+  showTime          Int
+  filterProfanity   Boolean
   // filterWord WordList
-  voiceMessage    Boolean
-  User            User?
+  voiceMessage      Boolean
+  User              User?   @relation(fields: [userWalletAddress], references: [walletAddress])
+  userWalletAddress String? @db.VarChar(42)
 }
 
 model Withdraw {

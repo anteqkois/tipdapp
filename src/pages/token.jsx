@@ -1,9 +1,15 @@
 import React from 'react'
 
-const token = () => {
+const Token = () => {
   return (
-    <div>token</div>
+    <div>Token</div>
   )
 }
 
-export default token
+export default Token
+
+export const getServerSideProps = requireAuthPage((ctx) => {
+  return {
+    props: { user: ctx.req.user },
+  };
+});

@@ -58,10 +58,15 @@ const useUser = () => {
     //   if (isConnected && user.walletAddress) {
     //     toast.success('You are already logged in');
     //   } else {
-    await disconnectAsync();
+    // await disconnectAsync();
+    console.log(disconnectAsync);
     console.log(openConnectModal);
-    await openConnectModal();
-    setAction(ACTION.LOGIN);
+
+    disconnectAsync().then(() => {
+      openConnectModal();
+      setAction(ACTION.LOGIN);
+    });
+    // await openConnectModal();
     // }
   };
 
@@ -111,6 +116,7 @@ const useUser = () => {
       });
 
       // console.log(dataLogin.data.user);
+
       setUser(dataLogin.data.user);
 
       // if (window.history.length > 1 && document.referrer.indexOf(window.location.host) !== -1) {

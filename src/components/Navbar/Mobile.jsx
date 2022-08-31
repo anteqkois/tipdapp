@@ -1,11 +1,5 @@
 import {
-  AdjustmentsHorizontalIcon,
-  ChatBubbleBottomCenterTextIcon,
-  BanknotesIcon,
-  Cog6ToothIcon,
-  CurrencyDollarIcon,
-  ArrowRightOnRectangleIcon,
-  RectangleGroupIcon,
+  AdjustmentsHorizontalIcon, ArrowRightOnRectangleIcon, BanknotesIcon, ChatBubbleBottomCenterTextIcon, Cog6ToothIcon, ComputerDesktopIcon, CurrencyDollarIcon, RectangleGroupIcon
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import Hamburger from './Hamburger';
@@ -37,6 +31,12 @@ const navigationOption = [
     label: 'token',
     href: '/token',
     icon: <CurrencyDollarIcon className="w-7" />,
+    className: optionStyle,
+  },
+  {
+    label: 'your page',
+    href: '/page',
+    icon: <ComputerDesktopIcon className="w-7" />,
     className: optionStyle,
   },
   {
@@ -82,11 +82,10 @@ const Mobile = ({ user, logout }) => {
               setIsOpen(false);
               logout();
             }}
+            className={optionStyle}
           >
-            <div className={optionStyle}>
               <ArrowRightOnRectangleIcon className="w-7 ml-0.5 -mr-0.5" />
               logout
-            </div>
           </li>
         </ul>
       </nav>

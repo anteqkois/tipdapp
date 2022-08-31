@@ -1,4 +1,5 @@
 import TipsDefault from '@/components/tip/TipsDefault';
+import Avatar from '@/components/utils/Avatar';
 import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import Spinner from '@/components/utils/Spinner';
@@ -25,14 +26,14 @@ const Dashboard = () => {
 
   return (
     <section className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-4">
-      <Card className="flex items-center col-span-2 row-span-2 gap-4">
-        <div className="hidden bg-red-700 w-36 h-36 aspect-square lg:block"></div>
+      <Card className="flex items-center gap-4 col-span-2 row-span-2">
+        <Avatar avatarPath={user} walletAddress={user.walletAddress} className="w-14 h-14" />
         <div>
-          <h6>
+          <h5 className="mb-1">
             Hey <span className="underline decoration-2 decoration-primary ">{user.nick}</span> !
-          </h6>
+          </h5>
           <p>
-            You are connected from <span className="font-medium">{cutAddress(user.walletAddress)}</span> account
+            Connected wallet: <span className="font-medium">{cutAddress(user.walletAddress)}</span>
           </p>
         </div>
       </Card>
