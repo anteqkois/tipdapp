@@ -33,13 +33,13 @@ const initialUserData = {
 const useUser = () => {
   const { openConnectModal } = useConnectModal();
   const { disconnectAsync } = useDisconnect();
+
   const { address, isConnected } = useAccount({
-    onConnect() {},
-    onDisconnect() {
-      // logout();
-      // message ? redirect to root path ?
+    async onDisconnect() {
+      logout();
     },
   });
+
   const { data, isSuccess, signMessageAsync } = useSignMessage();
 
   const [action, setAction] = useState('');

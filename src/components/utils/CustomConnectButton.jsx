@@ -5,9 +5,7 @@ import Avatar from './Avatar';
 import Button from './Button';
 import Tooltip from './Tooltip';
 
-export const CustomConnectButton = () => {
-  const { logout, user } = useUser();
-
+export const CustomConnectButton = ({ user }) => {
   return (
     <ConnectButton.Custom>
       {({ account, chain, openAccountModal, openChainModal, openConnectModal, authenticationStatus, mounted }) => {
@@ -58,13 +56,11 @@ export const CustomConnectButton = () => {
                   <Tooltip content="Disconnect / Copy">
                     <Button
                       onClick={openAccountModal}
-                      //TODO handle logout 
-                      // onClick={logout}
-                      className="flex items-center justify-between gap-2"
+                      className="flex items-center justify-center gap-2"
                       type="button"
                       option="overlay"
                     >
-                      <Avatar avatarPath={user} walletAddress={user.walletAddress} className="w-6 h-6" />
+                      {/* <Avatar avatarPath={user} walletAddress={user.walletAddress} className="w-6 h-6" /> */}
                       {account.displayName}
                       <ArrowRightOnRectangleIcon className="w-6 h-6" />
                     </Button>

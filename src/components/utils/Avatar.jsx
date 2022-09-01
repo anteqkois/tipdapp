@@ -28,13 +28,11 @@ const Avatar = ({ avatarPath, walletAddress, className }) => {
         //   }[variant],
         // )}
       />
-      <AvatarPrimitive.Fallback
-        delayMs={100}
-      >
+      <AvatarPrimitive.Fallback delayMs={100} className={className}>
         <img
           // width={48}
           // height={48}
-          className={`inline-block shadow-md rounded w-7 aspect-square ${className}`}
+          className={`inline-block shadow-md rounded-md w-7 aspect-square ${className}`}
           alt="user avatar"
           src={`https://avatars.dicebear.com/api/pixel-art-neutral/${walletAddress}.svg`}
         />

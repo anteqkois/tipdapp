@@ -26,7 +26,7 @@ model User {
   nick              String           @unique
   nonce             String?
   verified          Boolean          @default(false)
-  urlTip            String           @db.VarChar(60)
+  urlPage           String           @db.VarChar(60)
   description       String           @default("") @db.VarChar(150)
   avatarPath        String?
   createdAt         DateTime         @default(now())
@@ -65,8 +65,9 @@ model Cryptocurrency {
   symbol            String     @unique
   name              String     @unique
   chainId           Int
-  imgPath           String
-  latestPrice       Decimal    @db.Decimal(78, 0)
+  imgPath           String?
+  latestPrice       Decimal?   @db.Decimal(78, 0)
+  priceUpdateAt     DateTime?
   Tip               Tip[]
   Withdraw          Withdraw[]
   User              User?      @relation(fields: [userWalletAddress], references: [walletAddress])
@@ -85,13 +86,13 @@ model Tipper {
   walletAddress String  @id @unique @db.VarChar(42)
   nick          String  @unique
   nonce         String?
-  allTipsValue  Int
+  allTipsValue  Int @default(0)
   Tip           Tip[]
 }
 
 model Widget {
   id                String  @id @default(cuid())
-  link              String
+  url               String
   songPath          String
   backgroundPath    String
   nickColor         String

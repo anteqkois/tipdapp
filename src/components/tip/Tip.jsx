@@ -8,6 +8,7 @@ import { ArrowPathIcon, ArrowsPointingOutIcon, AtSymbolIcon } from '@heroicons/r
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ethers } from 'ethers';
+import Avatar from '../utils/Avatar';
 import Button from '../utils/Button';
 // import CopyToClipboard from '../utils/CopyToClipboard';
 // const { parseUnits, formatUnits } = ethers.utils;
@@ -55,6 +56,7 @@ const Tip = ({
     <Card>
       <div className="flex items-top justify-between w-full gap-1">
         <h5 className=" mr-3 lg:text-2xl">
+          <Avatar walletAddress={tipperWalletAddress} className="w-6 h-6 mr-0.5" />
           <AtSymbolIcon className="inline text-primary w-6 lg:w-7 " />
           <i className="text-primary">{tipper.nick} </i>
           sent {ethers.utils.formatEther(tokenAmount)}

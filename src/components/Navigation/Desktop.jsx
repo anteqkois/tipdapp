@@ -76,7 +76,7 @@ const Desktop = ({ user, logout }) => {
           ))}
         </ul>
       </nav>
-      <CustomConnectButton />
+      <CustomConnectButton user={user} />
     </div>
   );
 };
