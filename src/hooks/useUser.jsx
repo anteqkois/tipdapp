@@ -84,14 +84,17 @@ const useUser = () => {
   };
 
   const logout = async () => {
-    try {
-      const dataLogout = await axios('/api/auth/logout');
-      await disconnectAsync();
-      dataLogout.status = 200 && toast.success('You are succesfully logout');
-      setUser(initialUserData);
-      router.push('/login');
-    } catch (error) {
-      toast.error(error.response.data.userMessage);
+    console.log(isConnected);
+    if (isConnected) {
+      try {
+        const dataLogout = await axios('/api/auth/logout');
+        await disconnectAsync();
+        dataLogout.status = 200 && toast.success('You are succesfully logout');
+        setUser(initialUserData);
+        router.push('/login');
+      } catch (error) {
+        toast.error(error.response.data.userMessage);
+      }
     }
   };
 

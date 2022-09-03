@@ -1,8 +1,8 @@
 import UserLayout from '@/components/UserLayout.jsx';
 import { ModalProvider } from '@/hooks/useModal';
+import ReduxProvider from '@/services/ReduxProvider.jsx';
+import Web3Provider from '@/services/Web3Provider.jsx';
 import { Toaster } from 'react-hot-toast';
-import ReduxProvider from 'src/services/ReduxProvider';
-import Web3Provider from 'src/services/Web3Provider.jsx';
 import '../globals.css';
 
 function MyApp({ Component, pageProps }) {

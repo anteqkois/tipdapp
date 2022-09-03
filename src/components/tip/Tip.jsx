@@ -4,37 +4,15 @@ import Tooltip from '@/components/utils/Tooltip';
 import useClipboard from '@/hooks/useClipboard';
 import useModal from '@/hooks/useModal';
 import cutAddress from '@/utils/cutAddress';
+import { parseNotation } from '@/utils/format';
 import { ArrowPathIcon, ArrowsPointingOutIcon, AtSymbolIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { ethers } from 'ethers';
 import Avatar from '../utils/Avatar';
 import Button from '../utils/Button';
-// import CopyToClipboard from '../utils/CopyToClipboard';
 // const { parseUnits, formatUnits } = ethers.utils;
 
 dayjs.extend(relativeTime);
-
-[
-  {
-    txHash: '0xd12ac901ac86f1856839019bd4d031c9929bafd4',
-    tokenAmount: '900000000000000000',
-    value: '562000000000000000000',
-    message: '4 New wallet !',
-    displayed: false,
-    date: '2022-09-11T07:09:01.124Z',
-    userWalletAddress: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
-    cryptocurrencyAddress: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
-    tipperWalletAddress: '0xfdacb27dc605f21255108d4895bb91701a2c26cd',
-    cryptocurrency: {
-      name: 'SAND',
-      symbol: 'SAND',
-    },
-    tipper: {
-      nick: 'tiperOne',
-    },
-  },
-];
 
 const Tip = ({
   txHash,
@@ -59,7 +37,8 @@ const Tip = ({
           <Avatar walletAddress={tipperWalletAddress} className="w-6 h-6 mr-0.5" />
           <AtSymbolIcon className="inline text-primary w-6 lg:w-7 " />
           <i className="text-primary">{tipper.nick} </i>
-          sent {ethers.utils.formatEther(tokenAmount)}
+          {/* sent {ethers.utils.formatEther(tokenAmount)} */}
+          sent {parseNotation(tokenAmount)}
           <i className="text-secondary "> ${cryptocurrency.symbol}</i>:
         </h5>
         <div className="flex gap-1.5 max-h-7">
@@ -80,7 +59,7 @@ const Tip = ({
           Token:
           <span className="font-normal text-neutral-500">
             {' '}
-            {ethers.utils.formatEther(tokenAmount)} {cryptocurrency.symbol} ({ethers.utils.formatEther(value)}$)
+            {parseNotation(tokenAmount)} {cryptocurrency.symbol} ({parseNotation(value)}$)
           </span>
         </p>
       </div>
@@ -100,7 +79,7 @@ const Tip = ({
             <h6 className="text-primary">Value and Token</h6>
             <p>
               <span className="font-medium text-neutral-700">Value: </span>
-              {ethers.utils.formatEther(value)}$
+              {parseNotation(value)}$
             </p>
             <p>
               <span className="font-medium text-neutral-700">Symbol: </span>
@@ -108,7 +87,7 @@ const Tip = ({
             </p>
             <p>
               <span className="font-medium text-neutral-700">Amount: </span>
-              {ethers.utils.formatEther(tokenAmount)}
+              {parseNotation(tokenAmount)}
             </p>
             <p className="flex items-center  gap-1">
               <span className="font-medium ">Address: </span>

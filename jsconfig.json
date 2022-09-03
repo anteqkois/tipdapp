@@ -1,13 +1,14 @@
 {
-    "compilerOptions": {
-        "baseUrl": ".",
-        "paths": {
-            "@/components/*": ["src/components/*"],
-            "@/services/*": ["src/services/*"],
-            "@/hooks/*": ["src/hooks/*"],
-            "@/utils/*": ["src/utils/*"]
-        }
-    },
-    "include": ["src/**/*.js", "src/**/*.jsx", "contracts/utils/packOracleData.js"],
-    "exclude": ["node_modules", "**/node_modules", "dist"]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["src/components/*"],
+      "@/services/*": ["src/services/*"],
+      "@/hooks/*": ["src/hooks/*"],
+      "@/utils/*": ["src/utils/*"],
+      "@/lib/*": ["src/lib/*"]
+    }
+  },
+  "include": ["src/**/*.js", "src/**/*.jsx", "contracts/utils/packOracleData.js"],
+  "exclude": ["node_modules", "**/node_modules", "dist"]
 }

@@ -45,10 +45,10 @@ model User {
 
 model Tip {
   txHash                String         @id @db.VarChar(66)
-  tokenAmount           Decimal        @db.Decimal(30, 1)
-  // tokenAmount           Decimal        @db.Decimal(78, 0)
-  value                 Decimal        @db.Decimal(30, 1)
-  // value                 Decimal        @db.Decimal(78, 0)
+  // tokenAmount           Decimal        @db.Decimal(30, 1)
+  tokenAmount           Decimal        @db.Decimal(78, 0)
+  // value                 Decimal        @db.Decimal(30, 1)
+  value                 Decimal        @db.Decimal(78, 0)
   message               String
   displayed             Boolean
   date                  DateTime       @default(now())
