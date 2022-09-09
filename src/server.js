@@ -1,4 +1,3 @@
-import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import next from 'next';
@@ -11,26 +10,27 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+const baseUrl = '/api/auth/';
+
 app.prepare().then(() => {
-    const server = express();
-    // server.use(bodyParser.json());
-    // server.use(cookieParser());
+  const server = express();
 
-    server.use(express.json());
-    server.use(express.urlencoded({ extended: true }));
-    server.use(cookieParser());
-    // server.use('/api', apiRouter);
+  server.use(express.json());
+  server.use(express.urlencoded({ extended: true }));
+  server.use(cookieParser());
 
-    server.all('*', (req, res) => {
-        return handle(req, res);
-    });
+  server.use('/api', apiRouter);
 
-    //handling errors
-    server.use(handleErrors);
-    server.use(notFound);
+  server.all('*', (req, res) => {
+    return handle(req, res);
+  });
 
-    server.listen(port, (err) => {
-        if (err) throw err;
-        console.log(`> Ready on http://localhost:${port}`);
-    });
+  //handling errors
+  server.use(handleErrors);
+  server.use(notFound);
+
+  server.listen(port, (err) => {
+    if (err) throw err;
+    console.log(`> Ready on http://localhost:${port}`);
+  });
 });
