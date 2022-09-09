@@ -31,6 +31,7 @@ const Tips = () => {
   const pageAmount = useSelector(selectPageAmount);
 
   const handlePageChange = (page) => {
+    console.log('user.walletAddress', user.walletAddress);
     dispatch(getTipsByUser({ userWalletAddress: user.walletAddress, page }));
   };
 

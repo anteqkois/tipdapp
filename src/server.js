@@ -13,9 +13,13 @@ const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
     const server = express();
-    server.use(bodyParser.json());
+    // server.use(bodyParser.json());
+    // server.use(cookieParser());
+
+    server.use(express.json());
+    server.use(express.urlencoded({ extended: true }));
     server.use(cookieParser());
-    server.use('/api', apiRouter);
+    // server.use('/api', apiRouter);
 
     server.all('*', (req, res) => {
         return handle(req, res);

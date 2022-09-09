@@ -8,6 +8,7 @@ import { useDisconnect } from 'wagmi';
 const Login = () => {
   const { login, signIn, logout } = useUser();
   const { disconnectAsync, disconnect } = useDisconnect();
+  
 
   useEffect(() => {
     disconnect();
