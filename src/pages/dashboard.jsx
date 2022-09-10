@@ -5,7 +5,6 @@ import Card from '@/components/utils/Card';
 import Spinner from '@/components/utils/Spinner';
 import useUser from '@/hooks/useUser';
 import cutAddress from '@/utils/cutAddress';
-import { requireAuthPage } from '@/utils/requireAuthPage';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -66,10 +65,20 @@ const Dashboard = () => {
   );
 };
 
+Dashboard.isProtected = true;
+
 export default Dashboard;
 
-export const getServerSideProps = requireAuthPage(async (ctx) => {
-  return {
-    props: { user: ctx.req.user },
-  };
-});
+// export const getServerSideProps = requireAuthPage(async (ctx) => {
+//   return {
+//     props: { user: ctx.req.user },
+//   };
+// });
+
+// export const getServerSideProps = requireAuthPage(async (ctx) => {
+//   console.log(ctx.req);
+
+//   return {
+//     props: { user: ctx.req.user },
+//   };
+// });

@@ -1,5 +1,7 @@
 import PageLayout from '@/components/PageLayout';
 import useUser from '@/hooks/useUser';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { signOut } from 'next-auth/react';
 import { useEffect } from 'react';
 import { useDisconnect } from 'wagmi';
 // import { useEffect } from 'react';
@@ -8,7 +10,6 @@ import { useDisconnect } from 'wagmi';
 const Login = () => {
   const { login, signIn, logout } = useUser();
   const { disconnectAsync, disconnect } = useDisconnect();
-  
 
   useEffect(() => {
     disconnect();
@@ -50,12 +51,13 @@ const Login = () => {
   return (
     <>
       {/* <button onClick={connectWallet}>Connect wallet</button> */}
-      {/* <ConnectButton /> */}
+      <ConnectButton />
       <button onClick={login}>Login</button>
       <br />
       <button onClick={signIn}>signin</button>
       <br />
-      <button onClick={logout}>logout</button>
+      {/* <button onClick={logout}>logout</button> */}
+      <button onClick={signOut}>signOut</button>
       <br />
     </>
   );
