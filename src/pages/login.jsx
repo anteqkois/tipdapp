@@ -51,7 +51,7 @@ const Login = () => {
   return (
     <>
       {/* <button onClick={connectWallet}>Connect wallet</button> */}
-      <ConnectButton />
+      {/* <ConnectButton /> */}
       <button onClick={login}>Login</button>
       <br />
       <button onClick={signIn}>signin</button>

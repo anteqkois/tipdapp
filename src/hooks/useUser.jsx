@@ -1,13 +1,8 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-
-// const ACTION = {
-//   LOGIN: 'LOGIN',
-//   SIGNIN: 'SIGNIN',
-//   IDLE: 'IDLE',
-// };
+import { useEffect, useState } from 'react';
+import { useDisconnect } from 'wagmi';
 
 const initialUserData = {
   allDonateCount: 0,
@@ -29,7 +24,7 @@ const initialUserData = {
 
 const useUser = () => {
   const { openConnectModal } = useConnectModal();
-  // const { disconnectAsync } = useDisconnect();
+  const { disconnectAsync } = useDisconnect();
 
   // const { address, isConnected } = useAccount({
   //   async onDisconnect() {
@@ -53,12 +48,18 @@ const useUser = () => {
 
   const { status, data } = useSession();
 
-  console.log(data)
+  useEffect(() => {
+    // if (status === 'authenticated') router.push('/dashboard');
+    // console.log('first')
+  }, [status]);
+
+  // console.log(data);
   const login = () => {
     openConnectModal();
+    // router.push('/dashboard');
   };
-  const logout = () => {
-    openConnectModal();
+  const logout = async () => {
+    await disconnectAsync();
   };
 
   const signIn = () => {
@@ -199,7 +200,7 @@ const useUser = () => {
 
   // return { login, signIn, logout, user, error };
 
-  return { login, signIn, logout, user: data ?? initialUserData, error };
+  return { login, signIn, logout, user: data?.user ?? initialUserData, error };
 };
 
 export default useUser;

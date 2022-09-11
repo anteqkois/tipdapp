@@ -7,10 +7,6 @@ const Creator = () => {
   )
 }
 
-export default Creator
+Creartor.isProtected = true
 
-export const getServerSideProps = requireAuthPage((ctx) => {
-  return {
-    props: { user: ctx.req.user },
-  };
-});
+export default Creator

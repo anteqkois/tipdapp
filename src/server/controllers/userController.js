@@ -1,5 +1,5 @@
 // import { prismaClient } from '../../services/prismaClient';
-import { prismaClient } from '../../services/prismaClient.js';
+import { prismaClient } from '../../lib/prismaClient.js';
 import { createApiError } from '../middlewares/error.js';
 
 const find = async (req, res) => {

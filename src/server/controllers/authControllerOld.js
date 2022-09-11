@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { ethers } from 'ethers';
 import jwt from 'jsonwebtoken';
-import { prismaClient } from '../../services/prismaClient.js';
+import { prismaClient } from '../../lib/prismaClient.js';
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter.js';
 import { createApiError, createValidationError, ValidationError } from '../middlewares/error.js';
 const { PrismaClientKnownRequestError } = Prisma;

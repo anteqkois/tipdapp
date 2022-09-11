@@ -6,15 +6,15 @@ const ProtectPageGuard = ({ children, protect }) => {
   const { status } = useSession();
   const router = useRouter();
 
-  // console.log(status);
-  // console.log(protect);
-
   if (status === 'loading') {
     return <Spinner />;
   }
 
   if (status === 'unauthenticated' && protect) {
-    router.push('/login');
+    router.push({
+      pathname: '/login',
+      query: { callback: router.route },
+    });
     return <Spinner />;
   }
 

@@ -2,7 +2,7 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getCsrfToken } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
-import { prismaClient } from '../../services/prismaClient.js';
+import { prismaClient } from '../../lib/prismaClient.js';
 
 const providers = [
   CredentialsProvider.default({
@@ -78,6 +78,21 @@ const auth = async (req, res) => {
         }
         return token;
       },
+      // async redirect({ url, baseUrl }) {
+      //   // Allows relative callback URLs
+      //   // if (url.startsWith('/')) return `${baseUrl}${url}`;
+      //   // Allows callback URLs on the same origin
+      //   // else if (new URL(url).origin === baseUrl) return url;
+      //   console.log('url', url);
+      //   console.log('baseUrl', baseUrl);
+      //   console.log('split', url.replace(baseUrl, ''));
+
+      //   // console.log('baseUrl', baseUrl);
+
+      //   if (url.replace(baseUrl, '') === '/login') return `${baseUrl}/dashboard`;
+      //   return url;
+      //   // return baseUrl;
+      // },
       async session({ session, token }) {
         session.user = token.user;
         // console.log('session', session);

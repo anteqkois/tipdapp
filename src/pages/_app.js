@@ -1,8 +1,8 @@
 import UserLayout from '@/components/UserLayout.jsx';
 import ProtectPageGuard from '@/components/utils/ProtectPageGuard';
 import { ModalProvider } from '@/hooks/useModal';
-import ReduxProvider from '@/services/ReduxProvider.jsx';
-import { RainbowKitProviders, WagmiProvider } from '@/services/Web3Provider.jsx';
+import ReduxProvider from '@/lib/ReduxProvider.jsx';
+import { RainbowKitProviders, WagmiProvider } from '@/lib/Web3Provider.jsx';
 import { SessionProvider } from 'next-auth/react';
 import { Toaster } from 'react-hot-toast';
 import '../globals.css';

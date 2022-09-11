@@ -6,10 +6,6 @@ const Token = () => {
   )
 }
 
-export default Token
+Token.isProtected = true;
 
-export const getServerSideProps = requireAuthPage((ctx) => {
-  return {
-    props: { user: ctx.req.user },
-  };
-});
+export default Token

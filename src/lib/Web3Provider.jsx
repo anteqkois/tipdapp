@@ -1,6 +1,6 @@
 import useMediaQuery from '@/hooks/useMediaQuery';
+import RainbowKitAuthAdapter from '@/lib/RainbowKitAuthAdapter';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { RainbowKitSiweNextAuthProvider } from '@rainbow-me/rainbowkit-siwe-next-auth';
 import '@rainbow-me/rainbowkit/styles.css';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
@@ -26,7 +26,7 @@ const { connectors } = getDefaultWallets({
 });
 
 const wagmiClient = createClient({
-  // autoConnect: true,
+  autoConnect: true,
   connectors,
   provider,
 });
@@ -35,11 +35,13 @@ const RainbowKitProviders = ({ children }) => {
   const isMobile = useMediaQuery('(max-width: 1024px)', true);
 
   return (
-    <RainbowKitSiweNextAuthProvider>
+    // <RainbowKitSiweNextAuthProvider>
+    <RainbowKitAuthAdapter>
       <RainbowKitProvider coolMode chains={chains} modalSize={isMobile ? 'compact' : 'wide'}>
         {children}
       </RainbowKitProvider>
-    </RainbowKitSiweNextAuthProvider>
+    </RainbowKitAuthAdapter>
+    // </RainbowKitSiweNextAuthProvider>
   );
 };
 

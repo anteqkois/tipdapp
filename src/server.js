@@ -3,7 +3,7 @@ import express from 'express';
 import next from 'next';
 import { handleErrors, notFound } from './server/middlewares/error.js';
 import apiRouter from './server/routes/index.js';
-import './services/ethersProvider.js';
+import './lib/ethersProvider.js';
 
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== 'production';

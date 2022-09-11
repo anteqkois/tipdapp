@@ -1,7 +1,5 @@
-import useUser from '@/hooks/useUser';
 import { ArrowRightOnRectangleIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import Avatar from './Avatar';
 import Button from './Button';
 import Tooltip from './Tooltip';
 
@@ -13,6 +11,7 @@ export const CustomConnectButton = ({ user }) => {
         // can remove all 'authenticationStatus' checks
         const ready = mounted && authenticationStatus !== 'loading';
         const connected = ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated');
+
         return (
           <div className={!ready ? 'opacity-0 pointer-events-none select-none' : ''} aria-hidden={!ready}>
             {(() => {

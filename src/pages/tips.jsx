@@ -3,7 +3,6 @@ import TipsDefault from '@/components/tip/TipsDefault';
 import Card from '@/components/utils/Card';
 import Spinner from '@/components/utils/Spinner';
 import useUser from '@/hooks/useUser';
-import { requireAuthPage } from '@/utils/requireAuthPage';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -49,10 +48,6 @@ const Tips = () => {
   );
 };
 
-export default Tips;
+Tips.isProtected = true;
 
-export const getServerSideProps = requireAuthPage((ctx) => {
-  return {
-    props: { user: ctx.req.user },
-  };
-});
+export default Tips;

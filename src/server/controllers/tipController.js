@@ -1,4 +1,4 @@
-import { prismaClient } from '../../services/prismaClient.js';
+import { prismaClient } from '../../lib/prismaClient.js';
 import { createApiError } from '../middlewares/error.js';
 
 // const PAGE_SIZE = 2;

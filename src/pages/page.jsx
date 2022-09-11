@@ -103,10 +103,6 @@ const Page = () => {
   );
 };
 
-export default Page;
+Page.isProtected = true
 
-export const getServerSideProps = requireAuthPage((ctx) => {
-  return {
-    props: { user: ctx.req.user },
-  };
-});
+export default Page;

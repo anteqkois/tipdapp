@@ -4,7 +4,7 @@ import useUser from '@/hooks/useUser';
 import { requireAuthPage } from '@/utils/requireAuthPage';
 import { chain } from 'wagmi';
 
-const balance = ({}) => {
+const Balance = ({}) => {
   const { user } = useUser();
 
   return (
@@ -17,10 +17,6 @@ const balance = ({}) => {
   );
 };
 
-export default balance;
+Balance.isProtected = true;
 
-export const getServerSideProps = requireAuthPage((ctx) => {
-  return {
-    props: { user: ctx.req.user },
-  };
-});
+export default Balance;
