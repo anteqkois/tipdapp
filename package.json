@@ -57,7 +57,7 @@
   "devDependencies": {
     "@faker-js/faker": "^7.5.0",
     "@svgr/webpack": "^6.2.1",
-    "autoprefixer": "^10.4.2",
+    "autoprefixer": "^10.4.9",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "8.23.0",
     "eslint-config-next": "12.3.0",
