@@ -38,4 +38,4 @@ const useClipboard = (copyData) => {
   return { ClipboardIcon, handleCopy };
 };
 
-export default useClipboard;
+export { useClipboard };

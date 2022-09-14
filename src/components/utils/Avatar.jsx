@@ -10,7 +10,7 @@
 
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 
-const Avatar = ({ avatarPath, walletAddress, className }) => {
+export const Avatar = ({ avatarPath, walletAddress, className }) => {
   return (
     <AvatarPrimitive.Root>
       {/* <AvatarPrimitive.Root className={`relative inline-flex h-10 w-10 ${className}`}> */}

@@ -22,7 +22,7 @@ const initialUserData = {
   widgetId: null,
 };
 
-const useUser = () => {
+export const useUser = () => {
   const { openConnectModal } = useConnectModal();
   const { disconnectAsync } = useDisconnect();
 
@@ -62,7 +62,7 @@ const useUser = () => {
     await disconnectAsync();
   };
 
-  const signIn = () => {
+  const signIn = (userdata) => {
     openConnectModal();
   };
 

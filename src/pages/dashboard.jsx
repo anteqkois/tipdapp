@@ -1,9 +1,6 @@
 import TipsDefault from '@/components/tip/TipsDefault';
-import Avatar from '@/components/utils/Avatar';
-import Button from '@/components/utils/Button';
-import Card from '@/components/utils/Card';
-import Spinner from '@/components/utils/Spinner';
-import useUser from '@/hooks/useUser';
+import { Avatar, Button, Card, Spinner } from '@/components/utils';
+import { useUser } from '@/hooks';
 import cutAddress from '@/utils/cutAddress';
 import Link from 'next/link';
 import { useEffect } from 'react';

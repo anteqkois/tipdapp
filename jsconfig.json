@@ -3,10 +3,11 @@
     "baseUrl": ".",
     "paths": {
       "@/components/*": ["src/components/*"],
-      "@/services/*": ["src/services/*"],
+      "@/hooks": ["src/hooks"],
       "@/hooks/*": ["src/hooks/*"],
       "@/utils/*": ["src/utils/*"],
-      "@/lib/*": ["src/lib/*"]
+      "@/lib": ["src/lib"],
+      // "@/lib/*": ["src/lib/*"]
     }
   },
   "include": ["src/**/*.js", "src/**/*.jsx", "contracts/utils/packOracleData.js", "src/pages/api/auth/[...nextauth].ts"],

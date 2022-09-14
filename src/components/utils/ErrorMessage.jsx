@@ -1,5 +1,5 @@
-const ErrorMessage = ({ children }) => {
-    return <div>{children}</div>;
+export const ErrorMessage = ({ children }) => {
+  return <div>{children}</div>;
 };
 
 export default ErrorMessage;

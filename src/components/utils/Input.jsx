@@ -1,4 +1,4 @@
-const Input = ({ type, className, id, name, label, placeholder, onChange, value, error }) => {
+export const Input = ({ type, className, id, name, label, placeholder, onChange, value, error }) => {
   return (
     <div className="my-3">
       <label htmlFor={label} className="block mb-2 ml-1 text-sm font-medium text-neutral-800 first-letter:uppercase">

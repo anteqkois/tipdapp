@@ -29,7 +29,7 @@
 
 import { useEffect, useState } from 'react';
 
-function useMediaQuery(query, defaultMatches) {
+export const useMediaQuery = (query, defaultMatches)=> {
   const [matches, setMatches] = useState(defaultMatches);
 
   useEffect(() => {

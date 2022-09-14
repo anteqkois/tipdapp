@@ -2,7 +2,7 @@ import Spinner from '@/components/utils/Spinner';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
-const ProtectPageGuard = ({ children, protect }) => {
+export const ProtectPageGuard = ({ children, protect }) => {
   const { status } = useSession();
   const router = useRouter();
 

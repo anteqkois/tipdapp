@@ -1,8 +1,5 @@
-import Card from '@/components/utils/Card';
-import Flag from '@/components/utils/Flag';
-import Tooltip from '@/components/utils/Tooltip';
-import useClipboard from '@/hooks/useClipboard';
-import useModal from '@/hooks/useModal';
+import { Card, Flag, Tooltip } from '@/components/utils';
+import { useClipboard, useModal } from '@/hooks';
 import cutAddress from '@/utils/cutAddress';
 import { parseNotation } from '@/utils/format';
 import { ArrowPathIcon, ArrowsPointingOutIcon, AtSymbolIcon } from '@heroicons/react/24/outline';

@@ -2,7 +2,6 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getCsrfToken } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
-import { prismaClient } from '../../lib/prismaClient.js';
 
 const providers = [
   CredentialsProvider.default({
@@ -21,6 +20,8 @@ const providers = [
     },
     async authorize(credentials, req) {
       try {
+        console.log(credentials);
+
         const siwe = new SiweMessage(JSON.parse(credentials?.message || '{}'));
 
         const user = await prismaClient.user.findFirst({
@@ -69,6 +70,7 @@ const auth = async (req, res) => {
     providers,
     session: {
       strategy: 'jwt',
+      maxAge: 15 * 24 * 30 * 60, // 15 days
     },
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
@@ -95,6 +97,9 @@ const auth = async (req, res) => {
       // },
       async session({ session, token }) {
         session.user = token.user;
+        if (token) {
+          session.id = token.id;
+        }
         // console.log('session', session);
         // console.log('token', token);
         return session;
@@ -103,5 +108,44 @@ const auth = async (req, res) => {
   });
 };
 
+const validate = async (req, res) => {
+  // const { walletAddress, email, firstName, lastName, nick } = req.body;
+  // if (!walletAddress || !email || !firstName || !lastName || !nick) createApiError('Missing data to create accout.');
+  // const user = await prismaClient.user.findFirst({
+  //   where: {
+  //     walletAddress,
+  //   },
+  // });
+  // if (!user) {
+  //   const nonce = randomUUID();
+  //   try {
+  //     const newUser = await prismaClient.user.create({
+  //       data: { walletAddress, email, firstName, lastName, nonce, nick, urlTip: nick },
+  //     });
+  //     res.status(200).json({ nonce: nonce, user: newUser });
+  //   } catch (error) {
+  //     if (error instanceof PrismaClientKnownRequestError) {
+  //       if (error.code === 'P2002') {
+  //         const errors = [];
+  //         const validationError = new ValidationError(
+  //           error.meta.target[0],
+  //           `${capitalizeFirstLetter(error.meta.target[0])} used.`,
+  //           `${capitalizeFirstLetter(error.meta.target[0])} already used by someone.`,
+  //           `${error.meta.target}.unique`,
+  //         );
+  //         errors.push(validationError);
+  //         createValidationError(errors, 403);
+  //       }
+  //     } else {
+  //     }
+  //     createApiError('Something went wrong, you. Account not created.');
+  //   }
+  // } else {
+  //   // next(createApiError('Account is already register. Login to acccount.', 305));
+  //   createApiError('Account is already register.', 403);
+  // }
+};
+
 export { auth };
-export default { auth };
+export { validate };
+export default { auth, validate };

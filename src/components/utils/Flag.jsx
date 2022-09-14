@@ -2,7 +2,7 @@ import { CheckCircleIcon as FalseIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as TrueIcon } from '@heroicons/react/24/solid';
 import Tooltip from './Tooltip';
 
-const Flag = ({ flag, tooltip, className }) => {
+export const Flag = ({ flag, tooltip, className }) => {
   return (
     <Tooltip content={tooltip}>
       {flag ? (

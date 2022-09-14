@@ -3,7 +3,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import React, { useEffect, useState } from 'react';
 export const ModalProvider = () => <div id="modal" />;
 
-const useModal = () => {
+export const useModal = () => {
   const [showModal, setShowModal] = useState(false);
   const [mounted, setMounted] = useState(false);
 

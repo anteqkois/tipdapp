@@ -1,7 +1,7 @@
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { forwardRef } from 'react';
 
-const Button = forwardRef(({ children, className, option, ...props }, ref) => {
+export const Button = forwardRef(({ children, className, option, ...props }, ref) => {
   return (
     <button
       {...props}
@@ -21,7 +21,7 @@ const Button = forwardRef(({ children, className, option, ...props }, ref) => {
             result += `px-3.5 py-1.5 border-2 border-neutral-300 outline-2 text-neutral-800 hover:bg-neutral-150`;
             break;
           case 'special':
-            result += `px-4 py-2 text-neutral-50 bg-gradient-to-tr from-primary  via-primary to-secondary-700 hover:from-primary-dark hover:via-primary-dark hover:to-secondary-800 transition-all duration-1000 ease-in-out`;
+            result += `px-4 py-2 text-neutral-50 bg-gradient-to-tr from-primary  to-secondary-700 hover:from-primary-dark hover:to-secondary-800 `;
             break;
           case 'minimalist':
             result += `block text-neutral-900 underline decoration-2 decoration-primary`;

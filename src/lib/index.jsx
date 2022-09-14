@@ -1,4 +1,3 @@
-// const { default: Web3Provider } = require("./Web3Provider");
-
+// export { prismaClient } from './prismaClient';
 export { ReduxProvider } from './ReduxProvider';
-export { Web3Provider } from './Web3Provider';
+export { RainbowKitProviders, WagmiProvider } from './Web3Provider';
