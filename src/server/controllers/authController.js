@@ -1,7 +1,19 @@
+import { Prisma } from '@prisma/client';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getCsrfToken } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
+import { z, ZodError } from 'zod';
+import { prismaClient } from '../../lib/prismaClient.js';
+import { createValidationError, ValidationError, ValidationErrors } from '../middlewares/error.js';
+const { PrismaClientKnownRequestError } = Prisma;
+
+const userValidation = z.object({
+  email: z.string().email(),
+  firstName: z.string().min(3, { message: 'First name must have 3 or more characters.' }),
+  lastName: z.string().min(3, { message: 'Last name must have 3 or more characters.' }),
+  nick: z.string().min(2, { message: 'Nick must have 2 or more characters.' }),
+});
 
 const providers = [
   CredentialsProvider.default({
@@ -109,41 +121,48 @@ const auth = async (req, res) => {
 };
 
 const validate = async (req, res) => {
-  // const { walletAddress, email, firstName, lastName, nick } = req.body;
-  // if (!walletAddress || !email || !firstName || !lastName || !nick) createApiError('Missing data to create accout.');
-  // const user = await prismaClient.user.findFirst({
-  //   where: {
-  //     walletAddress,
-  //   },
-  // });
-  // if (!user) {
-  //   const nonce = randomUUID();
-  //   try {
-  //     const newUser = await prismaClient.user.create({
-  //       data: { walletAddress, email, firstName, lastName, nonce, nick, urlTip: nick },
-  //     });
-  //     res.status(200).json({ nonce: nonce, user: newUser });
-  //   } catch (error) {
-  //     if (error instanceof PrismaClientKnownRequestError) {
-  //       if (error.code === 'P2002') {
-  //         const errors = [];
-  //         const validationError = new ValidationError(
-  //           error.meta.target[0],
-  //           `${capitalizeFirstLetter(error.meta.target[0])} used.`,
-  //           `${capitalizeFirstLetter(error.meta.target[0])} already used by someone.`,
-  //           `${error.meta.target}.unique`,
-  //         );
-  //         errors.push(validationError);
-  //         createValidationError(errors, 403);
-  //       }
-  //     } else {
-  //     }
-  //     createApiError('Something went wrong, you. Account not created.');
-  //   }
-  // } else {
-  //   // next(createApiError('Account is already register. Login to acccount.', 305));
-  //   createApiError('Account is already register.', 403);
-  // }
+  const { email, nick } = req.body;
+  console.log(req);
+
+  try {
+    //Validate schema
+    userValidation.parse(req.body);
+
+    //Validate unique
+    const user = await prismaClient.user.findFirst({
+      where: {
+        OR: [{ email }, { nick }],
+      },
+      select: {
+        email: true,
+        nick: true,
+      },
+    });
+
+    if (user) {
+      const errors = [];
+      if (user.email === email) {
+        const validationError = new ValidationError('email', `Email used.`, `Email already used by someone.`, `email.unique`);
+        errors.push(validationError);
+      }
+      if (user.nick === nick) {
+        const validationError = new ValidationError('nick', `Nick used.`, `Nick already used by someone.`, `nick.unique`);
+        errors.push(validationError);
+      }
+      createValidationError(errors);
+    }
+  } catch (errors) {
+    if (errors instanceof ZodError) {
+      throw new ValidationErrors().fromZodErrorArray(errors.issues);
+    } else if (errors instanceof ValidationErrors) {
+      throw errors;
+    } else {
+      console.log(errors);
+      // createApiError('Something went wrong, you. Account not created.');
+    }
+  }
+
+  res.status(200).json({ message: 'Validation passed' });
 };
 
 export { auth };

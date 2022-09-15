@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
-import api from './apiConfig';
+import api from 'src/lib/apiConfig';
 
 export const STATUS = {
   IDLE: 'IDLE',

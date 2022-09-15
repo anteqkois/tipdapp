@@ -1,6 +1,8 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectActiveStep, selectErrors, selectStatus, setStep, validateUserData } from 'src/redux/signInFormSlice';
 import { Button, Input } from '../utils';
 import { FormikStep } from './FormikStep';
 
@@ -17,86 +19,58 @@ const validate = (values) => {
   return errors;
 };
 
-export const STATUS = {
-  IDLE: 'IDLE',
-  LOADING: 'LOADING',
-  SUCCEEDED: 'SUCCEEDED',
-  FAILED: 'FAILED',
-  // USER_DETAILS: 'USER_DETAILS',
-  // CONNECT_WALLET: 'CONNECT_WALLET',
-};
-
-// const initialState = {
-//   data: {
-//     firstName: '',
-//     lastName: '',
-//     email: '',
-//     nick: '',
-//     nick2: '',
-//   },
-//   status: STATUS.IDLE, //'idle' | 'loading' | 'succeeded' | 'failed'
-//   step: 1,
-//   error: null,
-// };
 const initialValues = {
   email: '',
   firstName: '',
   lastName: '',
   nick: '',
-  nick2: '',
 };
-
-// const dispatch = useDispatch();
-// const [formData, setFormData] = useState(initialState);
-// const error = useSelector(selectError);
-// const status = useSelector(selectStatus);
-// const step = useSelector(selectActiveStep);
 
 export const SignInForm = () => {
   const { openConnectModal } = useConnectModal();
-  const [step, setStep] = useState(1);
-  const [error, setError] = useState(null);
+
+  const dispatch = useDispatch();
+  const errors = useSelector(selectErrors);
+  const status = useSelector(selectStatus);
+  const step = useSelector(selectActiveStep);
+
+  //Display Error message
+  useEffect(() => {
+    if (errors) {
+      const errorsTemp = {};
+
+      errors.forEach((error) => {
+        errorsTemp[error.field] = error.message;
+      });
+
+      formik.setErrors(errorsTemp);
+    }
+  }, [errors]);
 
   const formik = useFormik({
     initialValues: initialValues,
     validate,
     onSubmit: async (values) => {
-      console.log(values);
-      if (!Object.keys(formik.errors).length) {
-        if (step === 1) {
-          //validate on backend
+      try {
+        // console.log(values);
+        if (!Object.keys(formik.errors).length) {
+          if (step === 1) {
+            //validate userData on backend
+            dispatch(validateUserData(values));
+          }
+          if (step === 2) {
+            //validate on backend
+            // openConnectModal();
+          }
         }
-        if (step === 2) {
-          //validate on backend
-          openConnectModal();
-        }
-        setStep((prev) => ++prev);
+      } catch (error) {
+        console.log(error);
       }
     },
   });
 
-  //Display Error message
-  useEffect(() => {
-    if (error) {
-      const errors = {};
-
-      error.forEach((error) => {
-        errors[error.field] = error.userMessage;
-      });
-
-      formik.setErrors(errors);
-    }
-  }, [error]);
-
-  // const childrenArray = React.Children.toArray(children);
-  // const childrenArray = [];
   const FormSteps = [
-    <FormikStep
-      label="User Details"
-      // onSubmit={() => {
-      //   console.log('first');
-      // }}
-    >
+    <FormikStep label="User Details">
       <Input
         id="email"
         name="email"
@@ -138,14 +112,9 @@ export const SignInForm = () => {
         error={formik.errors.nick}
       />
     </FormikStep>,
-    <FormikStep
-      label="Connect Wallet"
-      // onSubmit={() => {
-      //   console.log('second');
-      // }}
-    >
+    <FormikStep label="Connect Wallet">
       <Button className="w-full my-8 " option="special" onClick={() => setStep((prev) => --prev)}>
-      {/* <Metamask className="text-7xl" /> */}
+        {/* <Metamask className="text-7xl" /> */}
         Connect wallet
       </Button>
     </FormikStep>,
@@ -164,7 +133,7 @@ export const SignInForm = () => {
         {FormSteps[step - 1]}
         <div className="flex gap-3">
           {step > 1 && (
-            <Button className="w-full mt-3" onClick={() => setStep((prev) => --prev)}>
+            <Button className="w-full mt-3" onClick={() => dispatch(setStep(step - 1))}>
               Back
             </Button>
           )}

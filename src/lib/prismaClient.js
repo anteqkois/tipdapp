@@ -15,16 +15,18 @@ import { PrismaClient } from '@prisma/client';
 // export { prismaClient };
 // export default prismaClient;
 
-let prismaClient;
+// let prismaClient;
+// 
+// if (process.env.NODE_ENV === 'production') {
+//   prismaClient = new PrismaClient();
+// } else {
+//   if (!global.prismaClient) {
+//     global.prismaClient = new PrismaClient();
+//   }
+//   prismaClient = global.prismaClient;
+// }
 
-if (process.env.NODE_ENV === 'production') {
-  prismaClient = new PrismaClient();
-} else {
-  if (!global.prismaClient) {
-    global.prismaClient = new PrismaClient();
-  }
-  prismaClient = global.prismaClient;
-}
+const prismaClient = new PrismaClient();
 
 export { prismaClient };
 export default prismaClient;

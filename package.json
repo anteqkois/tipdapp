@@ -52,7 +52,8 @@
     "react-redux": "^8.0.2",
     "redux-devtools-extension": "^2.13.9",
     "siwe": "^1.1.6",
-    "wagmi": "^0.6.5"
+    "wagmi": "^0.6.5",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.5.0",

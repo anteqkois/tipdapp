@@ -10,6 +10,6 @@
       // "@/lib/*": ["src/lib/*"]
     }
   },
-  "include": ["src/**/*.js", "src/**/*.jsx", "contracts/utils/packOracleData.js", "src/pages/api/auth/[...nextauth].ts"],
+  "include": ["src/**/*.js", "src/**/*.jsx", "contracts/utils/packOracleData.js", "src/pages/api/auth/[...nextauth].ts", "src/lib/prismaClient.js"],
   "exclude": ["node_modules", "**/node_modules", "dist"]
 }
