@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActiveStep, selectErrors, selectStatus, setStep, validateUserData } from 'src/redux/signInFormSlice';
 import { Button, Input } from '../utils';
+import { Stepper } from '../utils/Stepper';
 import { FormikStep } from './FormikStep';
 
 const validate = (values) => {
@@ -122,13 +123,12 @@ export const SignInForm = () => {
 
   return (
     <>
-      <h1 className="flex-center text-3xl mb-3">
-        Sign in
+      <h1 className="flex-center text-2xl mb-3">
+        {FormSteps[step - 1].props.label}{/* Sign in */}
         {/* <Metamask className="text-7xl" /> */}
       </h1>
-      <h6>
-        Step {step}/2 ({FormSteps[step - 1].props.label}):
-      </h6>
+      <Stepper stepCount={4} activeStep={2} />
+      {/* <h6>Step {step}/2 ({FormSteps[step - 1].props.label}):</h6> */}
       <form onSubmit={formik.handleSubmit}>
         {FormSteps[step - 1]}
         <div className="flex gap-3">
