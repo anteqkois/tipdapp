@@ -2,11 +2,13 @@ import {
   AdjustmentsHorizontalIcon, ArrowRightOnRectangleIcon, BanknotesIcon, ChatBubbleBottomCenterTextIcon, Cog6ToothIcon, ComputerDesktopIcon, CurrencyDollarIcon, RectangleGroupIcon
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { CustomConnectButton } from '../utils/CustomConnectButton';
 import Hamburger from './Hamburger';
 import Navlink from './Navlink';
+import { RainbowKitButtonMobile } from './RainbowKitButtonMobile';
 
 const optionStyle =
-  'flex items-center gap-3 p-4 font-semibold uppercase group rounded text-neutral-600 hover:text-neutral-900 hover:cursor-pointer hover:bg-neutral-150';
+  'flex items-center gap-3 p-4 border-b border-neutral-150 font-semibold uppercase group text-neutral-600 hover:text-neutral-900 hover:cursor-pointer hover:bg-neutral-150';
 
 const navigationOption = [
   {
@@ -53,7 +55,7 @@ const navigationOption = [
   },
 ];
 
-const Mobile = ({ user, logout }) => {
+const Mobile = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -68,24 +70,20 @@ const Mobile = ({ user, logout }) => {
           isOpen ? 'translate-x-full' : 'translate-y-0'
         }`}
       >
-        <ul>
-          {navigationOption.map(({ label, href, icon, className }) => (
-            <li key={href} onClick={() => setIsOpen(false)}>
-              <Navlink href={href} className={className}>
-                {icon}
-                {label}
-              </Navlink>
-            </li>
-          ))}
+        <ul className="flex flex-col min-h-[calc(100%-3rem)]">
+          <ul>
+            {navigationOption.map(({ label, href, icon, className }) => (
+              <li key={href} onClick={() => setIsOpen(false)}>
+                <Navlink href={href} className={className}>
+                  {icon}
+                  {label}
+                </Navlink>
+              </li>
+            ))}
+          </ul>
           <li
-            onClick={() => {
-              setIsOpen(false);
-              logout();
-            }}
-            className={optionStyle}
           >
-              <ArrowRightOnRectangleIcon className="w-7 ml-0.5 -mr-0.5" />
-              logout
+            <RainbowKitButtonMobile buttonStyle={optionStyle} />
           </li>
         </ul>
       </nav>

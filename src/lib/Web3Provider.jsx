@@ -3,14 +3,14 @@ import {
   createAuthenticationAdapter,
   getDefaultWallets,
   RainbowKitAuthenticationProvider,
-  RainbowKitProvider,
+  RainbowKitProvider
 } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { getCsrfToken, signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { SiweMessage } from 'siwe';
-import { selectFields } from 'src/redux/signInFormSlice';
+import { selectFormData } from 'src/redux/signInFormSlice';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
@@ -41,7 +41,7 @@ const wagmiClient = createClient({
 });
 
 const RainbowKitProviders = ({ children, enabled }) => {
-  const fields = useSelector(selectFields);
+  const formData = useSelector(selectFormData);
   const isMobile = useMediaQuery('(max-width: 1024px)', true);
   const { status } = useSession();
   const router = useRouter();
@@ -69,7 +69,7 @@ const RainbowKitProviders = ({ children, enabled }) => {
       signIn('credentials', {
         message: JSON.stringify(message),
         signature, // <-- comment this out to throw an error & reach the error page ./pages/auth/signin.tsx
-        fields,
+        formData,
         redirect: true,
         callbackUrl: `${window.location.origin}/${router.query?.callback ?? '/dashboard'}`,
       });
@@ -78,6 +78,7 @@ const RainbowKitProviders = ({ children, enabled }) => {
       });
     },
     signOut: async () => {
+      console.log('signout')
       signOut({ callbackUrl: `${window.location.origin}/login` });
     },
   });

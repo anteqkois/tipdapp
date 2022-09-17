@@ -32,7 +32,7 @@ const providers = [
     },
     async authorize(credentials, req) {
       try {
-        console.log(credentials);
+        console.log(credentials, req);
 
         const siwe = new SiweMessage(JSON.parse(credentials?.message || '{}'));
 
@@ -122,7 +122,6 @@ const auth = async (req, res) => {
 
 const validate = async (req, res) => {
   const { email, nick } = req.body;
-  console.log(req);
 
   try {
     //Validate schema

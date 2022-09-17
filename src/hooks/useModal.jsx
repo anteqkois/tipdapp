@@ -31,9 +31,9 @@ export const useModal = () => {
   const ModalContent = React.forwardRef(({ children, title, description, className, ...props }, forwardedRef) => {
     return mounted ? (
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed flex-center inset-0 z-40 p-2 bg-neutral-800/40" forceMount>
+        <DialogPrimitive.Overlay className="fixed inset-0 z-40 p-2 overflow-scroll bg-neutral-800/40 md:flex-center" forceMount>
           <DialogPrimitive.Content
-            className={`z-50 w-full p-4 overflow-hidden max-w-md break-word rounded shadow-md bg-neutral-50 ${className}`}
+            className={`z-50 w-full p-4  max-w-md break-word rounded shadow-md bg-neutral-50 ${className}`}
             forceMount
             {...props}
             ref={forwardedRef}

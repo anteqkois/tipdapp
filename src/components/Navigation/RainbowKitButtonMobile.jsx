@@ -1,9 +1,8 @@
 import { ArrowRightOnRectangleIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import Button from './Button';
-import Tooltip from './Tooltip';
+import { Button } from '../utils';
 
-export const CustomConnectButton = () => {
+export const RainbowKitButtonMobile = ({ buttonStyle }) => {
   return (
     <ConnectButton.Custom>
       {({ account, chain, openAccountModal, openChainModal, openConnectModal, authenticationStatus, mounted }) => {
@@ -30,40 +29,33 @@ export const CustomConnectButton = () => {
                 );
               }
               return (
-                <div className="flex flex-col gap-3 ">
-                  <Tooltip content="Switch network">
-                    <Button
-                      onClick={openChainModal}
-                      className="flex items-center justify-between gap-2"
-                      type="button"
-                      option="overlay"
-                    >
+                <div className="w-full">
+                  <button onClick={openChainModal} className={`${buttonStyle} justify-between w-full`} type="button">
+                    <div className="flex gap-3 items-center">
                       {chain.hasIcon && (
                         <div
-                          className="w-6 h-6 rounded-full overflow-hidden"
+                          className="rounded-full overflow-hidden"
                           style={{
                             background: chain.iconBackground,
                           }}
                         >
-                          {chain.iconUrl && <img alt={chain.name ?? 'Chain icon'} src={chain.iconUrl} className="w-6 h-6" />}
+                          {chain.iconUrl && <img alt={chain.name ?? 'Chain icon'} src={chain.iconUrl} />}
                         </div>
                       )}
-                      {chain.name}
-                      <ChevronDownIcon className="w-6 h-6 mt-0.5" />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip content="Disconnect / Copy">
-                    <Button
-                      onClick={openAccountModal}
-                      className="flex items-center justify-center gap-2"
-                      type="button"
-                      option="overlay"
-                    >
-                      {/* <Avatar awalletAddress=alletAddress} className="w-6 h-6" /> */}
-                      {account.displayName}
-                      <ArrowRightOnRectangleIcon className="w-6 h-6" />
-                    </Button>
-                  </Tooltip>
+                      switch network ({chain.name})
+                    </div>
+                    <ChevronDownIcon className="w-6 h-6 mt-0.5" />
+                  </button>
+                  <button
+                    onClick={openAccountModal}
+                    className={`${buttonStyle} w-full`}
+                    type="button"
+                  >
+                    {/* <Avatar avatarPath={user} walletAddress={user.walletAddress} className="w-6 h-6" /> */}
+                    <ArrowRightOnRectangleIcon className="w-6 h-6" />
+                    {/* {account.displayName} */}
+                    logout / address
+                  </button>
                 </div>
               );
             })()}

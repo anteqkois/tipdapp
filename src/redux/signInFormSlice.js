@@ -64,13 +64,15 @@ const signInForm = createSlice({
       state.errors = null;
     });
     builder.addCase(validateUserData.fulfilled, (state, action, arg) => {
+      // console.log(action.meta.arg);
       state.status = STATUS.SUCCEEDED;
+      state.data = { ...state.data, ...action.meta.arg };
       state.step = state.step + 1;
       state.errors = null;
     });
     builder.addCase(validateUserData.rejected, (state, action) => {
       state.errors = action.payload;
-      // state.status = STATUS.FAILED;
+      state.status = STATUS.FAILED;
     });
   },
 });
@@ -79,7 +81,7 @@ export const { resetError, resetForm, setError, setStep } = signInForm.actions;
 // export const { resetError, resetForm, setField, setFields } = signInForm.actions;
 
 export const selectErrors = createSelector([(state) => state.signInForm.errors], (errors) => errors);
-export const selectFields = createSelector([(state) => state.signInForm.data], (data) => data);
+export const selectFormData = createSelector([(state) => state.signInForm.data], (data) => data);
 export const selectStatus = createSelector([(state) => state.signInForm.status], (status) => status);
 export const selectActiveStep = createSelector([(state) => state.signInForm.step], (step) => step);
 

@@ -1,8 +1,10 @@
+import { UserIcon, WalletIcon } from '@heroicons/react/24/outline';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActiveStep, selectErrors, selectStatus, setStep, validateUserData } from 'src/redux/signInFormSlice';
+import ConnectWallet from '../../assets/connectWallet.svg';
 import { Button, Input } from '../utils';
 import { Stepper } from '../utils/Stepper';
 import { FormikStep } from './FormikStep';
@@ -61,7 +63,8 @@ export const SignInForm = () => {
           }
           if (step === 2) {
             //validate on backend
-            // openConnectModal();
+            // dispatch(validateUserData(values));
+            openConnectModal();
           }
         }
       } catch (error) {
@@ -114,21 +117,21 @@ export const SignInForm = () => {
       />
     </FormikStep>,
     <FormikStep label="Connect Wallet">
-      <Button className="w-full my-8 " option="special" onClick={() => setStep((prev) => --prev)}>
-        {/* <Metamask className="text-7xl" /> */}
+      <ConnectWallet className="w-5/6 h-52 mx-auto my-5" />
+      <Button className="w-full mt-8" option="success" onClick={() => setStep((prev) => --prev)}>
         Connect wallet
       </Button>
     </FormikStep>,
   ];
 
+  const StepIcons = [<UserIcon className="stroke-current h-6" />, <WalletIcon className="stroke-current h-6" />];
+
   return (
     <>
       <h1 className="flex-center text-2xl mb-3">
-        {FormSteps[step - 1].props.label}{/* Sign in */}
-        {/* <Metamask className="text-7xl" /> */}
+        {FormSteps[step - 1].props.label}
       </h1>
-      <Stepper stepCount={4} activeStep={2} />
-      {/* <h6>Step {step}/2 ({FormSteps[step - 1].props.label}):</h6> */}
+      <Stepper stepCount={FormSteps.length} icons={StepIcons} activeStep={step} />
       <form onSubmit={formik.handleSubmit}>
         {FormSteps[step - 1]}
         <div className="flex gap-3">
@@ -138,7 +141,7 @@ export const SignInForm = () => {
             </Button>
           )}
           {step < FormSteps.length && (
-            <Button className="w-full mt-3" type="submit">
+            <Button className="w-full mt-3" type="submit" option='success'>
               Next
             </Button>
           )}
