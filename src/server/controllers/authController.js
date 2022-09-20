@@ -31,16 +31,9 @@ const providers = [
       },
     },
     async authorize(credentials, req) {
+      let userSesionData = null;
       try {
-        console.log(credentials, req);
-
         const siwe = new SiweMessage(JSON.parse(credentials?.message || '{}'));
-
-        const user = await prismaClient.user.findFirst({
-          where: {
-            walletAddress: siwe.address,
-          },
-        });
 
         const nextAuthUrl = process.env.NEXTAUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null);
         if (!nextAuthUrl) {
@@ -57,13 +50,84 @@ const providers = [
         }
 
         await siwe.validate(credentials?.signature || '');
-        return {
-          ...user,
-        };
-      } catch (e) {
-        console.log(e);
-        return null;
+
+        //check if SignUp
+        if (credentials?.formData) {
+          const formData = JSON.parse(credentials.formData);
+
+          //Validate schema
+          userValidation.parse(formData);
+
+          //Validate unique
+          const user = await prismaClient.user.findFirst({
+            where: {
+              OR: [{ walletAddress: siwe.address }, { email: formData.email }, { nick: formData.nick }],
+            },
+            select: {
+              walletAddress: true,
+              email: true,
+              nick: true,
+            },
+          });
+
+          if (user) {
+            const errors = [];
+            if (user.walletAddress === siwe.address) {
+              const validationError = new ValidationError(
+                'walletAddress',
+                `Already registered.`,
+                `The wallet has already been registered. Go to login or disconnect wallet from DAPP and then change wallet.`,
+                `walletAddress.unique`,
+              );
+              errors.push(validationError);
+            }
+            if (user.email === formData.email) {
+              const validationError = new ValidationError(
+                'email',
+                `Email used.`,
+                `Email already used by someone.`,
+                `email.unique`,
+              );
+              errors.push(validationError);
+            }
+            if (user.nick === formData.nick) {
+              const validationError = new ValidationError('nick', `Nick used.`, `Nick already used by someone.`, `nick.unique`);
+              errors.push(validationError);
+            }
+            createValidationError(errors);
+          }
+
+          userSesionData = await prismaClient.user.create({
+            data: {
+              walletAddress: siwe.address,
+              email: formData.email,
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              nick: formData.nick,
+              urlPage: formData.nick,
+            },
+          });
+        } else {
+          userSesionData = await prismaClient.user.findFirst({
+            where: {
+              walletAddress: siwe.address,
+            },
+          });
+        }
+      } catch (errors) {
+        if (errors instanceof ZodError) {
+          throw new Error(JSON.stringify(new ValidationErrors().fromZodErrorArray(errors.issues)));
+        } else if (errors instanceof ValidationErrors) {
+          throw new Error(JSON.stringify(errors));
+        } else {
+          console.log(errors);
+          throw errors;
+        }
       }
+
+      return {
+        ...userSesionData,
+      };
     },
   }),
 ];
@@ -85,6 +149,9 @@ const auth = async (req, res) => {
       maxAge: 15 * 24 * 30 * 60, // 15 days
     },
     secret: process.env.NEXTAUTH_SECRET,
+    pages: {
+      // error: '/auth/error',
+    },
     callbacks: {
       async jwt({ token, user }) {
         if (user) {

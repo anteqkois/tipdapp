@@ -3,7 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectActiveStep, selectErrors, selectStatus, setStep, validateUserData } from 'src/redux/signInFormSlice';
+import { selectActiveStep, selectErrors, selectStatus, setStep, validateUserData } from 'src/redux/signUpFormSlice';
 import ConnectWallet from '../../assets/connectWallet.svg';
 import { Button, Input } from '../utils';
 import { Stepper } from '../utils/Stepper';
@@ -29,7 +29,7 @@ const initialValues = {
   nick: '',
 };
 
-export const SignInForm = () => {
+export const SignUpForm = () => {
   const { openConnectModal } = useConnectModal();
 
   const dispatch = useDispatch();
@@ -55,15 +55,12 @@ export const SignInForm = () => {
     validate,
     onSubmit: async (values) => {
       try {
-        // console.log(values);
         if (!Object.keys(formik.errors).length) {
           if (step === 1) {
             //validate userData on backend
             dispatch(validateUserData(values));
           }
           if (step === 2) {
-            //validate on backend
-            // dispatch(validateUserData(values));
             openConnectModal();
           }
         }
@@ -118,7 +115,8 @@ export const SignInForm = () => {
     </FormikStep>,
     <FormikStep label="Connect Wallet">
       <ConnectWallet className="w-5/6 h-52 mx-auto my-5" />
-      <Button className="w-full mt-8" option="success" onClick={() => setStep((prev) => --prev)}>
+      <p className="text-alert-600 ">{formik.errors.walletAddress && `* ${formik.errors.walletAddress}`}</p>
+      <Button className="w-full mt-4" option="success" onClick={() => setStep((prev) => --prev)}>
         Connect wallet
       </Button>
     </FormikStep>,
@@ -128,9 +126,7 @@ export const SignInForm = () => {
 
   return (
     <>
-      <h1 className="flex-center text-2xl mb-3">
-        {FormSteps[step - 1].props.label}
-      </h1>
+      <h1 className="flex-center text-2xl mb-3 ">{FormSteps[step - 1].props.label}</h1>
       <Stepper stepCount={FormSteps.length} icons={StepIcons} activeStep={step} />
       <form onSubmit={formik.handleSubmit}>
         {FormSteps[step - 1]}
@@ -141,7 +137,7 @@ export const SignInForm = () => {
             </Button>
           )}
           {step < FormSteps.length && (
-            <Button className="w-full mt-3" type="submit" option='success'>
+            <Button className="w-full mt-3" type="submit" option="success">
               Next
             </Button>
           )}

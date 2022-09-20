@@ -21,31 +21,31 @@ export const validateUserData = createAsyncThunk('tips/validateUserData', async 
 
 const initialState = {
   data: {
-    firstName: '',
-    lastName: '',
-    email: '',
-    nick: '',
+    firstName: null,
+    lastName: null,
+    email: null,
+    nick: null,
   },
   status: STATUS.IDLE, //'idle' | 'loading' | 'succeeded' | 'failed'
   step: 1,
   errors: null,
 };
 
-const signInForm = createSlice({
-  name: 'signIn',
+const signUpForm = createSlice({
+  name: 'signUp',
   initialState,
   reducers: {
-    resetError: (state) => {
+    resetErrors: (state) => {
       state.errors = null;
     },
-    setError: (state, action) => {
+    setErrors: (state, action) => {
       state.errors = action.payload;
     },
     resetForm: (state, action) => {
-      state.data.firstName = '';
-      state.data.lastName = '';
-      state.data.email = '';
-      state.data.nick = '';
+      state.data.firstName = null;
+      state.data.lastName = null;
+      state.data.email = null;
+      state.data.nick = null;
     },
     setStep: (state, action) => {
       state.step = action.payload;
@@ -77,12 +77,12 @@ const signInForm = createSlice({
   },
 });
 
-export const { resetError, resetForm, setError, setStep } = signInForm.actions;
+export const { resetErrors, resetForm, setErrors, setStep } = signUpForm.actions;
 // export const { resetError, resetForm, setField, setFields } = signInForm.actions;
 
-export const selectErrors = createSelector([(state) => state.signInForm.errors], (errors) => errors);
-export const selectFormData = createSelector([(state) => state.signInForm.data], (data) => data);
-export const selectStatus = createSelector([(state) => state.signInForm.status], (status) => status);
-export const selectActiveStep = createSelector([(state) => state.signInForm.step], (step) => step);
+export const selectErrors = createSelector([(state) => state.signUpForm.errors], (errors) => errors);
+export const selectFormData = createSelector([(state) => state.signUpForm.data], (data) => data);
+export const selectStatus = createSelector([(state) => state.signUpForm.status], (status) => status);
+export const selectActiveStep = createSelector([(state) => state.signUpForm.step], (step) => step);
 
-export default signInForm.reducer;
+export default signUpForm.reducer;

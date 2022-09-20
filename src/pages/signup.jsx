@@ -1,14 +1,14 @@
-import { SignInForm } from '@/components/SignInForm/SignInForm';
+import { SignUpForm } from '@/components/SignUpForm/SignUpForm';
 
-const Signin = () => {
+const Signup = () => {
   return (
     <div className="max-w-md m-2 p-3 px-2 border-2 rounded shadow-xl bg-neutral-50 shadow-neutral-200 md:w-full md:p-5 md:position-center">
-      <SignInForm />
+      <SignUpForm />
     </div>
   );
 };
 
-export default Signin;
+export default Signup;
 
 //useOtherLayeout
-Signin.getLayout = (page) => <>{page}</>;
+Signup.getLayout = (page) => <>{page}</>;
