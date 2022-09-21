@@ -3,7 +3,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectActiveStep, selectErrors, selectStatus, setStep, validateUserData } from 'src/redux/signUpFormSlice';
+import { selectActiveStep, selectErrors, selectStatus, setStep, validateUserData } from 'src/lib/redux/signUpFormSlice';
 import ConnectWallet from '../../assets/connectWallet.svg';
 import { Button, Input } from '../utils';
 import { Stepper } from '../utils/Stepper';

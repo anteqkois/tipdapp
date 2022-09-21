@@ -12,8 +12,6 @@ export const Stepper = ({ stepCount, icons, activeStep }) => {
             index < activeStep ? 'bg-primary text-primary-50' : 'bg-neutral-150 text-primary'
           }`}
         >
-          {/* <span>{index + 1}</span> */}
-          {/* <span className="stroke-primary h-10">{icons[index]}</span> */}
           <span className={`${index < activeStep ? 'text-neutral-150' : 'text-primary'}`}>{icons[index]}</span>
         </p>
       </span>

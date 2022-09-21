@@ -1,24 +1,15 @@
-import TipsDefault from '@/components/tip/TipsDefault';
-import { Avatar, Button, Card, Spinner } from '@/components/utils';
+import TipsDefault from '@/components/Tip/TipsDefault';
+import { Avatar, Card, StateUI } from '@/components/utils';
 import { useUser } from '@/hooks';
+import { ASYNC_STATUS } from '@/utils/constants';
 import cutAddress from '@/utils/cutAddress';
-import Link from 'next/link';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getTipsByUser, selectError, selectStatus, selectTipsPerPage, STATUS } from 'src/redux/tipSlice';
-// import { useGetTipsByUserQuery } from 'src/redux/tipSlice';
+import { useSelector } from 'react-redux';
+import { selectCurrentData } from 'src/lib/redux/tipSlice';
 
 const Dashboard = () => {
   const { user } = useUser();
-  const dispatch = useDispatch();
 
-  const error = useSelector(selectError);
-  const status = useSelector(selectStatus);
-  const tips = useSelector(selectTipsPerPage);
-
-  useEffect(() => {
-    user.walletAddress && dispatch(getTipsByUser({ userWalletAddress: user.walletAddress, page: 1 }));
-  }, [user.walletAddress]);
+  const { status, error, tips } = useSelector(selectCurrentData);
 
   return (
     <section className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-4">
@@ -51,12 +42,13 @@ const Dashboard = () => {
       </Card>
       <Card className="col-span-full lg:p-8">
         <h4 className="mb-4">Latest tips:</h4>
-        {status === STATUS.SUCCEEDED ? <TipsDefault tips={tips} /> : status === STATUS.FAILED ? error : <Spinner />}
-        <div className="flex justify-end">
-          <Button className="mt-4">
-            <Link href="/tips">See more tips</Link>
-          </Button>
-        </div>
+        <StateUI
+          isLoading={status === ASYNC_STATUS.LOADING}
+          isEmpty={tips.length === 0}
+          EmptyComponent={<li className="w-full text-center">No tips to show</li>}
+        >
+          <TipsDefault tips={tips} />
+        </StateUI>
       </Card>
     </section>
   );

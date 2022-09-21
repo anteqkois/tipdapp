@@ -1,12 +1,6 @@
-import { createAsyncThunk, createSlice, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
+import { ASYNC_STATUS } from '@/utils/constants';
+import { createAsyncThunk, createEntityAdapter, createSelector, createSlice } from '@reduxjs/toolkit';
 import api from 'src/lib/apiConfig';
-
-export const STATUS = {
-  IDLE: 'IDLE',
-  LOADING: 'LOADING',
-  SUCCEEDED: 'SUCCEEDED',
-  FAILED: 'FAILED',
-};
 
 export const getTipsByUser = createAsyncThunk(
   'tips/getTipsByUser',
@@ -26,8 +20,8 @@ export const getTipsByUser = createAsyncThunk(
     condition: (queryParams, { getState, extra }) => {
       const { tips } = getState();
       return (
-        tips.pagination?.pages[queryParams.page]?.status !== STATUS.LOADING &&
-        tips.pagination?.pages[queryParams.page]?.status !== STATUS.SUCCEEDED
+        tips.pagination?.pages[queryParams.page]?.status !== ASYNC_STATUS.LOADING &&
+        tips.pagination?.pages[queryParams.page]?.status !== ASYNC_STATUS.SUCCEEDED
       );
     },
     dispatchConditionRejection: true,
@@ -44,7 +38,7 @@ const initialState = tipsAdapter.getInitialState({
   pageSize: 4,
   amount: 0,
   fetchedPage: [],
-  status: STATUS.IDLE, //'idle' | 'loading' | 'succeeded' | 'failed'
+  status: ASYNC_STATUS.IDLE, //'idle' | 'loading' | 'succeeded' | 'failed'
   error: null,
   pagination: {
     pages: {},
@@ -69,21 +63,21 @@ const tipsSlice = createSlice({
     builder.addCase(getTipsByUser.pending, (state, arg) => {
       // console.log(arg.meta.arg.page);
       state.pagination.pages[arg.meta.arg.page] = {
-        status: STATUS.LOADING,
+        status: ASYNC_STATUS.LOADING,
         ids: [],
       };
-      state.status = STATUS.LOADING;
+      state.status = ASYNC_STATUS.LOADING;
     });
     builder.addCase(getTipsByUser.fulfilled, (state, action, arg) => {
       tipsAdapter.upsertMany(state, action.payload.tips);
       state.error = null;
-      state.status = STATUS.SUCCEEDED;
+      state.status = ASYNC_STATUS.SUCCEEDED;
       state.currentPage = action.meta.arg.page;
       state.amount = action.payload.amount;
       state.fetchedPage.push(action.meta.arg.page);
       state.pagination.pages[action.meta.arg.page] = {
         // lastUpdateTime: 1516177824891,
-        status: STATUS.SUCCEEDED,
+        status: ASYNC_STATUS.SUCCEEDED,
         ids: action.payload.ids,
       };
     });
@@ -92,10 +86,10 @@ const tipsSlice = createSlice({
         state.currentPage = action.meta.arg.page;
       } else if (action.payload.name === 'ApiError') {
         state.error = action.payload.userMessage;
-        state.status = STATUS.FAILED;
+        state.status = ASYNC_STATUS.FAILED;
       } else {
         state.error = action.payload;
-        state.status = STATUS.FAILED;
+        state.status = ASYNC_STATUS.FAILED;
       }
     });
   },
@@ -118,6 +112,12 @@ export const selectTipsPerPage = createSelector([(state) => state.tips.entities,
   idsForPage.reduce((previousValue, id) => [...previousValue, entities[id]], []),
 );
 
+export const selectCurrentData = createSelector(
+  [(state) => state.tips.status, (state) => state.tips.error, selectTipsPerPage],
+  (status, error, tips) => {
+    return { status, error, tips };
+  },
+);
 export const selectError = createSelector([(state) => state.tips.error], (error) => error);
 export const selectStatus = createSelector([(state) => state.tips.status], (status) => status);
 export const selectTipsAmount = createSelector([(state) => state.tips.amount], (amount) => amount);

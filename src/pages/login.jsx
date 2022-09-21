@@ -1,29 +1,19 @@
 import PageLayout from '@/components/PageLayout';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import Link from 'next/link';
 import { useDisconnect } from 'wagmi';
-// import { useEffect } from 'react';
-// import { useDisconnect } from 'wagmi';
+import {useUser} from '@/hooks';
 
 const Login = () => {
-  // const { login, signIn, logout } = useUser();
-  const { disconnectAsync, disconnect } = useDisconnect();
-  const { openConnectModal } = useConnectModal();
-
-  // useEffect(() => {
-  //   disconnect();
-  //   // await disconnectAsync();
-  // }, []);
+  const { login, logout } = useUser();
 
   return (
     <>
-      {/* <button onClick={connectWallet}>Connect wallet</button> */}
-      {/* <ConnectButton /> */}
-      <button onClick={openConnectModal}>Login</button>
+      <button onClick={login}>Login</button>
       <br />
-      {/* <button onClick={signIn}>signin</button> */}
+      <button onClick={logout}>logout</button>
       <br />
-      {/* <button onClick={logout}>logout</button> */}
-      <button onClick={disconnectAsync}>signOut</button>
+      <Link href="/signup">signup</Link>
       <br />
     </>
   );
@@ -31,15 +21,15 @@ const Login = () => {
 
 Login.getLayout = (page) => <PageLayout className="">{page}</PageLayout>;
 
-const getServerSideProps = (ctx) => {
-  const { JWT } = ctx.req.cookies;
-  if (JWT)
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/dashboard',
-      },
-    };
-};
+// const getServerSideProps = (ctx) => {
+//   const { JWT } = ctx.req.cookies;
+//   if (JWT)
+//     return {
+//       redirect: {
+//         permanent: false,
+//         destination: '/dashboard',
+//       },
+//     };
+// };
 
 export default Login;

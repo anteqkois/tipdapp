@@ -1,9 +1,12 @@
 export { Avatar } from './Avatar';
 export { Button } from './Button';
 export { Card } from './Card';
+export { Close } from './Close';
 export { ErrorMessage } from './ErrorMessage';
 export { Flag } from './Flag';
 export { Input } from './Input';
 export { ProtectPageGuard } from './ProtectPageGuard';
 export { Spinner } from './Spinner';
+export { StateUI } from './StateUI';
+export { Stepper } from './Stepper';
 export { Tooltip } from './Tooltip';

@@ -7,6 +7,6 @@ const Creator = () => {
   )
 }
 
-Creartor.isProtected = true
+Creator.isProtected = true;
 
 export default Creator

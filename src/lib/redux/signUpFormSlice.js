@@ -1,14 +1,6 @@
+import { ASYNC_STATUS } from '@/utils/constants';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import api from 'src/lib/apiConfig';
-
-export const STATUS = {
-  IDLE: 'IDLE',
-  LOADING: 'LOADING',
-  SUCCEEDED: 'SUCCEEDED',
-  FAILED: 'FAILED',
-  // USER_DETAILS: 'USER_DETAILS',
-  // CONNECT_WALLET: 'CONNECT_WALLET',
-};
 
 export const validateUserData = createAsyncThunk('tips/validateUserData', async (userData, thunkAPI) => {
   try {
@@ -26,7 +18,7 @@ const initialState = {
     email: null,
     nick: null,
   },
-  status: STATUS.IDLE, //'idle' | 'loading' | 'succeeded' | 'failed'
+  status: ASYNC_STATUS.IDLE, //'idle' | 'loading' | 'succeeded' | 'failed'
   step: 1,
   errors: null,
 };
@@ -55,24 +47,24 @@ const signUpForm = createSlice({
     // },
     // setFields: (state, action) => {
     //   state.data = action.payload;
-    //   state.status = STATUS.USER_DETAILS;
+    //   state.status = ASYNC_STATUS.USER_DETAILS;
     // },
   },
   extraReducers: (builder) => {
     builder.addCase(validateUserData.pending, (state, arg) => {
-      state.status = STATUS.LOADING;
+      state.status = ASYNC_STATUS.LOADING;
       state.errors = null;
     });
     builder.addCase(validateUserData.fulfilled, (state, action, arg) => {
       // console.log(action.meta.arg);
-      state.status = STATUS.SUCCEEDED;
+      state.status = ASYNC_STATUS.SUCCEEDED;
       state.data = { ...state.data, ...action.meta.arg };
       state.step = state.step + 1;
       state.errors = null;
     });
     builder.addCase(validateUserData.rejected, (state, action) => {
       state.errors = action.payload;
-      state.status = STATUS.FAILED;
+      state.status = ASYNC_STATUS.FAILED;
     });
   },
 });

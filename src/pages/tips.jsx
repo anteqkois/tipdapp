@@ -1,36 +1,20 @@
-import Pagination from '@/components/pagination';
-import TipsDefault from '@/components/tip/TipsDefault';
-import Card from '@/components/utils/Card';
-import Spinner from '@/components/utils/Spinner';
+import Pagination from '@/components/Pagination';
+import TipsDefault from '@/components/Tip/TipsDefault';
+import { Card, StateUI } from '@/components/utils';
 import useUser from '@/hooks/useUser';
-import { useEffect } from 'react';
+import { ASYNC_STATUS } from '@/utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  getTipsByUser,
-  selectError,
-  selectPageAmount,
-  selectPageSize,
-  selectStatus,
-  selectTipsPerPage,
-  STATUS,
-} from 'src/redux/tipSlice';
+import { getTipsByUser, selectCurrentData, selectPageAmount, selectPageSize } from 'src/lib/redux/tipSlice';
 
 const Tips = () => {
   const dispatch = useDispatch();
   const { user } = useUser();
 
-  useEffect(() => {
-    user.walletAddress && dispatch(getTipsByUser({ userWalletAddress: user.walletAddress, page: 1 }));
-  }, [user.walletAddress]);
-
-  const error = useSelector(selectError);
-  const status = useSelector(selectStatus);
-  const tips = useSelector(selectTipsPerPage);
+  const { status, error, tips } = useSelector(selectCurrentData);
   const pageSize = useSelector(selectPageSize);
   const pageAmount = useSelector(selectPageAmount);
 
   const handlePageChange = (page) => {
-    console.log('user.walletAddress', user.walletAddress);
     dispatch(getTipsByUser({ userWalletAddress: user.walletAddress, page }));
   };
 
@@ -39,7 +23,13 @@ const Tips = () => {
     <section>
       <Card className="flex flex-col lg:p-8">
         <h4 className="pb-4">Your tips:</h4>
-        {status === STATUS.SUCCEEDED ? <TipsDefault tips={tips} /> : status === STATUS.FAILED ? error : <Spinner />}
+        <StateUI
+          isLoading={status === ASYNC_STATUS.LOADING}
+          isEmpty={tips.length === 0}
+          EmptyComponent={<li className="w-full text-center">No tips to show</li>}
+        >
+          <TipsDefault tips={tips} />
+        </StateUI>
         <div className="flex items-center justify-center pt-4 text-lg">
           <Pagination onPageChange={handlePageChange} pageRangeDisplayed={2} buttonsMarginPage={2} pageAmount={pageAmount} />
         </div>

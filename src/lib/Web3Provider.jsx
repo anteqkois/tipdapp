@@ -7,15 +7,15 @@ import {
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
-import { getCsrfToken, signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { SiweMessage } from 'siwe';
-import { selectFormData, setErrors } from 'src/redux/signUpFormSlice';
+import { selectFormData, setErrors } from 'src/lib/redux/signUpFormSlice';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
+import { getCsrfToken, signIn, signOut, useUserSession } from './UserSessionProvider';
 
 const { chains, provider } = configureChains(
   [chain.hardhat, chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
@@ -46,7 +46,7 @@ const RainbowKitProviders = ({ children, enabled }) => {
   const dispatch = useDispatch();
   const formData = useSelector(selectFormData);
   const isMobile = useMediaQuery('(max-width: 1024px)', true);
-  const { status } = useSession();
+  const { status } = useUserSession();
   const router = useRouter();
 
   const authAdapter = createAuthenticationAdapter({
@@ -123,47 +123,6 @@ const RainbowKitProviders = ({ children, enabled }) => {
           resolve(true);
         }
       });
-      // if (formData.firstName && formData.lastName && formData.nick && formData.email) {
-      //   const response = await signIn('credentials', {
-      //     message: JSON.stringify(message),
-      //     signature, // <-- comment this out to throw an error & reach the error page ./pages/auth/signin.tsx
-      //     formData: JSON.stringify(formData),
-      //     redirect: false,
-      //   });
-      //   if(response.error){
-      //   }
-      //   const data = JSON.parse(response.error);
-      //   toast(
-      //     (t) => (
-      //       <span>
-      //         <span className="flex items-center justify-between">
-      //           <h6 className="py-2">Validation Error</h6>
-      //           <Close onClick={() => toast.dismiss(t.id)} />
-      //         </span>
-      //         <ul className="px-4 list-inside list-['📌'] ">
-      //           {data.errors.map((error) => (
-      //             <li key={error.code}>{error.message}</li>
-      //           ))}
-      //         </ul>
-      //       </span>
-      //     ),
-      //     { duration: Infinity, id: 'validationError' },
-      //   );
-      //   dispatch(setErrors(data.errors));
-      //   return new Promise((resolve, reject) => {
-      //     reject(false);
-      //   });
-      // } else {
-      //   signIn('credentials', {
-      //     message: JSON.stringify(message),
-      //     signature, // <-- comment this out to throw an error & reach the error page ./pages/auth/signin.tsx
-      //     redirect: true,
-      //     callbackUrl: `${window.location.origin}/${router.query?.callback ?? '/dashboard'}`,
-      //   });
-      // }
-      // return new Promise((resolve, reject) => {
-      //   resolve(true);
-      // });
     },
     signOut: async () => {
       status === 'authenticated' && signOut({ callbackUrl: `${window.location.origin}/login` });

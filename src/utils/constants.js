@@ -1,0 +1,6 @@
+export const ASYNC_STATUS = {
+  IDLE: 'IDLE',
+  LOADING: 'LOADING',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED',
+};
