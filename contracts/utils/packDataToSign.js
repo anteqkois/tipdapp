@@ -1,5 +1,5 @@
 const { parseUnits, formatUnits } = ethers.utils;
-const {signer, provider} = require('../server/ethersProvider');
+const { signerAdmin, provider } = require('../server/ethersProvider');
 const { ERC20_TOKEN_ADDRESS } = require('./constant');
 
 const packDataToSign = (tokenAmount, tokenQuote, addressToDonate) => {

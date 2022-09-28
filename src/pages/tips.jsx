@@ -21,7 +21,7 @@ const Tips = () => {
   //TODO! useErrorBoundary
   return (
     <section>
-      <Card className="flex flex-col lg:p-8">
+      <Card className="flex flex-col ">
         <h4 className="pb-4">Your tips:</h4>
         <StateUI
           isLoading={status === ASYNC_STATUS.LOADING}

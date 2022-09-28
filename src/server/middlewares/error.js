@@ -1,3 +1,5 @@
+import { ZodError } from 'zod';
+
 export const notFound = (req, res, next) => {
   const err = new Error('404 api endpoint not found');
   err.status = 404;
@@ -100,6 +102,9 @@ export const handleErrors = (err, req, res, next) => {
   }
   if (err instanceof ValidationErrors) {
     return res.status(err.status || 500).json({ errors: err.errors });
+  }
+  if (err instanceof ZodError) {
+    return new ValidationErrors().fromZodErrorArray(err.issues);
   }
   return res.status(err.status || 500).json(err?.message);
   // next();

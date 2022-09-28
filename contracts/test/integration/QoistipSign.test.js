@@ -13,6 +13,7 @@ const UserToken = require('../../artifacts/contracts/UserToken/UserToken.sol/Use
 // const sandABI = require('../../../src/artifacts/SAND.json');
 const erc20 = require('../../artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json');
 const { axios } = require('axios');
+const { USER_ADDRESS } = require('../mocks/address');
 
 describe('QoistipSign', function () {
   let qoistipSign;
@@ -37,7 +38,7 @@ describe('QoistipSign', function () {
     elon = new ethers.Contract(ERC20_TOKEN_ADDRESS.ELON, erc20.abi, ethers.provider);
 
     // Have SAND, USDT, USDC
-    const accountWithSAND = '0x2eE555C9006A9DC4674f01E0d4Dfc58e013708f0';
+    const accountWithSAND = USER_ADDRESS.SAND_HOLDER;
     const accountWithSHIB = '0xd6Bc559a59B24A58A82F274555d152d67F15a7A6';
     const accountWithELON = '0xCFFAd3200574698b78f32232aa9D63eABD290703'; // This address have many tokens !(SHIB, CRO...)
 

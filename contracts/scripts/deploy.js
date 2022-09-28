@@ -1,17 +1,23 @@
 const hre = require('hardhat');
 const fs = require('fs');
 const path = require('path');
-const { signer, provider } = require('../server/ethersProvider');
+// const ethernal = require('hardhat-ethernal');
+// const { signerAdmin, provider } = require('../utils/ethersProvider');
 
 const saveDataToFrontend = async (tokenAddr, contractName, txDeploy) => {
-  const contractsDir = path.join(__dirname, '..', '/src/artifacts');
+  const contractsDir = path.join(__dirname, '../..', '/src/artifacts');
+  const networkDir = path.join(__dirname, '../..', '/src/artifacts/', hre.network.name);
 
   if (!fs.existsSync(contractsDir)) {
     fs.mkdirSync(contractsDir);
   }
 
+  if (!fs.existsSync(networkDir)) {
+    fs.mkdirSync(networkDir);
+  }
+
   fs.writeFileSync(
-    contractsDir + `/${contractName}-${hre.network.name}-txDeploy.json`,
+    `${networkDir}/${contractName}-txDeploy.json`,
     JSON.stringify(
       {
         txDeploy,
@@ -24,25 +30,28 @@ const saveDataToFrontend = async (tokenAddr, contractName, txDeploy) => {
   const TokenArtifact = artifacts.readArtifactSync(contractName);
 
   fs.writeFileSync(
-    contractsDir + `/${contractName}.json`,
+    `${networkDir}/${contractName}.json`,
     JSON.stringify({ address: tokenAddr, abi: TokenArtifact.abi }, null, 2),
   );
 };
 
 async function main() {
-  const [deployer] = await hre.ethers.getSigners();
+  const [deployer, signerAdmin] = await hre.ethers.getSigners();
 
   console.log('Deploying contracts with the account:', deployer.address);
 
   const QoistipSign = await hre.ethers.getContractFactory('QoistipSign');
-  const qoistipSign = await hre.upgrades.deployProxy(QoistipSign, [signer.address], { kind: 'uups' });
+  const qoistipSign = await hre.upgrades.deployProxy(QoistipSign, [signerAdmin.address], { kind: 'uups' });
   const tx = await qoistipSign.deployed();
 
-  // console.log(tx.deployTransaction);
-  // console.log(tx.deployTransaction);
-  console.log('Qoistip deployed to:', qoistipSign.address);
+  await hre.ethernal.push({
+    name: 'QoistipSign',
+    address: qoistipSign.address,
+  });
 
-  saveDataToFrontend(qoistipSign.address, 'Qoistip', tx.deployTransaction);
+  console.log('Qoistip deployed to:', qoistipSign.address, 'on network: ', hre.network.name);
+
+  saveDataToFrontend(qoistipSign.address, 'QoistipSign', tx.deployTransaction);
 
   // harhat 0xaB7B4c595d3cE8C85e16DA86630f2fc223B05057
   // localhost 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512

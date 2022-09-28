@@ -1,5 +1,5 @@
 const { ethers } = require('ethers');
-const { signer, provider } = require('../../utils/ethersProvider');
+const { signerAdmin, provider } = require('../../utils/ethersProvider');
 const { ERC20_TOKEN_ADDRESS } = require('../../utils/constant');
 const { parseUnits, formatUnits } = ethers.utils;
 
@@ -50,7 +50,7 @@ const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, userToke
   );
 
   const hashDataBinary = ethers.utils.arrayify(hashData);
-  const signature = await signer.signMessage(hashDataBinary);
+  const signature = await signerAdmin.signMessage(hashDataBinary);
 
   return {
     signature,

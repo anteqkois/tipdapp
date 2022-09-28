@@ -3,13 +3,10 @@ import { useClipboard, useModal } from '@/hooks';
 import cutAddress from '@/utils/cutAddress';
 import { parseNotation } from '@/utils/format';
 import { ArrowPathIcon, ArrowsPointingOutIcon, AtSymbolIcon } from '@heroicons/react/24/outline';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import { dateFormat } from 'src/lib/dayjs';
 import Avatar from '../utils/Avatar';
 import Button from '../utils/Button';
 // const { parseUnits, formatUnits } = ethers.utils;
-
-dayjs.extend(relativeTime);
 
 const Tip = ({
   txHash,
@@ -50,7 +47,7 @@ const Tip = ({
         <h6 className=" text-primary font-semibold">Tip details:</h6>
         <p>
           <span className="font-medium text-neutral-light">Date: </span>
-          {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
+          {dateFormat(date).format('MMM DD YYYY, HH:MM')} ({dateFormat(date).fromNow()})
         </p>
         <p className="font-medium text-neutral-light">
           Token:
@@ -131,7 +128,7 @@ const Tip = ({
             <h6 className="text-primary">Transaction</h6>
             <p>
               <span className="font-medium text-neutral-700">Date: </span>
-              {dayjs(date).format('MMM DD YYYY, HH:MM')} ({dayjs(date).fromNow()})
+              {dateFormat(date).format('MMM DD YYYY, HH:MM')} ({dateFormat(date).fromNow()})
             </p>
             <p className="flex items-center  gap-1">
               <span className="font-medium ">Transaction Hash: </span>
@@ -160,7 +157,7 @@ const Tip = ({
             </p>
             <div className="flex gap-1">
               <Button className="flex gap-2 items-center">
-                <ArrowPathIcon className="w-7" />
+                <ArrowPathIcon className="w-6" />
                 Display
               </Button>
               <Button onClick={() => setShowDetails(false)} option="alert" className="flex gap-2 items-center">

@@ -1,25 +1,13 @@
-require('dotenv').config({ path: '../../.env' });
 const ethers = require('ethers');
 
-let provider, privateKey;
+const providersList = {
+  rinkeby: new ethers.providers.AlchemyProvider('rinkeby'),
+  hardhat: new ethers.providers.JsonRpcProvider(),
+};
 
-switch (process.env.STATE) {
-    case 'dev-local':
-        privateKey = process.env.WALLET_PRIVATE_KEY_LOCAL;
-        provider = new ethers.providers.JsonRpcProvider();
-        break;
-    case 'dev-rinkeby':
-        privateKey = process.env.WALLET_PRIVATE_KEY_RINKEBY;
-        provider = new ethers.providers.AlchemyProvider('rinkeby');
-        break;
+const provider = providersList[process.env.NETWORK];
 
-    default:
-        privateKey = process.env.WALLET_PRIVATE_KEY_LOCAL;
-        provider = new ethers.providers.JsonRpcProvider();
-        break;
-}
+const signerAdmin = new ethers.Wallet(process.env.SIGNER_WALLET_PRIVATE_KEY, provider);
+const deployer = new ethers.Wallet(process.env.DEPLOYER_WALLET_PRIVATE_KEY, provider);
 
-const wallet = new ethers.Wallet(privateKey, provider);
-
-// export { wallet as signer , provider };
-module.exports = { signer: wallet, provider };
+module.exports = { signerAdmin, deployer, provider };

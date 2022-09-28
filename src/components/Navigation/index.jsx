@@ -1,5 +1,4 @@
-import useMediaQuery from '@/hooks/useMediaQuery';
-import useUser from '@/hooks/useUser';
+import { useMediaQuery, useUser } from '@/hooks';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
 

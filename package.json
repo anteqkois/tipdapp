@@ -1,8 +1,9 @@
 {
   "name": "qoisdapp",
   "version": "0.1.4",
-  "node": "17.6.0",
+  "node": "16.14.0",
   "type": "module",
+  "main": "src/server.js",
   "private": true,
   "repository": {
     "type": "git",
@@ -14,7 +15,7 @@
     "url": "https://github.com/anteqkois/qoisdapp/issues"
   },
   "scripts": {
-    "dev": "sudo service postgresql start && STATE=dev-local nodemon src/server.js & cd contracts && npx hardhat node",
+    "dev": "sudo service postgresql start && NODE_ENV=development nodemon src/server.js & cd contracts && npx hardhat node",
     "start": "NODE_ENV=production node src/server.js",
     "build": "next build",
     "commit": "git add . && cz",
@@ -22,8 +23,8 @@
     "lint": "next lint",
     "release": "standard-version",
     "postgres": "[ ! -f .env ] || export $(grep -v '^#' .env | xargs) | sudo service postgresql start | $DATABASE_PASSWORD",
-    "sc:test-i": "cd contracts && npm run test-integration",
-    "sc:test-u": "cd contracts && npm run test-unit"
+    "sc:test:i": "cd contracts && npm run test:integration",
+    "sc:test:u": "cd contracts && npm run test:unit"
   },
   "dependencies": {
     "@headlessui/react": "^1.6.6",

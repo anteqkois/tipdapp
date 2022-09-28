@@ -2,7 +2,6 @@ import Button from '@/components/utils/Button';
 import Card from '@/components/utils/Card';
 import Input from '@/components/utils/Input';
 import useUser from '@/hooks/useUser';
-import { requireAuthPage } from '@/utils/requireAuthPage';
 import { useFormik } from 'formik';
 import Link from 'next/link';
 
@@ -93,8 +92,7 @@ const Page = () => {
             ></textarea>
             <p className="text-alert-600 min-h-[24px]">{formik.errors.description && `* ${formik.errors.description}`}</p>
           </div>
-
-          <Button className="w-full mt-3" type="submit">
+          <Button className="mt-3" type="submit">
             Save
           </Button>
         </form>
@@ -103,6 +101,6 @@ const Page = () => {
   );
 };
 
-Page.isProtected = true
+Page.isProtected = true;
 
 export default Page;

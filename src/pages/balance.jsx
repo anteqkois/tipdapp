@@ -1,7 +1,6 @@
 import TokenBalance from '@/components/Token/TokenBalance';
 import Card from '@/components/utils/Card';
 import useUser from '@/hooks/useUser';
-import { requireAuthPage } from '@/utils/requireAuthPage';
 import { chain } from 'wagmi';
 
 const Balance = ({}) => {

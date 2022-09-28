@@ -1,35 +1,22 @@
-import { config } from 'dotenv';
-import ethers, { BigNumber, providers, Wallet } from 'ethers';
-({ config }.config({ path: '../../.env' }));
+import ethers from 'ethers';
 
 // ethers.BigNumber.fromNotation = (number) => {
 //   return new BigNumber.from(ethers.utils.hexValue(`0x${number.toString(16)}`));
 // };
 
-let provider, privateKey;
+const providersList = {
+  rinkeby: new ethers.providers.AlchemyProvider('rinkeby'),
+  development: new ethers.providers.JsonRpcProvider(),
+};
 
-switch (process.env.STATE) {
-  case 'dev-local':
-    privateKey = process.env.WALLET_PRIVATE_KEY_LOCAL;
-    provider = new providers.JsonRpcProvider('http://127.0.0.1:8545/');
-    break;
-  case 'dev-rinkeby':
-    privateKey = process.env.WALLET_PRIVATE_KEY_RINKEBY;
-    provider = new providers.AlchemyProvider('rinkeby');
-    break;
-  case 'production':
-    privateKey = process.env.WALLET_PRIVATE_KEY_LOCAL;
-    provider = new providers.JsonRpcProvider('http://127.0.0.1:8545/');
-    break;
-}
+let signerAdmin, deployer, provider;
 
-const wallet = new Wallet(privateKey, provider);
+const config = () => {
+  provider = providersList[process.env.NODE_ENV];
+  signerAdmin = new ethers.Wallet(process.env.SIGNER_WALLET_PRIVATE_KEY, provider);
+  deployer = new ethers.Wallet(process.env.DEPLOYER_WALLET_PRIVATE_KEY, provider);
+};
 
-export { wallet as signer };
-export { provider };
+export { signerAdmin, deployer, provider, config };
 
 export default ethers;
-// export default {
-//   signer: wallet,
-//   provider,
-// };

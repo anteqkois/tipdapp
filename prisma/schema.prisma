@@ -74,6 +74,7 @@ model Cryptocurrency {
   userWalletAddress String?    @db.VarChar(42)
 }
 
+//you can use data from blockchain (total suplly, all transaction etc.)
 model Token {
   address String @id @unique @db.VarChar(42)
   symbol  String @unique

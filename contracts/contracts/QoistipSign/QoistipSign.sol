@@ -138,6 +138,10 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         return _balanceETH[userAddress];
     }
 
+    /// @notice Register user and create your token - `tokenSymbol` - `tokenName`
+    /// @dev Create user in global map and create their loyal token
+    /// @param tokenSymbol The symbol of user token
+    /// @param tokenName The name of user token
     function registerUser(string memory tokenSymbol, string memory tokenName)
         external
         virtual

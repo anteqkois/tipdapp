@@ -1,9 +1,9 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import next from 'next';
+import { config as configEthers } from './lib/ethersProvider.js';
 import { handleErrors, notFound } from './server/middlewares/error.js';
 import apiRouter from './server/routes/index.js';
-import './lib/ethersProvider.js';
 
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== 'production';
@@ -32,5 +32,6 @@ app.prepare().then(() => {
   server.listen(port, (err) => {
     if (err) throw err;
     console.log(`> Ready on http://localhost:${port}`);
+    // configEthers();
   });
 });

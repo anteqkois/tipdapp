@@ -7,6 +7,7 @@
       "@/hooks/*": ["src/hooks/*"],
       "@/utils/*": ["src/utils/*"],
       "@/lib": ["src/lib"],
+      "@/schema": ["src/schema"],
       // "@/lib/*": ["src/lib/*"]
     }
   },

@@ -79,4 +79,10 @@
   .state-focus {
     @apply focus:outline-none focus-visible:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75;
   }
+  .icon {
+    @apply inline p-0.5 bg-neutral-200 stroke-neutral-600 w-6 rounded-full;
+  }
+  .icon-action{
+  @apply icon state-focus animate-action hover:stroke-neutral-800
+  }
 }

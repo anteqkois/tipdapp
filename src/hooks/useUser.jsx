@@ -1,8 +1,8 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { signOut, useUserSession } from 'src/lib/UserSessionProvider';
 import { getTipsByUser } from 'src/lib/redux/tipSlice';
+import { signOut, useUserSession } from 'src/lib/UserSessionProvider';
 import { useDisconnect } from 'wagmi';
 
 export const useUser = () => {
@@ -14,7 +14,6 @@ export const useUser = () => {
   //Dowload first tips page on login user
   useEffect(() => {
     if (session?.user) dispatch(getTipsByUser({ userWalletAddress: session.user.walletAddress, page: 1 }));
-    console.log('fetch fist page');
   }, [session]);
 
   const login = () => {

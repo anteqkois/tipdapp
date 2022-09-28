@@ -1,8 +1,9 @@
 import TipsDefault from '@/components/Tip/TipsDefault';
-import { Avatar, Card, StateUI } from '@/components/utils';
+import { Avatar, Button, Card, StateUI } from '@/components/utils';
 import { useUser } from '@/hooks';
 import { ASYNC_STATUS } from '@/utils/constants';
 import cutAddress from '@/utils/cutAddress';
+import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { selectCurrentData } from 'src/lib/redux/tipSlice';
 
@@ -40,7 +41,7 @@ const Dashboard = () => {
         <p className="text-4xl font-semibold">12</p>
         <h6>Handled tokens by you</h6>
       </Card>
-      <Card className="col-span-full lg:p-8">
+      <Card className="col-span-full">
         <h4 className="mb-4">Latest tips:</h4>
         <StateUI
           isLoading={status === ASYNC_STATUS.LOADING}
@@ -49,6 +50,11 @@ const Dashboard = () => {
         >
           <TipsDefault tips={tips} />
         </StateUI>
+        <div className="flex justify-end">
+          <Button className="mt-4">
+            <Link href="/tips">See more tips</Link>
+          </Button>
+        </div>
       </Card>
     </section>
   );
@@ -57,17 +63,3 @@ const Dashboard = () => {
 Dashboard.isProtected = true;
 
 export default Dashboard;
-
-// export const getServerSideProps = requireAuthPage(async (ctx) => {
-//   return {
-//     props: { user: ctx.req.user },
-//   };
-// });
-
-// export const getServerSideProps = requireAuthPage(async (ctx) => {
-//   console.log(ctx.req);
-
-//   return {
-//     props: { user: ctx.req.user },
-//   };
-// });

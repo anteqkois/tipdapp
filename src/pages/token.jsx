@@ -1,11 +1,17 @@
-import React from 'react'
+import { CreateToken } from '@/components/UserToken/CreateToken';
+import { TokenPanel } from '@/components/UserToken/TokenPanel';
+import { Card } from '@/components/utils';
 
 const Token = () => {
+  const tokenData = false;
+
   return (
-    <div>Token</div>
-  )
-}
+    <section>
+      {tokenData ? <TokenPanel /> : <CreateToken />}
+    </section>
+  );
+};
 
 Token.isProtected = true;
 
-export default Token
+export default Token;

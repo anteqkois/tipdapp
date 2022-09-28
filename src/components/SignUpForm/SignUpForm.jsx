@@ -41,7 +41,6 @@ export const SignUpForm = () => {
   useEffect(() => {
     if (errors) {
       const errorsTemp = {};
-
       errors.forEach((error) => {
         errorsTemp[error.field] = error.message;
       });

@@ -3,17 +3,11 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getCsrfToken } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
-import { z, ZodError } from 'zod';
+import { ZodError } from 'zod';
 import { prismaClient } from '../../lib/prismaClient.js';
+import { userSignUpSchema } from '../../schema/userSignUpSchema.js';
 import { createValidationError, ValidationError, ValidationErrors } from '../middlewares/error.js';
 const { PrismaClientKnownRequestError } = Prisma;
-
-const userValidation = z.object({
-  email: z.string().email(),
-  firstName: z.string().min(3, { message: 'First name must have 3 or more characters.' }),
-  lastName: z.string().min(3, { message: 'Last name must have 3 or more characters.' }),
-  nick: z.string().min(2, { message: 'Nick must have 2 or more characters.' }),
-});
 
 const providers = [
   CredentialsProvider.default({
@@ -56,7 +50,7 @@ const providers = [
           const formData = JSON.parse(credentials.formData);
 
           //Validate schema
-          userValidation.parse(formData);
+          userSignUpSchema.parse(formData);
 
           //Validate unique
           const user = await prismaClient.user.findFirst({
@@ -192,7 +186,7 @@ const validate = async (req, res) => {
 
   try {
     //Validate schema
-    userValidation.parse(req.body);
+    userSignUpSchema.parse(req.body);
 
     //Validate unique
     const user = await prismaClient.user.findFirst({
