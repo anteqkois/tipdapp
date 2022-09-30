@@ -26,6 +26,9 @@ module.exports = {
     localhost: {
       url: 'http://127.0.0.1:8545/',
       accounts: [process.env.DEPLOYER_WALLET_PRIVATE_KEY, process.env.SIGNER_WALLET_PRIVATE_KEY],
+      forking: {
+        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
+      },
     },
     hardhat: {
       forking: {

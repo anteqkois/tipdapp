@@ -1,11 +1,8 @@
 // import QoistipSign from '../../artifacts/localhost/QoistipSign.json';
 import { readFile } from 'fs/promises';
-import ethers, { provider } from '../lib/ethersProvider.js';
+import ethers, { provider } from './ethersProvider.js';
 
-const QoistipSign = JSON.parse(await readFile(new URL('../../artifacts/localhost/QoistipSign.json', import.meta.url)));
-
-console.log(process.env);
-console.log('start registerUser listener', provider);
+const QoistipSign = JSON.parse(await readFile(new URL('./artifacts/localhost/QoistipSign.json', import.meta.url)));
 
 const contract = new ethers.Contract(QoistipSign.address, QoistipSign.abi, provider);
 contract.on('NewUser', (from, to, value, event) => {
