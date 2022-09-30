@@ -23,10 +23,10 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
 module.exports = {
   defaultNetwork: 'hardhat',
   networks: {
-    // localhost: {
-    //   url: 'http://127.0.0.1:8545/',
-    //   accounts: [process.env.DEPLOYER_WALLET_PRIVATE_KEY, process.env.SIGNER_WALLET_PRIVATE_KEY],
-    // },
+    localhost: {
+      url: 'http://127.0.0.1:8545/',
+      accounts: [process.env.DEPLOYER_WALLET_PRIVATE_KEY, process.env.SIGNER_WALLET_PRIVATE_KEY],
+    },
     hardhat: {
       forking: {
         url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
@@ -71,7 +71,7 @@ module.exports = {
     enabled: true,
     currency: 'USD',
     maxMethodDiff: 20,
-    // coinmarketcap: process.env.COINMARKETCAP_API_KEY,
+    coinmarketcap: process.env.COINMARKETCAP_API_KEY,
     token: 'ETH',
     gasPriceApi: 'https://api.etherscan.io/api?module=proxy&action=eth_gasPrice',
     // token: 'MATIC',
@@ -84,6 +84,7 @@ module.exports = {
     timeout: 200000,
   },
   ethernal: {
+    disabled: true,
     email: process.env.ETHERNAL_EMAIL,
     password: process.env.ETHERNAL_PASSWORD,
     workspace: 'Qoisdapp',

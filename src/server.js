@@ -1,7 +1,6 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import next from 'next';
-import { config as configEthers } from './lib/ethersProvider.js';
 import { handleErrors, notFound } from './server/middlewares/error.js';
 import apiRouter from './server/routes/index.js';
 
@@ -10,6 +9,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+// import { config as configEthers } from './lib/ethersProvider.js';
 const baseUrl = '/api/auth/';
 
 app.prepare().then(() => {

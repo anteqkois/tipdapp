@@ -1,6 +1,6 @@
 import { ASYNC_STATUS } from '@/utils/constants';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import api from 'src/lib/apiConfig';
+import api from 'src/lib/api/apiConfig';
 
 export const validateUserData = createAsyncThunk('tips/validateUserData', async (userData, thunkAPI) => {
   try {

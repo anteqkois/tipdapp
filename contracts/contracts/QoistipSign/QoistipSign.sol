@@ -146,12 +146,14 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         external
         virtual
         notPaused
+        returns(address tokenAddress)
     {
         require(_tokenUser[msg.sender] == address(0), "Address registered");
 
         address _newToken = address(new UserToken(tokenSymbol, tokenName));
         _tokenUser[msg.sender] = _newToken;
         emit NewUser(msg.sender, _newToken);
+        return _newToken;
     }
 
     //donateERC20_K3u(): 0x0000701f

@@ -1,5 +1,5 @@
 {
-  "address": "0xC32609C91d6B6b51D48f2611308FEf121B02041f",
+  "address": "0xd30bF3219A0416602bE8D482E0396eF332b0494E",
   "abi": [
     {
       "anonymous": false,
@@ -355,7 +355,13 @@
         }
       ],
       "name": "registerUser",
-      "outputs": [],
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "tokenAddress",
+          "type": "address"
+        }
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },

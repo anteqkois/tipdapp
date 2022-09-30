@@ -3,7 +3,6 @@
   "version": "0.1.4",
   "node": "16.14.0",
   "type": "module",
-  "main": "src/server.js",
   "private": true,
   "repository": {
     "type": "git",
@@ -15,7 +14,8 @@
     "url": "https://github.com/anteqkois/qoisdapp/issues"
   },
   "scripts": {
-    "dev": "sudo service postgresql start && NODE_ENV=development nodemon src/server.js & cd contracts && npx hardhat node",
+    "dev": "sudo service postgresql start && NODE_ENV=development dotenv_config_path=../.env.development nodemon src/server.js & cd contracts && npx hardhat node",
+    "service:smart-contract-listener": "NODE_ENV=development dotenv_config_path=../../.env.development nodemon /src/services/index.js",
     "start": "NODE_ENV=production node src/server.js",
     "build": "next build",
     "commit": "git add . && cz",
