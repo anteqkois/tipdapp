@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/hooks": ["hooks"],
+      "@/hooks/*": ["hooks/*"],
+      "@/utils/*": ["utils/*"],
+      "@/lib": ["lib"],
+      "@/lib/*": ["lib/*"],
+      "@/schema/*": ["schema/*"]
+    }
+  },
+  "include": [
+    "**/*.js",
+    "**/*.jsx",
+    "../contracts/utils/packOracleData.js",
+    "pages/api/auth/[...nextauth].ts",
+    "lib/prismaClient.js"
+  ],
+  "exclude": ["node_modules", "**/node_modules", "dist"]
+}

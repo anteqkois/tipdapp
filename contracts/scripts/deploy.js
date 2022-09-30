@@ -4,20 +4,34 @@ const path = require('path');
 // const ethernal = require('hardhat-ethernal');
 // const { signerAdmin, provider } = require('../utils/ethersProvider');
 
+const createIfNotExsist = async (dir) => {
+  !fs.existsSync(dir) && fs.mkdirSync(dir);
+};
+
 const saveDataToFrontend = async (tokenAddr, contractName, txDeploy) => {
-  const contractsDir = path.join(__dirname, '../..', '/src/artifacts');
-  const networkDir = path.join(__dirname, '../..', '/src/artifacts/', hre.network.name);
+  const dappArtifactsDir = path.join(__dirname, '../..', '/dapp/artifacts/');
+  const dappNetworkDir = path.join(dappArtifactsDir, hre.network.name);
 
-  if (!fs.existsSync(contractsDir)) {
-    fs.mkdirSync(contractsDir);
-  }
+  const blockchainListenersArtifactsDir = path.join(__dirname, '../..', '/blockchainListeners/artifacts/');
+  const blockchainListenersNetworkDir = path.join(blockchainListenersArtifactsDir, hre.network.name);
 
-  if (!fs.existsSync(networkDir)) {
-    fs.mkdirSync(networkDir);
-  }
+  createIfNotExsist(dappArtifactsDir);
+  createIfNotExsist(dappNetworkDir);
+  createIfNotExsist(blockchainListenersArtifactsDir);
+  createIfNotExsist(blockchainListenersNetworkDir);
 
   fs.writeFileSync(
-    `${networkDir}/${contractName}-txDeploy.json`,
+    `${dappNetworkDir}/${contractName}-txDeploy.json`,
+    JSON.stringify(
+      {
+        txDeploy,
+      },
+      undefined,
+      2,
+    ),
+  );
+  fs.writeFileSync(
+    `${blockchainListenersNetworkDir}/${contractName}-txDeploy.json`,
     JSON.stringify(
       {
         txDeploy,
@@ -30,7 +44,11 @@ const saveDataToFrontend = async (tokenAddr, contractName, txDeploy) => {
   const TokenArtifact = artifacts.readArtifactSync(contractName);
 
   fs.writeFileSync(
-    `${networkDir}/${contractName}.json`,
+    `${dappNetworkDir}/${contractName}.json`,
+    JSON.stringify({ address: tokenAddr, abi: TokenArtifact.abi }, null, 2),
+  );
+  fs.writeFileSync(
+    `${blockchainListenersNetworkDir}/${contractName}.json`,
     JSON.stringify({ address: tokenAddr, abi: TokenArtifact.abi }, null, 2),
   );
 };

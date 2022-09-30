@@ -1,7 +1,7 @@
 require('@nomicfoundation/hardhat-toolbox');
 require('@openzeppelin/hardhat-upgrades');
 require('hardhat-ethernal');
-require('dotenv').config({ path: process.env.dotenv_config_path ? process.env.dotenv_config_path : '../.env.development' });
+require('dotenv').config({ path: process.env.dotenv_config_path ? process.env.dotenv_config_path : '.env.development' });
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html

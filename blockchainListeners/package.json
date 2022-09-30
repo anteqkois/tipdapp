@@ -1,0 +1,19 @@
+{
+  "name": "blockchainlisteners",
+  "version": "0.0.1",
+  "description": "Microservice to listen blockchain events",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anteqkois/qoisdapp.git"
+  },
+  "author": "Antek Kois",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anteqkois/qoisdapp/issues"
+  },
+  "homepage": "https://github.com/anteqkois/qoisdapp#readme",
+  "scripts": {
+    "service:smart-contract-listener": "NODE_ENV=development dotenv_config_path=../../.env.development nodemon /src/services/index.js"
+  }
+}

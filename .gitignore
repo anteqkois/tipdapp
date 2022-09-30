@@ -8,6 +8,7 @@ contracts/node_modules
 
 # dependencies
 /node_modules
+**/node_modules
 /.pnp
 .pnp.js
 
@@ -16,11 +17,11 @@ contracts/node_modules
 coverage.json
 
 # next.js
-/.next/
-/out/
+dapp/.next/
+dapp/out/
 
-# production
-/build
+# dapp production
+dapp/build
 
 # misc
 .DS_Store
@@ -33,12 +34,12 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
-.env
-.env.local
-.env.development
-.env.development.local
-.env.test.local
-.env.production.local
+**/.env
+**/.env.local
+**/.env.development
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
 
 # vercel
-.vercel
+dapp/.vercel
