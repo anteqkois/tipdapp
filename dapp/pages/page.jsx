@@ -22,8 +22,6 @@ const validate = (values) => {
 const Page = () => {
   const { user } = useUser();
 
-  console.log(user);
-
   // useEffect(() => {
   //   if (error) {
   //     const errors = {};

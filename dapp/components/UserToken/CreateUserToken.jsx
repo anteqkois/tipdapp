@@ -15,7 +15,6 @@ const validate = (values) => {
   } catch (error) {
     if (error instanceof ZodError) {
       error.issues.forEach((zodError) => {
-        // console.log(zodError.path[0]);
         errors[zodError.path[0]] = zodError.message;
       });
     }
@@ -39,33 +38,13 @@ export const CreateUserToken = () => {
 
   const { registerUser } = useQoistipSign();
 
-  // console.log(registerUser);
-  // console.log(registerUser.data);
-  // console.log('tokenUser', tokenUser);
-
   useEffect(() => {
     registerUser?.data?.wait &&
       (async () => {
-        // console.log('transactionData', transactionData);
-        // transactionData.wait(10);
-        //       address String @id @unique @db.VarChar(42)
-        // symbol  String @unique
-        // name    String @unique
-        // chainId Int
-        // User    User[]
         await registerUser.data.wait(10);
         setUserToken(initialUserToken);
-
-        console.log(object);
         //Give user information that token was create
         try {
-          //    // address:
-          // symbol: body.symbol,
-          // name: body.name,
-          // chainId: body.chainId,
-          // User: body.walletAddress,
-          // const res = await create({symbol: token.});
-          // console.log(res);
         } catch (error) {
           console.log(error);
         }
@@ -108,7 +87,7 @@ export const CreateUserToken = () => {
             label="Token name"
             type="text"
             onChange={handleChange}
-            value={userToken.name}
+            value={userToken.name ?? ''}
             error={errors?.name}
           />
           <Input
@@ -117,7 +96,7 @@ export const CreateUserToken = () => {
             label="Token symbol"
             type="text"
             onChange={handleChange}
-            value={userToken.symbol}
+            value={userToken.symbol ?? ''}
             error={errors?.symbol}
           />
         </div>
@@ -133,69 +112,4 @@ export const CreateUserToken = () => {
       </form>
     </Card>
   );
-  // const formik = useFormik({
-  //   initialValues: token,
-  //   initialStatus: 'idle',
-  //   validate,
-  //   validateOnChange: false,
-  //   onSubmit: async (values) => {
-  //     try {
-  //       console.log('register');
-  //       setToken(values);
-  //       registerUser.write({ recklesslySetUnpreparedArgs: [token.tokenSymbol, token.tokenName] });
-  //       formik.resetForm();
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   },
-  // });
-
-  // useEffect(() => {
-  //   console.log(formik);
-  //   token?.tokenName !== '' &&
-  //     formik.status !== 'seeded' &&
-  //     (() => {
-  //       console.log('seeding');
-  //       console.log(token);
-  //       formik.setStatus('seeded');
-  //       formik.setValues(token);
-  //     })();
-  // }, [token]);
-
-  // return (
-  //   <Card>
-  //     <form onSubmit={formik.handleSubmit}>
-  //       <h4>You don't have your own token yet. Create it below.</h4>
-  //       <div>
-  //         <Input
-  //           id="tokenName"
-  //           name="tokenName"
-  //           label="Token name"
-  //           type="text"
-  //           onChange={formik.handleChange}
-  //           value={formik.values.tokenName}
-  //           error={formik.errors.tokenName}
-  //         />
-  //         <Input
-  //           id="tokenSymbol"
-  //           name="tokenSymbol"
-  //           label="Token symbol"
-  //           type="text"
-  //           onChange={formik.handleChange}
-  //           value={formik.values.tokenSymbol}
-  //           error={formik.errors.tokenSymbol}
-  //         />
-  //       </div>
-  //       <p className="hover:cursor-pointer">
-  //         <InformationCircleIcon className="icon-action" /> More information about token (Decimals, Owner, Total Supply etc.)
-  //       </p>
-  //       <Button className="mt-3" type="submit">
-  //         Save
-  //       </Button>
-  //       <Button className="mt-3 ml-3" onClick={formik.resetForm} option="alert">
-  //         Reset from
-  //       </Button>
-  //     </form>
-  //   </Card>
-  // );
 };

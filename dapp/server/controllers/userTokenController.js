@@ -19,7 +19,7 @@ const findByAddress = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  console.log('REQUEST BODY', req.body);
+  // console.log('REQUEST BODY', req.body);
 
   // try {
 

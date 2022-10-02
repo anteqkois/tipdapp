@@ -62,7 +62,6 @@ const userSlice = createSlice({
       // localStorage.setItem('user', JSON.stringify(action.payload));
     });
     builder.addCase(login.rejected, (state, action) => {
-      console.log({state, action});
       state.error = action.payload.error;
     });
     builder.addCase(logout.fulfilled, (state, action) => {

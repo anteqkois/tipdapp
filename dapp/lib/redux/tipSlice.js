@@ -61,7 +61,6 @@ const tipsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getTipsByUser.pending, (state, arg) => {
-      // console.log(arg.meta.arg.page);
       state.pagination.pages[arg.meta.arg.page] = {
         status: ASYNC_STATUS.LOADING,
         ids: [],

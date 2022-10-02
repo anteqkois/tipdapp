@@ -20,7 +20,6 @@ export const useQoistipSign = () => {
     functionName: 'userToken',
     args: walletAddress,
   });
-  console.log(userToken);
 
   // WRITE
   // registerUser
@@ -30,6 +29,7 @@ export const useQoistipSign = () => {
     args: ['', ''],
     enabled: !Boolean(userToken?.data !== ethereum.zeroAddress),
     onSuccess: (data) => {
+      //give toast info
       console.log('success', data);
     },
   });

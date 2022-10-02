@@ -1,3 +1,3 @@
-import { api } from './apiConfig.js';
+import { api, errorHandler } from './apiConfig.js';
 
-export const create = async (body) => await api.post('/user-token', { ...body }).catch((err) => console.log(err));
+export const create = errorHandler(async (body) => await api.post('/user-token', { ...body }));

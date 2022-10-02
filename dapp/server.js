@@ -1,6 +1,7 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import next from 'next';
+import { requestLogger } from './lib/logger.js';
 import { handleErrors, notFound } from './server/middlewares/error.js';
 import apiRouter from './server/routes/index.js';
 
@@ -18,6 +19,11 @@ app.prepare().then(() => {
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
   server.use(cookieParser());
+
+  server.use((req, res, next) => {
+    requestLogger.info('incoming request', { url: req.url, method: req.method, host: req.hostname });
+    next();
+  });
 
   server.use('/api', apiRouter);
 

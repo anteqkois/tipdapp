@@ -1,7 +1,8 @@
-import util from 'util';
 import { ZodError } from 'zod';
+import { requestLogger } from '../../lib/logger.js';
 
 export const notFound = (req, res, next) => {
+  requestLogger.error({ url: req.url, method: req.method });
   const err = new Error('404 api endpoint not found');
   err.status = 404;
   next(err);
@@ -68,10 +69,6 @@ export class ValidationErrors extends Error {
   }
 
   fromZodErrorArray(zodErrorArray, status) {
-    // console.log('zodErrorArray', zodErrorArray);
-    // console.table('zodErrorArray', zodErrorArray);
-    // console.log('typeof', typeof zodErrorArray);
-
     zodErrorArray.forEach((zodError) => {
       const error = new ValidationError(
         zodError.path[0],
@@ -96,8 +93,8 @@ export const createApiError = (message, status) => {
 };
 
 export const handleErrors = (err, req, res, next) => {
-  // console.log(err);
-  console.log(util.inspect(err, { showHidden: false, depth: null, colors: true }));
+  console.log(err);
+  // console.log(util.inspect(err, { showHidden: false, depth: null, colors: true }));
   // console.table(err);
   if (err instanceof ApiError) {
     return res.status(err.status || 500).json(err);

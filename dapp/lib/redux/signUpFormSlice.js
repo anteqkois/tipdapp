@@ -5,7 +5,6 @@ import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 export const validateUserData = createAsyncThunk('tips/validateUserData', async (userData, thunkAPI) => {
   try {
     const { data } = await api.post('auth/validate', userData);
-    // console.log(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.errors);
   }
@@ -56,7 +55,6 @@ const signUpForm = createSlice({
       state.errors = null;
     });
     builder.addCase(validateUserData.fulfilled, (state, action, arg) => {
-      // console.log(action.meta.arg);
       state.status = ASYNC_STATUS.SUCCEEDED;
       state.data = { ...state.data, ...action.meta.arg };
       state.step = state.step + 1;
