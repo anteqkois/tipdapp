@@ -1,3 +1,4 @@
+import util from 'util';
 import { ZodError } from 'zod';
 
 export const notFound = (req, res, next) => {
@@ -95,8 +96,9 @@ export const createApiError = (message, status) => {
 };
 
 export const handleErrors = (err, req, res, next) => {
-  console.log(err);
-  console.table(err);
+  // console.log(err);
+  console.log(util.inspect(err, { showHidden: false, depth: null, colors: true }));
+  // console.table(err);
   if (err instanceof ApiError) {
     return res.status(err.status || 500).json(err);
   }

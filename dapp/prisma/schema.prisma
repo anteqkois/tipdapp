@@ -24,14 +24,13 @@ model User {
   lastName          String
   role              Role             @default(STREAMER)
   nick              String           @unique
-  nonce             String?
   verified          Boolean          @default(false)
   urlPage           String           @db.VarChar(60)
   description       String           @default("") @db.VarChar(150)
   avatarPath        String?
   createdAt         DateTime         @default(now())
   updateAt          DateTime         @updatedAt
-  token             Token?           @relation(fields: [tokenAddress], references: [address])
+  token             UserToken?       @relation(fields: [tokenAddress], references: [address])
   tokenAddress      String?          @db.VarChar(42)
   Widget            Widget[]
   //If it necessary below fields (read speed?)
@@ -45,8 +44,8 @@ model User {
 
 model Tip {
   txHash                String         @id @db.VarChar(66)
-  // tokenAmount           Decimal        @db.Decimal(30, 1)
-  tokenAmount           Decimal        @db.Decimal(78, 0)
+  // amount           Decimal        @db.Decimal(30, 1)
+  amount                Decimal        @db.Decimal(78, 0)
   // value                 Decimal        @db.Decimal(30, 1)
   value                 Decimal        @db.Decimal(78, 0)
   message               String
@@ -75,11 +74,12 @@ model Cryptocurrency {
 }
 
 //you can use data from blockchain (total suplly, all transaction etc.)
-model Token {
+model UserToken {
   address String @id @unique @db.VarChar(42)
   symbol  String @unique
   name    String @unique
   chainId Int
+  txHash  String @db.VarChar(66)
   User    User[]
 }
 
@@ -87,7 +87,7 @@ model Tipper {
   walletAddress String  @id @unique @db.VarChar(42)
   nick          String  @unique
   nonce         String?
-  allTipsValue  Int @default(0)
+  allTipsValue  Int     @default(0)
   Tip           Tip[]
 }
 

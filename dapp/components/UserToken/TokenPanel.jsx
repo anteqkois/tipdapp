@@ -11,7 +11,7 @@ export const TokenPanel = () => {
   const isMobile = useMediaQuery('(max-width: 1024px)', true);
   const { ClipboardIcon, handleCopy } = useClipboard();
 
-  const token = {
+  const userToken = {
     address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
     date: '2024-07-12T12:33:45.758Z',
   };
@@ -31,8 +31,8 @@ export const TokenPanel = () => {
           </p>
           <p className="flex items-center  gap-1">
             <span className="font-medium ">Address: </span>
-            {isMobile ? cutAddress(token.address) : token.address}
-            <ClipboardIcon copyData={token.address} message="Address copied !" />
+            {isMobile ? cutAddress(userToken.address) : userToken.address}
+            <ClipboardIcon copyData={userToken.address} message="Address copied !" />
           </p>
           <p className="flex items-end">
             <a
@@ -70,13 +70,13 @@ export const TokenPanel = () => {
           <p>
             <span className="font-medium">Last Transaction date: </span>
             <i>
-              {dateFormat(token.date).format('MMM DD YYYY, HH:MM')} ({dateFormat(token.date).fromNow()})
+              {dateFormat(userToken.date).format('MMM DD YYYY, HH:MM')} ({dateFormat(userToken.date).fromNow()})
             </i>
           </p>
           <p className="flex items-center  gap-1">
             <span className="font-medium ">Last Transaction: </span>
-            {isMobile ? cutAddress(token.address) : token.address}
-            <ClipboardIcon copyData={token.address} message="Address copied !" />
+            {isMobile ? cutAddress(userToken.address) : userToken.address}
+            <ClipboardIcon copyData={userToken.address} message="Address copied !" />
           </p>
           <p className="flex items-end">
             <a

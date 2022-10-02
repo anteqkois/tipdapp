@@ -10,7 +10,7 @@ import Button from '../utils/Button';
 
 const Tip = ({
   txHash,
-  tokenAmount,
+  amount,
   value,
   message,
   displayed,
@@ -31,8 +31,8 @@ const Tip = ({
           <Avatar walletAddress={tipperWalletAddress} className="w-6 h-6 mr-0.5" />
           <AtSymbolIcon className="inline text-primary w-6 lg:w-7 " />
           <i className="text-primary">{tipper.nick} </i>
-          {/* sent {ethers.utils.formatEther(tokenAmount)} */}
-          sent {parseNotation(tokenAmount)}
+          {/* sent {ethers.utils.formatEther(amount)} */}
+          sent {parseNotation(amount)}
           <i className="text-secondary "> ${cryptocurrency.symbol}</i>:
         </h5>
         <div className="flex gap-1.5 max-h-7">
@@ -53,7 +53,7 @@ const Tip = ({
           Token:
           <span className="font-normal text-neutral-500">
             {' '}
-            {parseNotation(tokenAmount)} {cryptocurrency.symbol} ({parseNotation(value)}$)
+            {parseNotation(amount)} {cryptocurrency.symbol} ({parseNotation(value)}$)
           </span>
         </p>
       </div>
@@ -81,7 +81,7 @@ const Tip = ({
             </p>
             <p>
               <span className="font-medium text-neutral-700">Amount: </span>
-              {parseNotation(tokenAmount)}
+              {parseNotation(amount)}
             </p>
             <p className="flex items-center  gap-1">
               <span className="font-medium ">Address: </span>

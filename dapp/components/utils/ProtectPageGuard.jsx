@@ -1,6 +1,6 @@
 import Spinner from '@/components/utils/Spinner';
-import { useRouter } from 'next/router';
 import { useUserSession } from '@/lib';
+import { useRouter } from 'next/router';
 
 export const ProtectPageGuard = ({ children, protect }) => {
   const { status } = useUserSession();

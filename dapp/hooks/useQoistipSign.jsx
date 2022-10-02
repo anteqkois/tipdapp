@@ -15,12 +15,12 @@ export const useQoistipSign = () => {
 
   // READ
   // tokenUser
-  const tokenUser = useContractRead({
+  const userToken = useContractRead({
     ...contractInstance,
-    functionName: 'tokenUser',
+    functionName: 'userToken',
     args: walletAddress,
   });
-  console.log(tokenUser);
+  console.log(userToken);
 
   // WRITE
   // registerUser
@@ -28,12 +28,12 @@ export const useQoistipSign = () => {
     ...contractInstance,
     functionName: 'registerUser',
     args: ['', ''],
-    enabled: !Boolean(tokenUser?.data !== ethereum.zeroAddress),
+    enabled: !Boolean(userToken?.data !== ethereum.zeroAddress),
     onSuccess: (data) => {
       console.log('success', data);
     },
   });
   const registerUser = useContractWrite(config);
 
-  return { registerUser, tokenUser };
+  return { registerUser, tokenUser: userToken };
 };

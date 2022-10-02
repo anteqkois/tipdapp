@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { create, findByAddress } from '../controllers/tokenController.js';
+import { create, findByAddress } from '../controllers/userTokenController.js';
 import { catchAsyncErrors } from '../middlewares/error.js';
 
 const router = Router();

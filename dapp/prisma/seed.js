@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import client from '@prisma/client';
-import ethers from 'ethers';
 import * as runtime from '@prisma/client/runtime/index.js';
 const { PrismaClient } = client;
 const { Decimal } = runtime;
@@ -67,7 +66,7 @@ async function main() {
       data: {
         message: faker.lorem.paragraph(),
         txHash: faker.datatype.hexadecimal({ length: 10 }),
-        tokenAmount: faker.datatype.number({ min: 1000_000000000000000000, max: 10000_000000000000000000 }),
+        amount: faker.datatype.number({ min: 1000_000000000000000000, max: 10000_000000000000000000 }),
         value: faker.datatype.number({ min: 1000_000000000000000000, max: 10000_000000000000000000 }),
         date: faker.datatype.datetime({ min: 1577836800000, max: 1893456000000 }),
         displayed: faker.datatype.boolean(),
@@ -90,7 +89,7 @@ async function main() {
         // cryptocurrency:
         // txHash: '0xd12ac901ac86f1856839019bd4d031c9929bafd4',
         // displayed: false,
-        // tokenAmount: '900000000000000000000',
+        // amount: '900000000000000000000',
         // value: '562000000000000000000',
         // message: 'New wallet !',
         // userWalletAddress: '0x3665b77813a64c48b700bd45dcb9998ddf7b6d63',

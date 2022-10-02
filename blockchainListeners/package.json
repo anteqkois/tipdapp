@@ -22,6 +22,7 @@
     "dev": "NODE_ENV=development nodemon --require dotenv/config index.js dotenv_config_path=.env.development"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.1"
   }

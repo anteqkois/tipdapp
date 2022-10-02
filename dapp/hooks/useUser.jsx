@@ -21,7 +21,7 @@ export const useUser = () => {
   };
   const logout = async () => {
     await disconnectAsync();
-    signOut({ callbackUrl: `${window.location.origin}/login'}` });
+    signOut({ callbackUrl: `${window.location.origin}/login` });
   };
 
   return { login, logout, user: session.user };

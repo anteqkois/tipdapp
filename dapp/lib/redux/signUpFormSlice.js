@@ -1,4 +1,4 @@
-import api from '@/lib/api/apiConfig';
+import api from 'api/apiConfig';
 import { ASYNC_STATUS } from '@/utils/constants';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 

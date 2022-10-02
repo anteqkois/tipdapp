@@ -1,7 +1,7 @@
 import { api } from './apiConfig';
 
 export const create = async (body) => {
-  await api.post('/token', {
+  await api.post('/user-token', {
     body: {
       // address:
       symbol: body.symbol,

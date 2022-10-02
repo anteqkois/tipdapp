@@ -125,6 +125,7 @@ const RainbowKitProviders = ({ children, enabled }) => {
       });
     },
     signOut: async () => {
+      // status === 'authenticated' && signOut({ callbackUrl: `${window.location.origin}/login` });
       status === 'authenticated' && signOut({ callbackUrl: `${window.location.origin}/login` });
     },
   });

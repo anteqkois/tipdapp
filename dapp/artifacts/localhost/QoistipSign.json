@@ -1,5 +1,5 @@
 {
-  "address": "0xC32609C91d6B6b51D48f2611308FEf121B02041f",
+  "address": "0x262e2b50219620226C5fB5956432A88fffd94Ba7",
   "abi": [
     {
       "anonymous": false,
@@ -392,25 +392,6 @@
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "userAddress",
-          "type": "address"
-        }
-      ],
-      "name": "tokenUser",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [],
       "name": "unPause",
       "outputs": [],
@@ -446,6 +427,25 @@
       "name": "upgradeToAndCall",
       "outputs": [],
       "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "userAddress",
+          "type": "address"
+        }
+      ],
+      "name": "userToken",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {

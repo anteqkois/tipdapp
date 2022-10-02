@@ -1,4 +1,4 @@
-import { CreateToken } from '@/components/UserToken/CreateToken';
+import { CreateUserToken } from '@/components/UserToken/CreateUserToken';
 import { TokenPanel } from '@/components/UserToken/TokenPanel';
 import { Card } from '@/components/utils';
 
@@ -7,7 +7,7 @@ const Token = () => {
 
   return (
     <section>
-      {tokenData ? <TokenPanel /> : <CreateToken />}
+      {tokenData ? <TokenPanel /> : <CreateUserToken />}
     </section>
   );
 };

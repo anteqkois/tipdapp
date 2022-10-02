@@ -1,6 +1,6 @@
 import { useLocalStorage, useUser } from '@/hooks';
 import { useQoistipSign } from '@/hooks/useQoistipSign';
-import { tokenSchemaForm } from '@/schema/tokenSchema.js';
+import { userTokenSchemaForm } from '@/schema/userTokenSchema.js';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import { useNetwork } from 'wagmi';
@@ -11,7 +11,7 @@ const validate = (values) => {
   const errors = {};
 
   try {
-    tokenSchemaForm.parse(values);
+    userTokenSchemaForm.parse(values);
   } catch (error) {
     if (error instanceof ZodError) {
       error.issues.forEach((zodError) => {
@@ -24,20 +24,20 @@ const validate = (values) => {
   return errors;
 };
 
-const initialToken = {
-  tokenSymbol: '',
-  tokenName: '',
+const initialUserToken = {
+  symbol: '',
+  name: '',
 };
 
-export const CreateToken = () => {
+export const CreateUserToken = () => {
   const [errors, setErrors] = useState(null);
-  const [token, setToken] = useLocalStorage('userToken', initialToken);
+  const [userToken, setUserToken] = useLocalStorage('userToken', initialUserToken);
   const { chain } = useNetwork();
   const {
     user: { walletAddress },
   } = useUser();
 
-  const { registerUser, tokenUser } = useQoistipSign();
+  const { registerUser } = useQoistipSign();
 
   // console.log(registerUser);
   // console.log(registerUser.data);
@@ -53,7 +53,9 @@ export const CreateToken = () => {
         // name    String @unique
         // chainId Int
         // User    User[]
-        registerUser.data.wait(10);
+        await registerUser.data.wait(10);
+        setUserToken(initialUserToken);
+
         console.log(object);
         //Give user information that token was create
         try {
@@ -74,11 +76,11 @@ export const CreateToken = () => {
     e.preventDefault();
     try {
       setErrors(null);
-      const error = validate(token);
+      const error = validate(userToken);
 
       if (!Object.keys(error).length) {
-        registerUser.write({ recklesslySetUnpreparedArgs: [token.tokenSymbol, token.tokenName] });
-        setToken(initialToken);
+        registerUser.write({ recklesslySetUnpreparedArgs: [userToken.symbol, userToken.name] });
+        // setUserToken(initialUserToken);
       } else {
         setErrors(error);
       }
@@ -88,11 +90,11 @@ export const CreateToken = () => {
   };
 
   const handleChange = (e) => {
-    setToken((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    setUserToken((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
   const resetForm = () => {
-    setToken(initialToken);
+    setUserToken(initialUserToken);
   };
 
   return (
@@ -101,22 +103,22 @@ export const CreateToken = () => {
         <h4>You don&apos;t have your own token yet. Create it below.</h4>
         <div>
           <Input
-            id="tokenName"
-            name="tokenName"
+            id="name"
+            name="name"
             label="Token name"
             type="text"
             onChange={handleChange}
-            value={token.tokenName}
-            error={errors?.tokenName}
+            value={userToken.name}
+            error={errors?.name}
           />
           <Input
-            id="tokenSymbol"
-            name="tokenSymbol"
+            id="symbol"
+            name="symbol"
             label="Token symbol"
             type="text"
             onChange={handleChange}
-            value={token.tokenSymbol}
-            error={errors?.tokenSymbol}
+            value={userToken.symbol}
+            error={errors?.symbol}
           />
         </div>
         <p className="hover:cursor-pointer">

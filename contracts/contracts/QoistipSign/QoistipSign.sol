@@ -111,7 +111,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         _minValue = newMinValue;
     }
 
-    function tokenUser(address userAddress)
+    function userToken(address userAddress)
         external
         view
         virtual
