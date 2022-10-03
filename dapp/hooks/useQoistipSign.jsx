@@ -1,4 +1,4 @@
-import { ethereum } from '@/utils/constants';
+import toast from 'react-hot-toast';
 import { useContractRead, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { useUser } from '.';
 // import QoistipSign from '../../artifacts/hardhat/QoistipSign.json';
@@ -27,13 +27,22 @@ export const useQoistipSign = () => {
     ...contractInstance,
     functionName: 'registerUser',
     args: ['', ''],
-    enabled: !Boolean(userToken?.data !== ethereum.zeroAddress),
+    // enabled: !Boolean(userToken?.data !== ethereum.zeroAddress),
+    enabled: false,
+  });
+  const registerUser = useContractWrite({
+    ...config,
     onSuccess: (data) => {
-      //give toast info
+      toast.success('Your token was succesfully create !');
       console.log('success', data);
     },
+    onError: (error) => {
+      toast.error('Something went wrong, we can not create your token.');
+      console.log(error);
+      console.log(error.message);
+      console.log(JSON.parse(error.message));
+    },
   });
-  const registerUser = useContractWrite(config);
 
   return { registerUser, tokenUser: userToken };
 };

@@ -40,7 +40,7 @@ export const useModal = () => {
           >
             <div className="flex justify-between mb-4">
               <DialogPrimitive.Title>
-                <h6 className="">{title}</h6>
+                <p className="text-lg">{title}</p>
               </DialogPrimitive.Title>
               <DialogPrimitive.Close className="rounded-full bg-neutral-150 state-focus w-6 h-6 animate-action">
                 <XMarkIcon className="p-1 ease-in-out w-6 h-6 stroke-neutral-600" />

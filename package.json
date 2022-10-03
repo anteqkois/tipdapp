@@ -15,6 +15,7 @@
   "scripts": {
     "dev": "sudo service postgresql start & sleep 5 && NODE_ENV=development cd dapp && npm run dev & cd contracts && npx hardhat node & sleep 10 && cd contracts && npm run deploy:dev",
     "posttdev": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}') & kill $(lsof -Pi | grep :3000 | awk '{ print $2}')",
+    "clean": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}') & kill $(lsof -Pi | grep :3000 | awk '{ print $2}')",
     "commit": "git add . && cz",
     "postcommit": "git push",
     "release": "standard-version",
