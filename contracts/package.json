@@ -4,7 +4,7 @@
   "description": "",
   "main": "scripts/test.js",
   "scripts": {
-    "deploy:dev": "dotenv_config_path=.env.development npx hardhat run scripts/deploy.js --network localhost",
+    "deploy-dev": "dotenv_config_path=.env.development npx hardhat run scripts/deploy.js --network localhost",
     "test:unit": "npx hardhat test test/unit/*",
     "test:integration": "npx hardhat node & npx hardhat test test/integration/*",
     "posttest:integration:": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}')",

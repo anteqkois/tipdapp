@@ -36,8 +36,14 @@ app.prepare().then(() => {
   server.use(notFound);
 
   server.listen(port, (err) => {
-    if (err) throw err;
+    // if (err) throw err;
     console.log(`> Ready on http://localhost:${port}`);
     // configEthers();
   });
 });
+
+// process.on('uncaughtException', () => {
+//   process.kill(process.pid);
+//   // process.kill();
+//   // process.exit(1);
+// });

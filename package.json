@@ -23,6 +23,9 @@
     "sc:test:i": "cd contracts && npm run test:integration",
     "sc:test:u": "cd contracts && npm run test:unit"
   },
+  "dependencies": {
+    "zx": "^7.0.8"
+  },
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "8.23.1",

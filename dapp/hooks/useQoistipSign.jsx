@@ -20,6 +20,7 @@ export const useQoistipSign = () => {
     functionName: 'userToken',
     args: walletAddress,
   });
+  // console.log(Boolean(userToken?.data !== ethereum.zeroAddress));
 
   // WRITE
   // registerUser
@@ -27,9 +28,10 @@ export const useQoistipSign = () => {
     ...contractInstance,
     functionName: 'registerUser',
     args: ['', ''],
-    // enabled: !Boolean(userToken?.data !== ethereum.zeroAddress),
-    enabled: false,
+    enabled: userToken?.data === ethereum.zeroAddress,
+    // enabled: true,
   });
+
   const registerUser = useContractWrite({
     ...config,
     onSuccess: (data) => {
@@ -38,11 +40,13 @@ export const useQoistipSign = () => {
     },
     onError: (error) => {
       toast.error('Something went wrong, we can not create your token.');
-      console.log(error);
-      console.log(error.message);
-      console.log(JSON.parse(error.message));
+      // console.log(error.error);
+      // console.log(error.message);
+      // console.log(error);
+      // console.log(JSON.parse(error.message));
     },
   });
+  console.log(registerUser.error);
 
-  return { registerUser, tokenUser: userToken };
+  return { registerUser, userToken };
 };

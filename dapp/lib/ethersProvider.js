@@ -1,4 +1,4 @@
-import ethers from 'ethers';
+import {ethers} from 'ethers';
 
 // ethers.BigNumber.fromNotation = (number) => {
 //   return new BigNumber.from(ethers.utils.hexValue(`0x${number.toString(16)}`));
@@ -13,7 +13,7 @@ import ethers from 'ethers';
 // const provider = providersList[process.env.NETWORK];
 
 // export { provider };
-
+export { ethers };
 export default ethers;
 // import ethers from 'ethers';
 

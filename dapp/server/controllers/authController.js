@@ -106,6 +106,20 @@ const providers = [
             where: {
               walletAddress: siwe.address,
             },
+            include: {
+              token: {
+                select: {
+                  address: true,
+                  chainId: true,
+                  name: true,
+                  symbol: true,
+                  txHash: true,
+                  _count: true,
+                },
+              },
+              // Widget: true,
+              // Withdraw: true,
+            },
           });
         }
       } catch (errors) {

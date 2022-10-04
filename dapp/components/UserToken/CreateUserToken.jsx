@@ -1,5 +1,6 @@
 import { useLocalStorage, useUser } from '@/hooks';
 import { useQoistipSign } from '@/hooks/useQoistipSign';
+import { useUserSession } from '@/lib';
 import { userTokenSchemaForm } from '@/schema/userTokenSchema.js';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
@@ -37,6 +38,8 @@ export const CreateUserToken = () => {
   } = useUser();
 
   const { registerUser } = useQoistipSign();
+  const { refreshData } = useUserSession();
+  // refreshData();
 
   useEffect(() => {
     registerUser?.data?.wait &&
@@ -58,6 +61,7 @@ export const CreateUserToken = () => {
       const error = validate(userToken);
 
       if (!Object.keys(error).length) {
+        console.log(registerUser);
         registerUser.write({ recklesslySetUnpreparedArgs: [userToken.symbol, userToken.name] });
         // setUserToken(initialUserToken);
       } else {
@@ -106,7 +110,7 @@ export const CreateUserToken = () => {
         <Button className="mt-3" type="submit">
           Save
         </Button>
-        <Button className="mt-3 ml-3" onClick={resetForm} option="alert">
+        <Button className="mt-3 ml-3" onClick={refreshData} type="reset" option="alert">
           Reset from
         </Button>
       </form>

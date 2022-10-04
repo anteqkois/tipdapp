@@ -21,6 +21,9 @@ const initialUserData = {
 
 export const useUserSession = () => {
   const { status, data } = useSession();
+  const refreshData = async () => {
+    //In future
+  };
 
-  return { status, session: data ? data : initialUserData };
+  return { status, session: data ? data : initialUserData, refreshData };
 };

@@ -1,15 +1,14 @@
 import { CreateUserToken } from '@/components/UserToken/CreateUserToken';
 import { TokenPanel } from '@/components/UserToken/TokenPanel';
-import { Card } from '@/components/utils';
+import { useUser } from '@/hooks';
 
 const Token = () => {
   const tokenData = false;
+  const { user } = useUser();
+  // const { refreshData } = useUserSession();
+  // // refreshData();
 
-  return (
-    <section>
-      {tokenData ? <TokenPanel /> : <CreateUserToken />}
-    </section>
-  );
+  return <section>{user.token ? <TokenPanel token={user.token} /> : <CreateUserToken />}</section>;
 };
 
 Token.isProtected = true;

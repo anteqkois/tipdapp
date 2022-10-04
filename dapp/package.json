@@ -46,7 +46,7 @@
     "express": "^4.17.3",
     "formik": "^2.2.9",
     "next": "^12.3.0",
-    "next-auth": "^4.10.3",
+    "next-auth": "^4.12.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-hot-toast": "^2.4.0",
