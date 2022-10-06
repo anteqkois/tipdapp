@@ -55,10 +55,10 @@ const providers = [
           //Validate unique
           const user = await prismaClient.user.findFirst({
             where: {
-              OR: [{ walletAddress: siwe.address }, { email: formData.email }, { nick: formData.nick }],
+              OR: [{ address: siwe.address }, { email: formData.email }, { nick: formData.nick }],
             },
             select: {
-              walletAddress: true,
+              address: true,
               email: true,
               nick: true,
             },
@@ -66,12 +66,12 @@ const providers = [
 
           if (user) {
             const errors = [];
-            if (user.walletAddress === siwe.address) {
+            if (user.address === siwe.address) {
               const validationError = new ValidationError(
-                'walletAddress',
+                'address',
                 `Already registered.`,
                 `The wallet has already been registered. Go to login or disconnect wallet from DAPP and then change wallet.`,
-                `walletAddress.unique`,
+                `address.unique`,
               );
               errors.push(validationError);
             }
@@ -93,7 +93,7 @@ const providers = [
 
           userSesionData = await prismaClient.user.create({
             data: {
-              walletAddress: siwe.address,
+              address: siwe.address,
               email: formData.email,
               firstName: formData.firstName,
               lastName: formData.lastName,
@@ -104,7 +104,7 @@ const providers = [
         } else {
           userSesionData = await prismaClient.user.findFirst({
             where: {
-              walletAddress: siwe.address,
+              address: siwe.address,
             },
             include: {
               token: {
@@ -114,7 +114,6 @@ const providers = [
                   name: true,
                   symbol: true,
                   txHash: true,
-                  _count: true,
                 },
               },
               // Widget: true,

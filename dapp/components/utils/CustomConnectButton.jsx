@@ -59,7 +59,7 @@ export const CustomConnectButton = () => {
                       type="button"
                       option="overlay"
                     >
-                      {/* <Avatar awalletAddress=alletAddress} className="w-6 h-6" /> */}
+                      {/* <Avatar aaddress=alletAddress} className="w-6 h-6" /> */}
                       {account.displayName}
                       <ArrowRightOnRectangleIcon className="w-6 h-6" />
                     </Button>

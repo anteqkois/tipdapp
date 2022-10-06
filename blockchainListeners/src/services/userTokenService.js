@@ -22,5 +22,6 @@ const getUserTokenData = async ({ userToken, userAddress, txHash }) => {
 
 export const createToken = async (eventData) => {
   const userTokenData = await getUserTokenData(eventData);
+  console.log('Create new token: ', userTokenData);
   create(userTokenData);
 };

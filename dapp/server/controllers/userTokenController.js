@@ -2,16 +2,17 @@ import { prismaClient } from '../../lib/prismaClient.js';
 import { userTokenSchema } from '../../schema/userTokenSchema.js';
 import { createApiError } from '../middlewares/error.js';
 
-const findByAddress = async (req, res) => {
-  typeof req.query?.address === 'undefined' && createApiError('Missing token address.');
+const find = async (req, res) => {
+  // typeof req.query?.address === 'undefined' && createApiError('Missing token address.');
 
-  const token = prismaClient.userToken.findFirstOrThrow({
+  const token = await prismaClient.userToken.findFirst({
     where: {
-      address: req.query.address,
+      ...req.query,
     },
   });
 
   if (token) {
+    console.log(token);
     return res.status(200).send({ token });
   } else {
     createApiError('No token found.', 404);
@@ -35,7 +36,7 @@ const create = async (req, res) => {
       txHash,
       User: {
         connect: {
-          walletAddress: user,
+          address: user,
         },
       },
     },
@@ -48,7 +49,8 @@ const create = async (req, res) => {
   // }
 };
 
-export { findByAddress, create };
+export { find, create };
 export default {
-  findByAddress,
+  find,
+  create,
 };

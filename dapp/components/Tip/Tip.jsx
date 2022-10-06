@@ -8,19 +8,7 @@ import Avatar from '../utils/Avatar';
 import Button from '../utils/Button';
 // const { parseUnits, formatUnits } = ethers.utils;
 
-const Tip = ({
-  txHash,
-  amount,
-  value,
-  message,
-  displayed,
-  date,
-  userWalletAddress,
-  tipper,
-  tipperWalletAddress,
-  cryptocurrencyAddress,
-  cryptocurrency,
-}) => {
+const Tip = ({ txHash, amount, value, message, displayed, date, userAddress, tipper, tipperAddress, tokenAddress, token }) => {
   const [DetailsModal, DetailsContent, DetailsTrigger, setShowDetails, showDetails] = useModal();
   const { ClipboardIcon, handleCopy } = useClipboard();
 
@@ -28,12 +16,12 @@ const Tip = ({
     <Card>
       <div className="flex items-top justify-between w-full gap-1">
         <h5 className=" mr-3 lg:text-2xl">
-          <Avatar walletAddress={tipperWalletAddress} className="w-6 h-6 mr-0.5" />
+          <Avatar address={tipperAddress} className="w-6 h-6 mr-0.5" />
           <AtSymbolIcon className="inline text-primary w-6 lg:w-7 " />
           <i className="text-primary">{tipper.nick} </i>
           {/* sent {ethers.utils.formatEther(amount)} */}
           sent {parseNotation(amount)}
-          <i className="text-secondary "> ${cryptocurrency.symbol}</i>:
+          <i className="text-secondary "> ${token.symbol}</i>:
         </h5>
         <div className="flex gap-1.5 max-h-7">
           <Tooltip content="Display again">
@@ -53,7 +41,7 @@ const Tip = ({
           Token:
           <span className="font-normal text-neutral-500">
             {' '}
-            {parseNotation(amount)} {cryptocurrency.symbol} ({parseNotation(value)}$)
+            {parseNotation(amount)} {token.symbol} ({parseNotation(value)}$)
           </span>
         </p>
       </div>
@@ -77,7 +65,7 @@ const Tip = ({
             </p>
             <p>
               <span className="font-medium text-neutral-700">Symbol: </span>
-              {cryptocurrency.symbol}
+              {token.symbol}
             </p>
             <p>
               <span className="font-medium text-neutral-700">Amount: </span>
@@ -85,15 +73,10 @@ const Tip = ({
             </p>
             <p className="flex items-center  gap-1">
               <span className="font-medium ">Address: </span>
-              {cutAddress(cryptocurrencyAddress)}
-              <ClipboardIcon copyData={cryptocurrencyAddress} message="Address copied !" />
+              {cutAddress(tokenAddress)}
+              <ClipboardIcon copyData={tokenAddress} message="Address copied !" />
             </p>
-            <a
-              tabIndex="-1"
-              href="https://zksync2-testnet.zkscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266/transactions"
-              target={'_blank'}
-              rel="noreferrer"
-            >
+            <a tabIndex="-1" href={`https://etherscan.io/token/${tipperAddress}`} target={'_blank'} rel="noreferrer">
               <Button option="link" className="font-medium text-neutral-700 mr-1">
                 View token on Explorer
               </Button>
@@ -108,16 +91,11 @@ const Tip = ({
             </p>
             <p className="flex items-center  gap-1">
               <span className="font-medium ">Address: </span>
-              {cutAddress(tipperWalletAddress)}
-              <ClipboardIcon copyData={tipperWalletAddress} message="Address copied !" />
+              {cutAddress(tipperAddress)}
+              <ClipboardIcon copyData={tipperAddress} message="Address copied !" />
             </p>
             <p className="flex items-end">
-              <a
-                tabIndex="-1"
-                href="https://zksync2-testnet.zkscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266/transactions"
-                target={'_blank'}
-                rel="noreferrer"
-              >
+              <a tabIndex="-1" href={`https://etherscan.io/address/${tipperAddress}`} target={'_blank'} rel="noreferrer">
                 <Button option="link" className="font-medium text-neutral-700 mr-1">
                   View on Explorer
                 </Button>
@@ -136,12 +114,7 @@ const Tip = ({
               <ClipboardIcon copyData={txHash} message="Transaction hash copied !" />
             </p>
             <p className="flex items-end">
-              <a
-                tabIndex="-1"
-                href="https://zksync2-testnet.zkscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266/transactions"
-                target={'_blank'}
-                rel="noreferrer"
-              >
+              <a tabIndex="-1" href={`https://etherscan.io/tx/${tipperAddress}`} target={'_blank'} rel="noreferrer">
                 <Button option="link" className="font-medium text-neutral-700 mr-1">
                   View on Explorer
                 </Button>

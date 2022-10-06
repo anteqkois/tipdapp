@@ -18,104 +18,104 @@ enum Role {
 }
 
 model User {
-  walletAddress     String           @id @unique @db.VarChar(42)
-  email             String           @unique
-  firstName         String
-  lastName          String
-  role              Role             @default(STREAMER)
-  nick              String           @unique
-  verified          Boolean          @default(false)
-  urlPage           String           @db.VarChar(60)
-  description       String           @default("") @db.VarChar(150)
-  avatarPath        String?
-  createdAt         DateTime         @default(now())
-  updateAt          DateTime         @updatedAt
-  token             UserToken?       @relation(fields: [tokenAddress], references: [address])
-  tokenAddress      String?          @db.VarChar(42)
-  Widget            Widget[]
+  address     String     @id @unique @db.VarChar(42)
+  email       String     @unique
+  firstName   String
+  lastName    String
+  role        Role       @default(STREAMER)
+  nick        String     @unique
+  verified    Boolean    @default(false)
+  urlPage     String     @db.VarChar(60)
+  description String     @default("") @db.VarChar(150)
+  avatarPath  String?
+  createdAt   DateTime   @default(now())
+  updateAt    DateTime   @updatedAt
+  token       UserToken?
+  widget      Widget[]
   //If it necessary below fields (read speed?)
-  allDonateCount    Int              @default(0)
-  allDonateValue    Decimal          @default(0) @db.Decimal(78, 0)
-  allDonateWithdraw Decimal          @default(0) @db.Decimal(78, 0)
-  Cryptocurrency    Cryptocurrency[]
-  Tip               Tip[]
-  Withdraw          Withdraw[]
+  tipsCount   Int        @default(0)
+  tipsValue   Decimal    @default(0) @db.Decimal(78, 0)
+  // withdrawsValue Decimal    @default(0) @db.Decimal(78, 0)
+  activeToken Token[]
+  tip         Tip[]
+  withdraw    Withdraw[]
 }
 
 model Tip {
-  txHash                String         @id @db.VarChar(66)
+  txHash        String   @id @db.VarChar(66)
   // amount           Decimal        @db.Decimal(30, 1)
-  amount                Decimal        @db.Decimal(78, 0)
+  amount        Decimal  @db.Decimal(78, 0)
   // value                 Decimal        @db.Decimal(30, 1)
-  value                 Decimal        @db.Decimal(78, 0)
-  message               String
-  displayed             Boolean
-  date                  DateTime       @default(now())
-  user                  User           @relation(fields: [userWalletAddress], references: [walletAddress])
-  userWalletAddress     String         @db.VarChar(42)
-  cryptocurrency        Cryptocurrency @relation(fields: [cryptocurrencyAddress], references: [address])
-  cryptocurrencyAddress String         @db.VarChar(42)
-  tipper                Tipper         @relation(fields: [tipperWalletAddress], references: [walletAddress])
-  tipperWalletAddress   String         @db.VarChar(42)
+  value         Decimal  @db.Decimal(78, 0)
+  message       String
+  displayed     Boolean
+  date          DateTime @default(now())
+  user          User     @relation(fields: [userAddress], references: [address])
+  userAddress   String   @db.VarChar(42)
+  token         Token    @relation(fields: [tokenAddress], references: [address])
+  tokenAddress  String   @db.VarChar(42)
+  tipper        Tipper   @relation(fields: [tipperAddress], references: [address])
+  tipperAddress String   @db.VarChar(42)
 }
 
-model Cryptocurrency {
-  address           String     @id @unique @db.VarChar(42)
-  symbol            String     @unique
-  name              String     @unique
-  chainId           Int
-  imgPath           String?
-  latestPrice       Decimal?   @db.Decimal(78, 0)
-  priceUpdateAt     DateTime?
-  Tip               Tip[]
-  Withdraw          Withdraw[]
-  User              User?      @relation(fields: [userWalletAddress], references: [walletAddress])
-  userWalletAddress String?    @db.VarChar(42)
+model Token {
+  address       String     @id @unique @db.VarChar(42)
+  symbol        String     @unique
+  name          String     @unique
+  chainId       Int
+  imgPath       String?
+  latestPrice   Decimal?   @db.Decimal(78, 0)
+  priceUpdateAt DateTime?
+  tip           Tip[]
+  withdraw      Withdraw[]
+  user          User[]
+  userAddress   String?    @db.VarChar(42)
 }
 
 //you can use data from blockchain (total suplly, all transaction etc.)
 model UserToken {
-  address String @id @unique @db.VarChar(42)
-  symbol  String @unique
-  name    String @unique
-  chainId Int
-  txHash  String @db.VarChar(66)
-  User    User[]
+  address     String  @id @unique @db.VarChar(42)
+  symbol      String  @unique
+  name        String  @unique
+  chainId     Int
+  txHash      String  @db.VarChar(66)
+  user        User?   @relation(fields: [userAddress], references: [address])
+  userAddress String? @unique @db.VarChar(42)
 }
 
 model Tipper {
-  walletAddress String  @id @unique @db.VarChar(42)
-  nick          String  @unique
-  nonce         String?
-  allTipsValue  Int     @default(0)
-  Tip           Tip[]
+  address   String  @id @unique @db.VarChar(42)
+  nick      String  @unique
+  nonce     String?
+  tipsValue Int     @default(0)
+  tip       Tip[]
 }
 
 model Widget {
-  id                String  @id @default(cuid())
-  url               String
-  songPath          String
-  backgroundPath    String
-  nickColor         String
-  messageColor      String
-  valueColor        String
-  showTime          Int
-  filterProfanity   Boolean
+  id              String  @id @default(cuid())
+  url             String
+  songPath        String
+  backgroundPath  String
+  nickColor       String
+  messageColor    String
+  valueColor      String
+  showTime        Int
+  filterProfanity Boolean
   // filterWord WordList
-  voiceMessage      Boolean
-  User              User?   @relation(fields: [userWalletAddress], references: [walletAddress])
-  userWalletAddress String? @db.VarChar(42)
+  voiceMessage    Boolean
+  user            User?   @relation(fields: [userAddress], references: [address])
+  userAddress     String? @db.VarChar(42)
 }
 
 model Withdraw {
-  id                    String         @id @default(cuid())
-  user                  User           @relation(fields: [userWalletAddress], references: [walletAddress])
-  userWalletAddress     String         @db.VarChar(42)
-  amount                Decimal        @db.Decimal(78, 0)
-  cryptocurrency        Cryptocurrency @relation(fields: [cryptocurrencyAddress], references: [address])
-  cryptocurrencyAddress String         @db.VarChar(42)
-  date                  DateTime       @default(now())
-  txHash                String         @unique @db.VarChar(66)
+  id           String   @id @default(cuid())
+  user         User     @relation(fields: [userAddress], references: [address])
+  userAddress  String   @db.VarChar(42)
+  amount       Decimal  @db.Decimal(78, 0)
+  token        Token    @relation(fields: [tokenAddress], references: [address])
+  tokenAddress String   @db.VarChar(42)
+  date         DateTime @default(now())
+  txHash       String   @unique @db.VarChar(66)
 }
 
 //sudo -u postgres psql

@@ -2,20 +2,20 @@ import { getCsrfToken, signIn, signOut, useSession } from 'next-auth/react';
 export { getCsrfToken, signIn, signOut };
 
 const initialUserData = {
-  allDonateCount: 0,
-  allDonateValue: '0',
-  allDonateWithdraw: '0',
+  tipsCount: 0,
+  tipsValue: '0',
+  // allDonateWithdraw: '0',
   avatarPath: null,
   createdAt: null,
   email: null,
   firstName: null,
   lastName: null,
-  linkToDonate: null,
+  urlPage: null,
   nick: null,
   nonce: null,
   tokenAddress: null,
   updateAt: null,
-  walletAddress: '',
+  address: '',
   widgetId: null,
 };
 

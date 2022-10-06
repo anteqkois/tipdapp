@@ -7,9 +7,7 @@ import { Button, Card } from '../utils';
 
 export const TokenPanel = ({ token }) => {
   const isMobile = useMediaQuery('(max-width: 1024px)', true);
-  const { totalSupply, decimals, balanceOf } = useUserToken();
-  console.log(decimals.data);
-
+  const { totalSupply, decimals, balanceOf } = useUserToken(token.address);
   const { ClipboardIcon, handleCopy } = useClipboard();
 
   return (
@@ -39,12 +37,7 @@ export const TokenPanel = ({ token }) => {
             <span>{ethers.utils.formatUnits(totalSupply.data)}</span>
           </p>
           <p className="flex items-end">
-            <a
-              tabIndex="-1"
-              href="https://zksync2-testnet.zkscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266/transactions"
-              target={'_blank'}
-              rel="noreferrer"
-            >
+            <a tabIndex="-1" href={`https://etherscan.io/token/${token.address}`} target={'_blank'} rel="noreferrer">
               <Button option="link" className="font-medium text-neutral-700 mr-1">
                 View token on Explorer
               </Button>

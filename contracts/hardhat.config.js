@@ -42,10 +42,10 @@ module.exports = {
       //   accounts: {
       //     // mnemonic: 'qoisdapp',
       //   },
-      // mining: {
-      //   auto: false,
-      //   interval: 13000,
-      // },
+      mining: {
+        auto: false,
+        interval: [2000, 4000],
+      },
       // throwOnTransactionFailures: true,
       // allowUnlimitedContractSize: true,
       // loggingEnabled: true,

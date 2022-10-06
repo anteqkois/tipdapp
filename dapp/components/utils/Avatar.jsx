@@ -10,7 +10,7 @@
 
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 
-export const Avatar = ({ avatarPath, walletAddress, className }) => {
+export const Avatar = ({ avatarPath, address, className }) => {
   return (
     <AvatarPrimitive.Root>
       {/* <AvatarPrimitive.Root className={`relative inline-flex h-10 w-10 ${className}`}> */}
@@ -34,7 +34,7 @@ export const Avatar = ({ avatarPath, walletAddress, className }) => {
           // height={48}
           className={`inline-block shadow-md rounded-md w-7 aspect-square ${className}`}
           alt="user avatar"
-          src={`https://avatars.dicebear.com/api/pixel-art-neutral/${walletAddress}.svg`}
+          src={`https://avatars.dicebear.com/api/pixel-art-neutral/${address}.svg`}
         />
       </AvatarPrimitive.Fallback>
     </AvatarPrimitive.Root>

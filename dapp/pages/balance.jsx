@@ -8,10 +8,10 @@ const Balance = ({}) => {
 
   return (
     <Card>
-      <TokenBalance walletAddress={user.walletAddress} chainId={chain.mainnet.id} tokenAddress />
-      <TokenBalance walletAddress={user.walletAddress} chainId={chain.polygon.id} tokenAddress />
-      <TokenBalance walletAddress={user.walletAddress} chainId={chain.optimism.id} tokenAddress />
-      <TokenBalance walletAddress={user.walletAddress} chainId={chain.hardhat.id} tokenAddress />
+      <TokenBalance address={user.address} chainId={chain.mainnet.id} tokenAddress />
+      <TokenBalance address={user.address} chainId={chain.polygon.id} tokenAddress />
+      <TokenBalance address={user.address} chainId={chain.optimism.id} tokenAddress />
+      <TokenBalance address={user.address} chainId={chain.hardhat.id} tokenAddress />
     </Card>
   );
 };

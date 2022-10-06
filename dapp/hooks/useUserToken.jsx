@@ -1,15 +1,15 @@
 import { useContractRead } from 'wagmi';
-import { useUser } from '.';
 import UserToken from '../artifacts/localhost/UserToken.json';
 
-export const useUserToken = () => {
-  const {
-    user: { token },
-  } = useUser();
+export const useUserToken = (address) => {
+  // const {
+  //   user: { token },
+  // } = useUser();
+  // address = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
 
   //useMemo
   const contractInstance = {
-    addressOrName: token.address,
+    addressOrName: address,
     contractInterface: UserToken.abi,
   };
 

@@ -15,7 +15,7 @@ const Tips = () => {
   const pageAmount = useSelector(selectPageAmount);
 
   const handlePageChange = (page) => {
-    dispatch(getTipsByUser({ userWalletAddress: user.walletAddress, page }));
+    dispatch(getTipsByUser({ userAddress: user.address, page }));
   };
 
   //TODO! useErrorBoundary

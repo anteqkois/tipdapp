@@ -10,7 +10,7 @@ const contractInstance = {
 
 export const useQoistipSign = () => {
   const {
-    user: { walletAddress },
+    user: { address },
   } = useUser();
 
   // READ
@@ -18,7 +18,7 @@ export const useQoistipSign = () => {
   const userToken = useContractRead({
     ...contractInstance,
     functionName: 'userToken',
-    args: walletAddress,
+    args: address,
   });
   // console.log(Boolean(userToken?.data !== ethereum.zeroAddress));
 

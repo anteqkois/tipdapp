@@ -1,8 +1,8 @@
 import { getTipsByUser } from '@/lib/redux/tipSlice.js';
+import { signOut, useUserSession } from '@/lib/UserSessionProvider';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { signOut, useUserSession } from '@/lib/UserSessionProvider';
 import { useDisconnect } from 'wagmi';
 
 export const useUser = () => {
@@ -13,7 +13,7 @@ export const useUser = () => {
 
   //Dowload first tips page on login user
   useEffect(() => {
-    if (session?.user) dispatch(getTipsByUser({ userWalletAddress: session.user.walletAddress, page: 1 }));
+    if (session?.user) dispatch(getTipsByUser({ userAddress: session.user.address, page: 1 }));
   }, [session]);
 
   const login = () => {

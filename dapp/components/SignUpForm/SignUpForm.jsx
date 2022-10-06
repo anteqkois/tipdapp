@@ -114,7 +114,7 @@ export const SignUpForm = () => {
     </FormikStep>,
     <FormikStep label="Connect Wallet">
       <ConnectWallet className="w-5/6 h-52 mx-auto my-5" />
-      <p className="text-alert-600 ">{formik.errors.walletAddress && `* ${formik.errors.walletAddress}`}</p>
+      <p className="text-alert-600 ">{formik.errors.address && `* ${formik.errors.address}`}</p>
       <Button className="w-full mt-4" option="success" onClick={() => setStep((prev) => --prev)}>
         Connect wallet
       </Button>

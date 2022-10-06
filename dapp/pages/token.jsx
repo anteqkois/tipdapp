@@ -1,14 +1,26 @@
 import { CreateUserToken } from '@/components/UserToken/CreateUserToken';
 import { TokenPanel } from '@/components/UserToken/TokenPanel';
 import { useUser } from '@/hooks';
+import { find } from 'api/userToken';
+import { useEffect, useState } from 'react';
 
 const Token = () => {
-  const tokenData = false;
   const { user } = useUser();
-  // const { refreshData } = useUserSession();
-  // // refreshData();
+  const [token, setToken] = useState(null);
 
-  return <section>{user.token ? <TokenPanel token={user.token} /> : <CreateUserToken />}</section>;
+  useEffect(() => {
+    user?.address &&
+      (async () => {
+        try {
+          const tokenData = await find({userAddress: user.address});
+          setToken(tokenData.data.token);
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+  }, [token?.created]);
+
+  return <section>{token?.address ? <TokenPanel token={token} /> : <CreateUserToken setToken={setToken} />}</section>;
 };
 
 Token.isProtected = true;

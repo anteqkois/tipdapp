@@ -1,12 +1,11 @@
 import { useLocalStorage, useUser } from '@/hooks';
 import { useQoistipSign } from '@/hooks/useQoistipSign';
-import { useUserSession } from '@/lib';
 import { userTokenSchemaForm } from '@/schema/userTokenSchema.js';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import { useNetwork } from 'wagmi';
 import { ZodError } from 'zod';
 import { Button, Card, Input } from '../utils';
+import { Details } from '../utils/Details';
 
 const validate = (values) => {
   const errors = {};
@@ -29,23 +28,23 @@ const initialUserToken = {
   name: '',
 };
 
-export const CreateUserToken = () => {
+export const CreateUserToken = (setToken) => {
   const [errors, setErrors] = useState(null);
+  const [showMoreInformation, setShowMoreInformation] = useState(false);
   const [userToken, setUserToken] = useLocalStorage('userToken', initialUserToken);
   const { chain } = useNetwork();
   const {
-    user: { walletAddress },
+    user: { address },
   } = useUser();
 
   const { registerUser } = useQoistipSign();
-  const { refreshData } = useUserSession();
-  // refreshData();
 
   useEffect(() => {
     registerUser?.data?.wait &&
       (async () => {
         await registerUser.data.wait(10);
         setUserToken(initialUserToken);
+        setToken({ created: true });
         //Give user information that token was create
         try {
         } catch (error) {
@@ -63,7 +62,6 @@ export const CreateUserToken = () => {
       if (!Object.keys(error).length) {
         console.log(registerUser);
         registerUser.write({ recklesslySetUnpreparedArgs: [userToken.symbol, userToken.name] });
-        // setUserToken(initialUserToken);
       } else {
         setErrors(error);
       }
@@ -104,16 +102,17 @@ export const CreateUserToken = () => {
             error={errors?.symbol}
           />
         </div>
-        <p className="hover:cursor-pointer">
-          <InformationCircleIcon className="icon-action" /> More information about token (Decimals, Owner, Total Supply etc.)
-        </p>
-        <Button className="mt-3" type="submit">
-          Save
-        </Button>
-        <Button className="mt-3 ml-3" onClick={refreshData} type="reset" option="alert">
+        <Button type="submit">Save</Button>
+        <Button className="ml-3" onClick={resetForm} type="reset" option="alert">
           Reset from
         </Button>
       </form>
+      <Details
+        title="More information about token (Decimals, Owner, Total Supply etc.)"
+        details="Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati possimus dignissimos sequi voluptatum, omnis magni
+          deleniti ducimus voluptatibus. Obcaecati similique ipsum laboriosam libero magnam modi earum voluptatibus. Delectus, in
+          veritatis."
+      ></Details>
     </Card>
   );
 };

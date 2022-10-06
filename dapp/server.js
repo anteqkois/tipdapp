@@ -20,11 +20,6 @@ app.prepare().then(() => {
   server.use(express.urlencoded({ extended: true }));
   server.use(cookieParser());
 
-  server.use((req, res, next) => {
-    requestLogger.info('incoming request', { url: req.url, method: req.method, host: req.hostname });
-    next();
-  });
-
   server.use('/api', apiRouter);
 
   server.all('*', (req, res) => {

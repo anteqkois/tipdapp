@@ -18,13 +18,13 @@ async function main() {
       lastName: 'Kois',
       nick: 'anteqkois',
       urlPage: 'anteqkois',
-      walletAddress: ADDRESS_WALLET_DEV,
+      address: ADDRESS_WALLET_DEV,
     },
   });
   console.log('Create user:', user);
 
   //create cryptocurenncy
-  const sand = await prisma.cryptocurrency.create({
+  const sand = await prisma.token.create({
     data: {
       address: ADDRESS_SAND,
       chainId: 1,
@@ -38,27 +38,27 @@ async function main() {
   await prisma.tipper.createMany({
     data: [
       {
-        walletAddress: faker.finance.ethereumAddress(),
+        address: faker.finance.ethereumAddress(),
         nick: faker.name.firstName(),
       },
       {
-        walletAddress: faker.finance.ethereumAddress(),
+        address: faker.finance.ethereumAddress(),
         nick: faker.name.firstName(),
       },
       {
-        walletAddress: faker.finance.ethereumAddress(),
+        address: faker.finance.ethereumAddress(),
         nick: faker.name.firstName(),
       },
     ],
   });
   const tipers = await prisma.tipper.findMany({
     select: {
-      walletAddress: true,
+      address: true,
     },
   });
 
   console.log('Create tipers:', tipers);
-  const tippersAddress = tipers.map((tipper) => tipper.walletAddress);
+  const tippersAddress = tipers.map((tipper) => tipper.address);
 
   for (let i = 0; i < 50; i++) {
     // const element = array[i];
@@ -70,31 +70,31 @@ async function main() {
         value: faker.datatype.number({ min: 1000_000000000000000000, max: 10000_000000000000000000 }),
         date: faker.datatype.datetime({ min: 1577836800000, max: 1893456000000 }),
         displayed: faker.datatype.boolean(),
-        cryptocurrency: {
+        token: {
           connect: {
             address: ADDRESS_SAND,
           },
         },
         tipper: {
           connect: {
-            walletAddress: faker.helpers.arrayElement(tippersAddress),
+            address: faker.helpers.arrayElement(tippersAddress),
           },
         },
         user: {
           connect: {
-            walletAddress: ADDRESS_WALLET_DEV,
+            address: ADDRESS_WALLET_DEV,
           },
         },
 
-        // cryptocurrency:
+        // token:
         // txHash: '0xd12ac901ac86f1856839019bd4d031c9929bafd4',
         // displayed: false,
         // amount: '900000000000000000000',
         // value: '562000000000000000000',
         // message: 'New wallet !',
-        // userWalletAddress: '0x3665b77813a64c48b700bd45dcb9998ddf7b6d63',
-        // cryptocurrencyAddress: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
-        // tipperWalletAddress: '0xfdacb27dc605f21255108d4895bb91701a2c26cd',
+        // userAddress: '0x3665b77813a64c48b700bd45dcb9998ddf7b6d63',
+        // tokenAddress: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
+        // tipperAddress: '0xfdacb27dc605f21255108d4895bb91701a2c26cd',
       },
     });
   }

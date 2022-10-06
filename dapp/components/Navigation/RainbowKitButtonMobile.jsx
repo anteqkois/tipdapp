@@ -46,12 +46,8 @@ export const RainbowKitButtonMobile = ({ buttonStyle }) => {
                     </div>
                     <ChevronDownIcon className="w-6 h-6 mt-0.5" />
                   </button>
-                  <button
-                    onClick={openAccountModal}
-                    className={`${buttonStyle} w-full`}
-                    type="button"
-                  >
-                    {/* <Avatar avatarPath={user} walletAddress={user.walletAddress} className="w-6 h-6" /> */}
+                  <button onClick={openAccountModal} className={`${buttonStyle} w-full`} type="button">
+                    {/* <Avatar avatarPath={user} address={user.address} className="w-6 h-6" /> */}
                     <ArrowRightOnRectangleIcon className="w-6 h-6" />
                     {/* {account.displayName} */}
                     logout / address
