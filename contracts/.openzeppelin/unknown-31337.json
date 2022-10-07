@@ -97,16 +97,6 @@
       "kind": "uups"
     },
     {
-      "address": "0x06b3244b086cecC40F1e5A826f736Ded68068a0F",
-      "txHash": "0x001cd277bb2de31c1c871294bc4cf1f8315f6d863ba01265f9198265cb79e917",
-      "kind": "uups"
-    },
-    {
-      "address": "0xAD2935E147b61175D5dc3A9e7bDa93B0975A43BA",
-      "txHash": "0xfc6b9ca135e103852b6d237a1a9d5d88271fca8a05032f6e2dd9bf8463ca5906",
-      "kind": "uups"
-    },
-    {
       "address": "0x00CAC06Dd0BB4103f8b62D280fE9BCEE8f26fD59",
       "txHash": "0xe6d790d8ba492f0a7346016ea0197e9c91c7c1dd5a4062a7d4ef003c742613ff",
       "kind": "uups"
@@ -158,7 +148,17 @@
     },
     {
       "address": "0xd30bF3219A0416602bE8D482E0396eF332b0494E",
-      "txHash": "0x85b7f252fbd9eff47b968173c8781b8d390445c085de04c72e3f8aaecab0a4cc",
+      "txHash": "0xc81862085c44b05b905b14832caa3bed20646dca06272d4d9812c1efc4a5aab5",
+      "kind": "uups"
+    },
+    {
+      "address": "0x06b3244b086cecC40F1e5A826f736Ded68068a0F",
+      "txHash": "0xeb6a2e5eb22fc87f2617824526bd3cf596badeffe4b8e2521774f22b85813fa1",
+      "kind": "uups"
+    },
+    {
+      "address": "0xAD2935E147b61175D5dc3A9e7bDa93B0975A43BA",
+      "txHash": "0x6aa059fa3ca26dc2656f87b59673cd13ee1da1dc0f326926519d6c0ee75b1df9",
       "kind": "uups"
     }
   ],
@@ -1567,153 +1567,6 @@
         }
       }
     },
-    "42cd3124ad3eeb6e1e9d9bb90f51ab5d3d54d113e36afb55584702ec891288f3": {
-      "address": "0x06b3244b086cecC40F1e5A826f736Ded68068a0F",
-      "txHash": "0x0ac07baa56090996555c4359f93c36f22dcf1f8e622b3c1f2e13b4b8c86c67b5",
-      "layout": {
-        "storage": [
-          {
-            "label": "_initialized",
-            "offset": 0,
-            "slot": "0",
-            "type": "t_uint8",
-            "contract": "Initializable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
-            "retypedFrom": "bool"
-          },
-          {
-            "label": "_initializing",
-            "offset": 1,
-            "slot": "0",
-            "type": "t_bool",
-            "contract": "Initializable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
-          },
-          {
-            "label": "__gap",
-            "offset": 0,
-            "slot": "1",
-            "type": "t_array(t_uint256)50_storage",
-            "contract": "ERC1967UpgradeUpgradeable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:211"
-          },
-          {
-            "label": "__gap",
-            "offset": 0,
-            "slot": "51",
-            "type": "t_array(t_uint256)50_storage",
-            "contract": "UUPSUpgradeable",
-            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:107"
-          },
-          {
-            "label": "_minValue",
-            "offset": 0,
-            "slot": "101",
-            "type": "t_uint256",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign/QoistipSign.sol:26"
-          },
-          {
-            "label": "_donateFee",
-            "offset": 0,
-            "slot": "102",
-            "type": "t_uint256",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign/QoistipSign.sol:28"
-          },
-          {
-            "label": "_paused",
-            "offset": 0,
-            "slot": "103",
-            "type": "t_bool",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign/QoistipSign.sol:30"
-          },
-          {
-            "label": "_signerAdmin",
-            "offset": 1,
-            "slot": "103",
-            "type": "t_address",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign/QoistipSign.sol:32"
-          },
-          {
-            "label": "_owner",
-            "offset": 0,
-            "slot": "104",
-            "type": "t_address",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign/QoistipSign.sol:33"
-          },
-          {
-            "label": "_balanceETH",
-            "offset": 0,
-            "slot": "105",
-            "type": "t_mapping(t_address,t_uint256)",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign/QoistipSign.sol:35"
-          },
-          {
-            "label": "_addressToTokenToBalance",
-            "offset": 0,
-            "slot": "106",
-            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign/QoistipSign.sol:36"
-          },
-          {
-            "label": "_tokenUser",
-            "offset": 0,
-            "slot": "107",
-            "type": "t_mapping(t_address,t_address)",
-            "contract": "QoistipSign",
-            "src": "contracts/QoistipSign/QoistipSign.sol:38"
-          },
-          {
-            "label": "number",
-            "offset": 0,
-            "slot": "108",
-            "type": "t_uint256",
-            "contract": "QoistipSignV2",
-            "src": "contracts/QoistipSign/QoistipSignV2.sol:7"
-          }
-        ],
-        "types": {
-          "t_address": {
-            "label": "address",
-            "numberOfBytes": "20"
-          },
-          "t_array(t_uint256)50_storage": {
-            "label": "uint256[50]",
-            "numberOfBytes": "1600"
-          },
-          "t_bool": {
-            "label": "bool",
-            "numberOfBytes": "1"
-          },
-          "t_mapping(t_address,t_address)": {
-            "label": "mapping(address => address)",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
-            "label": "mapping(address => mapping(address => uint256))",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_address,t_uint256)": {
-            "label": "mapping(address => uint256)",
-            "numberOfBytes": "32"
-          },
-          "t_uint256": {
-            "label": "uint256",
-            "numberOfBytes": "32"
-          },
-          "t_uint8": {
-            "label": "uint8",
-            "numberOfBytes": "1"
-          }
-        }
-      }
-    },
     "11c7fc12760c8e8f1f5b588a53e4cf273afce726c242f4745c4ca31e70515ec7": {
       "address": "0x4951A1C579039EbfCBA0BE33D2cd3A6D30b0f802",
       "txHash": "0xe9b2177b4c99ed756d608694c639f859b7b53204e000a885e8309ca6174bb791",
@@ -2295,8 +2148,8 @@
       }
     },
     "a558b8615c262c1e75c9fa5a5fa108efe82d27967850f2f517567107830d48c9": {
-      "address": "0xd710a67624Ad831683C86a48291c597adE30F787",
-      "txHash": "0x99a6f1abc682c0a5690537e0d297b57c5c3fd8f816e5ced705f790ddc9656f53",
+      "address": "0x06b3244b086cecC40F1e5A826f736Ded68068a0F",
+      "txHash": "0x15f970d510a610d925d0e09a17c527a809b69efc8d171b9ac54f18bb71df9e35",
       "layout": {
         "storage": [
           {

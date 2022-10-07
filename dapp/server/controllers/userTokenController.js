@@ -34,7 +34,7 @@ const create = async (req, res) => {
       name,
       chainId,
       txHash,
-      User: {
+      user: {
         connect: {
           address: user,
         },

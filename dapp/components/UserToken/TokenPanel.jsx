@@ -9,6 +9,9 @@ export const TokenPanel = ({ token }) => {
   const isMobile = useMediaQuery('(max-width: 1024px)', true);
   const { totalSupply, decimals, balanceOf } = useUserToken(token.address);
   const { ClipboardIcon, handleCopy } = useClipboard();
+  console.log(totalSupply.data);
+  console.log(decimals.data);
+  console.log(balanceOf.data);
 
   return (
     <div className="grid gap-2 lg:gap-4">
@@ -34,7 +37,7 @@ export const TokenPanel = ({ token }) => {
           </p>
           <p>
             <span className="font-medium">Total supply: </span>
-            <span>{ethers.utils.formatUnits(totalSupply.data)}</span>
+            <span>{ethers.utils.formatUnits(totalSupply.data ?? '0')}</span>
           </p>
           <p className="flex items-end">
             <a tabIndex="-1" href={`https://etherscan.io/token/${token.address}`} target={'_blank'} rel="noreferrer">

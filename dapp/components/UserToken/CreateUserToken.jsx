@@ -2,6 +2,7 @@ import { useLocalStorage, useUser } from '@/hooks';
 import { useQoistipSign } from '@/hooks/useQoistipSign';
 import { userTokenSchemaForm } from '@/schema/userTokenSchema.js';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useNetwork } from 'wagmi';
 import { ZodError } from 'zod';
 import { Button, Card, Input } from '../utils';
@@ -28,7 +29,7 @@ const initialUserToken = {
   name: '',
 };
 
-export const CreateUserToken = (setToken) => {
+export const CreateUserToken = ({ setToken }) => {
   const [errors, setErrors] = useState(null);
   const [showMoreInformation, setShowMoreInformation] = useState(false);
   const [userToken, setUserToken] = useLocalStorage('userToken', initialUserToken);
@@ -42,10 +43,14 @@ export const CreateUserToken = (setToken) => {
   useEffect(() => {
     registerUser?.data?.wait &&
       (async () => {
-        await registerUser.data.wait(10);
+        await registerUser.data.wait(1);
+        toast.success(`Transaction have 1 confirmation`, { id: 'confirmation', position: 'bottom-right', duration: 6000 });
+        await registerUser.data.wait(2);
+        toast.success(`Transaction have 2 confirmation`, { id: 'confirmation', position: 'bottom-right', duration: 6000 });
+        await registerUser.data.wait(3);
+        toast.success(`Transaction have 3 confirmation`, { id: 'confirmation', position: 'bottom-right', duration: 6000 });
         setUserToken(initialUserToken);
         setToken({ created: true });
-        //Give user information that token was create
         try {
         } catch (error) {
           console.log(error);
@@ -60,8 +65,20 @@ export const CreateUserToken = (setToken) => {
       const error = validate(userToken);
 
       if (!Object.keys(error).length) {
-        console.log(registerUser);
-        registerUser.write({ recklesslySetUnpreparedArgs: [userToken.symbol, userToken.name] });
+        // console.log(registerUser);
+        // registerUser.write({ recklesslySetUnpreparedArgs: [userToken.symbol, userToken.name] });
+
+        // console.log(writePromise.);
+        const writePromise = registerUser.writeAsync({ recklesslySetUnpreparedArgs: [userToken.symbol, userToken.name] });
+        toast.promise(
+          writePromise,
+          {
+            loading: 'Wait for send transaction',
+            success: 'Your token was succesfully create!',
+            error: 'Something went wrong, we can not create your token.',
+          },
+          // { duration: 5000 },
+        );
       } else {
         setErrors(error);
       }

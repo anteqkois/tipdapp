@@ -17,7 +17,10 @@ function MyApp({ Component, pageProps }) {
         <SessionProvider session={pageProps.session} refetchInterval={0}>
           <RainbowKitProviders>
             <ModalProvider />
-            <Toaster position="top-center" reverseOrder={false} />
+            <Toaster
+              position="top-center"
+              reverseOrder={false}
+            />
             <ProtectPageGuard protect={Component?.isProtected}>
               {Component.getLayout ? (
                 Component.getLayout(<Component {...pageProps} />)

@@ -34,7 +34,7 @@ module.exports = {
       forking: {
         url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
       },
-      loggingEnabled: false,
+      loggingEnabled: true,
       // chainId: 31337,
       timeout: 200000,
       // accounts: [process.env.DEPLOYER_WALLET_PRIVATE_KEY, process.env.SIGNER_WALLET_PRIVATE_KEY],
@@ -44,7 +44,7 @@ module.exports = {
       //   },
       mining: {
         auto: false,
-        interval: [2000, 4000],
+        interval: [5000, 8000],
       },
       // throwOnTransactionFailures: true,
       // allowUnlimitedContractSize: true,
