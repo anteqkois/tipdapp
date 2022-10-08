@@ -1,7 +1,6 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import next from 'next';
-import { requestLogger } from './lib/logger.js';
 import { handleErrors, notFound } from './server/middlewares/error.js';
 import apiRouter from './server/routes/index.js';
 

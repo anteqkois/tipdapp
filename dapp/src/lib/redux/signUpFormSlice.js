@@ -1,10 +1,10 @@
-import api from 'api/apiConfig';
+import { validateFormData } from '@/api/auth';
 import { ASYNC_STATUS } from '@/utils/constants';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 
-export const validateUserData = createAsyncThunk('tips/validateUserData', async (userData, thunkAPI) => {
+export const validateUserData = createAsyncThunk('user/validateUserData', async (userData, thunkAPI) => {
   try {
-    const { data } = await api.post('auth/validate', userData);
+    const { data } = await validateFormData(userData);
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.errors);
   }

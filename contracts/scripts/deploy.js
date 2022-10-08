@@ -8,8 +8,8 @@ const createIfNotExsist = async (dir) => {
   !fs.existsSync(dir) && fs.mkdirSync(dir);
 };
 
-const saveDataToFrontend = async (tokenAddr, contractName, txDeploy) => {
-  const dappArtifactsDir = path.join(__dirname, '../..', '/dapp/artifacts/');
+const saveDataToServices = async (tokenAddr, contractName, txDeploy) => {
+  const dappArtifactsDir = path.join(__dirname, '../..', '/dapp/src/artifacts/');
   const dappNetworkDir = path.join(dappArtifactsDir, hre.network.name);
 
   const blockchainListenersArtifactsDir = path.join(__dirname, '../..', '/blockchainListeners/artifacts/');
@@ -69,7 +69,7 @@ async function main() {
 
   console.log('Qoistip deployed to:', qoistipSign.address, 'on network: ', hre.network.name);
 
-  saveDataToFrontend(qoistipSign.address, 'QoistipSign', tx.deployTransaction);
+  saveDataToServices(qoistipSign.address, 'QoistipSign', tx.deployTransaction);
 
   // harhat 0xaB7B4c595d3cE8C85e16DA86630f2fc223B05057
   // localhost 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512

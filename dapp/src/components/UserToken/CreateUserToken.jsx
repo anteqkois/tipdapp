@@ -1,6 +1,6 @@
 import { useLocalStorage, useUser } from '@/hooks';
 import { useQoistipSign } from '@/hooks/useQoistipSign';
-import { userTokenSchemaForm } from '@/schema/userTokenSchema.js';
+import { userTokenSchemaForm } from '@/src/schema/userTokenSchema.js';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNetwork } from 'wagmi';

@@ -1,7 +1,7 @@
 import { CreateUserToken } from '@/components/UserToken/CreateUserToken';
 import { TokenPanel } from '@/components/UserToken/TokenPanel';
 import { useUser } from '@/hooks';
-import { find } from 'api/userToken';
+import { find } from '@/api/userToken';
 import { useEffect, useState } from 'react';
 
 const Token = () => {
