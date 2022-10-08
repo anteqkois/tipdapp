@@ -1,4 +1,4 @@
-import { getCsrfToken, signIn, signOut, useSession } from 'next-auth/react';
+import { getCsrfToken, signIn, signOut, useSession as useNextAuthSession } from 'next-auth/react';
 export { getCsrfToken, signIn, signOut };
 
 const initialUserData = {
@@ -19,8 +19,8 @@ const initialUserData = {
   widgetId: null,
 };
 
-export const useUserSession = () => {
-  const { status, data } = useSession();
+export const useSession = () => {
+  const { status, data } = useNextAuthSession();
   const refreshData = async () => {
     //In future
   };

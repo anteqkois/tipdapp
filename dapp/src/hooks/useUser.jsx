@@ -1,5 +1,5 @@
 import { getTipsByUser } from '@/lib/redux/tipSlice.js';
-import { signOut, useUserSession } from '@/lib/UserSessionProvider';
+import { signOut, useSession } from '@/lib/useSession';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -9,7 +9,7 @@ export const useUser = () => {
   const { openConnectModal } = useConnectModal();
   const { disconnectAsync } = useDisconnect();
   const dispatch = useDispatch();
-  const { session, status } = useUserSession();
+  const { session, status } = useSession();
 
   //Dowload first tips page on login user
   useEffect(() => {

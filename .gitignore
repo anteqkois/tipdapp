@@ -19,6 +19,7 @@ coverage.json
 # next.js
 dapp/.next/
 dapp/out/
+dapp/next-env.d.ts
 
 # dapp production
 dapp/build

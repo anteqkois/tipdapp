@@ -158,7 +158,7 @@
     },
     {
       "address": "0xAD2935E147b61175D5dc3A9e7bDa93B0975A43BA",
-      "txHash": "0xa4c5be9b80314fc1c0d1dd0744f5ca42e8e69b5e95f9cb4ae089022a77985e69",
+      "txHash": "0x468aaa66261035fbcf5a6e9da3bad2191e85fa53aace28f91ec01c3166f7a351",
       "kind": "uups"
     }
   ],
@@ -2149,7 +2149,7 @@
     },
     "a558b8615c262c1e75c9fa5a5fa108efe82d27967850f2f517567107830d48c9": {
       "address": "0x06b3244b086cecC40F1e5A826f736Ded68068a0F",
-      "txHash": "0x3371406f3a4e1eef9b5e3c0a9c37d82441e2091ab7225a36354c36bde25ec3f4",
+      "txHash": "0x2d771754e364fa3df8a5d6f7b48144cb7d8eb1055da83268301cc7d4a80a9644",
       "layout": {
         "storage": [
           {

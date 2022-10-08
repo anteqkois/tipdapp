@@ -10,25 +10,26 @@
 
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 
-export const Avatar = ({ avatarPath, address, className }) => {
+type AvatarProps = {
+  avatarPath: string;
+  address: string;
+  className: string;
+};
+
+//TODO change avatarPath to url
+
+export const Avatar = ({ avatarPath, address, className }: AvatarProps) => {
   return (
     <AvatarPrimitive.Root>
-      {/* <AvatarPrimitive.Root className={`relative inline-flex h-10 w-10 ${className}`}> */}
       <AvatarPrimitive.Image
         // src={avatarPath}
         src={''}
         alt="Avatar"
-        // className={` ${className}`}
-        // className="h-full w-full object-cover rounded"
-        // className={cx(
-        //   'h-full w-full object-cover',
-        //   {
-        //     [Variant.Circle]: 'rounded-full',
-        //     [Variant.Rounded]: 'rounded',
-        //   }[variant],
-        // )}
       />
-      <AvatarPrimitive.Fallback delayMs={100} className={className}>
+      <AvatarPrimitive.Fallback
+        delayMs={100}
+        className={className}
+      >
         <img
           // width={48}
           // height={48}

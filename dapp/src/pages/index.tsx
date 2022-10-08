@@ -1,17 +1,7 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-
 import Head from 'next/head';
-import Image from 'next/image';
 
-import { Toaster } from 'react-hot-toast';
 
 export default function Home() {
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(login({ email: 'jannowak@gmail.com', password: 'haslo123' }));
-  // }, []);
 
   return (
     <div>

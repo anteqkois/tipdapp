@@ -17,6 +17,7 @@ enum Role {
   SHOP
 }
 
+//change AvatarPath to url
 model User {
   address     String     @id @unique @db.VarChar(42)
   email       String     @unique

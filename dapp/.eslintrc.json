@@ -1,7 +1,28 @@
 {
-  "extends": ["next/babel", "next/core-web-vitals"]
-  // "extends": "next/core-web-vitals"
-  // "rules": {
-  //   "react-hooks/exhaustive-deps": "off"
-  // }
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    // "next/babel",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "next/core-web-vitals",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "rules": {
+    "prettier/prettier": "error"
+    // "@typescript-eslint/no-empty-function": "off"
+    // "react-hooks/exhaustive-deps": "off"
+  }
 }

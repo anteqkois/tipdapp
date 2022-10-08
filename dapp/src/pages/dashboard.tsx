@@ -46,7 +46,7 @@ const Dashboard = () => {
         <StateUI
           isLoading={status === ASYNC_STATUS.LOADING}
           isEmpty={tips.length === 0}
-          EmptyComponent={<li className="w-full text-center">No tips to show</li>}
+          EmptyComponent={<p className="w-full text-center">No tips to show</p>}
         >
           <TipsDefault tips={tips} />
         </StateUI>

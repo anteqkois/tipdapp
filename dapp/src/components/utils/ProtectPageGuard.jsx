@@ -1,9 +1,9 @@
 import Spinner from '@/components/utils/Spinner';
-import { useUserSession } from '@/lib';
+import { useSession } from '@/lib/useSession';
 import { useRouter } from 'next/router';
 
 export const ProtectPageGuard = ({ children, protect }) => {
-  const { status } = useUserSession();
+  const { status } = useSession();
   const router = useRouter();
 
   if (status === 'loading') {

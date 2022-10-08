@@ -15,7 +15,7 @@ import { SiweMessage } from 'siwe';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
-import { getCsrfToken, signIn, signOut, useUserSession } from './UserSessionProvider';
+import { getCsrfToken, signIn, signOut, useSession } from './useSession';
 
 const { chains, provider } = configureChains(
   [chain.hardhat, chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
@@ -46,7 +46,7 @@ const RainbowKitProviders = ({ children, enabled }) => {
   const dispatch = useDispatch();
   const formData = useSelector(selectFormData);
   const isMobile = useMediaQuery('(max-width: 1024px)', true);
-  const { status } = useUserSession();
+  const { status } = useSession();
   const router = useRouter();
 
   const authAdapter = createAuthenticationAdapter({
