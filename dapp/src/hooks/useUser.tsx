@@ -1,37 +1,47 @@
 import { getTipsByUser } from '@/lib/redux/tipSlice.js';
 import { signOut, useSession } from '@/lib/useSession';
+import { UserSession } from '@/ts/models';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useDisconnect } from 'wagmi';
-import { UserSession } from '@/ts/models';
+
+const tempUser = {} as UserSession;
 
 export const useUser = (): {
   login: () => void;
   logout: () => Promise<void>;
-  user: UserSession | undefined;
+  user: UserSession;
 } => {
   const { openConnectModal } = useConnectModal();
   const { disconnectAsync } = useDisconnect();
   const dispatch = useDispatch();
-  const { session, status } = useSession();
+  const { session } = useSession();
+
+  const user = useMemo<UserSession>((): UserSession => {
+    return session?.user ? session.user : tempUser;
+  }, [session]);
 
   //Dowload first tips page on login user
   useEffect(() => {
-    if (session?.user)
+    if (user.address)
       // @ts-ignore
-      dispatch(getTipsByUser({ userAddress: session.user.address, page: 1 }));
-  }, [session, dispatch]);
+      dispatch(getTipsByUser({ userAddress: user.address, page: 1 }));
+  }, [user.address, dispatch]);
 
   const login = () => {
-    status === 'unauthenticated' && openConnectModal?.();
+    try {
+      openConnectModal?.();
+    } catch (error) {
+      console.log(error);
+    }
   };
   const logout = async () => {
     await disconnectAsync();
     signOut({ callbackUrl: `${window.location.origin}/login` });
   };
 
-  return { login, logout, user: session?.user };
+  return { login, logout, user };
 };
 
 export default useUser;

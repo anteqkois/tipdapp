@@ -1,4 +1,4 @@
-import { prismaClient } from '../../lib/prismaClient.js';
+import { prisma } from '../../lib/db.js';
 import { createApiError } from '../middlewares/error.js';
 
 // const PAGE_SIZE = 2;
@@ -7,15 +7,16 @@ const findByAddress = async (req, res) => {
   const pageSize = parseInt(req.query?.pageSize) ?? 20;
   const skip = (page - 1) * pageSize;
 
-  typeof req.query?.userAddress === 'undefined' && createApiError('Missing user address.');
+  typeof req.query?.userAddress === 'undefined' &&
+    createApiError('Missing user address.');
 
-  const count = await prismaClient.tip.count({
+  const count = await prisma.tip.count({
     where: {
       userAddress: req.query.userAddress,
     },
   });
 
-  const tips = await prismaClient.tip.findMany({
+  const tips = await prisma.tip.findMany({
     skip,
     take: pageSize,
     where: {

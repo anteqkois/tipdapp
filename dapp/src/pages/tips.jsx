@@ -6,8 +6,8 @@ import {
   getTipsByUser,
   selectCurrentData,
   selectPageAmount,
-  selectPageSize,
 } from '@/lib/redux/tipSlice';
+import { asyncStatus } from '@/ts/utils';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Tips = () => {
@@ -15,14 +15,12 @@ const Tips = () => {
   const { user } = useUser();
 
   const { status, error, tips } = useSelector(selectCurrentData);
-  const pageSize = useSelector(selectPageSize);
   const pageAmount = useSelector(selectPageAmount);
 
   const handlePageChange = (page) => {
     dispatch(getTipsByUser({ userAddress: user.address, page }));
   };
 
-  //TODO! useErrorBoundary
   return (
     <section>
       <Card className="flex flex-col ">
@@ -30,9 +28,8 @@ const Tips = () => {
         <StateUI
           loading={status === asyncStatus.loading}
           empty={tips.length === 0}
-          EmptyComponent={
-            <li className="w-full text-center">No tips to show</li>
-          }
+          error={error}
+          EmptyComponent={<p className="w-full text-center">No tips to show</p>}
         >
           <TipsDefault tips={tips} />
         </StateUI>

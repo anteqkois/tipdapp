@@ -1,5 +1,5 @@
 import UserLayout from '@/components/UserLayout.jsx';
-import ProtectPageGuard from '@/components/utils/ProtectPageGuard';
+import { ProtectPageGuard } from '@/components/utils/ProtectPageGuard';
 import { ModalProvider } from '@/hooks';
 import { ReduxProvider } from '@/lib/redux/ReduxProvider';
 import { RainbowKitProviders, WagmiProvider } from '@/lib/Web3Provider';
