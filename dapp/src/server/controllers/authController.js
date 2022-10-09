@@ -1,13 +1,16 @@
-import { Prisma } from '@prisma/client';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getCsrfToken } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
 import { ZodError } from 'zod';
-import { prismaClient } from '../../lib/prismaClient.js';
+import { prisma } from '../../lib/db.js';
 import { userSignUpSchema } from '../../schema/userSignUpSchema.js';
-import { createValidationError, ValidationError, ValidationErrors } from '../middlewares/error.js';
-const { PrismaClientKnownRequestError } = Prisma;
+import {
+  createValidationError,
+  ValidationError,
+  ValidationErrors,
+} from '../middlewares/error.js';
+// const { PrismaClientKnownRequestError } = Prisma;
 
 const providers = [
   CredentialsProvider.default({
@@ -29,7 +32,9 @@ const providers = [
       try {
         const siwe = new SiweMessage(JSON.parse(credentials?.message || '{}'));
 
-        const nextAuthUrl = process.env.NEXTAUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null);
+        const nextAuthUrl =
+          process.env.NEXTAUTH_URL ||
+          (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null);
         if (!nextAuthUrl) {
           return null;
         }
@@ -53,9 +58,13 @@ const providers = [
           userSignUpSchema.parse(formData);
 
           //Validate unique
-          const user = await prismaClient.user.findFirst({
+          const user = await prisma.user.findFirst({
             where: {
-              OR: [{ address: siwe.address }, { email: formData.email }, { nick: formData.nick }],
+              OR: [
+                { address: siwe.address },
+                { email: formData.email },
+                { nick: formData.nick },
+              ],
             },
             select: {
               address: true,
@@ -71,7 +80,7 @@ const providers = [
                 'address',
                 `Already registered.`,
                 `The wallet has already been registered. Go to login or disconnect wallet from DAPP and then change wallet.`,
-                `address.unique`,
+                `address.unique`
               );
               errors.push(validationError);
             }
@@ -80,18 +89,23 @@ const providers = [
                 'email',
                 `Email used.`,
                 `Email already used by someone.`,
-                `email.unique`,
+                `email.unique`
               );
               errors.push(validationError);
             }
             if (user.nick === formData.nick) {
-              const validationError = new ValidationError('nick', `Nick used.`, `Nick already used by someone.`, `nick.unique`);
+              const validationError = new ValidationError(
+                'nick',
+                `Nick used.`,
+                `Nick already used by someone.`,
+                `nick.unique`
+              );
               errors.push(validationError);
             }
             createValidationError(errors);
           }
 
-          userSesionData = await prismaClient.user.create({
+          userSesionData = await prisma.user.create({
             data: {
               address: siwe.address,
               email: formData.email,
@@ -102,11 +116,12 @@ const providers = [
             },
           });
         } else {
-          userSesionData = await prismaClient.user.findFirst({
+          userSesionData = await prisma.user.findFirst({
             where: {
               address: siwe.address,
             },
             include: {
+              avatar: true,
               token: {
                 select: {
                   address: true,
@@ -123,7 +138,11 @@ const providers = [
         }
       } catch (errors) {
         if (errors instanceof ZodError) {
-          throw new Error(JSON.stringify(new ValidationErrors().fromZodErrorArray(errors.issues)));
+          throw new Error(
+            JSON.stringify(
+              new ValidationErrors().fromZodErrorArray(errors.issues)
+            )
+          );
         } else if (errors instanceof ValidationErrors) {
           throw new Error(JSON.stringify(errors));
         } else {
@@ -142,7 +161,8 @@ const providers = [
 const auth = async (req, res) => {
   req.query.nextauth = req.url.slice(1).replace(/\?.*/, '').split('/');
 
-  const isDefaultSigninPage = req.method === 'GET' && req.query.nextauth.includes('signin');
+  const isDefaultSigninPage =
+    req.method === 'GET' && req.query.nextauth.includes('signin');
 
   // Hide Sign-In with Ethereum from default sign page
   if (isDefaultSigninPage) {
@@ -185,7 +205,7 @@ const validate = async (req, res) => {
     userSignUpSchema.parse(req.body);
 
     //Validate unique
-    const user = await prismaClient.user.findFirst({
+    const user = await prisma.user.findFirst({
       where: {
         OR: [{ email }, { nick }],
       },
@@ -198,11 +218,21 @@ const validate = async (req, res) => {
     if (user) {
       const errors = [];
       if (user.email === email) {
-        const validationError = new ValidationError('email', `Email used.`, `Email already used by someone.`, `email.unique`);
+        const validationError = new ValidationError(
+          'email',
+          `Email used.`,
+          `Email already used by someone.`,
+          `email.unique`
+        );
         errors.push(validationError);
       }
       if (user.nick === nick) {
-        const validationError = new ValidationError('nick', `Nick used.`, `Nick already used by someone.`, `nick.unique`);
+        const validationError = new ValidationError(
+          'nick',
+          `Nick used.`,
+          `Nick already used by someone.`,
+          `nick.unique`
+        );
         errors.push(validationError);
       }
       createValidationError(errors);

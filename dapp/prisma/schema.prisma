@@ -19,27 +19,30 @@ enum Role {
 
 //change AvatarPath to url
 model User {
-  address     String     @id @unique @db.VarChar(42)
-  email       String     @unique
-  firstName   String
-  lastName    String
-  role        Role       @default(STREAMER)
-  nick        String     @unique
-  verified    Boolean    @default(false)
-  urlPage     String     @db.VarChar(60)
-  description String     @default("") @db.VarChar(150)
-  avatarPath  String?
-  createdAt   DateTime   @default(now())
-  updateAt    DateTime   @updatedAt
-  token       UserToken?
-  widget      Widget[]
+  address       String     @id @unique @db.VarChar(42)
+  email         String     @unique
+  emailVerified DateTime?
+  firstName     String
+  lastName      String
+  role          Role       @default(STREAMER)
+  nick          String     @unique
+  verified      Boolean    @default(false)
+  urlPage       String     @db.VarChar(60)
+  description   String     @default("") @db.VarChar(150)
+  avatar        File?      @relation(fields: [avatarFileId], references: [id])
+  avatarFileId  String?
+  // avatar        File?      @relation(fields: [avatarFileId], references: [id])
+  createdAt     DateTime   @default(now())
+  updateAt      DateTime   @updatedAt
+  token         UserToken?
+  widget        Widget[]
   //If it necessary below fields (read speed?)
-  tipsCount   Int        @default(0)
-  tipsValue   Decimal    @default(0) @db.Decimal(78, 0)
+  tipsCount     Int        @default(0)
+  tipsValue     Decimal    @default(0) @db.Decimal(78, 0)
   // withdrawsValue Decimal    @default(0) @db.Decimal(78, 0)
-  activeToken Token[]
-  tip         Tip[]
-  withdraw    Withdraw[]
+  activeToken   Token[]
+  tip           Tip[]
+  withdraw      Withdraw[]
 }
 
 model Tip {
@@ -117,6 +120,13 @@ model Withdraw {
   tokenAddress String   @db.VarChar(42)
   date         DateTime @default(now())
   txHash       String   @unique @db.VarChar(66)
+}
+
+model File {
+  id        String @id @default(cuid())
+  filename  String
+  extension String
+  User      User[]
 }
 
 //sudo -u postgres psql

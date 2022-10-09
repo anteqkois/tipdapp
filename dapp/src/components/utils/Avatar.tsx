@@ -7,22 +7,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+import { File } from '@prisma/client';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 
 type AvatarProps = {
-  avatarPath: string;
-  address: string;
+  avatar: File | null | undefined;
+  address: string | undefined;
   className: string;
 };
 
 //TODO change avatarPath to url
 
-export const Avatar = ({ avatarPath, address, className }: AvatarProps) => {
+export const Avatar = ({ avatar, address, className }: AvatarProps) => {
   return (
     <AvatarPrimitive.Root>
       <AvatarPrimitive.Image
         // src={avatarPath}
+        // create utils function to build url to image
         src={''}
         alt="Avatar"
       />

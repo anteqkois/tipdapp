@@ -2,7 +2,7 @@ import TipsDefault from '@/components/Tip/TipsDefault';
 import { Avatar, Button, Card, StateUI } from '@/components/utils';
 import { useUser } from '@/hooks';
 import { selectCurrentData } from '@/lib/redux/tipSlice';
-import { ASYNC_STATUS } from '@/utils/constants';
+import { asyncStatus } from '@/ts/utils';
 import cutAddress from '@/utils/cutAddress';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
@@ -15,13 +15,23 @@ const Dashboard = () => {
   return (
     <section className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-4">
       <Card className="flex items-center gap-4 col-span-2 row-span-2">
-        <Avatar avatarPath={user} address={user.address} className="!w-14" />
+        <Avatar
+          // avatarURL={user}
+          avatar={user?.avatar}
+          address={user?.address}
+          className="!w-14"
+        />
         <div>
           <h5 className="mb-1">
-            Hey <span className="underline decoration-2 decoration-primary ">{user.nick}</span> !
+            Hey{' '}
+            <span className="underline decoration-2 decoration-primary ">
+              {user?.nick}
+            </span>{' '}
+            !
           </h5>
           <p>
-            Connected wallet: <span className="font-medium">{cutAddress(user.address)}</span>
+            Connected wallet:{' '}
+            <span className="font-medium">{cutAddress(user?.address)}</span>
           </p>
         </div>
       </Card>
@@ -44,8 +54,9 @@ const Dashboard = () => {
       <Card className="col-span-full">
         <h4 className="mb-4">Latest tips:</h4>
         <StateUI
-          isLoading={status === ASYNC_STATUS.LOADING}
-          isEmpty={tips.length === 0}
+          loading={status === asyncStatus.loading}
+          empty={tips.length === 0}
+          error={error}
           EmptyComponent={<p className="w-full text-center">No tips to show</p>}
         >
           <TipsDefault tips={tips} />

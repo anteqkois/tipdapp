@@ -1,14 +1,20 @@
 import { validateFormData } from '@/api/auth';
-import { ASYNC_STATUS } from '@/utils/constants';
-import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from '@reduxjs/toolkit';
 
-export const validateUserData = createAsyncThunk('user/validateUserData', async (userData, thunkAPI) => {
-  try {
-    const { data } = await validateFormData(userData);
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data.errors);
+export const validateUserData = createAsyncThunk(
+  'user/validateUserData',
+  async (userData, thunkAPI) => {
+    try {
+      const { data } = await validateFormData(userData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.errors);
+    }
   }
-});
+);
 
 const initialState = {
   data: {
@@ -17,7 +23,7 @@ const initialState = {
     email: null,
     nick: null,
   },
-  status: ASYNC_STATUS.IDLE, //'idle' | 'loading' | 'succeeded' | 'failed'
+  status: asyncStatus.idle, //'idle' | 'loading' | 'succeeded' | 'failed'
   step: 1,
   errors: null,
 };
@@ -41,38 +47,44 @@ const signUpForm = createSlice({
     setStep: (state, action) => {
       state.step = action.payload;
     },
-    // setField: (state, action) => {
-    //   state.data[action.payload.field] = action.payload.value;
-    // },
-    // setFields: (state, action) => {
-    //   state.data = action.payload;
-    //   state.status = ASYNC_STATUS.USER_DETAILS;
-    // },
   },
   extraReducers: (builder) => {
     builder.addCase(validateUserData.pending, (state, arg) => {
-      state.status = ASYNC_STATUS.LOADING;
+      state.status = asyncStatus.loading;
       state.errors = null;
     });
     builder.addCase(validateUserData.fulfilled, (state, action, arg) => {
-      state.status = ASYNC_STATUS.SUCCEEDED;
+      state.status = asyncStatus.success;
       state.data = { ...state.data, ...action.meta.arg };
       state.step = state.step + 1;
       state.errors = null;
     });
     builder.addCase(validateUserData.rejected, (state, action) => {
       state.errors = action.payload;
-      state.status = ASYNC_STATUS.FAILED;
+      state.status = asyncStatus.fail;
     });
   },
 });
 
-export const { resetErrors, resetForm, setErrors, setStep } = signUpForm.actions;
+export const { resetErrors, resetForm, setErrors, setStep } =
+  signUpForm.actions;
 // export const { resetError, resetForm, setField, setFields } = signInForm.actions;
 
-export const selectErrors = createSelector([(state) => state.signUpForm.errors], (errors) => errors);
-export const selectFormData = createSelector([(state) => state.signUpForm.data], (data) => data);
-export const selectStatus = createSelector([(state) => state.signUpForm.status], (status) => status);
-export const selectActiveStep = createSelector([(state) => state.signUpForm.step], (step) => step);
+export const selectErrors = createSelector(
+  [(state) => state.signUpForm.errors],
+  (errors) => errors
+);
+export const selectFormData = createSelector(
+  [(state) => state.signUpForm.data],
+  (data) => data
+);
+export const selectStatus = createSelector(
+  [(state) => state.signUpForm.status],
+  (status) => status
+);
+export const selectActiveStep = createSelector(
+  [(state) => state.signUpForm.step],
+  (step) => step
+);
 
 export default signUpForm.reducer;

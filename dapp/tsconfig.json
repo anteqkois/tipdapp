@@ -4,6 +4,7 @@
     "paths": {
       "@/src/*": ["src/*"],
       "@/components/*": ["src/components/*"],
+      "@/ts/*": ["src/ts/*"],
       "@/api/*": ["src/api/*"],
       "@/utils/*": ["src/utils/*"],
       "@/lib/*": ["src/lib/*"],
@@ -34,7 +35,8 @@
     // "**/*.js",
     // "**/*.jsx",
     // "src/pages/api/auth/[...nextauth].ts",
-    "lib/prismaClient.js"
+    "lib/prismaClient.js",
+    "src/lib/redux/tipSlice.js"
   ],
   "exclude": ["node_modules", "dist", "src/artifacts"]
 }

@@ -20,4 +20,4 @@ export const ProtectPageGuard = ({ children, protect }) => {
 
   return <>{children}</>;
 };
-export default ProtectPageGuard;
+// export default ProtectPageGuard;

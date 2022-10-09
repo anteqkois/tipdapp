@@ -1,5 +1,5 @@
 export const ErrorMessage = ({ children }) => {
-  return <div>{children}</div>;
+  return <div className="text-alert-800">Error: {children}</div>;
 };
 
 export default ErrorMessage;

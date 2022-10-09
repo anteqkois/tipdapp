@@ -15,10 +15,16 @@ function MyApp({ Component, pageProps }) {
   return (
     <WagmiProvider>
       <ReduxProvider>
-        <SessionProvider session={pageProps.session} refetchInterval={0}>
+        <SessionProvider
+          session={pageProps.session}
+          refetchInterval={0}
+        >
           <RainbowKitProviders>
             <ModalProvider />
-            <Toaster position="top-center" reverseOrder={false} />
+            <Toaster
+              position="top-center"
+              reverseOrder={false}
+            />
             <ProtectPageGuard protect={Component?.isProtected}>
               {Component.getLayout ? (
                 Component.getLayout(<Component {...pageProps} />)
