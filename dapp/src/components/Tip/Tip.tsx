@@ -207,7 +207,7 @@ const Tip = ({
               </Button>
               <Button
                 onClick={() => setShowDetails(false)}
-                option="alert"
+                option="danger"
                 className="flex gap-2 items-center"
               >
                 Close

@@ -76,7 +76,10 @@ const Page = () => {
             </span>
           </div>
           <div className="my-3">
-            <label htmlFor="description" className="block mb-2 text-sm font-medium text-neutral-800 first-letter:uppercase">
+            <label
+              htmlFor="description"
+              className="block mb-2 text-sm font-medium text-neutral-800 first-letter:uppercase"
+            >
               Description
             </label>
             <textarea
@@ -85,12 +88,19 @@ const Page = () => {
               cols="30"
               rows="10"
               className={`block p-2 w-full resize-none bg-gray-50 rounded border ${
-                formik.errors.description ? 'border-alert-600' : 'border-neutral-300'
+                formik.errors.description
+                  ? 'border-danger-600'
+                  : 'border-neutral-300'
               } shadow-sm focus:outline-none focus:border-primary focus:ring focus:ring-primary-light focus:ring-opacity-50`}
             ></textarea>
-            <p className="text-alert-600 min-h-[24px]">{formik.errors.description && `* ${formik.errors.description}`}</p>
+            <p className="text-danger-600 min-h-[24px]">
+              {formik.errors.description && `* ${formik.errors.description}`}
+            </p>
           </div>
-          <Button className="mt-3" type="submit">
+          <Button
+            className="mt-3"
+            type="submit"
+          >
             Save
           </Button>
         </form>

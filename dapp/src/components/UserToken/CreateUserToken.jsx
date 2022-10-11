@@ -141,7 +141,7 @@ export const CreateUserToken = ({ setToken }) => {
           className="ml-3"
           onClick={resetForm}
           type="reset"
-          option="alert"
+          option="danger"
         >
           Reset from
         </Button>

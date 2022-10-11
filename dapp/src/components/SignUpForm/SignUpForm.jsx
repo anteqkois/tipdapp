@@ -1,4 +1,10 @@
-import { selectActiveStep, selectErrors, selectStatus, setStep, validateUserData } from '@/lib/redux/signUpFormSlice';
+import {
+  selectActiveStep,
+  selectErrors,
+  selectStatus,
+  setStep,
+  validateUserData
+} from '@/lib/redux/signUpFormSlice';
 import { UserIcon, WalletIcon } from '@heroicons/react/24/outline';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFormik } from 'formik';
@@ -114,29 +120,51 @@ export const SignUpForm = () => {
     </FormikStep>,
     <FormikStep label="Connect Wallet">
       <ConnectWallet className="w-5/6 h-52 mx-auto my-5" />
-      <p className="text-alert-600 ">{formik.errors.address && `* ${formik.errors.address}`}</p>
-      <Button className="w-full mt-4" option="success" onClick={() => setStep((prev) => --prev)}>
+      <p className="text-danger-600 ">
+        {formik.errors.address && `* ${formik.errors.address}`}
+      </p>
+      <Button
+        className="w-full mt-4"
+        option="success"
+        onClick={() => setStep((prev) => --prev)}
+      >
         Connect wallet
       </Button>
     </FormikStep>,
   ];
 
-  const StepIcons = [<UserIcon className="stroke-current h-6" />, <WalletIcon className="stroke-current h-6" />];
+  const StepIcons = [
+    <UserIcon className="stroke-current h-6" />,
+    <WalletIcon className="stroke-current h-6" />,
+  ];
 
   return (
     <>
-      <h1 className="flex-center text-2xl mb-3 ">{FormSteps[step - 1].props.label}</h1>
-      <Stepper stepCount={FormSteps.length} icons={StepIcons} activeStep={step} />
+      <h1 className="flex-center text-2xl mb-3 ">
+        {FormSteps[step - 1].props.label}
+      </h1>
+      <Stepper
+        stepCount={FormSteps.length}
+        icons={StepIcons}
+        activeStep={step}
+      />
       <form onSubmit={formik.handleSubmit}>
         {FormSteps[step - 1]}
         <div className="flex gap-3">
           {step > 1 && (
-            <Button className="w-full mt-3" onClick={() => dispatch(setStep(step - 1))}>
+            <Button
+              className="w-full mt-3"
+              onClick={() => dispatch(setStep(step - 1))}
+            >
               Back
             </Button>
           )}
           {step < FormSteps.length && (
-            <Button className="w-full mt-3" type="submit" option="success">
+            <Button
+              className="w-full mt-3"
+              type="submit"
+              option="success"
+            >
               Next
             </Button>
           )}

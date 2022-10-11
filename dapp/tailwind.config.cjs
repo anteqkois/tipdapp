@@ -9,7 +9,11 @@ const colors = require('tailwindcss/colors');
 // }
 
 module.exports = {
-  content: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}', './src/hooks/**/*.{js,ts,jsx,tsx}'],
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx}',
+    './src/components/**/*.{js,ts,jsx,tsx}',
+    './src/hooks/**/*.{js,ts,jsx,tsx}',
+  ],
   theme: {
     fontFamily: {
       poppins: ['Poppins', 'sans-serif'],
@@ -61,7 +65,7 @@ module.exports = {
           800: '#92400E',
           900: '#78350F',
         },
-        alert: {
+        danger: {
           50: '#FEF2F2',
           100: '#FEE2E2',
           200: '#FECACA',
