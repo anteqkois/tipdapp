@@ -1,6 +1,6 @@
 import { useLocalStorage, useUser } from '@/hooks';
 import { useQoistipSign } from '@/hooks/useQoistipSign';
-import { userTokenSchemaForm } from '@/src/schema/userTokenSchema.js';
+import { userTokenSchemaForm } from '@/schema/userTokenSchema.js';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNetwork } from 'wagmi';
@@ -32,7 +32,10 @@ const initialUserToken = {
 export const CreateUserToken = ({ setToken }) => {
   const [errors, setErrors] = useState(null);
   const [showMoreInformation, setShowMoreInformation] = useState(false);
-  const [userToken, setUserToken] = useLocalStorage('userToken', initialUserToken);
+  const [userToken, setUserToken] = useLocalStorage(
+    'userToken',
+    initialUserToken
+  );
   const { chain } = useNetwork();
   const {
     user: { address },
@@ -44,11 +47,23 @@ export const CreateUserToken = ({ setToken }) => {
     registerUser?.data?.wait &&
       (async () => {
         await registerUser.data.wait(1);
-        toast.success(`Transaction have 1 confirmation`, { id: 'confirmation', position: 'bottom-right', duration: 6000 });
+        toast.success(`Transaction have 1 confirmation`, {
+          id: 'confirmation',
+          position: 'bottom-right',
+          duration: 6000,
+        });
         await registerUser.data.wait(2);
-        toast.success(`Transaction have 2 confirmation`, { id: 'confirmation', position: 'bottom-right', duration: 6000 });
+        toast.success(`Transaction have 2 confirmation`, {
+          id: 'confirmation',
+          position: 'bottom-right',
+          duration: 6000,
+        });
         await registerUser.data.wait(3);
-        toast.success(`Transaction have 3 confirmation`, { id: 'confirmation', position: 'bottom-right', duration: 6000 });
+        toast.success(`Transaction have 3 confirmation`, {
+          id: 'confirmation',
+          position: 'bottom-right',
+          duration: 6000,
+        });
         setUserToken(initialUserToken);
         setToken({ created: true });
         try {
@@ -69,14 +84,16 @@ export const CreateUserToken = ({ setToken }) => {
         // registerUser.write({ recklesslySetUnpreparedArgs: [userToken.symbol, userToken.name] });
 
         // console.log(writePromise.);
-        const writePromise = registerUser.writeAsync({ recklesslySetUnpreparedArgs: [userToken.symbol, userToken.name] });
+        const writePromise = registerUser.writeAsync({
+          recklesslySetUnpreparedArgs: [userToken.symbol, userToken.name],
+        });
         toast.promise(
           writePromise,
           {
             loading: 'Wait for send transaction',
             success: 'Your token was succesfully create!',
             error: 'Something went wrong, we can not create your token.',
-          },
+          }
           // { duration: 5000 },
         );
       } else {
@@ -120,7 +137,12 @@ export const CreateUserToken = ({ setToken }) => {
           />
         </div>
         <Button type="submit">Save</Button>
-        <Button className="ml-3" onClick={resetForm} type="reset" option="alert">
+        <Button
+          className="ml-3"
+          onClick={resetForm}
+          type="reset"
+          option="alert"
+        >
           Reset from
         </Button>
       </form>

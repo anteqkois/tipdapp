@@ -9,35 +9,44 @@
  */
 import { File } from '@prisma/client';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
+import Image, { ImageProps } from 'next/image';
 
 type AvatarProps = {
-  avatar: File | null | undefined;
+  avatar?: File | null;
   address: string | undefined;
-  className: string;
-};
+} & Pick<ImageProps, 'onClick' | 'className'>;
 
-//TODO change avatarPath to url
-
-export const Avatar = ({ avatar, address, className }: AvatarProps) => {
+export const Avatar = ({
+  avatar,
+  address,
+  className,
+  ...rest
+}: AvatarProps) => {
   return (
     <AvatarPrimitive.Root>
       <AvatarPrimitive.Image
-        // src={avatarPath}
+        {...rest}
         // create utils function to build url to image
-        src={''}
+        //TODO change avatarPath to url
+        src={`${avatar?.filename}`}
         alt="Avatar"
       />
       <AvatarPrimitive.Fallback
         delayMs={100}
         className={className}
       >
-        <img
-          // width={48}
-          // height={48}
-          className={`inline-block shadow-md rounded-md w-7 aspect-square ${className}`}
-          alt="user avatar"
-          src={`https://avatars.dicebear.com/api/pixel-art-neutral/${address}.svg`}
-        />
+        <div
+          className={`inline-block shadow-md rounded-md w-7 aspect-square overflow-hidden ${className}`}
+        >
+          <Image
+            height={24}
+            width={24}
+            layout="responsive"
+            {...rest}
+            alt="user avatar"
+            src={`https://avatars.dicebear.com/api/pixel-art-neutral/${address}.svg`}
+          />
+        </div>
       </AvatarPrimitive.Fallback>
     </AvatarPrimitive.Root>
   );

@@ -1,5 +1,4 @@
 import Pagination from '@/components/Pagination';
-import TipsDefault from '@/components/Tip/TipsDefault';
 import { Card, StateUI } from '@/components/utils';
 import useUser from '@/hooks/useUser';
 import {
@@ -7,6 +6,7 @@ import {
   selectCurrentData,
   selectPageAmount,
 } from '@/lib/redux/tipSlice';
+import TipsDefault from '@/components/Tip/TipsDefault';
 import { asyncStatus } from '@/ts/utils';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -17,7 +17,8 @@ const Tips = () => {
   const { status, error, tips } = useSelector(selectCurrentData);
   const pageAmount = useSelector(selectPageAmount);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
+    //@ts-ignore
     dispatch(getTipsByUser({ userAddress: user.address, page }));
   };
 

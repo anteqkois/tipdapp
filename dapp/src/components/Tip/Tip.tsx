@@ -1,22 +1,44 @@
 import { Card, Flag, Tooltip } from '@/components/utils';
 import { useClipboard, useModal } from '@/hooks';
 import { dateFormat } from '@/lib/dayjs';
+import { TipUI } from '@/ts/models';
 import cutAddress from '@/utils/cutAddress';
 import { parseNotation } from '@/utils/format';
-import { ArrowPathIcon, ArrowsPointingOutIcon, AtSymbolIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowPathIcon,
+  ArrowsPointingOutIcon,
+  AtSymbolIcon,
+} from '@heroicons/react/24/outline';
 import Avatar from '../utils/Avatar';
 import Button from '../utils/Button';
 // const { parseUnits, formatUnits } = ethers.utils;
 
-const Tip = ({ txHash, amount, value, message, displayed, date, userAddress, tipper, tipperAddress, tokenAddress, token }) => {
-  const [DetailsModal, DetailsContent, DetailsTrigger, setShowDetails, showDetails] = useModal();
-  const { ClipboardIcon, handleCopy } = useClipboard();
+// type Props { type: 'full'|'patial'}
+
+const Tip = ({
+  txHash,
+  amount,
+  value,
+  message,
+  displayed,
+  date,
+  tipper,
+  tipperAddress,
+  tokenAddress,
+  token,
+}: TipUI) => {
+  const [DetailsModal, DetailsContent, DetailsTrigger, setShowDetails] =
+    useModal();
+  const { ClipboardIcon } = useClipboard();
 
   return (
     <Card>
       <div className="flex items-top justify-between w-full gap-1">
         <h5 className=" mr-3 lg:text-2xl">
-          <Avatar address={tipperAddress} className="w-6 h-6 mr-0.5" />
+          <Avatar
+            address={tipperAddress}
+            className="w-6 h-6 mr-0.5"
+          />
           <AtSymbolIcon className="inline text-primary w-6 lg:w-7 " />
           <i className="text-primary">{tipper.nick} </i>
           {/* sent {ethers.utils.formatEther(amount)} */}
@@ -27,7 +49,11 @@ const Tip = ({ txHash, amount, value, message, displayed, date, userAddress, tip
           <Tooltip content="Display again">
             <ArrowPathIcon className="w-7 p-0.5 rounded-full bg-neutral-150 animate-action" />
           </Tooltip>
-          <Flag flag={displayed} tooltip="Displayed" className="w-7 h-7" />
+          <Flag
+            flag={displayed}
+            tooltip="Displayed"
+            className="w-7 h-7"
+          />
         </div>
       </div>
       <p className="pt-2 pb-3 leading-tight max-w-4xl truncate">{message}</p>
@@ -35,7 +61,8 @@ const Tip = ({ txHash, amount, value, message, displayed, date, userAddress, tip
         <h6 className=" text-primary font-semibold">Tip details:</h6>
         <p>
           <span className="font-medium text-neutral-light">Date: </span>
-          {dateFormat(date).format('MMM DD YYYY, HH:MM')} ({dateFormat(date).fromNow()})
+          {dateFormat(date).format('MMM DD YYYY, HH:MM')} (
+          {dateFormat(date).fromNow()})
         </p>
         <p className="font-medium text-neutral-light">
           Token:
@@ -47,12 +74,18 @@ const Tip = ({ txHash, amount, value, message, displayed, date, userAddress, tip
       </div>
       <DetailsModal>
         <DetailsTrigger>
-          <Button option="minimalist" className="h-7">
+          <Button
+            option="minimalist"
+            className="h-7"
+          >
             <ArrowsPointingOutIcon className="inline w-5 mr-1" />
             display details
           </Button>
         </DetailsTrigger>
-        <DetailsContent title="Tip details" className="space-y-2">
+        <DetailsContent
+          title="Tip details"
+          className="space-y-2"
+        >
           <Card className="shadow-none text-neutral-800 !p-2">
             <h6 className="text-primary">Tipper&apos;s Message</h6>
             <p className="p-1 leading-tight max-w-4xl">{message}</p>
@@ -74,10 +107,21 @@ const Tip = ({ txHash, amount, value, message, displayed, date, userAddress, tip
             <p className="flex items-center  gap-1">
               <span className="font-medium ">Address: </span>
               {cutAddress(tokenAddress)}
-              <ClipboardIcon copyData={tokenAddress} message="Address copied !" />
+              <ClipboardIcon
+                copyData={tokenAddress}
+                message="Address copied !"
+              />
             </p>
-            <a tabIndex="-1" href={`https://etherscan.io/token/${tipperAddress}`} target={'_blank'} rel="noreferrer">
-              <Button option="link" className="font-medium text-neutral-700 mr-1">
+            <a
+              tabIndex={-1}
+              href={`https://etherscan.io/token/${tipperAddress}`}
+              target={'_blank'}
+              rel="noreferrer"
+            >
+              <Button
+                option="link"
+                className="font-medium text-neutral-700 mr-1"
+              >
                 View token on Explorer
               </Button>
             </a>
@@ -92,11 +136,22 @@ const Tip = ({ txHash, amount, value, message, displayed, date, userAddress, tip
             <p className="flex items-center  gap-1">
               <span className="font-medium ">Address: </span>
               {cutAddress(tipperAddress)}
-              <ClipboardIcon copyData={tipperAddress} message="Address copied !" />
+              <ClipboardIcon
+                copyData={tipperAddress}
+                message="Address copied !"
+              />
             </p>
             <p className="flex items-end">
-              <a tabIndex="-1" href={`https://etherscan.io/address/${tipperAddress}`} target={'_blank'} rel="noreferrer">
-                <Button option="link" className="font-medium text-neutral-700 mr-1">
+              <a
+                tabIndex={-1}
+                href={`https://etherscan.io/address/${tipperAddress}`}
+                target={'_blank'}
+                rel="noreferrer"
+              >
+                <Button
+                  option="link"
+                  className="font-medium text-neutral-700 mr-1"
+                >
                   View on Explorer
                 </Button>
               </a>
@@ -106,16 +161,28 @@ const Tip = ({ txHash, amount, value, message, displayed, date, userAddress, tip
             <h6 className="text-primary">Transaction</h6>
             <p>
               <span className="font-medium text-neutral-700">Date: </span>
-              {dateFormat(date).format('MMM DD YYYY, HH:MM')} ({dateFormat(date).fromNow()})
+              {dateFormat(date).format('MMM DD YYYY, HH:MM')} (
+              {dateFormat(date).fromNow()})
             </p>
             <p className="flex items-center  gap-1">
               <span className="font-medium ">Transaction Hash: </span>
               {cutAddress(txHash)}
-              <ClipboardIcon copyData={txHash} message="Transaction hash copied !" />
+              <ClipboardIcon
+                copyData={txHash}
+                message="Transaction hash copied !"
+              />
             </p>
             <p className="flex items-end">
-              <a tabIndex="-1" href={`https://etherscan.io/tx/${tipperAddress}`} target={'_blank'} rel="noreferrer">
-                <Button option="link" className="font-medium text-neutral-700 mr-1">
+              <a
+                tabIndex={-1}
+                href={`https://etherscan.io/tx/${tipperAddress}`}
+                target={'_blank'}
+                rel="noreferrer"
+              >
+                <Button
+                  option="link"
+                  className="font-medium text-neutral-700 mr-1"
+                >
                   View on Explorer
                 </Button>
               </a>
@@ -124,16 +191,25 @@ const Tip = ({ txHash, amount, value, message, displayed, date, userAddress, tip
           <div className="flex justify-between !mt-4">
             <p className="flex items-center gap-1">
               <span className="ml-2">
-                <Flag flag={displayed} className="w-5" />
+                <Flag
+                  flag={displayed}
+                  className="w-5"
+                />
               </span>
-              <span className="font-medium text-neutral-700">Display status </span>
+              <span className="font-medium text-neutral-700">
+                Display status{' '}
+              </span>
             </p>
             <div className="flex gap-1">
               <Button className="flex gap-2 items-center">
                 <ArrowPathIcon className="w-6" />
                 Display
               </Button>
-              <Button onClick={() => setShowDetails(false)} option="alert" className="flex gap-2 items-center">
+              <Button
+                onClick={() => setShowDetails(false)}
+                option="alert"
+                className="flex gap-2 items-center"
+              >
                 Close
               </Button>
             </div>

@@ -1,4 +1,4 @@
-import api from '@/src/api/apiConfig';
+import api from '@/api/apiConfig';
 import { asyncStatus } from '@/ts/utils';
 import {
   createAsyncThunk,

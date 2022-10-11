@@ -1,11 +1,8 @@
-import { ReactNode } from 'react';
+import { HTMLAttributes } from 'react';
 
-type CardProps = {
-  children: ReactNode;
-  className: string;
-};
+type Props = HTMLAttributes<HTMLDivElement>;
 
-export const Card = ({ children, className }: CardProps): JSX.Element => {
+export const Card = ({ children, className }: Props) => {
   return (
     <div
       className={`p-4 bg-neutral-50 rounded shadow-md ring-1 ring-neutral-600 ring-opacity-10 ${className}`}

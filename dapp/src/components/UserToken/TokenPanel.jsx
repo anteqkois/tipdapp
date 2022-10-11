@@ -8,7 +8,7 @@ import { Button, Card } from '../utils';
 export const TokenPanel = ({ token }) => {
   const isMobile = useMediaQuery('(max-width: 1024px)', true);
   const { totalSupply, decimals, balanceOf } = useUserToken(token.address);
-  const { ClipboardIcon, handleCopy } = useClipboard();
+  const { ClipboardIcon, copy } = useClipboard();
   console.log(totalSupply.data);
   console.log(decimals.data);
   console.log(balanceOf.data);
@@ -29,7 +29,10 @@ export const TokenPanel = ({ token }) => {
           <p className="flex items-center  gap-1">
             <span className="font-medium ">Address: </span>
             {isMobile ? cutAddress(token.address) : token.address}
-            <ClipboardIcon copyData={token.address} message="Address copied !" />
+            <ClipboardIcon
+              copyData={token.address}
+              message="Address copied !"
+            />
           </p>
           <p>
             <span className="font-medium">Decimals: </span>
@@ -40,8 +43,16 @@ export const TokenPanel = ({ token }) => {
             <span>{ethers.utils.formatUnits(totalSupply.data ?? '0')}</span>
           </p>
           <p className="flex items-end">
-            <a tabIndex="-1" href={`https://etherscan.io/token/${token.address}`} target={'_blank'} rel="noreferrer">
-              <Button option="link" className="font-medium text-neutral-700 mr-1">
+            <a
+              tabIndex="-1"
+              href={`https://etherscan.io/token/${token.address}`}
+              target={'_blank'}
+              rel="noreferrer"
+            >
+              <Button
+                option="link"
+                className="font-medium text-neutral-700 mr-1"
+              >
                 View token on Explorer
               </Button>
             </a>
@@ -66,14 +77,19 @@ export const TokenPanel = ({ token }) => {
           <p>
             <span className="font-medium">Last Transaction date: </span>
             <i>
-              {dateFormat('2024-07-12T12:33:45.758Z').format('MMM DD YYYY, HH:MM')} (
-              {dateFormat('2024-07-12T12:33:45.758Z').fromNow()})
+              {dateFormat('2024-07-12T12:33:45.758Z').format(
+                'MMM DD YYYY, HH:MM'
+              )}{' '}
+              ({dateFormat('2024-07-12T12:33:45.758Z').fromNow()})
             </i>
           </p>
           <p className="flex items-center  gap-1">
             <span className="font-medium ">Last Transaction: </span>
             {isMobile ? cutAddress(token.address) : token.address}
-            <ClipboardIcon copyData={token.address} message="Address copied !" />
+            <ClipboardIcon
+              copyData={token.address}
+              message="Address copied !"
+            />
           </p>
           <p className="flex items-end">
             <a
@@ -82,7 +98,10 @@ export const TokenPanel = ({ token }) => {
               target={'_blank'}
               rel="noreferrer"
             >
-              <Button option="link" className="font-medium text-neutral-700 mr-1">
+              <Button
+                option="link"
+                className="font-medium text-neutral-700 mr-1"
+              >
                 View transaction on Explorer
               </Button>
             </a>

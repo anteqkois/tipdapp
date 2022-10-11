@@ -1,5 +1,5 @@
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
-import { forwardRef } from 'react';
+import { ButtonHTMLAttributes, forwardRef } from 'react';
 
 type ButtonOption =
   | 'link'
@@ -11,20 +11,18 @@ type ButtonOption =
   | 'success';
 
 type ButtonProps = {
-  children: JSX.Element;
-  className: string;
   option?: ButtonOption;
-};
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
-export const Button = forwardRef(
-  ({ children, className, option, ...props }: ButtonProps): JSX.Element => {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ children, className, option, ...props }, ref) => {
     // export const Button = forwardRef(({ children, className, option, ...props }, ref) => {
     return (
       <button
         {...props}
         // onKeyDown={(key) => key.code === 'Enter' && props.onClick()}
         // tabIndex='0'
-        // ref={ref}
+        ref={ref}
         className={(() => {
           let result = `${className} rounded select-none text-sm font-medium state-focus `;
           switch (option) {
