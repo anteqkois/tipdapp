@@ -150,6 +150,7 @@ const providers = [
           throw errors;
         }
       }
+      console.log('AUTH');
 
       return {
         ...userSesionData,
@@ -181,6 +182,26 @@ const auth = async (req, res) => {
     },
     callbacks: {
       async jwt({ token, user }) {
+        if (req.query.update) {
+          user = await prisma.user.findFirst({
+            where: {
+              address: token.user.address,
+            },
+            include: {
+              avatar: true,
+              token: {
+                select: {
+                  address: true,
+                  chainId: true,
+                  name: true,
+                  symbol: true,
+                  txHash: true,
+                },
+              },
+            },
+          });
+        }
+
         if (user) {
           return { ...token, user };
         }

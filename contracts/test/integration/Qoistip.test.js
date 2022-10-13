@@ -2,9 +2,9 @@ const { expect } = require('chai');
 const { ethers, network, upgrades } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
 const {
-    CHAILINK_PRICE_ORACLE_ADDRESS_USD,
-    ERC20_TOKEN_ADDRESS,
-    CHAILINK_PRICE_ORACLE_ADDRESS_ETH,
+  CHAILINK_PRICE_ORACLE_ADDRESS_USD,
+  ERC20_TOKEN_ADDRESS,
+  CHAILINK_PRICE_ORACLE_ADDRESS_ETH,
 } = require('../../utils/constant');
 const { packToBytes32, unpackFromBytes32 } = require('../../utils/packOracleData');
 const UserToken = require('../../artifacts/contracts/UserToken/UserToken.sol/UserToken.json');
@@ -72,7 +72,7 @@ xdescribe('Qoistip', function () {
     const registerUserTransation = await qoistip.connect(user1).registerUser('UT1', 'UserToken1');
 
     registerUserTransation.wait();
-    const UserToken1Address = await qoistip.tokenUser(user1.address);
+    const UserToken1Address = await qoistip.userToken(user1.address);
     userToken1 = new ethers.Contract(UserToken1Address, UserToken.abi, ethers.provider);
   });
 
@@ -124,9 +124,9 @@ xdescribe('Qoistip', function () {
     it('Can not send donate if worth is to small ($SAND)', async function () {
       await sand.connect(sandHodler).approve(qoistip.address, parseUnits('0.01'));
 
-      await expect(
-        qoistip.connect(sandHodler).donateERC20(user1.address, sand.address, parseUnits('0.01')),
-      ).to.be.revertedWith('Donate worth < min value $');
+      await expect(qoistip.connect(sandHodler).donateERC20(user1.address, sand.address, parseUnits('0.01'))).to.be.revertedWith(
+        'Donate worth < min value $',
+      );
     });
     it('Revert when address to donate is 0x0...', async function () {
       await sand.connect(sandHodler).approve(qoistip.address, parseUnits('100'));
@@ -244,9 +244,7 @@ xdescribe('Qoistip', function () {
     });
     it('Check $ELON balance after donate', async function () {
       expect(await qoistip.balanceERC20(user1.address, elon.address)).to.equal(parseUnits('970000'));
-      expect(await qoistip.balanceERC20(qoistip.address, elon.address)).to.equal(
-        parseUnits('1000000').sub(parseUnits('970000')),
-      );
+      expect(await qoistip.balanceERC20(qoistip.address, elon.address)).to.equal(parseUnits('1000000').sub(parseUnits('970000')));
       expect(await elon.balanceOf(qoistip.address)).to.equal(parseUnits('1000000'));
     });
     it('Check $CT1 balance after donate', async function () {

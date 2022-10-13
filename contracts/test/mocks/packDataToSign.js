@@ -12,7 +12,7 @@ const tokenPrice = {
   SHIB: 0.0000152412344123,
   ELON: 0.0000004991232343,
 };
-
+//TOD create config file !
 // FINAL -> string tokenAmount, string tokenQuote, string addressToDonate
 const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, userTokenAddress) => {
   if (addressToDonate === ethers.constants.AddressZero) {
@@ -20,12 +20,12 @@ const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, userToke
   }
   const tokenAmountBN = parseUnits(tokenAmount);
 
-  //TODO* FROM DB, if not in DB throw error
+  //TODO* get erc20 token address (donated token) FROM DB, if not in DB throw error
   const tokenAddress = ERC20_TOKEN_ADDRESS[tokenQuote];
-  // const tokenUserAddress = userAddressToUserTokenAddress[addressToDonate];
-  
-  //TODO* FROM DB, if not in DB throw error
-  const tokenUserAddress = userTokenAddress;
+  // const userTokenAddress = userAddressToUserTokenAddress[addressToDonate];
+
+  //TODO* get userToken address FROM DB using strimer address (tokenAddress = users[address]), if not in DB throw error
+  // const userTokenAddress = userTokenAddress;
 
   //TODO* FROM DB OR COINMARKETCAP
   const price = tokenPrice[tokenQuote];
@@ -46,7 +46,7 @@ const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, userToke
   // donatedTokenAmount - amountToMint - AmountToUser - amountToAdmin - tokenDonateAddress - userTokenAddress
   const hashData = ethers.utils.solidityKeccak256(
     ['uint256', 'uint256', 'uint256', 'uint256', 'uint256', 'address', 'address'],
-    [tokenAmountBN, amountToMint, tokenToUser, fee, timestamp, tokenAddress, tokenUserAddress],
+    [tokenAmountBN, amountToMint, tokenToUser, fee, timestamp, tokenAddress, userTokenAddress],
   );
 
   const hashDataBinary = ethers.utils.arrayify(hashData);
@@ -61,7 +61,7 @@ const packDataToSign = async (tokenAmount, tokenQuote, addressToDonate, userToke
       fee,
       timestamp,
       tokenAddress,
-      tokenUserAddress,
+      userTokenAddress,
     },
   };
 };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-export const useLocalStorage = (key, initialValue) => {
-  const [storedValue, setStoredValue] = useState(initialValue);
+export const useLocalStorage = <S,>(key: string, initialValue: S) => {
+  const [storedValue, setStoredValue] = useState<S>(initialValue);
 
   //to run on client, not on server
   useEffect(() => {
@@ -13,10 +13,11 @@ export const useLocalStorage = (key, initialValue) => {
     }
   }, []);
 
-  const setValue = (value) => {
+  const setValue = (value: S | ((val: S) => S)) => {
     try {
       // Allow value to be a function so we have same API as useState
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
       setStoredValue(valueToStore);
       if (typeof window !== 'undefined') {
         window.localStorage.setItem(key, JSON.stringify(valueToStore));

@@ -1,5 +1,5 @@
 {
-  "address": "0x00CAC06Dd0BB4103f8b62D280fE9BCEE8f26fD59",
+  "address": "0x4951A1C579039EbfCBA0BE33D2cd3A6D30b0f802",
   "abi": [
     {
       "anonymous": false,
@@ -247,7 +247,7 @@
         },
         {
           "internalType": "address",
-          "name": "tokenUserAddress",
+          "name": "userTokenAddress",
           "type": "address"
         }
       ],

@@ -15,7 +15,7 @@ contract QoistipSignV3 is QoistipSignV2 {
         uint256 timestampOffChain,
         address addressToDonate,
         address tokenAddress,
-        address tokenUserAddress
+        address userTokenAddress
     ) external virtual override {
         require(
             timestampOffChain + 90 seconds > block.timestamp,
@@ -48,7 +48,7 @@ contract QoistipSignV3 is QoistipSignV2 {
                                 fee,
                                 timestampOffChain,
                                 tokenAddress,
-                                tokenUserAddress
+                                userTokenAddress
                             )
                         )
                     )
@@ -73,7 +73,7 @@ contract QoistipSignV3 is QoistipSignV2 {
             _addressToTokenToBalance[address(this)][tokenAddress] += fee;
         }
 
-        UserToken(tokenUserAddress).mint(msg.sender, mintTokenAmount);
+        UserToken(userTokenAddress).mint(msg.sender, mintTokenAmount);
     }
 
     function donateETH(address addressToDonate)
@@ -94,7 +94,7 @@ contract QoistipSignV3 is QoistipSignV2 {
         _balanceETH[address(this)] += fee;
         _balanceETH[addressToDonate] += msg.value - fee;
 
-        UserToken(_tokenUser[addressToDonate]).mint(
+        UserToken(_tokenToUser[addressToDonate]).mint(
             msg.sender,
             tokenToMint
         );
@@ -107,7 +107,7 @@ contract QoistipSignV3 is QoistipSignV2 {
         external
         onlyOwner
     {
-        bool success = UserToken(_tokenUser[userAddress])
+        bool success = UserToken(_tokenToUser[userAddress])
             .changeOwner(newOwner);
         require(success, "Owner not change");
     }

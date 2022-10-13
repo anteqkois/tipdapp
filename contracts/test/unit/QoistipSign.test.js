@@ -29,7 +29,7 @@ describe('QoistipSign', function () {
       const registerUserTransation = await qoistipSign.connect(user1).registerUser('UT1', 'UserToken1');
 
       registerUserTransation.wait();
-      const userToken1Address = await qoistipSign.tokenUser(user1.address);
+      const userToken1Address = await qoistipSign.userToken(user1.address);
 
       await expect(registerUserTransation).to.emit(qoistipSign, 'NewUser').withArgs(user1.address, userToken1Address);
       expect(userToken1Address).to.not.equal('0x0000000000000000000000000000000000000000');

@@ -4,9 +4,9 @@ chai.use(require('chai-as-promised'));
 const { ethers, network, upgrades } = require('hardhat');
 const { parseUnits, formatUnits } = ethers.utils;
 const {
-    CHAILINK_PRICE_ORACLE_ADDRESS_USD,
-    ERC20_TOKEN_ADDRESS,
-    CHAILINK_PRICE_ORACLE_ADDRESS_ETH,
+  CHAILINK_PRICE_ORACLE_ADDRESS_USD,
+  ERC20_TOKEN_ADDRESS,
+  CHAILINK_PRICE_ORACLE_ADDRESS_ETH,
 } = require('../../utils/constant');
 const { packDataToSign } = require('../mocks/packDataToSign');
 const UserToken = require('../../artifacts/contracts/UserToken/UserToken.sol/UserToken.json');
@@ -68,7 +68,7 @@ describe('QoistipSign', function () {
     const registerUserTransation = await qoistipSign.connect(user1).registerUser('UT1', 'UserToken1');
 
     registerUserTransation.wait();
-    const userToken1Address = await qoistipSign.tokenUser(user1.address);
+    const userToken1Address = await qoistipSign.userToken(user1.address);
     userToken1 = new ethers.Contract(userToken1Address, UserToken.abi, owner);
   });
 
@@ -104,7 +104,7 @@ describe('QoistipSign', function () {
           signatureData.timestamp,
           user1.address,
           signatureData.tokenAddress,
-          signatureData.tokenUserAddress,
+          signatureData.userTokenAddress,
         );
     });
     it('Check $SAND balance after donate', async function () {
@@ -136,7 +136,7 @@ describe('QoistipSign', function () {
             signatureData.timestamp,
             user1.address,
             signatureData.tokenAddress,
-            signatureData.tokenUserAddress,
+            signatureData.userTokenAddress,
           ),
       ).to.changeTokenBalances(shib, [shibHodler, qoistipSign], [parseUnits('-10000'), parseUnits('10000')]);
     });
@@ -154,9 +154,7 @@ describe('QoistipSign', function () {
     it('Can not send donate if worth is to small ($SAND)', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('0.01'));
 
-      await expect(packDataToSign('0.01', 'SAND', user1.address, userToken1.address)).to.eventually.be.rejectedWith(
-        Error,
-      );
+      await expect(packDataToSign('0.01', 'SAND', user1.address, userToken1.address)).to.eventually.be.rejectedWith(Error);
     });
     it('Revert when smart contract locked', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('100'));
@@ -180,7 +178,7 @@ describe('QoistipSign', function () {
             signatureData.timestamp,
             user1.address,
             signatureData.tokenAddress,
-            signatureData.tokenUserAddress,
+            signatureData.userTokenAddress,
           ),
       ).to.be.revertedWith('Smart Contract paused');
 
@@ -197,15 +195,15 @@ describe('QoistipSign', function () {
           signatureData.timestamp,
           user1.address,
           signatureData.tokenAddress,
-          signatureData.tokenUserAddress,
+          signatureData.userTokenAddress,
         );
     });
     it('Revert when address to donate is 0x0...', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('100'));
 
-      await expect(
-        packDataToSign('1', 'SAND', ethers.constants.AddressZero, userToken1.address),
-      ).to.eventually.be.rejectedWith(Error);
+      await expect(packDataToSign('1', 'SAND', ethers.constants.AddressZero, userToken1.address)).to.eventually.be.rejectedWith(
+        Error,
+      );
     });
     xit('Revert when address not register (handle with db)', async function () {
       await sand.connect(sandHodler).approve(qoistipSign.address, parseUnits('100'));
@@ -264,7 +262,7 @@ describe('QoistipSign', function () {
           signatureData.timestamp,
           user1.address,
           signatureData.tokenAddress,
-          signatureData.tokenUserAddress,
+          signatureData.userTokenAddress,
         );
 
       expect(await qoistipSign.balanceERC20(user1.address, sand.address)).to.equal(parseUnits('97'));
@@ -368,7 +366,7 @@ describe('QoistipSign', function () {
           signatureData.timestamp,
           user1.address,
           signatureData.tokenAddress,
-          signatureData.tokenUserAddress,
+          signatureData.userTokenAddress,
         );
     });
     it('Check $ELON balance after donate', async function () {
@@ -420,7 +418,7 @@ describe('QoistipSign', function () {
           signatureData.timestamp,
           user1.address,
           signatureData.tokenAddress,
-          signatureData.tokenUserAddress,
+          signatureData.userTokenAddress,
         );
     });
     it('Check $ELON balance after donate', async function () {

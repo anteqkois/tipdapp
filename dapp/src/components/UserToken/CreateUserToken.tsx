@@ -1,15 +1,17 @@
 import { useLocalStorage, useUser } from '@/hooks';
 import { useQoistipSign } from '@/hooks/useQoistipSign';
+import { useSession } from '@/lib/useSession';
 import { userTokenSchemaForm } from '@/schema/userTokenSchema.js';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useNetwork } from 'wagmi';
 import { ZodError } from 'zod';
 import { Button, Card, Input } from '../utils';
 import { Details } from '../utils/Details';
 
+interface Errors extends Record<'string', 'string'>
+
 const validate = (values) => {
-  const errors = {};
+  const errors:Errors;
 
   try {
     userTokenSchemaForm.parse(values);
@@ -29,73 +31,88 @@ const initialUserToken = {
   name: '',
 };
 
-export const CreateUserToken = ({ setToken }) => {
+interface UserTokenFormData {
+  symbol?: string,
+  name?: string,
+}
+
+// type Props = {
+//   setToken: Dispatch<
+//     SetStateAction<
+//       | UserToken
+//       | {
+//           address: string;
+//         }
+//       | null
+//     >
+//   >;
+// };
+
+export const CreateUserToken = () => {
   const [errors, setErrors] = useState(null);
   const [showMoreInformation, setShowMoreInformation] = useState(false);
-  const [userToken, setUserToken] = useLocalStorage(
-    'userToken',
+  const [userTokenFormData, setUserTokenFormData] = useLocalStorage<UserTokenFormData>(
+    'userTokenFormData',
     initialUserToken
   );
-  const { chain } = useNetwork();
   const {
+    user,
     user: { address },
   } = useUser();
+  const { refreshSessionData } = useSession();
+  console.log(user);
 
-  const { registerUser } = useQoistipSign();
+  const { registerUser, userToken } = useQoistipSign();
 
   useEffect(() => {
     registerUser?.data?.wait &&
       (async () => {
-        await registerUser.data.wait(1);
+        await registerUser.data!.wait(1);
         toast.success(`Transaction have 1 confirmation`, {
           id: 'confirmation',
           position: 'bottom-right',
           duration: 6000,
         });
-        await registerUser.data.wait(2);
+        await registerUser.data!.wait(2);
         toast.success(`Transaction have 2 confirmation`, {
           id: 'confirmation',
           position: 'bottom-right',
           duration: 6000,
         });
-        await registerUser.data.wait(3);
+        await registerUser.data!.wait(3);
         toast.success(`Transaction have 3 confirmation`, {
           id: 'confirmation',
           position: 'bottom-right',
           duration: 6000,
         });
-        setUserToken(initialUserToken);
-        setToken({ created: true });
-        try {
-        } catch (error) {
-          console.log(error);
-        }
+        setUserTokenFormData(initialUserToken);
+        await refreshSessionData();
+
+        // try {
+        // } catch (error) {
+        //   console.log(error);
+        // }
       })();
   }, [registerUser?.data]);
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     try {
       setErrors(null);
-      const error = validate(userToken);
+      const error = validate(userTokenFormData);
 
       if (!Object.keys(error).length) {
-        // console.log(registerUser);
-        // registerUser.write({ recklesslySetUnpreparedArgs: [userToken.symbol, userToken.name] });
-
-        // console.log(writePromise.);
-        const writePromise = registerUser.writeAsync({
-          recklesslySetUnpreparedArgs: [userToken.symbol, userToken.name],
+        const writePromise = registerUser?.writeAsync({
+          recklesslySetUnpreparedArgs: [
+            userTokenFormData.symbol,
+            userTokenFormData.name,
+          ],
         });
-        toast.promise(
-          writePromise,
-          {
-            loading: 'Wait for send transaction',
-            success: 'Your token was succesfully create!',
-            error: 'Something went wrong, we can not create your token.',
-          }
-          // { duration: 5000 },
-        );
+        toast.promise(writePromise, {
+          loading: 'Wait for send transaction',
+          success: 'Your token was succesfully create!',
+          error: 'Something went wrong, we can not create your token.',
+        });
       } else {
         setErrors(error);
       }
@@ -105,11 +122,14 @@ export const CreateUserToken = ({ setToken }) => {
   };
 
   const handleChange = (e) => {
-    setUserToken((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    setUserTokenFormData((prev) => ({
+      ...prev,
+      [e.target.id]: e.target.value,
+    }));
   };
 
   const resetForm = () => {
-    setUserToken(initialUserToken);
+    setUserTokenFormData(initialUserToken);
   };
 
   return (
@@ -123,7 +143,7 @@ export const CreateUserToken = ({ setToken }) => {
             label="Token name"
             type="text"
             onChange={handleChange}
-            value={userToken.name ?? ''}
+            value={userTokenFormData.name ?? ''}
             error={errors?.name}
           />
           <Input
@@ -132,7 +152,7 @@ export const CreateUserToken = ({ setToken }) => {
             label="Token symbol"
             type="text"
             onChange={handleChange}
-            value={userToken.symbol ?? ''}
+            value={userTokenFormData.symbol ?? ''}
             error={errors?.symbol}
           />
         </div>

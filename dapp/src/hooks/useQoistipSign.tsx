@@ -19,7 +19,7 @@ export const useQoistipSign = () => {
     user: { address },
   } = useUser();
 
-  const { ClipboardIcon, copy } = useClipboard();
+  const { ClipboardIcon } = useClipboard();
 
   // READ
   // tokenUser
@@ -35,16 +35,21 @@ export const useQoistipSign = () => {
     ...contractInstance,
     functionName: 'registerUser',
     args: ['', ''],
-    enabled: userToken?.data === ethereum.zeroAddress,
-    // enabled: true,
+    enabled: userToken?.data
+      ? (userToken.data as unknown as string) === ethereum.zeroAddress
+      : false,
   });
+
+  console.log(error);
 
   const registerUser = useContractWrite({
     ...config,
 
     onSuccess: async (data) => {
       await data.wait(1);
-      const newTokenAddress = await userToken.refetch();
+      const newTokenAddress = (await userToken.refetch()) as unknown as {
+        data: string;
+      };
 
       toast(
         (t) => (
@@ -66,14 +71,14 @@ export const useQoistipSign = () => {
                 <span className="font-medium ">Token address: </span>
                 {cutAddress(newTokenAddress.data)}
                 <ClipboardIcon
-                  copyData={newTokenAddress.data}
+                  copyData={newTokenAddress?.data}
                   message="Address copied !"
                 />
               </p>
             </div>
             <div className="flex justify-between">
               <a
-                tabIndex="-1"
+                tabIndex={-1}
                 href={`https://etherscan.io/token/${newTokenAddress.data}`}
                 target="_blank"
                 rel="noreferrer"
@@ -97,23 +102,8 @@ export const useQoistipSign = () => {
         { duration: Infinity, id: 'registerUserToats' }
       );
     },
-    onError: (error) => {
-      // toast.success(
-      //   (t) => (
-      //     <div>
-      //       Something went wrong, we can not create your token.
-      //       <Button onClick={() => toast.dismiss(t.id)} option="minimalist">
-      //         Close
-      //       </Button>
-      //     </div>
-      //   ),
-      //   { duration: Infinity, id: 'registerUserToats' },
-      // );
-      // toast.error('Something went wrong, we can not create your token.');
-      // console.log(error.error);
-      // console.log(error.message);
-      // console.log(error);
-      // console.log(JSON.parse(error.message));
+    onError(error) {
+      console.log(error);
     },
   });
 

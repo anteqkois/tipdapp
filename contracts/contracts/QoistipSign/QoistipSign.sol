@@ -35,7 +35,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
     mapping(address => uint256) internal _balanceETH;
     mapping(address => mapping(address => uint256))
         internal _addressToTokenToBalance;
-    mapping(address => address) internal _tokenUser;
+    mapping(address => address) internal _tokenToUser;
 
     AggregatorV3Interface constant ethUsdOracle =
         AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
@@ -117,7 +117,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         virtual
         returns (address)
     {
-        return _tokenUser[userAddress];
+        return _tokenToUser[userAddress];
     }
 
     function balanceERC20(address userAddress, address tokenAddress)
@@ -148,10 +148,10 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         notPaused
         returns(address tokenAddress)
     {
-        require(_tokenUser[msg.sender] == address(0), "Address registered");
+        require(_tokenToUser[msg.sender] == address(0), "Address registered");
 
         address _newToken = address(new UserToken(tokenSymbol, tokenName));
-        _tokenUser[msg.sender] = _newToken;
+        _tokenToUser[msg.sender] = _newToken;
         emit NewUser(msg.sender, _newToken);
         return _newToken;
     }
@@ -166,7 +166,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
         uint256 timestampOffChain,
         address addressToDonate,
         address tokenAddress,
-        address tokenUserAddress
+        address userTokenAddress
     ) external virtual notPaused {
         // donate worth check on backend
         //connect msg with onChain data with tx
@@ -203,7 +203,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
                                 fee,
                                 timestampOffChain,
                                 tokenAddress,
-                                tokenUserAddress
+                                userTokenAddress
                             )
                         )
                     )
@@ -226,7 +226,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
             _addressToTokenToBalance[address(this)][tokenAddress] += fee;
         }
 
-        UserToken(tokenUserAddress).mint(msg.sender, mintTokenAmount);
+        UserToken(userTokenAddress).mint(msg.sender, mintTokenAmount);
     }
 
     //donateETH_Bej(): 0x00002206
@@ -249,7 +249,7 @@ contract QoistipSign is Initializable, UUPSUpgradeable {
             _balanceETH[addressToDonate] += msg.value - fee;
         }
 
-        UserToken(_tokenUser[addressToDonate]).mint(msg.sender, tokenToMint);
+        UserToken(_tokenToUser[addressToDonate]).mint(msg.sender, tokenToMint);
 
         emit Donate(msg.sender, addressToDonate, address(0), msg.value);
     }

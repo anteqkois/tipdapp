@@ -33,6 +33,7 @@ module.exports = {
     hardhat: {
       forking: {
         url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
+        blockNumber: 15741469,
       },
       loggingEnabled: true,
       // chainId: 31337,
@@ -42,9 +43,13 @@ module.exports = {
       //   accounts: {
       //     // mnemonic: 'qoisdapp',
       //   },
+      // mining: {
+      //   auto: false,
+      //   interval: [5000, 8000],
+      // },
       mining: {
-        auto: false,
-        interval: [5000, 8000],
+        auto: true,
+        interval: [2000, 4000],
       },
       // throwOnTransactionFailures: true,
       // allowUnlimitedContractSize: true,
@@ -77,7 +82,7 @@ module.exports = {
     maxMethodDiff: 20,
     coinmarketcap: process.env.COINMARKETCAP_API_KEY,
     token: 'ETH',
-    gasPriceApi: 'https://api.etherscan.io/api?module=proxy&action=eth_gasPrice',
+    // gasPriceApi: 'https://api.etherscan.io/api?module=proxy&action=eth_gasPrice',
     // token: 'MATIC',
     // gasPriceApi: 'https://api.polygonscan.com/api?module=proxy&action=eth_gasPrice',
     // token: 'BNB',
