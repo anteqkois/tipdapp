@@ -18,30 +18,22 @@ export const TokenPanel = ({ token }) => {
       <Card>
         <h4>Your token basic information</h4>
         <div>
-          <p>
+          <h6>
             <span className="font-medium">Name: </span>
             <span className="text-primary">{token.name}</span>
-          </p>
-          <p>
+          </h6>
+          <h6>
             <span className="font-medium">Symbol: </span>
             <span>{token.symbol}</span>
-          </p>
-          <p className="flex items-center  gap-1">
+          </h6>
+          <h6 className="flex items-center  gap-1">
             <span className="font-medium ">Address: </span>
             {isMobile ? cutAddress(token.address) : token.address}
             <ClipboardIcon
               copyData={token.address}
               message="Address copied !"
             />
-          </p>
-          <p>
-            <span className="font-medium">Decimals: </span>
-            <span>{decimals.data}</span>
-          </p>
-          <p>
-            <span className="font-medium">Total supply: </span>
-            <span>{ethers.utils.formatUnits(totalSupply.data ?? '0')}</span>
-          </p>
+          </h6>
           <p className="flex items-end">
             <a
               tabIndex="-1"
@@ -63,7 +55,15 @@ export const TokenPanel = ({ token }) => {
         <h4>Details/Analist</h4>
         <div>
           <p>
-            <span className="font-medium">Total Supply: </span>
+            <span className="font-medium">Decimals: </span>
+            <span>{decimals.data}</span>
+          </p>
+          <p>
+            <span className="font-medium">Total supply: </span>
+            <span>{ethers.utils.formatUnits(totalSupply.data ?? '0')}</span>
+          </p>
+          <p>
+            <span className="font-medium">Burnt token: </span>
             <span>{123231123}</span>
           </p>
           <p>
@@ -74,39 +74,42 @@ export const TokenPanel = ({ token }) => {
             <span className="font-medium">Holders: </span>
             <span>{12000}</span>
           </p>
-          <p>
-            <span className="font-medium">Last Transaction date: </span>
-            <i>
-              {dateFormat('2024-07-12T12:33:45.758Z').format(
-                'MMM DD YYYY, HH:MM'
-              )}{' '}
-              ({dateFormat('2024-07-12T12:33:45.758Z').fromNow()})
-            </i>
-          </p>
-          <p className="flex items-center  gap-1">
-            <span className="font-medium ">Last Transaction: </span>
-            {isMobile ? cutAddress(token.address) : token.address}
-            <ClipboardIcon
-              copyData={token.address}
-              message="Address copied !"
-            />
-          </p>
-          <p className="flex items-end">
-            <a
-              tabIndex="-1"
-              href="https://zksync2-testnet.zkscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266/transactions"
-              target={'_blank'}
-              rel="noreferrer"
-            >
-              <Button
-                option="link"
-                className="font-medium text-neutral-700 mr-1"
-              >
-                View transaction on Explorer
-              </Button>
-            </a>
-          </p>
         </div>
+      </Card>
+      <Card>
+        <h4>Last transaction</h4>
+        <p>
+          <span className="font-medium">Date: </span>
+          <span>
+            {dateFormat('2024-07-12T12:33:45.758Z').format(
+              'MMM DD YYYY, HH:MM'
+            )}{' '}
+            <i>({dateFormat('2024-07-12T12:33:45.758Z').fromNow()})</i>
+          </span>
+        </p>
+        <p className="flex items-center  gap-1">
+          <span className="font-medium ">Hash: </span>
+          {isMobile ? cutAddress(token.address) : token.address}
+          <ClipboardIcon
+            copyData={token.address}
+            message="Address copied !"
+          />
+        </p>
+        <p className="flex items-end">
+          <a
+            tabIndex="-1"
+            href="https://zksync2-testnet.zkscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266/transactions"
+            target={'_blank'}
+            rel="noreferrer"
+          >
+            <Button
+              option="link"
+              className="font-medium text-neutral-700 mr-1"
+            >
+              View transaction on Explorer
+            </Button>
+          </a>
+        </p>
       </Card>
     </div>
   );

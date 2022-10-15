@@ -36,7 +36,7 @@ export const Avatar = ({
         className={className}
       >
         <div
-          className={`inline-block shadow-md rounded-md w-7 aspect-square overflow-hidden ${className}`}
+          className={`inline-block shadow-inner-avatar rounded-md w-7 aspect-square overflow-hidden ${className}`}
         >
           <Image
             height={24}

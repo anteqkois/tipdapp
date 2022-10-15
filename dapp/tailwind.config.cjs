@@ -20,7 +20,10 @@ module.exports = {
     },
     extend: {
       borderRadius: {
-        DEFAULT: '.75rem',
+        DEFAULT: '.5rem',
+      },
+      boxShadow: {
+        'inner-avatar': 'inset 0 0 7px 0 rgb(0 0 0 / 0.05)',
       },
       colors: {
         primary: {

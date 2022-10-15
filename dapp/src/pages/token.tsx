@@ -1,37 +1,29 @@
-import { find } from '@/api/userToken';
 import { CreateUserToken } from '@/components/UserToken/CreateUserToken';
 import { TokenPanel } from '@/components/UserToken/TokenPanel';
 import { useUser } from '@/hooks';
-import { UserToken } from '@prisma/client';
-import { useEffect, useState } from 'react';
 
 const Token = () => {
   const {
-    user: { address, token: tokenfromSession },
+    user: { address, token },
   } = useUser();
-  const [token, setToken] = useState<
-    UserToken | Pick<UserToken, 'address'> | null
-  >(tokenfromSession);
+  // const [token, setToken] = useState<UserToken | null>(tokenfromSession);
 
-  useEffect(() => {
-    address &&
-      (async () => {
-        try {
-          const { data } = await find({ userAddress: address });
-          setToken(data.token);
-        } catch (error) {
-          console.log(error);
-        }
-      })();
-  }, [token?.address, address]);
+  // useEffect(() => {
+  //   tokenfromSession && setToken(tokenfromSession);
+  //   // address &&
+  //   //   (async () => {
+  //   //     try {
+  //   //       const { data } = await find({ userAddress: address });
+  //   //       setToken(data.token);
+  //   //     } catch (error) {
+  //   //       console.log(error);
+  //   //     }
+  //   //   })();
+  // }, [tokenfromSession]);
 
   return (
     <section>
-      {token?.address ? (
-        <TokenPanel token={token} />
-      ) : (
-        <CreateUserToken />
-      )}
+      {token ? <TokenPanel token={token} /> : <CreateUserToken />}
     </section>
   );
 };

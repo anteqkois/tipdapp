@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import {
   useContractRead,
   useContractWrite,
-  usePrepareContractWrite,
+  usePrepareContractWrite
 } from 'wagmi';
 import { useClipboard, useUser } from '.';
 import QoistipSign from '../artifacts/localhost/QoistipSign.json';
@@ -39,8 +39,6 @@ export const useQoistipSign = () => {
       ? (userToken.data as unknown as string) === ethereum.zeroAddress
       : false,
   });
-
-  console.log(error);
 
   const registerUser = useContractWrite({
     ...config,

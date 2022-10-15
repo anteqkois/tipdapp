@@ -13,7 +13,7 @@ type Props = {
 };
 
 const Pagination = ({
-  pageAmount = 1,
+  pageAmount,
   previousLabel = 'Previous',
   nextLabel = 'Next',
   onPageChange,
@@ -28,7 +28,7 @@ const Pagination = ({
   if (isMobile) {
     previousLabel = '<';
     nextLabel = '>';
-    // pageRangeDisplayed = 1;
+    pageRangeDisplayed = 1;
     buttonsMarginPage = 1;
   }
 

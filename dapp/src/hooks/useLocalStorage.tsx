@@ -1,21 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export const useLocalStorage = <S,>(key: string, initialValue: S) => {
-  const [storedValue, setStoredValue] = useState<S>(initialValue);
-
-  //to run on client, not on server
-  useEffect(() => {
+  const [storedValue, setStoredValue] = useState<S>(() => {
     try {
       const item = window.localStorage.getItem(key);
-      setStoredValue(item ? JSON.parse(item) : initialValue);
+      return item ? JSON.parse(item) : initialValue;
     } catch (error) {
-      setStoredValue(initialValue);
+      return initialValue;
     }
-  }, []);
+  });
 
   const setValue = (value: S | ((val: S) => S)) => {
     try {
-      // Allow value to be a function so we have same API as useState
       const valueToStore =
         value instanceof Function ? value(storedValue) : value;
       setStoredValue(valueToStore);
@@ -26,7 +22,7 @@ export const useLocalStorage = <S,>(key: string, initialValue: S) => {
       console.log(error);
     }
   };
-  return [storedValue, setValue];
+  return [storedValue, setValue] as const;
 };
 
 export default useLocalStorage;

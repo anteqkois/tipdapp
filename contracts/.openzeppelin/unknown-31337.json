@@ -158,7 +158,7 @@
     },
     {
       "address": "0x4951A1C579039EbfCBA0BE33D2cd3A6D30b0f802",
-      "txHash": "0x032dea3873aaec6d357cf4ed8a3ff173b248ac03c7b4d8e5f5ef48bd73fd5ac7",
+      "txHash": "0xf84f1abc1316e013ae9c495b51fa07d8749d92faf78a80c221b6bb12830ba51f",
       "kind": "uups"
     }
   ],

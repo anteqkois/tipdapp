@@ -33,19 +33,20 @@ const Tip = ({
 
   return (
     <Card>
-      <div className="flex items-top justify-between w-full gap-1">
+      {/* <div className="flex items-center justify-between w-full gap-1"> */}
+      <div className="flex items-top w-full gap-1">
+        <Avatar
+          address={tipperAddress}
+          className="w-6 h-6 mr-0.5"
+        />
         <h5 className=" mr-3 lg:text-2xl">
-          <Avatar
-            address={tipperAddress}
-            className="w-6 h-6 mr-0.5"
-          />
           <AtSymbolIcon className="inline text-primary w-6 lg:w-7 " />
           <i className="text-primary">{tipper.nick} </i>
           {/* sent {ethers.utils.formatEther(amount)} */}
           sent {parseNotation(amount)}
           <i className="text-secondary "> ${token.symbol}</i>:
         </h5>
-        <div className="flex gap-1.5 max-h-7">
+        <div className="flex gap-1.5 ml-auto max-h-7">
           <Tooltip content="Display again">
             <ArrowPathIcon className="w-7 p-0.5 rounded-full bg-neutral-150 animate-action" />
           </Tooltip>
