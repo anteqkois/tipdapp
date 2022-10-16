@@ -79,7 +79,7 @@ const providers = [
               const validationError = new ValidationError(
                 'address',
                 `Already registered.`,
-                `The wallet has already been registered. Go to login or disconnect wallet from DAPP and then change wallet.`,
+                `The wallet has already been registered. Go to login page or disconnect wallet from DAPP and then change wallet.`,
                 `address.unique`
               );
               errors.push(validationError);

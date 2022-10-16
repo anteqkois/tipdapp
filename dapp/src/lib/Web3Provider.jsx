@@ -28,7 +28,7 @@ const { chains, provider } = configureChains(
       }),
     }),
     // alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }),
-  ],
+  ]
 );
 
 const { connectors } = getDefaultWallets({
@@ -55,7 +55,12 @@ const RainbowKitProviders = ({ children, enabled }) => {
       return response ?? '';
     },
     createMessage: ({ nonce, address, chainId }) => {
-      if (formData.firstName && formData.lastName && formData.nick && formData.email) {
+      if (
+        formData.firstName &&
+        formData.lastName &&
+        formData.nick &&
+        formData.email
+      ) {
         return new SiweMessage({
           domain: window.location.host,
           address,
@@ -81,7 +86,12 @@ const RainbowKitProviders = ({ children, enabled }) => {
     },
     verify: async ({ message, signature }) => {
       return new Promise(async (resolve, reject) => {
-        if (formData.firstName && formData.lastName && formData.nick && formData.email) {
+        if (
+          formData.firstName &&
+          formData.lastName &&
+          formData.nick &&
+          formData.email
+        ) {
           const response = await signIn('credentials', {
             message: JSON.stringify(message),
             signature,
@@ -98,14 +108,14 @@ const RainbowKitProviders = ({ children, enabled }) => {
                     <h6 className="py-2">Validation Error</h6>
                     <Close onClick={() => toast.dismiss(t.id)} />
                   </span>
-                  <ul className="px-4 list-inside list-['📌'] ">
+                  <ul className="px-4 flex flex-col gap-3 list-['📌']">
                     {data.errors.map((error) => (
                       <li key={error.code}>{error.message}</li>
                     ))}
                   </ul>
                 </span>
               ),
-              { duration: Infinity, id: 'validationError' },
+              { duration: Infinity, id: 'validationError' }
             );
             dispatch(setErrors(data.errors));
             reject(false);
@@ -118,7 +128,9 @@ const RainbowKitProviders = ({ children, enabled }) => {
             message: JSON.stringify(message),
             signature,
             redirect: true,
-            callbackUrl: `${window.location.origin}/${router.query?.callback ?? '/dashboard'}`,
+            callbackUrl: `${window.location.origin}/${
+              router.query?.callback ?? '/dashboard'
+            }`,
           });
           resolve(true);
         }
@@ -126,13 +138,22 @@ const RainbowKitProviders = ({ children, enabled }) => {
     },
     signOut: async () => {
       // status === 'authenticated' && signOut({ callbackUrl: `${window.location.origin}/login` });
-      status === 'authenticated' && signOut({ callbackUrl: `${window.location.origin}/login` });
+      status === 'authenticated' &&
+        signOut({ callbackUrl: `${window.location.origin}/login` });
     },
   });
 
   return (
-    <RainbowKitAuthenticationProvider adapter={authAdapter} enabled={enabled} status={status}>
-      <RainbowKitProvider coolMode chains={chains} modalSize={isMobile ? 'compact' : 'wide'}>
+    <RainbowKitAuthenticationProvider
+      adapter={authAdapter}
+      enabled={enabled}
+      status={status}
+    >
+      <RainbowKitProvider
+        coolMode
+        chains={chains}
+        modalSize={isMobile ? 'compact' : 'wide'}
+      >
         {children}
       </RainbowKitProvider>
     </RainbowKitAuthenticationProvider>

@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import {
   useContractRead,
   useContractWrite,
-  usePrepareContractWrite
+  usePrepareContractWrite,
 } from 'wagmi';
 import { useClipboard, useUser } from '.';
 import QoistipSign from '../artifacts/localhost/QoistipSign.json';
@@ -22,7 +22,6 @@ export const useQoistipSign = () => {
   const { ClipboardIcon } = useClipboard();
 
   // READ
-  // tokenUser
   const userToken = useContractRead({
     ...contractInstance,
     functionName: 'userToken',
@@ -30,7 +29,6 @@ export const useQoistipSign = () => {
   });
 
   // WRITE
-  // registerUser
   const { config } = usePrepareContractWrite({
     ...contractInstance,
     functionName: 'registerUser',
@@ -42,7 +40,6 @@ export const useQoistipSign = () => {
 
   const registerUser = useContractWrite({
     ...config,
-
     onSuccess: async (data) => {
       await data.wait(1);
       const newTokenAddress = (await userToken.refetch()) as unknown as {

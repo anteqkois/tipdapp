@@ -11,4 +11,4 @@ const Signup = () => {
 export default Signup;
 
 //useOtherLayeout
-Signup.getLayout = (page) => <>{page}</>;
+Signup.getLayout = (page: JSX.Element) => <>{page}</>;

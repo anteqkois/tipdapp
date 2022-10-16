@@ -1,10 +1,10 @@
 import {
   selectActiveStep,
   selectErrors,
-  selectStatus,
   setStep,
-  validateUserData
+  validateUserData,
 } from '@/lib/redux/signUpFormSlice';
+import { ValidationError, ValidationErrors, ZodParseErrors } from '@/ts/utils';
 import { UserIcon, WalletIcon } from '@heroicons/react/24/outline';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFormik } from 'formik';
@@ -15,39 +15,26 @@ import { Button, Input } from '../utils';
 import { Stepper } from '../utils/Stepper';
 import { FormikStep } from './FormikStep';
 
-const validate = (values) => {
-  const errors = {};
-  const emailRegex =
-    /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
-  if (!emailRegex.test(values.email)) errors.email = 'Invalid e-mail';
-  // if (values.firstName.length === 0) errors.firstName = 'Type your name';
-  // if (values.lastName.length === 0) errors.lastName = 'Type your last name';
-  // if (values.nick.length === 0) errors.nick = 'Type your nick';
-
-  return errors;
-};
-
 const initialValues = {
   email: '',
   firstName: '',
   lastName: '',
   nick: '',
+  address: '',
 };
 
 export const SignUpForm = () => {
   const { openConnectModal } = useConnectModal();
 
   const dispatch = useDispatch();
-  const errors = useSelector(selectErrors);
-  const status = useSelector(selectStatus);
+  const errors: ValidationErrors = useSelector(selectErrors);
   const step = useSelector(selectActiveStep);
 
-  //Display Error message
+  //Display Error messages
   useEffect(() => {
     if (errors) {
-      const errorsTemp = {};
-      errors.forEach((error) => {
+      const errorsTemp: ZodParseErrors = {};
+      errors.forEach((error: ValidationError) => {
         errorsTemp[error.field] = error.message;
       });
 
@@ -57,16 +44,18 @@ export const SignUpForm = () => {
 
   const formik = useFormik({
     initialValues: initialValues,
-    validate,
+    // validate,
+    validateOnChange: false,
     onSubmit: async (values) => {
       try {
         if (!Object.keys(formik.errors).length) {
           if (step === 1) {
             //validate userData on backend
+            //@ts-ignore
             dispatch(validateUserData(values));
           }
           if (step === 2) {
-            openConnectModal();
+            openConnectModal?.();
           }
         }
       } catch (error) {
@@ -76,7 +65,10 @@ export const SignUpForm = () => {
   });
 
   const FormSteps = [
-    <FormikStep label="User Details">
+    <FormikStep
+      label="User Details"
+      key="User Details"
+    >
       <Input
         id="email"
         name="email"
@@ -118,7 +110,10 @@ export const SignUpForm = () => {
         error={formik.errors.nick}
       />
     </FormikStep>,
-    <FormikStep label="Connect Wallet">
+    <FormikStep
+      label="Connect Wallet"
+      key="Connect Wallet"
+    >
       <ConnectWallet className="w-5/6 h-52 mx-auto my-5" />
       <p className="text-danger-600 ">
         {formik.errors.address && `* ${formik.errors.address}`}
@@ -126,7 +121,8 @@ export const SignUpForm = () => {
       <Button
         className="w-full mt-4"
         option="success"
-        onClick={() => setStep((prev) => --prev)}
+        type="submit"
+        onClick={() => setStep((prev: number) => --prev)}
       >
         Connect wallet
       </Button>
@@ -134,8 +130,14 @@ export const SignUpForm = () => {
   ];
 
   const StepIcons = [
-    <UserIcon className="stroke-current h-6" />,
-    <WalletIcon className="stroke-current h-6" />,
+    <UserIcon
+      key="userIcon"
+      className="stroke-current h-6"
+    />,
+    <WalletIcon
+      key="WalletIcon"
+      className="stroke-current h-6"
+    />,
   ];
 
   return (

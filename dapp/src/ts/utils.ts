@@ -6,3 +6,6 @@ export enum asyncStatus {
 }
 
 export type ZodParseErrors = Record<string, string>;
+
+export type ValidationErrors = any;
+export type ValidationError = any;
