@@ -27,8 +27,6 @@ model User {
   role          Role       @default(STREAMER)
   nick          String     @unique
   verified      Boolean    @default(false)
-  urlPage       String     @db.VarChar(60)
-  description   String     @default("") @db.VarChar(150)
   avatar        File?      @relation(fields: [avatarFileId], references: [id])
   avatarFileId  String?
   // avatar        File?      @relation(fields: [avatarFileId], references: [id])
@@ -43,6 +41,7 @@ model User {
   activeToken   Token[]
   tip           Tip[]
   withdraw      Withdraw[]
+  page          Page?
 }
 
 model Tip {
@@ -83,6 +82,14 @@ model UserToken {
   name        String  @unique
   chainId     Int
   txHash      String  @db.VarChar(66)
+  user        User?   @relation(fields: [userAddress], references: [address])
+  userAddress String? @unique @db.VarChar(42)
+}
+
+model Page {
+  id          String  @id @default(cuid())
+  url         String  @db.VarChar(60)
+  description String? @default("") @db.VarChar(200)
   user        User?   @relation(fields: [userAddress], references: [address])
   userAddress String? @unique @db.VarChar(42)
 }

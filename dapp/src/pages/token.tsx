@@ -4,22 +4,8 @@ import { useUser } from '@/hooks';
 
 const Token = () => {
   const {
-    user: { address, token },
+    user: { token },
   } = useUser();
-  // const [token, setToken] = useState<UserToken | null>(tokenfromSession);
-
-  // useEffect(() => {
-  //   tokenfromSession && setToken(tokenfromSession);
-  //   // address &&
-  //   //   (async () => {
-  //   //     try {
-  //   //       const { data } = await find({ userAddress: address });
-  //   //       setToken(data.token);
-  //   //     } catch (error) {
-  //   //       console.log(error);
-  //   //     }
-  //   //   })();
-  // }, [tokenfromSession]);
 
   return (
     <section>

@@ -4,3 +4,5 @@ export enum asyncStatus {
   'success' = 'success',
   'fail' = 'fail',
 }
+
+export type ZodParseErrors = Record<string, string>;

@@ -1,5 +1,5 @@
 import { prisma } from '../../lib/db.js';
-import { userTokenSchema } from '../../schema/userTokenSchema.js';
+import { userTokenValidation } from '../../validation/userToken.validation.old.js';
 import { createApiError } from '../middlewares/error.js';
 
 const find = async (req, res) => {
@@ -24,7 +24,7 @@ const create = async (req, res) => {
 
   // try {
 
-  userTokenSchema.parse(req.body);
+  userTokenValidation.parse(req.body);
   const { address, symbol, name, chainId, txHash, user } = req.body;
 
   const token = await prisma.userToken.create({

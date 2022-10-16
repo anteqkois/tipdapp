@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { InputHTMLAttributes } from 'react';
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
-  error: string;
+  error?: string;
   label: string;
   type: 'checkbox' | 'email' | 'number' | 'password' | 'range' | 'tel' | 'text';
   // type: Pick<
@@ -21,6 +21,8 @@ export const Input = ({
   onChange,
   value,
   error,
+  disabled,
+  ...rest
 }: Props) => {
   return (
     <div className="my-3">
@@ -31,16 +33,19 @@ export const Input = ({
         {label}
       </label>
       <input
+        {...rest}
         id={id}
         name={name}
         type={type}
         onChange={onChange}
         value={value}
         placeholder={placeholder}
+        disabled={disabled}
         className={classNames(
           className,
           'block p-2 w-full bg-gray-50 rounded border',
           [error ? 'border-danger-600' : 'border-neutral-300'],
+          [disabled && 'opacity-40'],
           'shadow-sm focus:outline-none focus:border-primary focus:ring focus:ring-primary-light focus:ring-opacity-50'
         )}
       ></input>

@@ -1,45 +1,48 @@
 import { useLocalStorage } from '@/hooks';
 import { useQoistipSign } from '@/hooks/useQoistipSign';
 import { useSession } from '@/lib/useSession';
-import { userTokenSchemaForm } from '@/schema/userTokenSchema.js';
+import { ZodParseErrors } from '@/ts/utils';
+import {
+  UserTokenFormObject,
+  userTokenFormParse,
+} from '@/validation/userToken.validation';
 import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { ZodError, ZodIssue } from 'zod';
 import { Button, Card, Input } from '../utils';
 import { Details } from '../utils/Details';
 
-type Errors = Record<string, string>;
+// type ZodParseErrors = Record<string, string>;
 
-const validate = (values: UserTokenFormData): Errors => {
-  const errors: Errors = {} as Errors;
+// const validate = (values: UserTokenFormData): ZodParseErrors => {
+//   const errors: ZodParseErrors = {} as ZodParseErrors;
 
-  try {
-    userTokenSchemaForm.parse(values);
-  } catch (error) {
-    if (error instanceof ZodError) {
-      error.issues.forEach((zodError: ZodIssue) => {
-        errors[zodError.path[0]] = zodError.message;
-      });
-    }
-  }
+//   try {
+//     userTokenFormValidation.parse(values);
+//   } catch (error) {
+//     if (error instanceof ZodError) {
+//       error.issues.forEach((zodError: ZodIssue) => {
+//         errors[zodError.path[0]] = zodError.message;
+//       });
+//     }
+//   }
 
-  return errors;
-};
+//   return errors;
+// };
 
 const initialUserToken = {
   symbol: '',
   name: '',
 };
 
-interface UserTokenFormData {
-  symbol?: string;
-  name?: string;
-}
+// interface UserTokenFormData {
+//   symbol?: string;
+//   name?: string;
+// }
 
 export const CreateUserToken = () => {
-  const [errors, setErrors] = useState<Errors>({} as Errors);
+  const [errors, setErrors] = useState<ZodParseErrors>({} as ZodParseErrors);
   const [userTokenFormData, setUserTokenFormData] =
-    useLocalStorage<UserTokenFormData>('userTokenFormData', initialUserToken);
+    useLocalStorage<UserTokenFormObject>('userTokenFormData', initialUserToken);
   const { refreshSessionData } = useSession();
 
   const { registerUser } = useQoistipSign();
@@ -81,10 +84,12 @@ export const CreateUserToken = () => {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      setErrors({} as Errors);
-      const error = validate(userTokenFormData);
+      setErrors({} as ZodParseErrors);
+      const error = userTokenFormParse(userTokenFormData);
 
-      if (Object.keys(error).length === 0) {
+      if (Object.keys(error).length !== 0) {
+        setErrors(error);
+      } else {
         if (registerUser?.writeAsync) {
           const writePromise = registerUser.writeAsync({
             recklesslySetUnpreparedArgs: [
@@ -106,11 +111,9 @@ export const CreateUserToken = () => {
             id: 'registerUserPromise',
           });
         }
-      } else {
-        setErrors(error);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

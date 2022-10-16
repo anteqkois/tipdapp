@@ -31,7 +31,7 @@ export const useQoistipSign = () => {
 
   // WRITE
   // registerUser
-  const { config, error } = usePrepareContractWrite({
+  const { config } = usePrepareContractWrite({
     ...contractInstance,
     functionName: 'registerUser',
     args: ['', ''],

@@ -4,7 +4,7 @@ import { getCsrfToken } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
 import { ZodError } from 'zod';
 import { prisma } from '../../lib/db.js';
-import { userSignUpSchema } from '../../schema/userSignUpSchema.js';
+import { signUpValidation } from '../../validation/signUp.validaion.old.js';
 import {
   createValidationError,
   ValidationError,
@@ -55,7 +55,7 @@ const providers = [
           const formData = JSON.parse(credentials.formData);
 
           //Validate schema
-          userSignUpSchema.parse(formData);
+          signUpValidation.parse(formData);
 
           //Validate unique
           const user = await prisma.user.findFirst({
@@ -112,7 +112,24 @@ const providers = [
               firstName: formData.firstName,
               lastName: formData.lastName,
               nick: formData.nick,
-              urlPage: formData.nick,
+              page: {
+                create: {
+                  url: formData.nick,
+                },
+              },
+            },
+            include: {
+              avatar: true,
+              token: {
+                select: {
+                  address: true,
+                  chainId: true,
+                  name: true,
+                  symbol: true,
+                  txHash: true,
+                },
+              },
+              page: true,
             },
           });
         } else {
@@ -131,6 +148,7 @@ const providers = [
                   txHash: true,
                 },
               },
+              page: true,
               // Widget: true,
               // Withdraw: true,
             },
@@ -223,7 +241,7 @@ const validate = async (req, res) => {
 
   try {
     //Validate schema
-    userSignUpSchema.parse(req.body);
+    signUpValidation.parse(req.body);
 
     //Validate unique
     const user = await prisma.user.findFirst({

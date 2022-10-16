@@ -8,7 +8,7 @@
       "@/api/*": ["src/api/*"],
       "@/utils/*": ["src/utils/*"],
       "@/lib/*": ["src/lib/*"],
-      "@/schema/*": ["src/schema/*"],
+      "@/validation/*": ["src/validation/*"],
       "@/hooks": ["src/hooks"],
       "@/hooks/*": ["src/hooks/*"]
       // "@/lib": ["src/lib"],
@@ -36,7 +36,10 @@
     // "**/*.jsx",
     // "src/pages/api/auth/[...nextauth].ts",
     "lib/prismaClient.js",
-    "src/lib/redux/tipSlice.js"
+    "src/lib/redux/tipSlice.js",
+    "src/validation/userToken.validation.old.js",
+    "src/validation/signUp.validaion.old.js",
+    "src/server/controllers/authController.js"
   ],
   "exclude": ["node_modules", "dist", "src/artifacts"]
 }

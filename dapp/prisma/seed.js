@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
 import client from '@prisma/client';
-import * as runtime from '@prisma/client/runtime/index.js';
+// import * as runtime from '@prisma/client/runtime/index.js';
 const { PrismaClient } = client;
-const { Decimal } = runtime;
+// const { Decimal } = runtime;
 
 const prisma = new PrismaClient();
 
@@ -17,8 +17,12 @@ async function main() {
       firstName: 'Antek',
       lastName: 'Kois',
       nick: 'anteqkois',
-      urlPage: 'anteqkois',
       address: ADDRESS_WALLET_DEV,
+      page: {
+        create: {
+          url: 'anteqkois',
+        },
+      },
     },
   });
   console.log('Create user:', user);
@@ -66,9 +70,18 @@ async function main() {
       data: {
         message: faker.lorem.paragraph(),
         txHash: faker.datatype.hexadecimal({ length: 10 }),
-        amount: faker.datatype.number({ min: 1000_000000000000000000, max: 10000_000000000000000000 }),
-        value: faker.datatype.number({ min: 1000_000000000000000000, max: 10000_000000000000000000 }),
-        date: faker.datatype.datetime({ min: 1577836800000, max: 1893456000000 }),
+        amount: faker.datatype.number({
+          min: 1000_000000000000000000,
+          max: 10000_000000000000000000,
+        }),
+        value: faker.datatype.number({
+          min: 1000_000000000000000000,
+          max: 10000_000000000000000000,
+        }),
+        date: faker.datatype.datetime({
+          min: 1577836800000,
+          max: 1893456000000,
+        }),
         displayed: faker.datatype.boolean(),
         token: {
           connect: {

@@ -1,11 +1,21 @@
 import PageLayout from '@/components/PageLayout';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useUser } from '@/hooks';
+import { useSession } from '@/lib/useSession';
 import Link from 'next/link';
-import { useDisconnect } from 'wagmi';
-import {useUser} from '@/hooks';
+import { useRouter } from 'next/router';
 
 const Login = () => {
   const { login, logout } = useUser();
+  const { status } = useSession();
+  const router = useRouter();
+
+  console.log(status);
+  console.log(router.query?.callback);
+  console.log(status === 'authenticated' && router.query?.callback);
+  if (status === 'authenticated' && router.query?.callback)
+    router.push({
+      pathname: router.query.callback as string,
+    });
 
   return (
     <>
@@ -19,7 +29,7 @@ const Login = () => {
   );
 };
 
-Login.getLayout = (page) => <PageLayout className="">{page}</PageLayout>;
+Login.getLayout = (page: JSX.Element) => <PageLayout>{page}</PageLayout>;
 
 // const getServerSideProps = (ctx) => {
 //   const { JWT } = ctx.req.cookies;

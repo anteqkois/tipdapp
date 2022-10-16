@@ -1,17 +1,22 @@
 import { useClipboard, useMediaQuery } from '@/hooks';
 import { dateFormat } from '@/lib/dayjs';
 import cutAddress from '@/utils/cutAddress';
+import { UserToken } from '@prisma/client';
 import { useUserToken } from '../../hooks/useUserToken';
 import { ethers } from '../../lib/ethersProvider';
 import { Button, Card } from '../utils';
 
-export const TokenPanel = ({ token }) => {
+type Props = {
+  token: UserToken;
+};
+
+export const TokenPanel = ({ token }: Props) => {
   const isMobile = useMediaQuery('(max-width: 1024px)', true);
-  const { totalSupply, decimals, balanceOf } = useUserToken(token.address);
-  const { ClipboardIcon, copy } = useClipboard();
-  console.log(totalSupply.data);
-  console.log(decimals.data);
-  console.log(balanceOf.data);
+  const { totalSupply, decimals } = useUserToken(token.address);
+  const { ClipboardIcon } = useClipboard();
+  // console.log(totalSupply.data);
+  // console.log(decimals.data);
+  // console.log(balanceOf.data);
 
   return (
     <div className="grid gap-2 lg:gap-4">
@@ -36,7 +41,7 @@ export const TokenPanel = ({ token }) => {
           </h6>
           <p className="flex items-end">
             <a
-              tabIndex="-1"
+              tabIndex={-1}
               href={`https://etherscan.io/token/${token.address}`}
               target={'_blank'}
               rel="noreferrer"
@@ -97,7 +102,7 @@ export const TokenPanel = ({ token }) => {
         </p>
         <p className="flex items-end">
           <a
-            tabIndex="-1"
+            tabIndex={-1}
             href="https://zksync2-testnet.zkscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266/transactions"
             target={'_blank'}
             rel="noreferrer"
