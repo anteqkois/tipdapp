@@ -1,12 +1,13 @@
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
-import { ReactNode } from 'react';
+import { ReactNode, RefAttributes } from 'react';
 
 type Props = {
   children: ReactNode;
   content: string;
-};
+} & TooltipPrimitive.TooltipContentProps &
+  RefAttributes<HTMLDivElement>;
 
-export const Tooltip = ({ children, content }: Props) => {
+export const Tooltip = ({ children, content, ...rest }: Props) => {
   return (
     <TooltipPrimitive.Provider>
       <TooltipPrimitive.Root>
@@ -14,6 +15,7 @@ export const Tooltip = ({ children, content }: Props) => {
         <TooltipPrimitive.Content
           sideOffset={4}
           className="inline-flex items-center bg-neutral-800 rounded-md px-4 py-2.5"
+          {...rest}
         >
           <TooltipPrimitive.Arrow className="fill-current text-neutral" />
           <span className="block text-xs leading-none dark:text-neutral-150">

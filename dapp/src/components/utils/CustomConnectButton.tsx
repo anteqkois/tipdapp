@@ -1,30 +1,57 @@
-import { ArrowRightOnRectangleIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowRightOnRectangleIcon,
+  ChevronDownIcon,
+} from '@heroicons/react/24/outline';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Image from 'next/image';
 import Button from './Button';
 import Tooltip from './Tooltip';
 
 export const CustomConnectButton = () => {
   return (
     <ConnectButton.Custom>
-      {({ account, chain, openAccountModal, openChainModal, openConnectModal, authenticationStatus, mounted }) => {
+      {({
+        account,
+        chain,
+        openAccountModal,
+        openChainModal,
+        openConnectModal,
+        authenticationStatus,
+        mounted,
+      }) => {
         // Note: If your app doesn't use authentication, you
         // can remove all 'authenticationStatus' checks
         const ready = mounted && authenticationStatus !== 'loading';
-        const connected = ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated');
+        const connected =
+          ready &&
+          account &&
+          chain &&
+          (!authenticationStatus || authenticationStatus === 'authenticated');
 
         return (
-          <div className={!ready ? 'opacity-0 pointer-events-none select-none' : ''} aria-hidden={!ready}>
+          <div
+            className={
+              !ready ? 'opacity-0 pointer-events-none select-none' : ''
+            }
+            aria-hidden={!ready}
+          >
             {(() => {
               if (!connected) {
                 return (
-                  <Button onClick={openConnectModal} type="button">
+                  <Button
+                    onClick={openConnectModal}
+                    type="button"
+                  >
                     Connect Wallet
                   </Button>
                 );
               }
               if (chain.unsupported) {
                 return (
-                  <Button onClick={openChainModal} type="button">
+                  <Button
+                    onClick={openChainModal}
+                    type="button"
+                  >
                     Wrong network
                   </Button>
                 );
@@ -45,7 +72,14 @@ export const CustomConnectButton = () => {
                             background: chain.iconBackground,
                           }}
                         >
-                          {chain.iconUrl && <img alt={chain.name ?? 'Chain icon'} src={chain.iconUrl} className="w-6 h-6" />}
+                          {chain.iconUrl && (
+                            <Image
+                              alt={chain.name ?? 'Chain icon'}
+                              src={chain.iconUrl}
+                              height="24"
+                              width="24"
+                            />
+                          )}
                         </div>
                       )}
                       {chain.name}

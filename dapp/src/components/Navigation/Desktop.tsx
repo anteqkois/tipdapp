@@ -1,3 +1,4 @@
+import { NavigationOption } from '@/ts/utils';
 import {
   AdjustmentsHorizontalIcon,
   BanknotesIcon,
@@ -11,10 +12,11 @@ import { CustomConnectButton } from '../utils/CustomConnectButton';
 import Tooltip from '../utils/Tooltip';
 import Navlink from './Navlink';
 
-const optionStyle = 'flex p-3 rounded hover:cursor-pointer hover:bg-neutral-200';
+const optionStyle =
+  'flex p-3 rounded hover:cursor-pointer hover:bg-neutral-200';
 const optionStyleActive = 'bg-primary hover:bg-primary stroke-neutral-150';
 
-const navigationOption = [
+const navigationOption: NavigationOption[] = [
   {
     tooltipLabel: 'Dashboard',
     href: '/dashboard',
@@ -59,16 +61,24 @@ const navigationOption = [
   },
 ];
 
-const Desktop = ({ user, logout }) => {
+const Desktop = () => {
   return (
     <div className="fixed top-0 left-0 w-full h-32 bg-neutral-50 shadow-md px-2 grid grid-cols-[170px_auto_170px] gap-5 place-items-center z-30">
       <div className="flex-center">LOGO</div>
       <nav>
         <ul className="flex shadow-md p-2 m-3 w-fit rounded bg-neutral-100">
           {navigationOption.map(({ tooltipLabel, href, icon, className }) => (
-            <Tooltip key={href} content={tooltipLabel} placement="bottom">
+            <Tooltip
+              key={href}
+              content={tooltipLabel as string}
+              side="bottom"
+            >
               <li>
-                <Navlink href={href} classActive={optionStyleActive} className={optionStyle}>
+                <Navlink
+                  href={href}
+                  classNameActive={optionStyleActive}
+                  className={className}
+                >
                   {icon}
                 </Navlink>
               </li>
@@ -76,7 +86,8 @@ const Desktop = ({ user, logout }) => {
           ))}
         </ul>
       </nav>
-      <CustomConnectButton user={user} />
+      <CustomConnectButton />
+      {/* <CustomConnectButton user={user} /> */}
     </div>
   );
 };

@@ -5,10 +5,14 @@ import Mobile from './Mobile';
 //TODO add tabindex to desktop version
 
 const Navigation = () => {
-  const isMobile = useMediaQuery('(max-width: 1024px)', true);
-  const { logout, user } = useUser();
+  const isMobile = useMediaQuery<boolean>(
+    ['(max-width: 1024px)'],
+    [true],
+    false
+  );
+  const { user } = useUser();
 
-  return isMobile ? <Mobile user={user} logout={logout} /> : <Desktop user={user} logout={logout} />;
+  return isMobile ? <Mobile user={user} /> : <Desktop />;
 };
 
 export default Navigation;

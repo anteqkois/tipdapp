@@ -23,7 +23,7 @@ const Pagination = ({
 }: Props) => {
   const currentPage = useRef<number>(1);
 
-  const isMobile = useMediaQuery('(max-width: 640px)', true);
+  const isMobile = useMediaQuery<boolean>(['(max-width: 640px)'], [true], true);
 
   if (isMobile) {
     previousLabel = '<';

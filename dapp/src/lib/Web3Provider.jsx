@@ -45,7 +45,7 @@ const wagmiClient = createClient({
 const RainbowKitProviders = ({ children, enabled }) => {
   const dispatch = useDispatch();
   const formData = useSelector(selectFormData);
-  const isMobile = useMediaQuery('(max-width: 1024px)', true);
+  const isMobile = useMediaQuery(['(max-width: 1024px)'], [true], true);
   const { status } = useSession();
   const router = useRouter();
 

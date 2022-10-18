@@ -11,7 +11,11 @@ type Props = {
 };
 
 export const TokenPanel = ({ token }: Props) => {
-  const isMobile = useMediaQuery('(max-width: 1024px)', true);
+  const isMobile = useMediaQuery<boolean>(
+    ['(max-width: 1024px)'],
+    [true],
+    true
+  );
   const { totalSupply, decimals } = useUserToken(token.address);
   const { ClipboardIcon } = useClipboard();
   // console.log(totalSupply.data);
@@ -33,7 +37,7 @@ export const TokenPanel = ({ token }: Props) => {
           </h6>
           <h6 className="flex items-center  gap-1">
             <span className="font-medium ">Address: </span>
-            {isMobile ? cutAddress(token.address) : token.address}
+            {isMobile ? cutAddress(t < boolean > oken.address) : token.address}
             <ClipboardIcon
               copyData={token.address}
               message="Address copied !"
@@ -94,7 +98,7 @@ export const TokenPanel = ({ token }: Props) => {
         </p>
         <p className="flex items-center  gap-1">
           <span className="font-medium ">Hash: </span>
-          {isMobile ? cutAddress(token.address) : token.address}
+          {isMobile ? cutAddress(t < boolean > oken.address) : token.address}
           <ClipboardIcon
             copyData={token.address}
             message="Address copied !"
