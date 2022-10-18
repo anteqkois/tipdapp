@@ -2,10 +2,10 @@ import TipsDefault from '@/components/Tip/TipsDefault';
 import { Avatar, Button, Card, StateUI } from '@/components/utils';
 import { useUser } from '@/hooks';
 import { selectCurrentData } from '@/lib/redux/tipSlice';
-import { asyncStatus } from '@/ts/utils';
 import cutAddress from '@/utils/cutAddress';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
+import { asyncStatus } from 'src/types/utils';
 
 const Dashboard = () => {
   const { user } = useUser();

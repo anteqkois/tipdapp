@@ -1,14 +1,14 @@
 import { Card, Flag, Tooltip } from '@/components/utils';
 import { useClipboard, useModal } from '@/hooks';
 import { dateFormat } from '@/lib/dayjs';
-import { TipUI } from '@/ts/models';
 import cutAddress from '@/utils/cutAddress';
 import { parseNotation } from '@/utils/format';
 import {
-  ArrowPathIcon,
-  ArrowsPointingOutIcon,
-  AtSymbolIcon,
+    ArrowPathIcon,
+    ArrowsPointingOutIcon,
+    AtSymbolIcon
 } from '@heroicons/react/24/outline';
+import { TipUI } from 'src/types/models';
 import Avatar from '../utils/Avatar';
 import Button from '../utils/Button';
 // const { parseUnits, formatUnits } = ethers.utils;

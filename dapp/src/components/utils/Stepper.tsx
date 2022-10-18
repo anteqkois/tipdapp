@@ -1,4 +1,10 @@
-export const Stepper = ({ stepCount, icons, activeStep }) => {
+type Props = {
+  stepCount: number;
+  icons: JSX.Element[];
+  activeStep: number;
+};
+
+export const Stepper = ({ stepCount, icons, activeStep }: Props) => {
   const steps = Array.from({ length: stepCount }, (_, index) => {
     return (
       <span
@@ -9,10 +15,16 @@ export const Stepper = ({ stepCount, icons, activeStep }) => {
       >
         <p
           className={`flex-center w-9 h-9 rounded-full absolute z-20 text-xl font-semibold ${
-            index < activeStep ? 'bg-primary text-primary-50' : 'bg-neutral-150 text-primary'
+            index < activeStep
+              ? 'bg-primary text-primary-50'
+              : 'bg-neutral-150 text-primary'
           }`}
         >
-          <span className={`${index < activeStep ? 'text-neutral-150' : 'text-primary'}`}>{icons[index]}</span>
+          <span
+            className={index < activeStep ? 'text-neutral-150' : 'text-primary'}
+          >
+            {icons[index]}
+          </span>
         </p>
       </span>
     );

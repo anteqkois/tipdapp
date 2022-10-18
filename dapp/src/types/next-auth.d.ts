@@ -1,5 +1,5 @@
 import 'next-auth';
-import { UserSession } from './ts/models';
+import { UserSession } from './models';
 
 declare module 'next-auth' {
   /**

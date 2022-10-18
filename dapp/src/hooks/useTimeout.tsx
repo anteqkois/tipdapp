@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-export function useTimeout(callback, delay) {
-  const callbackRef = useRef(callback);
-  const timeoutRef = useRef();
+export function useTimeout(callback: () => void, delay: number) {
+  const callbackRef = useRef<() => void>(callback);
+  const timeoutRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     callbackRef.current = callback;
@@ -29,4 +29,4 @@ export function useTimeout(callback, delay) {
   return { reset, clear: clearT };
 }
 
-export default useTimeout
+export default useTimeout;

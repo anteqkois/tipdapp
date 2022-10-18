@@ -1,11 +1,11 @@
 import api from '@/api/apiConfig';
-import { asyncStatus } from '@/ts/utils';
 import {
-  createAsyncThunk,
-  createEntityAdapter,
-  createSelector,
-  createSlice,
+    createAsyncThunk,
+    createEntityAdapter,
+    createSelector,
+    createSlice
 } from '@reduxjs/toolkit';
+import { asyncStatus } from 'src/types/utils';
 
 export const getTipsByUser = createAsyncThunk(
   'tips/getTipsByUser',

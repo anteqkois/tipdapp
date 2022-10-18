@@ -1,4 +1,4 @@
-import { ZodParseErrors } from '@/ts/utils';
+import { ZodParseErrors } from 'src/types/utils';
 import { ZodError, ZodIssue, ZodTypeAny } from 'zod';
 
 export const validationHelper = <D>(

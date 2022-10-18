@@ -1,13 +1,13 @@
 import { useLocalStorage } from '@/hooks';
 import { useQoistipSign } from '@/hooks/useQoistipSign';
 import { useSession } from '@/lib/useSession';
-import { ZodParseErrors } from '@/ts/utils';
 import {
-  UserTokenFormObject,
-  userTokenFormParse,
+    UserTokenFormObject,
+    userTokenFormParse
 } from '@/validation/userToken.validation';
 import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { ZodParseErrors } from 'src/types/utils';
 import { Button, Card, Input } from '../utils';
 import { Details } from '../utils/Details';
 

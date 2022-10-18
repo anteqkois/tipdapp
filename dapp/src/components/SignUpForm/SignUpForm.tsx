@@ -4,12 +4,16 @@ import {
   setStep,
   validateUserData,
 } from '@/lib/redux/signUpFormSlice';
-import { ValidationError, ValidationErrors, ZodParseErrors } from '@/ts/utils';
 import { UserIcon, WalletIcon } from '@heroicons/react/24/outline';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  ValidationError,
+  ValidationErrors,
+  ZodParseErrors,
+} from 'src/types/utils';
 import ConnectWallet from '../../assets/connectWallet.svg';
 import { Button, Input } from '../utils';
 import { Stepper } from '../utils/Stepper';

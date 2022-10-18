@@ -1,14 +1,14 @@
 import Pagination from '@/components/Pagination';
+import TipsDefault from '@/components/Tip/TipsDefault';
 import { Card, StateUI } from '@/components/utils';
 import useUser from '@/hooks/useUser';
 import {
-  getTipsByUser,
-  selectCurrentData,
-  selectPageAmount,
+    getTipsByUser,
+    selectCurrentData,
+    selectPageAmount
 } from '@/lib/redux/tipSlice';
-import TipsDefault from '@/components/Tip/TipsDefault';
-import { asyncStatus } from '@/ts/utils';
 import { useDispatch, useSelector } from 'react-redux';
+import { asyncStatus } from 'src/types/utils';
 
 const Tips = () => {
   const dispatch = useDispatch();

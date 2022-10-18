@@ -1,9 +1,9 @@
 import { getTipsByUser } from '@/lib/redux/tipSlice.js';
 import { signOut, useSession } from '@/lib/useSession';
-import { UserSession } from '@/ts/models';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+import { UserSession } from 'src/types/models';
 import { useDisconnect } from 'wagmi';
 
 const tempUser = {} as UserSession;

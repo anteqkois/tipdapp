@@ -1,6 +1,7 @@
 import { Close } from '@/components/utils/Close';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { selectFormData, setErrors } from '@/lib/redux/signUpFormSlice';
+import { ApiError } from '@/types/utils';
 import {
   createAuthenticationAdapter,
   getDefaultWallets,
@@ -9,6 +10,7 @@ import {
 } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { useRouter } from 'next/router';
+import { ReactNode } from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { SiweMessage } from 'siwe';
@@ -22,7 +24,7 @@ const { chains, provider } = configureChains(
   [
     publicProvider(),
     jsonRpcProvider({
-      rpc: (chain) => ({
+      rpc: () => ({
         http: `http://127.0.0.1:8545/`,
         webSocket: `wss://127.0.0.1:8545/`,
       }),
@@ -42,7 +44,7 @@ const wagmiClient = createClient({
   provider,
 });
 
-const RainbowKitProviders = ({ children, enabled }) => {
+const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
   const dispatch = useDispatch();
   const formData = useSelector(selectFormData);
   const isMobile = useMediaQuery(['(max-width: 1024px)'], [true], true);
@@ -85,56 +87,54 @@ const RainbowKitProviders = ({ children, enabled }) => {
       return message.prepareMessage();
     },
     verify: async ({ message, signature }) => {
-      return new Promise(async (resolve, reject) => {
-        if (
-          formData.firstName &&
-          formData.lastName &&
-          formData.nick &&
-          formData.email
-        ) {
-          const response = await signIn('credentials', {
-            message: JSON.stringify(message),
-            signature,
-            formData: JSON.stringify(formData),
-            redirect: false,
-          });
-          if (response?.error) {
-            const data = JSON.parse(response.error);
+      if (
+        formData.firstName &&
+        formData.lastName &&
+        formData.nick &&
+        formData.email
+      ) {
+        const response = await signIn('credentials', {
+          message: JSON.stringify(message),
+          signature,
+          formData: JSON.stringify(formData),
+          redirect: false,
+        });
+        if (response?.error) {
+          const data = JSON.parse(response.error);
 
-            toast(
-              (t) => (
-                <span>
-                  <span className="flex items-center justify-between">
-                    <h6 className="py-2">Validation Error</h6>
-                    <Close onClick={() => toast.dismiss(t.id)} />
-                  </span>
-                  <ul className="px-4 flex flex-col gap-3 list-['📌']">
-                    {data.errors.map((error) => (
-                      <li key={error.code}>{error.message}</li>
-                    ))}
-                  </ul>
+          toast(
+            (t) => (
+              <span>
+                <span className="flex items-center justify-between">
+                  <h6 className="py-2">Validation Error</h6>
+                  <Close onClick={() => toast.dismiss(t.id)} />
                 </span>
-              ),
-              { duration: Infinity, id: 'validationError' }
-            );
-            dispatch(setErrors(data.errors));
-            reject(false);
-          } else {
-            router.push('/dashboard');
-            resolve(true);
-          }
+                <ul className="px-4 flex flex-col gap-3 list-['📌']">
+                  {data.errors.map((error: ApiError) => (
+                    <li key={error.code}>{error.message}</li>
+                  ))}
+                </ul>
+              </span>
+            ),
+            { duration: Infinity, id: 'validationError' }
+          );
+          dispatch(setErrors(data.errors));
+          return false;
         } else {
-          signIn('credentials', {
-            message: JSON.stringify(message),
-            signature,
-            redirect: true,
-            callbackUrl: `${window.location.origin}/${
-              router.query?.callback ?? '/dashboard'
-            }`,
-          });
-          resolve(true);
+          router.push('/dashboard');
+          return true;
         }
-      });
+      } else {
+        signIn('credentials', {
+          message: JSON.stringify(message),
+          signature,
+          redirect: true,
+          callbackUrl: `${window.location.origin}/${
+            router.query?.callback ?? '/dashboard'
+          }`,
+        });
+        return true;
+      }
     },
     signOut: async () => {
       // status === 'authenticated' && signOut({ callbackUrl: `${window.location.origin}/login` });
@@ -146,7 +146,6 @@ const RainbowKitProviders = ({ children, enabled }) => {
   return (
     <RainbowKitAuthenticationProvider
       adapter={authAdapter}
-      enabled={enabled}
       status={status}
     >
       <RainbowKitProvider
@@ -160,7 +159,7 @@ const RainbowKitProviders = ({ children, enabled }) => {
   );
 };
 
-const WagmiProvider = ({ children }) => {
+const WagmiProvider = ({ children }: { children: ReactNode }) => {
   return <WagmiConfig client={wagmiClient}>{children}</WagmiConfig>;
 };
 

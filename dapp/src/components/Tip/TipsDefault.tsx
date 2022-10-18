@@ -1,4 +1,4 @@
-import { TipUI } from '@/ts/models';
+import { TipUI } from 'src/types/models';
 import Tip from './Tip';
 
 type Props = {

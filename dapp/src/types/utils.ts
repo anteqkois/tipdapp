@@ -17,5 +17,7 @@ export type NavigationOption = {
 
 export type ZodParseErrors = Record<string, string>;
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type ApiError = any;
 export type ValidationErrors = any;
 export type ValidationError = any;
