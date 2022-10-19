@@ -1,6 +1,7 @@
-import Spinner from '@/components/utils/Spinner';
 import { useSession } from '@/lib/useSession';
 import { useRouter } from 'next/router';
+import { ReactNode } from 'react';
+import { PageSpinner } from './PageSpinner';
 
 type Props = {
   children: ReactNode;
@@ -12,7 +13,7 @@ export const ProtectPageGuard = ({ children, protect }: Props) => {
   const router = useRouter();
 
   if (status === 'loading') {
-    return <Spinner />;
+    return <PageSpinner />;
   }
 
   if (status === 'unauthenticated' && protect) {
@@ -20,9 +21,8 @@ export const ProtectPageGuard = ({ children, protect }: Props) => {
       pathname: '/login',
       query: { callback: router.route },
     });
-    return <Spinner />;
+    return <PageSpinner />;
   }
 
   return <>{children}</>;
 };
-// export default ProtectPageGuard;

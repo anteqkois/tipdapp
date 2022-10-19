@@ -1,5 +1,9 @@
+import { ethers } from 'ethers';
 
-
+//TODO Add chain, web3 constants
 export const ethereum = {
-  zeroAddress: '0x0000000000000000000000000000000000000000',
+  ...ethers.constants,
 };
+
+const constants = { ethereum };
+export default constants;

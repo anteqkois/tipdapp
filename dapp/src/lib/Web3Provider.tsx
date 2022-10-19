@@ -1,7 +1,7 @@
 import { Close } from '@/components/utils/Close';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { selectFormData, setErrors } from '@/lib/redux/signUpFormSlice';
-import { ApiError } from '@/types/utils';
+import { ApiError } from '@/types';
 import {
   createAuthenticationAdapter,
   getDefaultWallets,

@@ -4,7 +4,7 @@ import { getCsrfToken } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
 import { ZodError } from 'zod';
 import { prisma } from '../../lib/db.js';
-import { signUpValidation } from '../../validation/signUp.validaion.old.js';
+import { signUpValidation } from '../../validation/signUpValidaion.old.js';
 import {
   createValidationError,
   ValidationError,

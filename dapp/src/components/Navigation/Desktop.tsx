@@ -1,13 +1,13 @@
+import { NavigationOption } from '@/types';
 import {
-    AdjustmentsHorizontalIcon,
-    BanknotesIcon,
-    ChatBubbleBottomCenterTextIcon,
-    Cog6ToothIcon,
-    ComputerDesktopIcon,
-    CurrencyDollarIcon,
-    RectangleGroupIcon
+  AdjustmentsHorizontalIcon,
+  BanknotesIcon,
+  ChatBubbleBottomCenterTextIcon,
+  Cog6ToothIcon,
+  ComputerDesktopIcon,
+  CurrencyDollarIcon,
+  RectangleGroupIcon,
 } from '@heroicons/react/24/outline';
-import { NavigationOption } from 'src/types/utils';
 import { CustomConnectButton } from '../utils/CustomConnectButton';
 import Tooltip from '../utils/Tooltip';
 import Navlink from './Navlink';

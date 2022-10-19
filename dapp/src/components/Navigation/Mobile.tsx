@@ -1,16 +1,16 @@
+import { NavigationOption } from '@/types';
 import {
-    AdjustmentsHorizontalIcon,
-    BanknotesIcon,
-    ChatBubbleBottomCenterTextIcon,
-    Cog6ToothIcon,
-    ComputerDesktopIcon,
-    CurrencyDollarIcon,
-    RectangleGroupIcon
+  AdjustmentsHorizontalIcon,
+  BanknotesIcon,
+  ChatBubbleBottomCenterTextIcon,
+  Cog6ToothIcon,
+  ComputerDesktopIcon,
+  CurrencyDollarIcon,
+  RectangleGroupIcon,
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { UserSession } from 'src/types/models';
-import { NavigationOption } from 'src/types/utils';
 import Hamburger from './Hamburger';
 import Navlink from './Navlink';
 import { RainbowKitButtonMobile } from './RainbowKitButtonMobile';

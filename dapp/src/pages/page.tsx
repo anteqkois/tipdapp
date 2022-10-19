@@ -4,7 +4,7 @@ import useUser from '@/hooks/useUser';
 import {
   UserPageFormObject,
   userPageFormParse,
-} from '@/validation/userPage.validation';
+} from '@/validation/userPageValidation';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
 import Link from 'next/link';

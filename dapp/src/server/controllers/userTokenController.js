@@ -1,5 +1,5 @@
 import { prisma } from '../../lib/db.js';
-import { userTokenValidation } from '../../validation/userToken.validation.old.js';
+import { userTokenValidation } from '../../validation/userTokenValidation.old.js';
 import { createApiError } from '../middlewares/error.js';
 
 const find = async (req, res) => {

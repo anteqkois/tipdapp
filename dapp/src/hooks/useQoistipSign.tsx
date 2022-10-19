@@ -34,7 +34,7 @@ export const useQoistipSign = () => {
     functionName: 'registerUser',
     args: ['', ''],
     enabled: userToken?.data
-      ? (userToken.data as unknown as string) === ethereum.zeroAddress
+      ? (userToken.data as unknown as string) === ethereum.AddressZero
       : false,
   });
 

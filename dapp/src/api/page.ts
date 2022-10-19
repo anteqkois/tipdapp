@@ -1,4 +1,4 @@
-import { UserPageFormObject } from '@/validation/userPage.validation';
+import { UserPageFormObject } from '@/validation/userPageValidation';
 import { api } from './apiConfig';
 
 export const update = async (body: UserPageFormObject) => {

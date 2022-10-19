@@ -1,10 +1,10 @@
 import { validateFormData } from '@/api/auth';
+import { asyncStatus } from '@/types';
 import {
   createAsyncThunk,
   createSelector,
   createSlice,
 } from '@reduxjs/toolkit';
-import { asyncStatus } from 'src/types/utils';
 
 export const validateUserData = createAsyncThunk(
   'user/validateUserData',

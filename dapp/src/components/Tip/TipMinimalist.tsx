@@ -15,7 +15,7 @@ import Button from '../utils/Button';
 
 // type Props { type: 'full'|'patial'}
 
-const Tip = ({
+const TipMinimalist = ({
   txHash,
   amount,
   value,
@@ -221,4 +221,4 @@ const Tip = ({
   );
 };
 
-export default Tip;
+export default TipMinimalist;

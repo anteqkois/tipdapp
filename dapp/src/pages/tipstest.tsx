@@ -1,5 +1,5 @@
 import Pagination from '@/components/Pagination';
-import TipsDefault from '@/components/Tip/TipsDefault';
+import { TipsList } from '@/components/Tip/TipsList';
 import { Card, StateUI } from '@/components/utils';
 import useUser from '@/hooks/useUser';
 import {
@@ -32,7 +32,10 @@ const Tips = () => {
           error={error}
           EmptyComponent={<p className="w-full text-center">No tips to show</p>}
         >
-          <TipsDefault tips={tips} />
+          <TipsList
+            tips={tips}
+            tipView="Minimalist"
+          />
         </StateUI>
         <div className="flex items-center justify-center pt-4 text-lg">
           <Pagination
