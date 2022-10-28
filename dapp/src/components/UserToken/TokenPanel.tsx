@@ -1,8 +1,7 @@
-import { useClipboard, useMediaQuery } from '@/hooks';
+import { useClipboard, useMediaQuery, useUserToken } from '@/hooks';
 import { dateFormat } from '@/lib/dayjs';
 import cutAddress from '@/utils/cutAddress';
 import { UserToken } from '@prisma/client';
-import { useUserToken } from '../../hooks/useUserToken';
 import { ethers } from '../../lib/ethersProvider';
 import { Button, Card } from '../utils';
 

@@ -8,49 +8,35 @@ const createIfNotExsist = async (dir) => {
   !fs.existsSync(dir) && fs.mkdirSync(dir);
 };
 
+const saveToService = async (tokenAddr, contractName, txDeploy, TokenArtifact, folderPath) => {
+  const serviceArtifactsDir = path.join(__dirname, '../..', folderPath);
+  const serviceNetworkDir = path.join(serviceArtifactsDir, hre.network.name);
+
+  await createIfNotExsist(serviceArtifactsDir);
+  await createIfNotExsist(serviceNetworkDir);
+
+  fs.writeFileSync(
+    `${serviceNetworkDir}/${contractName}-txDeploy.json`,
+    JSON.stringify(
+      {
+        txDeploy,
+      },
+      undefined,
+      2,
+    ),
+  );
+
+  fs.writeFileSync(
+    `${serviceNetworkDir}/${contractName}.json`,
+    JSON.stringify({ address: tokenAddr, abi: TokenArtifact.abi }, null, 2),
+  );
+};
+
+const servicesPath = ['/server/artifacts/', '/dapp/src/artifacts/', '/blockchainListeners/artifacts/'];
+
 const saveDataToServices = async (tokenAddr, contractName, txDeploy) => {
-  const dappArtifactsDir = path.join(__dirname, '../..', '/dapp/src/artifacts/');
-  const dappNetworkDir = path.join(dappArtifactsDir, hre.network.name);
-
-  const blockchainListenersArtifactsDir = path.join(__dirname, '../..', '/blockchainListeners/artifacts/');
-  const blockchainListenersNetworkDir = path.join(blockchainListenersArtifactsDir, hre.network.name);
-
-  createIfNotExsist(dappArtifactsDir);
-  createIfNotExsist(dappNetworkDir);
-  createIfNotExsist(blockchainListenersArtifactsDir);
-  createIfNotExsist(blockchainListenersNetworkDir);
-
-  fs.writeFileSync(
-    `${dappNetworkDir}/${contractName}-txDeploy.json`,
-    JSON.stringify(
-      {
-        txDeploy,
-      },
-      undefined,
-      2,
-    ),
-  );
-  fs.writeFileSync(
-    `${blockchainListenersNetworkDir}/${contractName}-txDeploy.json`,
-    JSON.stringify(
-      {
-        txDeploy,
-      },
-      undefined,
-      2,
-    ),
-  );
-
   const TokenArtifact = artifacts.readArtifactSync(contractName);
-
-  fs.writeFileSync(
-    `${dappNetworkDir}/${contractName}.json`,
-    JSON.stringify({ address: tokenAddr, abi: TokenArtifact.abi }, null, 2),
-  );
-  fs.writeFileSync(
-    `${blockchainListenersNetworkDir}/${contractName}.json`,
-    JSON.stringify({ address: tokenAddr, abi: TokenArtifact.abi }, null, 2),
-  );
+  servicesPath.forEach((folderPath) => saveToService(tokenAddr, contractName, txDeploy, TokenArtifact, folderPath));
 };
 
 async function main() {
@@ -69,7 +55,7 @@ async function main() {
 
   console.log('Qoistip deployed to:', qoistipSign.address, 'on network: ', hre.network.name);
 
-  saveDataToServices(qoistipSign.address, 'QoistipSign', tx.deployTransaction);
+  await saveDataToServices(qoistipSign.address, 'QoistipSign', tx.deployTransaction);
 
   // harhat 0xaB7B4c595d3cE8C85e16DA86630f2fc223B05057
   // localhost 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512

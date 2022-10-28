@@ -1,3 +1,4 @@
+'use client';
 import { NavigationOption } from '@/types';
 import {
   AdjustmentsHorizontalIcon,
@@ -75,7 +76,7 @@ const Mobile = ({ user }: Props) => {
       <div className="fixed top-0 left-0 w-full h-12 bg-neutral-50 px-2 grid grid-cols-[50px_auto_45px] gap-5 items-center z-30 shadow-md">
         <div className="flex-center">LOGO</div>
         <p className="text-lg underline flex-center decoration-2 decoration-primary">
-          {user.nick}
+          {user?.nick}
         </p>
         <Hamburger
           isOpen={isOpen}

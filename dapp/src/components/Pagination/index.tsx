@@ -1,4 +1,4 @@
-import useMediaQuery from '@/hooks/useMediaQuery';
+import useMediaQuery from '@/hooks';
 import { Key, useCallback, useMemo, useRef } from 'react';
 import PaginationButton from './PaginationButton';
 

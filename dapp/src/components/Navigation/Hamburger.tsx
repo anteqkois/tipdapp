@@ -1,3 +1,4 @@
+'use client';
 import { Dispatch, MouseEvent, SetStateAction } from 'react';
 
 type Props = {

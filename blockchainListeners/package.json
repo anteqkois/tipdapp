@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/anteqkois/qoisdapp#readme",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon --require dotenv/config index.js dotenv_config_path=.env.development"
+    "dev": "NODE_ENV=development nodemon --require dotenv/config index.js dotenv_config_path=.env.development",
+    "start": "NODE_ENV=production node --require dotenv/config index.js dotenv_config_path=.env.development"
   },
   "dependencies": {
     "axios": "^0.27.2",
