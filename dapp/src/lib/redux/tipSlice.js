@@ -19,6 +19,7 @@ export const getTipsByUser = createAsyncThunk(
       const ids = data.tips.reduce((prev, curr) => [...prev, curr.txHash], []);
       return { tips: data.tips, ids, amount: data.count };
     } catch (error) {
+      console.log(error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   },
@@ -88,14 +89,13 @@ const tipsSlice = createSlice({
       };
     });
     builder.addCase(getTipsByUser.rejected, (state, action) => {
-      // console.log(action);
       if (action.error.name === 'ConditionError') {
         state.currentPage = action.meta.arg.page;
-      } else if (action.payload?.[0]?.name === 'ApiError') {
+      } else if (action.payload.name === 'ApiError') {
         state.error = action.payload.userMessage;
         state.status = asyncStatus.fail;
       } else {
-        state.error = 'Something went wrong';
+        state.error = action.payload;
         state.status = asyncStatus.fail;
       }
     });

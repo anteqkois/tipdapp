@@ -27,6 +27,5 @@
 
     // "@typescript-eslint/no-empty-function": "off"
     // "react-hooks/exhaustive-deps": "off"
-  },
-  "ignorePatterns":["*.config.cjs"]
+  }
 }

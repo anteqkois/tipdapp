@@ -1,8 +1,6 @@
-'use client';
 import classNames from 'classnames';
 import Link, { LinkProps } from 'next/link';
-import { usePathname } from 'next/navigation';
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { AnchorHTMLAttributes } from 'react';
 
 type Props = {
@@ -17,21 +15,20 @@ const Navlink = ({
   children,
   ...props
 }: Props) => {
-  const pathname = usePathname();
-  // const router = useRouter();
+  const router = useRouter();
 
   return (
     <Link
       {...props}
       href={href}
-      className={classNames(className, [
-        pathname.includes(href.toString()) && classNameActive,
-      ])}
     >
-      {/* <a */}
-      {/* > */}
-      {children}
-      {/* </a> */}
+      <a
+        className={classNames(className, [
+          router.pathname.includes(href.toString()) && classNameActive,
+        ])}
+      >
+        {children}
+      </a>
     </Link>
   );
 };

@@ -12,7 +12,7 @@ export const validateUserData = createAsyncThunk(
     try {
       const { data } = await validateFormData(userData);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.error);
+      return thunkAPI.rejectWithValue(error.response.data.errors);
     }
   }
 );
