@@ -1,6 +1,5 @@
 import { useLocalStorage } from '@/hooks';
-import { useQoistipSign } from '@/hooks/useQoistipSign';
-import { useSession } from '@/lib/useSession';
+import { useQoistipSign } from '@/hooks';
 import { ZodParseErrors } from '@/types';
 import {
   UserTokenFormObject,
@@ -43,7 +42,8 @@ export const CreateUserToken = () => {
   const [errors, setErrors] = useState<ZodParseErrors>({} as ZodParseErrors);
   const [userTokenFormData, setUserTokenFormData] =
     useLocalStorage<UserTokenFormObject>('userTokenFormData', initialUserToken);
-  const { refreshSessionData } = useSession();
+  //TODO Refreshh user data after create user token
+  // const { refreshSessionData } = useSession();
 
   const { registerUser } = useQoistipSign();
 
@@ -64,7 +64,7 @@ export const CreateUserToken = () => {
         });
 
         setUserTokenFormData(initialUserToken);
-        await refreshSessionData();
+        // await refreshSessionData();
 
         await registerUser.data?.wait(3);
         toast.success(`Transaction have 3 confirmation`, {

@@ -1,3 +1,4 @@
+'use client';
 import { NavigationOption } from '@/types';
 import {
   AdjustmentsHorizontalIcon,

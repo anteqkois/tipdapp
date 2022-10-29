@@ -1,28 +1,40 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-#Hardhat files
-contracts/typechain
-contracts/cache
-contracts/artifacts
-contracts/node_modules
-
 # dependencies
 /node_modules
 **/node_modules
 /.pnp
 .pnp.js
 
-# testing
-/coverage
-coverage.json
+#contracts files
+contracts/typechain
+contracts/cache
+contracts/artifacts
+contracts/node_modules
 
-# next.js
+# dapp
 dapp/.next/
 dapp/out/
 dapp/next-env.d.ts
-
-# dapp production
 dapp/build
+dapp/.vercel
+
+# server
+server/artifacts
+server/node_modules
+
+# local env files
+**/.env
+**/.env.local
+**/.env.development
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+
+
+# testing
+/coverage
+coverage.json
 
 # misc
 .DS_Store
@@ -34,14 +46,3 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-
-# local env files
-**/.env
-**/.env.local
-**/.env.development
-**/.env.development.local
-**/.env.test.local
-**/.env.production.local
-
-# vercel
-dapp/.vercel

@@ -3,19 +3,41 @@
     "baseUrl": ".",
     "paths": {
       // "@/src/*": ["src/*"],
-      "@/components/*": ["src/components/*"],
-      "@/types/*": ["src/types/*"],
-      "@/types": ["src/types/index.ts"],
-      "@/api/*": ["src/api/*"],
-      "@/utils/*": ["src/utils/*"],
-      "@/lib/*": ["src/lib/*"],
-      "@/validation/*": ["src/validation/*"],
-      "@/hooks": ["src/hooks"],
-      "@/hooks/*": ["src/hooks/*"]
+      "@/components/*": [
+        "src/components/*"
+      ],
+      "@/types/*": [
+        "src/types/*"
+      ],
+      "@/types": [
+        "src/types/index.ts"
+      ],
+      "@/api/*": [
+        "src/api/*"
+      ],
+      "@/utils/*": [
+        "src/utils/*"
+      ],
+      "@/lib/*": [
+        "src/lib/*"
+      ],
+      "@/validation/*": [
+        "src/validation/*"
+      ],
+      "@/hooks": [
+        "src/hooks"
+      ],
+      "@/hooks/*": [
+        "src/hooks/*"
+      ]
       // "@/lib": ["src/lib"],
     },
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -27,20 +49,30 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx",
+    "**/*.tsx"
     // "**/*.js",
-    // "**/*.jsx",
     // "src/pages/api/auth/[...nextauth].ts",
-    "lib/prismaClient.js",
-    "src/lib/redux/tipSlice.js",
-    "src/validation/userTokenValidation.old.js",
-    "src/validation/signUpValidaion.old.js",
-    "src/server/controllers/authController.js"
+    // "lib/prismaClient.js",
+    // "src/lib/redux/tipSlice.js",
+    // "src/validation/userTokenValidation.old.js",
+    // "src/validation/signUpValidaion.old.js",
+    // "src/server/controllers/authController.js"
+    ,
+    ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "dist", "src/artifacts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/artifacts"
+  ]
 }

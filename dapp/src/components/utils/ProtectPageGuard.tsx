@@ -1,28 +1,27 @@
-import { useSession } from '@/lib/useSession';
-import { useRouter } from 'next/router';
+import { useUser } from '@/hooks';
 import { ReactNode } from 'react';
-import { PageSpinner } from './PageSpinner';
 
 type Props = {
   children: ReactNode;
-  protect: boolean;
+  // protect: boolean;
 };
 
-export const ProtectPageGuard = ({ children, protect }: Props) => {
-  const { status } = useSession();
-  const router = useRouter();
+export const ProtectPageGuard = ({ children }: Props) => {
+  const { status } = useUser();
+  // const router = useRouter();
 
-  if (status === 'loading') {
-    return <PageSpinner />;
-  }
+  // if (status === 'loading') {
+  //   return <PageSpinner />;
+  // }
 
-  if (status === 'unauthenticated' && protect) {
-    router.push({
-      pathname: '/login',
-      query: { callback: router.route },
-    });
-    return <PageSpinner />;
-  }
+  // if (status === 'unauthenticated' && protect) {
+  //   console.log(window);
+  //   router.push({
+  //     pathname: '/login',
+  //     query: { callback: router.route },
+  //   });
+  //   return <PageSpinner />;
+  // }
 
   return <>{children}</>;
 };
