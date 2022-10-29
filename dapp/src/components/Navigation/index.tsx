@@ -1,4 +1,3 @@
-'use client';
 import { useMediaQuery, useUser } from '@/hooks';
 import Desktop from './Desktop';
 import Mobile from './Mobile';

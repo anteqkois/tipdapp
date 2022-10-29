@@ -4,7 +4,7 @@ const userSession = Prisma.validator<Prisma.UserArgs>()({
   include: { avatar: true, token: true, page: true },
 });
 
-export type UserSession = Prisma.UserGetPayload<typeof userSession> | null;
+export type UserSession = Prisma.UserGetPayload<typeof userSession>;
 
 const tipUI = Prisma.validator<Prisma.TipArgs>()({
   include: {

@@ -35,7 +35,7 @@ module.exports = {
         url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
         blockNumber: 15741469,
       },
-      loggingEnabled: false,
+      loggingEnabled: true,
       // chainId: 31337,
       timeout: 200000,
       // accounts: [process.env.DEPLOYER_WALLET_PRIVATE_KEY, process.env.SIGNER_WALLET_PRIVATE_KEY],

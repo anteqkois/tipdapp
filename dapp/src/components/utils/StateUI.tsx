@@ -1,20 +1,19 @@
-import { ReactNode } from 'react';
 import ErrorMessage from './ErrorMessage';
 import Spinner from './Spinner';
 
 type StateUIProps = {
   loading: boolean;
-  empty?: boolean;
-  error?: string;
+  empty: boolean;
+  error: string;
   LoadingComponent?: JSX.Element;
-  EmptyComponent?: JSX.Element;
-  children: ReactNode;
+  EmptyComponent: JSX.Element;
+  children: JSX.Element;
 };
 //TODO add error/fail state
 export const StateUI = ({
   loading,
-  empty = false,
-  error = '',
+  empty,
+  error,
   LoadingComponent = <Spinner />,
   EmptyComponent = <Spinner />,
   children,
