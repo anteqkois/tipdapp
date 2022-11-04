@@ -1,7 +1,7 @@
 'use client';
 import { PageSpinner } from '@/components/utils';
 import { useUser } from '@/hooks';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 
 type Props = {
@@ -11,22 +11,14 @@ type Props = {
 export const ProtectPageGuard = ({ children }: Props) => {
   const { status } = useUser();
   const router = useRouter();
-  console.log(router);
-
-  // useEffect(() => {
-  // }, [third])
 
   if (status === 'loading') {
     return <PageSpinner />;
   }
 
+  //TODO add callback feature
   if (status === 'unauthenticated') {
-    // console.log(window);
-
-    router?.push({
-      pathname: '/login',
-      query: { callback: router.route },
-    });
+    router?.push('/login');
     return <PageSpinner />;
   }
 

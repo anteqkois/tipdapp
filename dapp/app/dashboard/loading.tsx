@@ -1,4 +1,3 @@
-'use client';
 import { PageSpinner } from '@/components/utils';
 
 export default function Loading() {

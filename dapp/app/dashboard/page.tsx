@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 const Dashboard = () => {
   const { user } = useUser();
 
-  const { status, error, tips } = useSelector(selectCurrentData);
+  // const { status, error, tips } = useSelector(selectCurrentData);
   console.log(user);
   return (
     <StateUI loading={!user}>
@@ -58,7 +58,7 @@ const Dashboard = () => {
         </Card>
         <Card className="col-span-full">
           <h4 className="mb-4">Latest tips:</h4>
-          <StateUI
+          {/* <StateUI
             loading={status === asyncStatus.loading}
             empty={tips.length === 0}
             error={error}
@@ -67,7 +67,7 @@ const Dashboard = () => {
             }
           >
             <TipsDefault tips={tips} />
-          </StateUI>
+          </StateUI> */}
           <div className="flex justify-end">
             <Button className="mt-4">
               <Link href="/tips">See more tips</Link>

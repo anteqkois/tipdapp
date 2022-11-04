@@ -86,7 +86,7 @@ export const UserProvider = ({ children }: Props) => {
   // const [status, setStatus] = useState<AuthStatus>('unauthenticated');
   const { openConnectModal } = useConnectModal();
   const { disconnectAsync } = useDisconnect();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const router = useRouter();
 
   // console.log(status);
@@ -101,11 +101,11 @@ export const UserProvider = ({ children }: Props) => {
   // }, [session]);
 
   //Dowload first tips page on login user
-  useEffect(() => {
-    if (user?.address)
-      // @ts-ignore
-      dispatch(getTipsByUser({ page: 1 }));
-  }, [user?.address, dispatch]);
+  // useEffect(() => {
+  //   if (user?.address)
+  //     // @ts-ignore
+  //     dispatch(getTipsByUser({ page: 1 }));
+  // }, [user?.address, dispatch]);
 
   const login = () => {
     status === 'unauthenticated'

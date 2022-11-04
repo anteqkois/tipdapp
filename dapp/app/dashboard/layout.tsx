@@ -1,4 +1,3 @@
-'use client';
 import Navigation from '@/components/Navigation';
 import { ReactNode } from 'react';
 import { ProtectPageGuard } from './ProtectPageGuard';
