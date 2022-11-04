@@ -1,4 +1,3 @@
-import NextAuth from 'next-auth/next';
 import { ZodError } from 'zod';
 import { prisma } from '../lib/db.js';
 import {

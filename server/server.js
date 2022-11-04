@@ -31,11 +31,10 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(cookieParser());
 
-server.use('/api', apiRouter);
-
-server.all('*', (req, res) => {
-  return handle(req, res);
+server.use('/test', (req, res)=>{
+  res.send('working 4!')
 });
+server.use('/api', apiRouter);
 
 //handling errors
 server.use(handleErrors);

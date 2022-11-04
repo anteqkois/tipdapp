@@ -3,24 +3,31 @@ import { createApiError } from '../middlewares/error.js';
 
 // const PAGE_SIZE = 2;
 const findByAddress = async (req, res) => {
-  console.log(req.jwtData);
-  const page = parseInt(req.query?.page) ?? 1;
-  const pageSize = parseInt(req.query?.pageSize) ?? 20;
+  // console.log(req.jwtData);
+  // const page = parseInt(req.query?.page) ?? 1;
+  // const pageSize = parseInt(req.query?.pageSize) ?? 20;
+  // const skip = (page - 1) * pageSize;
+  const page = 1;
+  const pageSize = 20;
   const skip = (page - 1) * pageSize;
-
   // typeof req.query?.userAddress === 'undefined' && createApiError('Missing user address.');
 
   const count = await prisma.tip.count({
     where: {
-      userAddress: req.jwtData.metadata.address,
+      // userAddress: req.jwtData.metadata.address,
+      userAddress: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
     },
   });
+
+  console.log('pagesize', pageSize);
+  console.log('skip', skip);
 
   const tips = await prisma.tip.findMany({
     skip,
     take: pageSize,
     where: {
-      userAddress: req.jwtData.metadata.address,
+      // userAddress: req.jwtData.metadata.address,
+      userAddress: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
     },
     orderBy: {
       date: 'asc',

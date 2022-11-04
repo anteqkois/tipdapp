@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: qoistip
+      POSTGRES_HOST_AUTH: trust
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgressql/data
+  server:
+    build: server/
+    depends_on:
+      - db
+    container_name: qoisdapp-server
+    env_file:
+      - server/.env.development
+    command: npm run dev-update
+    ports:
+      - 3001:3001
+    volumes:
+      - ./server:/app
+volumes:
+  db:

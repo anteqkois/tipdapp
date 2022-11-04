@@ -15,6 +15,7 @@ const Dashboard = () => {
   console.log(user);
   return (
     <StateUI loading={!user}>
+      a
       <section className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-4">
         <Card className="flex items-center gap-4 col-span-2 row-span-2">
           <Avatar

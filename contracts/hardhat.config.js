@@ -1,6 +1,6 @@
 require('@nomicfoundation/hardhat-toolbox');
 require('@openzeppelin/hardhat-upgrades');
-require('hardhat-ethernal');
+// require('hardhat-ethernal');
 require('dotenv').config({ path: process.env.dotenv_config_path ? process.env.dotenv_config_path : '.env.development' });
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -92,10 +92,10 @@ module.exports = {
   mocha: {
     timeout: 200000,
   },
-  ethernal: {
-    disabled: true,
-    email: process.env.ETHERNAL_EMAIL,
-    password: process.env.ETHERNAL_PASSWORD,
-    workspace: 'Qoisdapp',
-  },
+  // ethernal: {
+  //   disabled: true,
+  //   email: process.env.ETHERNAL_EMAIL,
+  //   password: process.env.ETHERNAL_PASSWORD,
+  //   workspace: 'Qoisdapp',
+  // },
 };
