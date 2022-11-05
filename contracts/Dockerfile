@@ -1,9 +1,9 @@
-FROM node:18.12.0-slim
-# FROM node:17.3
+FROM node:18.12.0-alpine
 
-RUN apt-get update || : && apt-get install -y \
- python3 \
- build-essential
+RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+# RUN apk update && apk add --no-cache \
+#  python3 \
+#  build-essential
 
 WORKDIR /app 
 
@@ -17,8 +17,3 @@ COPY entrypoint.sh ./
 COPY . .
 
 ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
-# CMD bash entrypoint.sh
-# ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
-# CMD npm run dev
-# CMD npx hardhat node && sleep 12 & npm run deploy-dev
-# npx hardhat node & sleep 12 && npm run deploy-dev
