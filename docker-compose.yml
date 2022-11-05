@@ -13,15 +13,40 @@ services:
       - db:/var/lib/postgressql/data
   server:
     build: server/
+    container_name: server
+    command: ${SERVER_COMMAND}
     depends_on:
       - db
-    container_name: qoisdapp-server
+      - hardhat
     env_file:
       - server/.env.development
-    command: npm run dev-update
+      - server/prisma/.env
     ports:
       - 3001:3001
     volumes:
       - ./server:/app
+  dapp:
+    build: dapp/
+    container_name: dapp
+    command: npm run dev
+    depends_on:
+      - server
+      - hardhat
+    env_file:
+      - dapp/.env.development
+    ports:
+      - 3000:3000
+    volumes:
+      - ./dapp:/app
+  hardhat:
+    build: contracts/
+    container_name: hardhat
+    # command: npm run dev
+    env_file:
+      - contracts/.env.development
+    ports:
+      - 8545:8545
+    volumes:
+      - ./contracts:/app
 volumes:
   db:

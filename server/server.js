@@ -6,6 +6,7 @@ import { handleErrors, notFound } from './middlewares/error.js';
 import apiRouter from './routes/index.js';
 // require('dotenv').config({ path: process.env.dotenv_config_path ? process.env.dotenv_config_path : '.env.development' });
 import dotenv from 'dotenv';
+import { logRequest } from './middlewares/logRequest.js';
 const { config } = dotenv;
 config({ path: process.env.dotenv_config_path ? process.env.dotenv_config_path : '.env.development' });
 
@@ -31,9 +32,8 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(cookieParser());
 
-server.use('/test', (req, res)=>{
-  res.send('working 4!')
-});
+server.use('*', logRequest);
+
 server.use('/api', apiRouter);
 
 //handling errors

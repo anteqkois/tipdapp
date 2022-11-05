@@ -48,10 +48,10 @@ async function main() {
   const qoistipSign = await hre.upgrades.deployProxy(QoistipSign, [signerAdmin.address], { kind: 'uups' });
   const tx = await qoistipSign.deployed();
 
-  await hre.ethernal.push({
-    name: 'QoistipSign',
-    address: qoistipSign.address,
-  });
+  // await hre.ethernal.push({
+  //   name: 'QoistipSign',
+  //   address: qoistipSign.address,
+  // });
 
   console.log('Qoistip deployed to:', qoistipSign.address, 'on network: ', hre.network.name);
 

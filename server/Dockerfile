@@ -1,5 +1,5 @@
-# FROM node:18.12.0
-FROM node:17.3
+FROM node:18.12.0
+# FROM node:17.3
 
 RUN apt-get update && apt-get -y install openssl
 
@@ -11,11 +11,8 @@ COPY package*.json ./
 COPY .npmrc ./
 RUN npm install
 
-# COPY prisma ./prisma/
 COPY prisma ./prisma/
-# COPY prisma/.env ./prisma/
 RUN npx prisma generate
-# RUN npm run prisma-update
 
 COPY . .
 

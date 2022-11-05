@@ -1,10 +1,13 @@
 **/.dockerignore
 **/.env
 **/.env.development
+**/.env.example
 **/.log
 **/docker-compose*
 **/compose*
 **/Dockerfile*
 **/node_modules
 **/npm-debug.log
+.openzeppelin
+cache
 README.md
