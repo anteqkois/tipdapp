@@ -24,7 +24,9 @@ export const Avatar = ({
   ...rest
 }: AvatarProps) => {
   return (
-    <AvatarPrimitive.Root>
+    <AvatarPrimitive.Root
+      className={`relative shadow-inner-avatar rounded-md w-7 aspect-square overflow-hidden ${className}`}
+    >
       <AvatarPrimitive.Image
         {...rest}
         // create utils function to build url to image
@@ -36,18 +38,12 @@ export const Avatar = ({
         delayMs={100}
         className={className}
       >
-        <div
-          className={`inline-block shadow-inner-avatar rounded-md w-7 aspect-square overflow-hidden ${className}`}
-        >
           <Image
-            height={24}
-            width={24}
-            layout="responsive"
+            fill={true}
             {...rest}
             alt="user avatar"
             src={`https://avatars.dicebear.com/api/pixel-art-neutral/${address}.svg`}
           />
-        </div>
       </AvatarPrimitive.Fallback>
     </AvatarPrimitive.Root>
   );
