@@ -206,15 +206,15 @@ const verifyMessage = async (req, res) => {
 
 const logout = async (req, res) => {
   // res.clearCookie('foo');
-  if (req.cookies.authToken) {
+  // if (req.cookies.authToken) {
     res.cookie('authToken', '', {
       maxAge: 0,
       httpOnly: true,
     });
     res.status(200).send({ message: 'You are succesfully logout.' });
-  } else {
-    createApiError('You have not logged in yet.', 422);
-  }
+  // } else {
+  //   createApiError('You have not logged in yet.', 422);
+  // }
 };
 
 const validate = async (req, res) => {

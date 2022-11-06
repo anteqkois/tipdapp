@@ -1,0 +1,157 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [
+    {
+      "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "txHash": "0x75146e8443129a9e0cba06d62a2a5d571d956824b202b5ace4906da6fe789d9e",
+      "kind": "uups"
+    },
+    {
+      "address": "0x4951A1C579039EbfCBA0BE33D2cd3A6D30b0f802",
+      "txHash": "0x016aef6d97722599eef86fa5ebfdbb69581a217f43c77a12ce3ce2ab84829e23",
+      "kind": "uups"
+    }
+  ],
+  "impls": {
+    "a558b8615c262c1e75c9fa5a5fa108efe82d27967850f2f517567107830d48c9": {
+      "address": "0x00CAC06Dd0BB4103f8b62D280fE9BCEE8f26fD59",
+      "txHash": "0xfabffcb1d632fdb74ed9ba36187ea994610cae477befe22811782aa27163e224",
+      "layout": {
+        "solcVersion": "0.8.13",
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC1967UpgradeUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:211"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "UUPSUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol:107"
+          },
+          {
+            "label": "_minValue",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_uint256",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign/QoistipSign.sol:26"
+          },
+          {
+            "label": "_donateFee",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_uint256",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign/QoistipSign.sol:28"
+          },
+          {
+            "label": "_paused",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_bool",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign/QoistipSign.sol:30"
+          },
+          {
+            "label": "_signerAdmin",
+            "offset": 1,
+            "slot": "103",
+            "type": "t_address",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign/QoistipSign.sol:32"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_address",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign/QoistipSign.sol:33"
+          },
+          {
+            "label": "_balanceETH",
+            "offset": 0,
+            "slot": "105",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign/QoistipSign.sol:35"
+          },
+          {
+            "label": "_addressToTokenToBalance",
+            "offset": 0,
+            "slot": "106",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign/QoistipSign.sol:36"
+          },
+          {
+            "label": "_tokenToUser",
+            "offset": 0,
+            "slot": "107",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "QoistipSign",
+            "src": "contracts/QoistipSign/QoistipSign.sol:38"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    }
+  }
+}

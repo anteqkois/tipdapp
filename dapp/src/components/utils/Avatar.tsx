@@ -7,9 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-import { File } from '@prisma/client';
+// import { File } from '@prisma/client';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import Image, { ImageProps } from 'next/image';
+type File = any;
 
 type AvatarProps = {
   avatar?: File | null;

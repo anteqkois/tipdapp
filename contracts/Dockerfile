@@ -16,4 +16,6 @@ COPY entrypoint.sh ./
 
 COPY . .
 
+EXPOSE 8545
+
 ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]

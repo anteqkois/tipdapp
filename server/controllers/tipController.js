@@ -15,8 +15,8 @@ const findByAddress = async (req, res) => {
 
   const count = await prisma.tip.count({
     where: {
-      // userAddress: req.jwtData.metadata.address,
-      userAddress: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+      userAddress: req.jwtData.metadata.address,
+      // userAddress: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
     },
   });
   
@@ -24,8 +24,8 @@ const findByAddress = async (req, res) => {
     skip,
     take: pageSize,
     where: {
-      // userAddress: req.jwtData.metadata.address,
-      userAddress: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+      userAddress: req.jwtData.metadata.address,
+      // userAddress: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
     },
     orderBy: {
       date: 'asc',

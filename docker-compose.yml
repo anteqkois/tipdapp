@@ -17,7 +17,7 @@ services:
     command: ${SERVER_COMMAND}
     depends_on:
       - db
-      - hardhat
+      # - hardhat
     env_file:
       - server/.env.development
       - server/prisma/.env
@@ -31,22 +31,22 @@ services:
     command: npm run dev
     depends_on:
       - server
-      - hardhat
+      # - hardhat
     env_file:
       - dapp/.env.development
     ports:
       - 3000:3000
     volumes:
       - ./dapp:/app
-  hardhat:
-    build: contracts/
-    container_name: hardhat
-    # command: npm run dev
-    env_file:
-      - contracts/.env.development
-    ports:
-      - 8545:8545
-    volumes:
-      - ./contracts:/app
+  # hardhat:
+  #   build: contracts/
+  #   container_name: hardhat
+  #   # command: npm run dev
+  #   env_file:
+  #     - contracts/.env.development
+  #   ports:
+  #     - 8545:8545
+  #   volumes:
+  #     - ./contracts:/app
 volumes:
   db:

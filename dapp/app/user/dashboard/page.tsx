@@ -7,6 +7,7 @@ import { asyncStatus } from '@/types';
 import cutAddress from '@/utils/cutAddress';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
+import TipsList from './TipsList';
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -15,7 +16,6 @@ const Dashboard = () => {
   console.log(user);
   return (
     <StateUI loading={!user}>
-      a
       <section className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-4">
         <Card className="flex items-center gap-4 col-span-2 row-span-2">
           <Avatar
@@ -68,6 +68,7 @@ const Dashboard = () => {
           >
             <TipsDefault tips={tips} />
           </StateUI> */}
+          {/* <TipsList/> */}
           <div className="flex justify-end">
             <Button className="mt-4">
               <Link href="/tips">See more tips</Link>

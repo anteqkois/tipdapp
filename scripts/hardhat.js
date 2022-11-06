@@ -6,10 +6,10 @@ $.verbose = true;
 try {
   cd('contracts');
   $`npx hardhat node`;
-  await sleep(12000);
+  await sleep(5000);
   await $`npm run deploy-dev`;
-  cd('../blockchainListeners');
-  $`npm run start`;
+  // cd('../blockchainListeners');
+  // $`npm run start`;
 } catch (error) {
   console.log(chalk.red('Error encourage'), error);
 }

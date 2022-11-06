@@ -3,7 +3,7 @@ import { logoutUser, verifyMessage } from '@/api/auth';
 import { getTipsByUser } from '@/lib/redux/tipSlice.js';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import {
   createContext,
   Dispatch,
@@ -127,9 +127,10 @@ export const UserProvider = ({ children }: Props) => {
       const { data } = await verifyMessage({ message, signature });
       setUser(data.user);
       setStatus('authenticated');
-      router.push('/dashboard');
+      router.push('/user/dashboard');
       return true;
     } catch (err: unknown) {
+      console.log(err)
       if (axios.isAxiosError(err)) {
         toast.error(err.response?.data.error[0].message);
       }
@@ -140,10 +141,15 @@ export const UserProvider = ({ children }: Props) => {
 
   const logout = async () => {
     try {
-      await disconnectAsync();
-      const { data } = await logoutUser();
-      toast.success(data.message);
-      setStatus('unauthenticated');
+      if(status === 'authenticated'){
+        await disconnectAsync();
+        const { data } = await logoutUser();
+        toast.success(data.message);
+        setStatus('unauthenticated');
+        setUser(null);
+      }else{
+        toast.error('You are not conneted.');
+      }
     } catch (err) {
       if (axios.isAxiosError(err)) {
         toast.error(err.response?.data.error[0].message);
