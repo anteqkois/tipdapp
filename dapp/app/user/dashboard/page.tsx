@@ -7,19 +7,31 @@ import { asyncStatus } from '@/types';
 import cutAddress from '@/utils/cutAddress';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
-import TipsList from './TipsList';
+import { useQuery } from '@tanstack/react-query';
+import api from '@/api/apiConfig';
+// import api from '@/api/apiConfig';
+
+async function getData() {
+  const { data } = await api.get('tip', {
+    params: { page: 1, pageSize: 50 },
+  });
+  return data;
+}
 
 const Dashboard = () => {
   const { user } = useUser();
+  const { status, data, error, isFetching } = useQuery({
+    queryKey: ['tip'],
+    queryFn: getData,
+  });
 
+  console.log({ status, data, error, isFetching });
   // const { status, error, tips } = useSelector(selectCurrentData);
-  console.log(user);
   return (
     <StateUI loading={!user}>
       <section className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-4">
         <Card className="flex items-center gap-4 col-span-2 row-span-2">
           <Avatar
-            // avatarURL={user}
             avatar={user?.avatar}
             address={user?.address}
             className="!w-14"
@@ -58,17 +70,16 @@ const Dashboard = () => {
         </Card>
         <Card className="col-span-full">
           <h4 className="mb-4">Latest tips:</h4>
-          {/* <StateUI
-            loading={status === asyncStatus.loading}
-            empty={tips.length === 0}
-            error={error}
+          <StateUI
+            loading={isFetching}
+            empty={data?.tips?.length === 0}
+            error={error as string}
             EmptyComponent={
               <p className="w-full text-center">No tips to show</p>
             }
           >
-            <TipsDefault tips={tips} />
-          </StateUI> */}
-          {/* <TipsList/> */}
+            <TipsDefault tips={data?.tips} />
+          </StateUI>
           <div className="flex justify-end">
             <Button className="mt-4">
               <Link href="/tips">See more tips</Link>

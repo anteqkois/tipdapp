@@ -107,6 +107,7 @@ export const UserProvider = ({ children }: Props) => {
   //     dispatch(getTipsByUser({ page: 1 }));
   // }, [user?.address, dispatch]);
 
+  //TODO add function to check if session is still valid (in interwal, becouse token is remowe but storage flag no)
   const login = () => {
     status === 'unauthenticated'
       ? openConnectModal?.()

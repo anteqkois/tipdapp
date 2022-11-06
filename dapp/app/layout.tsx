@@ -4,7 +4,13 @@ import ReduxProvider from '@/lib/redux/ReduxProvider';
 import { RainbowKitProviders, WagmiProvider } from '@/lib/Web3Provider';
 import { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import './globals.css';
+
+const queryClient = new QueryClient();
 
 type Props = {
   children: ReactNode;
@@ -30,6 +36,8 @@ export default function RootLayout({ children }: Props) {
         <title>CryptoTip</title>
       </head>
       <body>
+         <QueryClientProvider client={queryClient}>
+
         <WagmiProvider>
           {/* TODO move signUpForm slice to react context */}
           <ReduxProvider>
@@ -39,12 +47,13 @@ export default function RootLayout({ children }: Props) {
                 <Toaster
                   position="top-center"
                   reverseOrder={false}
-                />
+                  />
                 {children}
               </RainbowKitProviders>
             </UserProvider>
           </ReduxProvider>
-        </WagmiProvider>
+                  </WagmiProvider>
+                  </QueryClientProvider>
       </body>
     </html>
   );

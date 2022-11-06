@@ -9,7 +9,7 @@ const router = Router();
 
 router.use('/auth', authorizationRoutes);
 router.use('/user', userRoutes);
-// router.use('/tip', authenticate, tipRoutes);
-router.use('/tip', tipRoutes);
+router.use('/tip', authenticate, tipRoutes);
+// router.use('/tip', tipRoutes);
 router.use('/userToken', userTokenRoutes);
 export default router;
