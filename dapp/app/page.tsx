@@ -1,3 +1,20 @@
+'use client';
+
+import { useCookie } from '@/hooks';
+
 export default function Page() {
-  return <h1>Main Page 2!</h1>;
+  const [value, setValue] = useCookie<string>('test');
+
+  return (
+    <>
+      <button
+        onClick={() => {
+          setValue('testowa wartosc');
+        }}
+      >
+        set cookie
+      </button>
+      <h1>{value}</h1>;
+    </>
+  );
 }

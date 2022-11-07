@@ -9,3 +9,4 @@ export { useQoistipSign } from './useQoistipSign';
 export { useTimeout } from './useTimeout';
 export { UserProvider, useUser } from './useUser';
 export { useUserToken } from './useUserToken';
+export { useCookie } from './useCookie';
