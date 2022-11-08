@@ -47,6 +47,7 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
   const formData = useSelector(selectFormData);
   const isMobile = useMediaQuery(['(max-width: 1024px)'], [true], true);
   // const router = useRouter();
+  console.log(status);
 
   const authAdapter = createAuthenticationAdapter({
     getNonce: async () => {

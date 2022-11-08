@@ -1,6 +1,5 @@
 // 'use client';
 import { logoutUser, verifyMessage } from '@/api/auth';
-import { getTipsByUser } from '@/lib/redux/tipSlice.js';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -10,13 +9,12 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
-  useEffect,
 } from 'react';
 import toast from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
 import { SiweMessage } from 'siwe';
 import { UserSession } from 'src/types/models';
 import { useDisconnect } from 'wagmi';
+import useCookie from './useCookie';
 import useLocalStorage from './useLocalStorage';
 
 // export const useUser = (): ReturnType => {
@@ -79,9 +77,10 @@ export const UserProvider = ({ children }: Props) => {
   // const [user, setUser] = useLocalStorage<UserSession>('user', tempUser);
   const [user, setUser] = useLocalStorage<UserSession>('user', null);
   // const [user, setUser] = useState<UserSession>(tempUser);
-  const [status, setStatus] = useLocalStorage<AuthStatus>(
+  const [status, setStatus] = useCookie<AuthStatus>(
     'authStatus',
-    'unauthenticated'
+    'unauthenticated',
+    { path: '/' }
   );
   // const [status, setStatus] = useState<AuthStatus>('unauthenticated');
   const { openConnectModal } = useConnectModal();
@@ -131,7 +130,7 @@ export const UserProvider = ({ children }: Props) => {
       router.push('/user/dashboard');
       return true;
     } catch (err: unknown) {
-      console.log(err)
+      console.log(err);
       if (axios.isAxiosError(err)) {
         toast.error(err.response?.data.error[0].message);
       }
@@ -142,13 +141,13 @@ export const UserProvider = ({ children }: Props) => {
 
   const logout = async () => {
     try {
-      if(status === 'authenticated'){
+      if (status === 'authenticated') {
         await disconnectAsync();
         const { data } = await logoutUser();
         toast.success(data.message);
         setStatus('unauthenticated');
         setUser(null);
-      }else{
+      } else {
         toast.error('You are not conneted.');
       }
     } catch (err) {

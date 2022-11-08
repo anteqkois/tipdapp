@@ -13,63 +13,63 @@ import { signUpValidation } from '../validation/signUpValidaion.old.js';
 import jwt from 'jsonwebtoken';
 import { generateNonce, SiweMessage } from 'siwe';
 
-const authorization = async (req, res) => {
-  if (req.cookies.authToken) {
-    jwt.verify(req.cookies.authToken, process.env.JWT_TOKEN_SECRET, (err, user) => {
-      if (err) {
-        res.cookie('authToken', '', {
-          maxAge: 0,
-          httpOnly: true,
-        });
-      } else {
-        createApiError('You have already authorized.');
-      }
-    });
-  }
+// const authorization = async (req, res) => {
+//   if (req.cookies.authToken) {
+//     jwt.verify(req.cookies.authToken, process.env.JWT_TOKEN_SECRET, (err, user) => {
+//       if (err) {
+//         res.cookie('authToken', '', {
+//           maxAge: 0,
+//           httpOnly: true,
+//         });
+//       } else {
+//         createApiError('You have already authorized.');
+//       }
+//     });
+//   }
 
-  const { signature, walletAddress, nonce } = req.body;
-  if (!signature || !walletAddress || !nonce) createApiError('Missing data in request.');
+//   const { signature, walletAddress, nonce } = req.body;
+//   if (!signature || !walletAddress || !nonce) createApiError('Missing data in request.');
 
-  const signerAddress = ethers.utils.verifyMessage(nonce, signature);
+//   const signerAddress = ethers.utils.verifyMessage(nonce, signature);
 
-  if (signerAddress !== walletAddress) {
-    createApiError('Wrong signature, addresses are not equeal.');
-  }
-  const user = await prismaClient.user.findFirst({
-    where: {
-      walletAddress: signerAddress,
-    },
-  });
+//   if (signerAddress !== walletAddress) {
+//     createApiError('Wrong signature, addresses are not equeal.');
+//   }
+//   const user = await prismaClient.user.findFirst({
+//     where: {
+//       walletAddress: signerAddress,
+//     },
+//   });
 
-  if (user) {
-    if (nonce !== user.nonce) {
-      createApiError('Wrong signature, nonces are not equeal.');
-    }
-    //TODO add refresh token
-    const accessToken = jwt.sign(
-      {
-        role: 'authencicated',
-        user_metadata: { walletAddress: walletAddress, id: user.id },
-      },
-      process.env.JWT_TOKEN_SECRET,
-      {
-        expiresIn: 3600,
-      },
-    );
-    res.cookie('authToken', accessToken, {
-      maxAge: 60 * 60 * 1000,
-      httpOnly: true,
-    });
-    res.status(200).json({ message: 'You are authorizated', user: { ...user, nonce: '' } });
-  } else {
-    createApiError('Account not registered. Sign in first.');
-  }
+//   if (user) {
+//     if (nonce !== user.nonce) {
+//       createApiError('Wrong signature, nonces are not equeal.');
+//     }
+//     //TODO add refresh token
+//     const accessToken = jwt.sign(
+//       {
+//         role: 'authencicated',
+//         user_metadata: { walletAddress: walletAddress, id: user.id },
+//       },
+//       process.env.JWT_TOKEN_SECRET,
+//       {
+//         expiresIn: 3600,
+//       },
+//     );
+//     res.cookie('authToken', accessToken, {
+//       maxAge: 60 * 60 * 1000,
+//       httpOnly: true,
+//     });
+//     res.status(200).json({ message: 'You are authorizated', user: { ...user, nonce: '' } });
+//   } else {
+//     createApiError('Account not registered. Sign in first.');
+//   }
 
-  await prismaClient.user.update({
-    where: { walletAddress },
-    data: { nonce: '' },
-  });
-};
+//   await prismaClient.user.update({
+//     where: { walletAddress },
+//     data: { nonce: '' },
+//   });
+// };
 
 // const auth = async (req, res) => {
 //   req.query.nextauth = req.url.slice(1).replace(/\?.*/, '').split('/');
@@ -188,8 +188,9 @@ const verifyMessage = async (req, res) => {
 
       res.cookie('authToken', accessToken, {
         secure: true,
+        // 1h
         maxAge: 60 * 60 * 1000,
-        // httpOnly: true,
+        httpOnly: true,
       });
 
       res.status(200).json({ message: 'You are authorizated', user: userSesionData });
@@ -209,7 +210,12 @@ const logout = async (req, res) => {
   // if (req.cookies.authToken) {
     res.cookie('authToken', '', {
       maxAge: 0,
+      // expries: Date.now(),
       httpOnly: true,
+    });
+    res.cookie('authStatus', '', {
+      // 1h
+      maxAge: 60 * 60 * 1000,
     });
     res.status(200).send({ message: 'You are succesfully logout.' });
   // } else {

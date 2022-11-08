@@ -3,7 +3,8 @@
 import { useCookie } from '@/hooks';
 
 export default function Page() {
-  const [value, setValue] = useCookie<string>('test');
+  const [value, setValue] = useCookie<any>('test2', 'teest');
+  console.log(value);
 
   return (
     <>
@@ -14,7 +15,7 @@ export default function Page() {
       >
         set cookie
       </button>
-      <h1>{value}</h1>;
+      {/* <h1>{value}</h1> */}
     </>
   );
 }
