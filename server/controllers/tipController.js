@@ -19,7 +19,7 @@ const findByAddress = async (req, res) => {
       // userAddress: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
     },
   });
-  
+
   const tips = await prisma.tip.findMany({
     skip,
     take: pageSize,

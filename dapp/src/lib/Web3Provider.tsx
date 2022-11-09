@@ -1,16 +1,16 @@
 'use client';
 import { getNonce } from '@/api/auth';
-import { useUser, useMediaQuery } from '@/hooks';
+import { useMediaQuery, useUser } from '@/hooks';
 import { selectFormData } from '@/lib/redux/signUpFormSlice';
 import {
   createAuthenticationAdapter,
   getDefaultWallets,
   RainbowKitAuthenticationProvider,
-  RainbowKitProvider,
+  RainbowKitProvider
 } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { ReactNode } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { SiweMessage } from 'siwe';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
@@ -51,7 +51,7 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
 
   const authAdapter = createAuthenticationAdapter({
     getNonce: async () => {
-      const { data } = await getNonce();
+      const  data  = await getNonce();
       return data.nonce ?? '';
     },
     createMessage: ({ nonce, address, chainId }) => {

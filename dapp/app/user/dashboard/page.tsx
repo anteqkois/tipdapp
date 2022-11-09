@@ -1,28 +1,25 @@
 'use client';
+import { find } from '@/api/tips';
 import TipsDefault from '@/components/Tip/TipsDefault';
 import { Avatar, Button, Card, StateUI } from '@/components/utils';
 import { useUser } from '@/hooks';
-import { selectCurrentData } from '@/lib/redux/tipSlice';
-import { asyncStatus } from '@/types';
 import cutAddress from '@/utils/cutAddress';
-import Link from 'next/link';
-import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
-import api from '@/api/apiConfig';
+import Link from 'next/link';
 // import api from '@/api/apiConfig';
 
-async function getData() {
-  const { data } = await api.get('tip', {
-    params: { page: 1, pageSize: 50 },
-  });
-  return data;
-}
+// async function getData() {
+//   const { data } = await find({ page: 1, pageSize: 50 });
+//   console.log(data);
+//   return data;
+// }
 
 const Dashboard = () => {
   const { user } = useUser();
   const { status, data, error, isFetching } = useQuery({
     queryKey: ['tip'],
-    queryFn: getData,
+    queryFn: () => find({ page: 1, pageSize: 50 }),
+    retry: false,
   });
 
   console.log({ status, data, error, isFetching });

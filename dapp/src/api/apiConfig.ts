@@ -6,4 +6,10 @@ export const api = axios.create({
   withCredentials: true,
 });
 
+api.interceptors.response.use((data)=>{
+  return Promise.resolve(data.data);
+}, (err)=>{
+  return Promise.reject(err.response?.data.error[0].message);
+})
+
 export default api;

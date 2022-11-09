@@ -11,7 +11,7 @@ type GetNonceResponse = {
 };
 
 export const getNonce = async () =>
-  await api.get<GetNonceResponse>('/auth/nonce');
+  await api.get<any, GetNonceResponse>('/auth/nonce');
 
 type PostVerifyMessageResponse = {
   user: UserSession;
