@@ -1,9 +1,10 @@
-import useMediaQuery from '@/hooks';
+import {useMediaQuery} from '@/hooks';
 import { Key, useCallback, useMemo, useRef } from 'react';
 import PaginationButton from './PaginationButton';
 
 type Props = {
-  pageAmount: number;
+  count: number;
+  pageSize: number,
   previousLabel?: string;
   nextLabel?: string;
   onPageChange: (newcurrentPage: number) => void;
@@ -13,7 +14,8 @@ type Props = {
 };
 
 const Pagination = ({
-  pageAmount,
+  count,
+  pageSize,
   previousLabel = 'Previous',
   nextLabel = 'Next',
   onPageChange,
@@ -32,7 +34,11 @@ const Pagination = ({
     buttonsMarginPage = 1;
   }
 
-  const countPage = useMemo(() => Math.ceil(pageAmount), [pageAmount]);
+    const countPage = useMemo(
+      () => Math.ceil(count / pageSize),
+      [count, pageSize]
+    );
+  // const countPage = useMemo(() => Math.ceil(pageAmount), [pageAmount]);
 
   const handlePageChange = useCallback(
     (page: Key) => {
@@ -148,6 +154,7 @@ const Pagination = ({
       .filter(Boolean)
       .sort((a, b) => Number(a?.key) - Number(b?.key));
   }, [
+    currentPage.current,
     countPage,
     pageRangeDisplayed,
     allPaginationButtons,

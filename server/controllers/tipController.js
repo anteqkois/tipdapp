@@ -9,9 +9,9 @@ const findByAddress = async (req, res) => {
   const skip = (page - 1) * pageSize;
   // typeof req.query?.userAddress === 'undefined' && createApiError('Missing user address.');
   
-    console.log('pagesize', pageSize);
-    console.log('skip', skip);
-    console.log('page', page);
+    // console.log('pagesize', pageSize);
+    // console.log('skip', skip);
+    // console.log('page', page);
 
   const count = await prisma.tip.count({
     where: {

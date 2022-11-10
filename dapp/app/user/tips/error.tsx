@@ -1,22 +1,23 @@
 'use client';
 
+import { ErrorMessage } from '@/components/utils';
+import { ApiError } from '@/types/index';
 import { useEffect } from 'react';
 
-export function ErrorBoundary({
+export default function Error({
   error,
   reset,
 }: {
-  error: string;
+  error: ApiError[];
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service
     console.error(error);
   }, [error]);
 
   return (
     <div>
-      <p>{error}</p>
+      <ErrorMessage>{error[0].message}</ErrorMessage>
       <button onClick={() => reset()}>Reset error boundary</button>
     </div>
   );
