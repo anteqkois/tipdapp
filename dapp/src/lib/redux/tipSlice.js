@@ -13,13 +13,14 @@ export const getTipsByUser = createAsyncThunk(
     //TODO! check if not fetched !
     const { tips } = thunkAPI.getState();
     try {
-      const { data } = await api.get('tip', {
+      const data = await api.get('tip', {
         params: { ...queryParams, pageSize: tips.pageSize },
       });
       const ids = data.tips.reduce((prev, curr) => [...prev, curr.txHash], []);
       return { tips: data.tips, ids, amount: data.count };
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error);
+      // return thunkAPI.rejectWithValue(error.response.data);
     }
   },
   {

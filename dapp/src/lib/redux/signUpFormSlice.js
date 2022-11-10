@@ -10,9 +10,10 @@ export const validateUserData = createAsyncThunk(
   'user/validateUserData',
   async (userData, thunkAPI) => {
     try {
-      const { data } = await validateFormData(userData);
+      const data = await validateFormData(userData);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.error);
+      return thunkAPI.rejectWithValue(error);
+      // return thunkAPI.rejectWithValue(error.response.data.error);
     }
   }
 );

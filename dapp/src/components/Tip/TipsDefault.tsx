@@ -2,7 +2,8 @@ import { TipUI } from 'src/types/models';
 import Tip from './Tip';
 
 type Props = {
-  tips: TipUI[];
+  tips:any;
+  // tips: TipUI[];
 };
 
 const TipsDefault = ({ tips }: Props) => {

@@ -23,11 +23,11 @@ type VerifyMessageBody = {
 };
 
 export const verifyMessage = async (body: VerifyMessageBody) =>
-  await api.post<PostVerifyMessageResponse>('/auth/verify', body);
+  await api.post<any, PostVerifyMessageResponse>('/auth/verify', body);
 
 type LogoutResponse = {
   message: string;
 };
 
 export const logoutUser = async () =>
-  await api.get<LogoutResponse>('/auth/logout');
+  await api.get<any, LogoutResponse>('/auth/logout');

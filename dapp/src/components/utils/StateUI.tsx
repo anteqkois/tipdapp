@@ -21,7 +21,16 @@ export const StateUI = ({
 }: StateUIProps): JSX.Element => {
   return (
     <>
-      {loading ? (
+      {error ? (
+        <ErrorMessage>{error}</ErrorMessage>
+        ) : loading ? (
+        LoadingComponent
+      ) : empty ? (
+        EmptyComponent
+      ) : (
+        children
+      )}
+      {/* {loading ? (
         LoadingComponent
       ) : error ? (
         <ErrorMessage>{error}</ErrorMessage>
@@ -29,7 +38,7 @@ export const StateUI = ({
         EmptyComponent
       ) : (
         children
-      )}
+      )} */}
     </>
   );
   // return <>{loading ? LoadingComponent : empty ? EmptyComponent : children}</>;

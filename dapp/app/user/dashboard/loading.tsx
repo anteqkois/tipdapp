@@ -1,6 +1,6 @@
-import { PageSpinner } from '@/components/utils';
+import { Spinner } from '@/components/utils';
 
 export default function Loading() {
-  // You can add any UI inside Loading, including a Skeleton.
-  return <PageSpinner />;
+  // return <Spinner className='h-24'/>;
+  return <Spinner/>;
 }

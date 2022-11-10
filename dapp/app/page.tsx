@@ -15,7 +15,6 @@ export default function Page() {
       >
         set cookie
       </button>
-      {/* <h1>{value}</h1> */}
     </>
   );
 }

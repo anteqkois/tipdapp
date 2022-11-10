@@ -1,7 +1,6 @@
 // 'use client';
 import { logoutUser, verifyMessage } from '@/api/auth';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import {
   createContext,
@@ -124,17 +123,26 @@ export const UserProvider = ({ children }: Props) => {
     signature: string
   ): Promise<boolean> => {
     try {
-      const { data } = await verifyMessage({ message, signature });
+      const data = await verifyMessage({ message, signature });
       setUser(data.user);
       setStatus('authenticated');
       router.push('/user/dashboard');
       return true;
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.log(err);
-      if (axios.isAxiosError(err)) {
-        toast.error(err.response?.data.error[0].message);
-      }
-      toast.error('Something went wrong ! You can not login now.');
+      // if (axios.isAxiosError(err)) {
+      // if (err?.[0]?.message) {
+      //   // toast.error(err.response?.data.error[0].message);
+      //   toast.error(err[0].message);
+      // }
+      toast.error(
+        err[0].message ?? 'Something went wrong ! You can not login now.'
+      );
+      // if (err?.[0]?.message) {
+      //   // toast.error(err.response?.data.error[0].message);
+      //   toast.error(err[0].message);
+      // }
+      // toast.error('Something went wrong ! You can not login now.');
       return false;
     }
   };
@@ -143,19 +151,24 @@ export const UserProvider = ({ children }: Props) => {
     try {
       if (status === 'authenticated') {
         await disconnectAsync();
-        const { data } = await logoutUser();
+        const data= await logoutUser();
         toast.success(data.message);
         setStatus('unauthenticated');
         setUser(null);
       } else {
         toast.error('You are not conneted.');
       }
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        toast.error(err.response?.data.error[0].message);
-      } else {
-        toast.error('Something went wrong ! You can not logout.');
-      }
+    } catch (error: any) {
+      console.log(error)
+      toast.error(
+        error[0].message ?? 'Something went wrong ! You can not logout.'
+      );
+
+      // if (axios.isAxiosError(err)) {
+      //   toast.error(err.response?.data.error[0].message);
+      // } else {
+      //   toast.error('Something went wrong ! You can not logout.');
+      // }
     }
     // signOut({ callbackUrl: `${window.location.origin}/login` });
   };
