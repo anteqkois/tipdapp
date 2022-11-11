@@ -43,8 +43,6 @@ const setCookie = <S,>(key: string, value: S, options?: Options) => {
       ...options,
     };
 
-    console.log(optionsWithDefaults);
-
     const expires = new Date(
       Date.now() + optionsWithDefaults.expireDays * 864e5
     ).toUTCString();
@@ -58,8 +56,6 @@ const setCookie = <S,>(key: string, value: S, options?: Options) => {
     const cookie = (window.document.cookie = `${key}=${encodeURIComponent(
       val
     )}; expires=${expires} ${stringifyOptions(optionsWithDefaults)}`);
-
-    console.log(cookie);
 
     document.cookie = cookie;
   } catch (error) {
