@@ -1,5 +1,7 @@
+'use client';
+
 import TokenBalance from '@/components/Token/TokenBalance';
-import {Card} from '@/components/utils';
+import { Card } from '@/components/utils';
 import { useUser } from '@/hooks';
 import { chain } from 'wagmi';
 
@@ -27,7 +29,5 @@ const Balance = () => {
     </Card>
   );
 };
-
-Balance.isProtected = true;
 
 export default Balance;

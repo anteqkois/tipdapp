@@ -12,7 +12,7 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 //TODO? use page to be ability in future to change this element by user(for example can change to show default top tiper)
-const Dashboard = () => {
+const Page = () => {
   const { user } = useUser();
 
   const formik = useFormik({
@@ -104,4 +104,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Page;

@@ -7,7 +7,9 @@ import { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
 import './globals.css';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: 5 * 60 * 1000 } },
+});
 
 type Props = {
   children: ReactNode;

@@ -3,7 +3,7 @@ import { useBalance } from 'wagmi';
 type Props = {
   address: string;
   chainId: number;
-  tokenAddress: string;
+  tokenAddress?: string;
 };
 
 const TokenBalance = ({ address, chainId = 1, tokenAddress }: Props) => {

@@ -1,9 +1,11 @@
 import { useClipboard, useMediaQuery, useUserToken } from '@/hooks';
 import { dateFormat } from '@/lib/dayjs';
 import cutAddress from '@/utils/cutAddress';
-import { UserToken } from '@prisma/client';
+// import { UserToken } from '@prisma/client';
 import { ethers } from '../../lib/ethersProvider';
 import { Button, Card } from '../utils';
+
+type UserToken = any;
 
 type Props = {
   token: UserToken;
@@ -36,7 +38,7 @@ export const TokenPanel = ({ token }: Props) => {
           </h6>
           <h6 className="flex items-center  gap-1">
             <span className="font-medium ">Address: </span>
-            {isMobile ? cutAddress(t < boolean > oken.address) : token.address}
+            {isMobile ? cutAddress(token.address) : token.address}
             <ClipboardIcon
               copyData={token.address}
               message="Address copied !"
@@ -97,7 +99,7 @@ export const TokenPanel = ({ token }: Props) => {
         </p>
         <p className="flex items-center  gap-1">
           <span className="font-medium ">Hash: </span>
-          {isMobile ? cutAddress(t < boolean > oken.address) : token.address}
+          {isMobile ? cutAddress(token.address) : token.address}
           <ClipboardIcon
             copyData={token.address}
             message="Address copied !"

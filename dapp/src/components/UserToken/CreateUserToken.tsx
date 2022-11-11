@@ -10,33 +10,10 @@ import toast from 'react-hot-toast';
 import { Button, Card, Input } from '../utils';
 import { Details } from '../utils/Details';
 
-// type ZodParseErrors = Record<string, string>;
-
-// const validate = (values: UserTokenFormData): ZodParseErrors => {
-//   const errors: ZodParseErrors = {} as ZodParseErrors;
-
-//   try {
-//     userTokenFormValidation.parse(values);
-//   } catch (error) {
-//     if (error instanceof ZodError) {
-//       error.issues.forEach((zodError: ZodIssue) => {
-//         errors[zodError.path[0]] = zodError.message;
-//       });
-//     }
-//   }
-
-//   return errors;
-// };
-
 const initialUserToken = {
   symbol: '',
   name: '',
 };
-
-// interface UserTokenFormData {
-//   symbol?: string;
-//   name?: string;
-// }
 
 export const CreateUserToken = () => {
   const [errors, setErrors] = useState<ZodParseErrors>({} as ZodParseErrors);
@@ -72,11 +49,6 @@ export const CreateUserToken = () => {
           position: 'bottom-right',
           duration: 6000,
         });
-
-        // try {
-        // } catch (error) {
-        //   console.log(error);
-        // }
       }
     })();
   }, [registerUser?.data]);

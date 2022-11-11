@@ -6,7 +6,7 @@ import { useTipsPaginated } from '@/hooks';
 import { useState } from 'react';
 
 //TODO? use page to be ability in future to change this element by user(for example can change to show default top tiper)
-const Dashboard = () => {
+const Tips = () => {
   //TODO get page from URL
   //TODO create global settings store to store information about default tips view for user
   const [pageSize, setPageSize] = useState<number>(5);
@@ -27,7 +27,7 @@ const Dashboard = () => {
             onPageChange={setPage}
             pageRangeDisplayed={2}
             buttonsMarginPage={2}
-            count={data?.count !}
+            count={data?.count!}
             pageSize={pageSize}
           />
         </div>
@@ -36,4 +36,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Tips;
