@@ -31,3 +31,17 @@ type LogoutResponse = {
 
 export const logoutUser = async () =>
   await api.get<any, LogoutResponse>('/auth/logout');
+
+type SignUpResponse = {
+  message: string;
+  user: UserSession,
+};
+
+type SignUpBody = {
+  message: SiweMessage;
+  signature: string;
+  formData: any;
+};
+
+export const signUp = async (body: SignUpBody) =>
+  await api.post<any, SignUpResponse>('/auth/signup', body);

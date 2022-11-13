@@ -11,7 +11,7 @@ type Props = {
 export const ProtectPageGuard = ({ children }: Props) => {
   const { status } = useUser();
   const router = useRouter();
-
+  
   if (status === 'loading') {
     return <PageSpinner />;
   }

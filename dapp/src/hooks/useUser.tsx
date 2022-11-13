@@ -16,45 +16,6 @@ import { useDisconnect } from 'wagmi';
 import useCookie from './useCookie';
 import useLocalStorage from './useLocalStorage';
 
-// export const useUser = (): ReturnType => {
-// const [user, setUser] = useState<UserSession>(tempUser);
-// const [status, setStatus] = useState<AuthStatus>('unauthenticated');
-// const { openConnectModal } = useConnectModal();
-// const { disconnectAsync } = useDisconnect();
-// const dispatch = useDispatch();
-
-// // const user = useMemo<UserSession>((): UserSession => {
-// //   return session?.user ? session.user : tempUser;
-// // }, [session]);
-
-// //Dowload first tips page on login user
-// useEffect(() => {
-//   if (user.address)
-//     // @ts-ignore
-//     dispatch(getTipsByUser({ userAddress: user.address, page: 1 }));
-// }, [user.address, dispatch]);
-
-// const login = () => {
-//   status === 'unauthenticated'
-//     ? openConnectModal?.()
-//     : toast.error('You are already login.');
-//   // try {
-//   //   openConnectModal?.();
-//   // } catch (error) {
-//   //   toast.error('You are already login.');
-//   //   // console.log(error);
-//   // }
-// };
-
-// const logout = async () => {
-//   await disconnectAsync();
-//   setStatus('unauthenticated');
-//   // signOut({ callbackUrl: `${window.location.origin}/login` });
-// };
-
-//   return { login, logout, user, setUser, status, setStatus };
-// };
-
 export const UserContext = createContext<ReturnType>({} as ReturnType);
 
 const tempUser = {} as UserSession;
@@ -73,49 +34,21 @@ type ReturnType = {
 type Props = { children: ReactNode };
 
 export const UserProvider = ({ children }: Props) => {
-  // const [user, setUser] = useLocalStorage<UserSession>('user', tempUser);
   const [user, setUser] = useLocalStorage<UserSession>('user', null);
-  // const [user, setUser] = useState<UserSession>(tempUser);
   const [status, setStatus] = useCookie<AuthStatus>(
     'authStatus',
     'unauthenticated',
     { path: '/' }
   );
-  // const [status, setStatus] = useState<AuthStatus>('unauthenticated');
   const { openConnectModal } = useConnectModal();
   const { disconnectAsync } = useDisconnect();
-  // const dispatch = useDispatch();
   const router = useRouter();
-
-  // console.log(status);
-
-  // const [user, setUser] = useState<UserSession>(tempUser);
-
-  // console.log(openConnectModal);
-  // console.log(openConnectModal);
-
-  // const user = useMemo<UserSession>((): UserSession => {
-  //   return session?.user ? session.user : tempUser;
-  // }, [session]);
-
-  //Dowload first tips page on login user
-  // useEffect(() => {
-  //   if (user?.address)
-  //     // @ts-ignore
-  //     dispatch(getTipsByUser({ page: 1 }));
-  // }, [user?.address, dispatch]);
 
   //TODO add function to check if session is still valid (in interwal, becouse token is remowe but storage flag no)
   const login = () => {
     status === 'unauthenticated'
       ? openConnectModal?.()
       : toast.error('You are already login.');
-    // try {
-    //   openConnectModal?.();
-    // } catch (error) {
-    //   toast.error('You are already login.');
-    //   // console.log(error);
-    // }
   };
 
   const verify = async (
@@ -151,7 +84,7 @@ export const UserProvider = ({ children }: Props) => {
     try {
       if (status === 'authenticated') {
         await disconnectAsync();
-        const data= await logoutUser();
+        const data = await logoutUser();
         toast.success(data.message);
         setStatus('unauthenticated');
         setUser(null);
@@ -159,7 +92,7 @@ export const UserProvider = ({ children }: Props) => {
         toast.error('You are not conneted.');
       }
     } catch (error: any) {
-      console.log(error)
+      console.log(error);
       toast.error(
         error[0].message ?? 'Something went wrong ! You can not logout.'
       );

@@ -16,6 +16,7 @@ export const useLocalStorage = <S,>(key: string, initialValue: S) => {
         value instanceof Function ? value(storedValue) : value;
       setStoredValue(valueToStore);
       if (typeof window !== 'undefined') {
+        console.log('IN HOOK', JSON.stringify(valueToStore));
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
       }
     } catch (error) {

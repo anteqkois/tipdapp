@@ -43,7 +43,7 @@ export const Input = ({
         disabled={disabled}
         className={classNames(
           className,
-          'block p-2 w-full bg-gray-50 rounded border',
+          'block p-2 w-full bg-gray-50 rounded border placeholder:text-neutral-300',
           [error ? 'border-danger-600' : 'border-neutral-300'],
           [disabled && 'opacity-40'],
           'shadow-sm focus:outline-none focus:border-primary focus:ring focus:ring-primary-light focus:ring-opacity-50'

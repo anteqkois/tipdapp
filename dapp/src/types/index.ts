@@ -5,6 +5,7 @@ export enum asyncStatus {
   'fail' = 'fail',
 }
 
+export type AsyncStatus = 'idle' | 'loading' | 'success' | 'fail';
 // export type asyncStatus = 'idle' | 'loading' | 'success' | 'fail';
 
 export type NavigationOption = {

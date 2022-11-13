@@ -1,68 +1,13 @@
-import {
-  selectActiveStep,
-  selectErrors,
-  setStep,
-  validateUserData,
-} from '@/lib/redux/signUpFormSlice';
-import { ValidationError, ValidationErrors, ZodParseErrors } from '@/types';
+'use client';
+import { useSignUpForm } from '@/hooks';
 import { UserIcon, WalletIcon } from '@heroicons/react/24/outline';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useFormik } from 'formik';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import ConnectWallet from '../../assets/connectWallet.svg';
 import { Button, Input } from '../utils';
 import { Stepper } from '../utils/Stepper';
 import { FormikStep } from './FormikStep';
 
-const initialValues = {
-  email: '',
-  firstName: '',
-  lastName: '',
-  nick: '',
-  address: '',
-};
-
 export const SignUpForm = () => {
-  const { openConnectModal } = useConnectModal();
-
-  const dispatch = useDispatch();
-  const errors: ValidationErrors = useSelector(selectErrors);
-  const step = useSelector(selectActiveStep);
-
-  //Display Error messages
-  useEffect(() => {
-    if (errors) {
-      const errorsTemp: ZodParseErrors = {};
-      errors.forEach((error: ValidationError) => {
-        errorsTemp[error.field] = error.message;
-      });
-
-      formik.setErrors(errorsTemp);
-    }
-  }, [errors]);
-
-  const formik = useFormik({
-    initialValues: initialValues,
-    // validate,
-    validateOnChange: false,
-    onSubmit: async (values) => {
-      try {
-        if (!Object.keys(formik.errors).length) {
-          if (step === 1) {
-            //validate userData on backend
-            //@ts-ignore
-            dispatch(validateUserData(values));
-          }
-          if (step === 2) {
-            openConnectModal?.();
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  });
+  const { formik, formState, setStep, setFormData } = useSignUpForm();
 
   const FormSteps = [
     <FormikStep
@@ -122,7 +67,6 @@ export const SignUpForm = () => {
         className="w-full mt-4"
         option="success"
         type="submit"
-        onClick={() => setStep((prev: number) => --prev)}
       >
         Connect wallet
       </Button>
@@ -143,25 +87,28 @@ export const SignUpForm = () => {
   return (
     <>
       <h1 className="flex-center text-2xl mb-3 ">
-        {FormSteps[step - 1].props.label}
+        {console.log(formState.step - 1)}
+        {console.log(formState.step)}
+        {console.log(FormSteps[formState.step - 1])}
+        {FormSteps[formState.step - 1].props.label}
       </h1>
       <Stepper
         stepCount={FormSteps.length}
         icons={StepIcons}
-        activeStep={step}
+        activeStep={formState.step}
       />
       <form onSubmit={formik.handleSubmit}>
-        {FormSteps[step - 1]}
+        {FormSteps[formState.step - 1]}
         <div className="flex gap-3">
-          {step > 1 && (
+          {formState.step > 1 && (
             <Button
               className="w-full mt-3"
-              onClick={() => dispatch(setStep(step - 1))}
+              onClick={() => setStep((prev) => --prev)}
             >
               Back
             </Button>
           )}
-          {step < FormSteps.length && (
+          {formState.step < FormSteps.length && (
             <Button
               className="w-full mt-3"
               type="submit"
