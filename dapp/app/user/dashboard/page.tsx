@@ -4,7 +4,7 @@ import { useTips } from '@/hooks';
 
 //TODO? use page to be ability in future to change this element by user(for example can change to show default top tiper)
 const Dashboard = () => {
-  const { data } = useTips();
+  const { data } = useTips({ page: 1, pageSize: 8 });
 
   return (
     <TipsList

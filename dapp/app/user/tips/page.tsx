@@ -19,7 +19,7 @@ const Tips = () => {
         <h4 className="pb-4">Your tips:</h4>
         <TipsList
           tips={data?.tips!}
-          tipView="Minimalist"
+          tipView="Card"
         />
 
         <div className="flex items-center justify-center pt-4 text-lg">
