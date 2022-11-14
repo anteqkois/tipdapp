@@ -14,7 +14,7 @@ const authenticate = (req, res, next) => {
   }
   jwt.verify(authToken, process.env.JWT_TOKEN_SECRET, (err, data) => {
     if (err) createApiError(`Wrong authentication token.`, 403);
-    req.jwtData = data;
+    req.user = data;
     next();
   });
 };

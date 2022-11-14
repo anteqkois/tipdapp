@@ -1,6 +1,6 @@
-import { prisma } from '../lib/db.js';
-import { userTokenValidation } from '../validation/userTokenValidation.old.js';
+import { prisma } from '../config/db.js';
 import { createApiError } from '../middlewares/error.js';
+import { userTokenValidation } from '../validation/userTokenValidation.old.js';
 
 const find = async (req, res) => {
   // typeof req.query?.address === 'undefined' && createApiError('Missing token address.');

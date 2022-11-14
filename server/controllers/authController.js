@@ -1,5 +1,5 @@
 import { ZodError } from 'zod';
-import { prisma } from '../lib/db.js';
+import { prisma } from '../config/db.js';
 import {
   createApiError,
   createValidationError,
@@ -12,134 +12,21 @@ import { signUpValidation } from '../validation/signUpValidaion.old.js';
 
 import jwt from 'jsonwebtoken';
 import { generateNonce, SiweMessage } from 'siwe';
-
-// const authorization = async (req, res) => {
-//   if (req.cookies.authToken) {
-//     jwt.verify(req.cookies.authToken, process.env.JWT_TOKEN_SECRET, (err, user) => {
-//       if (err) {
-//         res.cookie('authToken', '', {
-//           maxAge: 0,
-//           httpOnly: true,
-//         });
-//       } else {
-//         createApiError('You have already authorized.');
-//       }
-//     });
-//   }
-
-//   const { signature, walletAddress, nonce } = req.body;
-//   if (!signature || !walletAddress || !nonce) createApiError('Missing data in request.');
-
-//   const signerAddress = ethers.utils.verifyMessage(nonce, signature);
-
-//   if (signerAddress !== walletAddress) {
-//     createApiError('Wrong signature, addresses are not equeal.');
-//   }
-//   const user = await prismaClient.user.findFirst({
-//     where: {
-//       walletAddress: signerAddress,
-//     },
-//   });
-
-//   if (user) {
-//     if (nonce !== user.nonce) {
-//       createApiError('Wrong signature, nonces are not equeal.');
-//     }
 //     //TODO add refresh token
-//     const accessToken = jwt.sign(
-//       {
-//         role: 'authencicated',
-//         user_metadata: { walletAddress: walletAddress, id: user.id },
-//       },
-//       process.env.JWT_TOKEN_SECRET,
-//       {
-//         expiresIn: 3600,
-//       },
-//     );
-//     res.cookie('authToken', accessToken, {
-//       maxAge: 60 * 60 * 1000,
-//       httpOnly: true,
-//     });
-//     res.status(200).json({ message: 'You are authorizated', user: { ...user, nonce: '' } });
-//   } else {
-//     createApiError('Account not registered. Sign in first.');
-//   }
 
-//   await prismaClient.user.update({
-//     where: { walletAddress },
-//     data: { nonce: '' },
-//   });
-// };
-
-// const auth = async (req, res) => {
-//   req.query.nextauth = req.url.slice(1).replace(/\?.*/, '').split('/');
-
-//   const isDefaultSigninPage = req.method === 'GET' && req.query.nextauth.includes('signin');
-
-//   // Hide Sign-In with Ethereum from default sign page
-//   if (isDefaultSigninPage) {
-//     providers.pop();
-//   }
-
-//   return await NextAuth.default(req, res, {
-//     // return await NextAuth(req, res, {
-//     providers,
-//     session: {
-//       strategy: 'jwt',
-//       maxAge: 15 * 24 * 30 * 60, // 15 days
-//     },
-//     secret: process.env.NEXTAUTH_SECRET,
-//     pages: {
-//       // error: '/auth/error',
-//     },
-//     callbacks: {
-//       async jwt({ token, user }) {
-//         if (req.query.update) {
-//           user = await prisma.user.findFirst({
-//             where: {
-//               address: token.user.address,
-//             },
-//             include: {
-//               avatar: true,
-//               token: {
-//                 select: {
-//                   address: true,
-//                   chainId: true,
-//                   name: true,
-//                   symbol: true,
-//                   txHash: true,
-//                 },
-//               },
-//             },
-//           });
-//         }
-
-//         if (user) {
-//           return { ...token, user };
-//         }
-//         return token;
-//       },
-//       async session({ session, token }) {
-//         session.user = token.user;
-//         if (token) {
-//           session.id = token.id;
-//         }
-//         return session;
-//       },
-//     },
-//   });
-// };
 const validateSiweMessage = async (message, signature) => {
-  //TODO! SAVE NONE IN COOKIES ONLYSERVER
+  //TODO! SAVE NONCE IN COOKIES ONLYSERVER
   const siwe = new SiweMessage(message || {});
 
-  if (siwe.domain !== new URL(process.env.FRONTEND_URL).host) {
-    createValidationError('Signature domain is wrong', 'Wrong domian', 'domain', 'domain');
-  }
+  // if (siwe.domain !== new URL(process.env.FRONTEND_URL).host) {
+  //   createValidationError('Signature domain is wrong', 'Wrong domian', 'domain', 'domain');
+  // }
 
-  await siwe.validate(signature);
+  const { data, success } = await siwe.verify({ signature, domain: process.env.FRONTEND_URL });
 
-  return siwe;
+  return success
+    ? data
+    : createValidationError("Siwe Message didn't pass validation.", 'Siwe Validation', 'siwe', 'siwe.invalid');
 };
 
 const createAuthToken = (userSessionData) => {
@@ -161,7 +48,7 @@ const signUp = async (req, res) => {
   const { message, signature, formData } = req.body;
 
   try {
-    const siwe = await validateSiweMessage(message, signature);
+    const siweMessage = await validateSiweMessage(message, signature);
 
     //Validate schema
     signUpValidation.parse(formData);
@@ -169,7 +56,7 @@ const signUp = async (req, res) => {
     //Validate unique
     const userExist = await prisma.user.findFirst({
       where: {
-        OR: [{ address: siwe.address }, { email: formData.email }, { nick: formData.nick }],
+        OR: [{ address: siweMessage.address }, { email: formData.email }, { nick: formData.nick }],
       },
       select: {
         address: true,
@@ -180,7 +67,7 @@ const signUp = async (req, res) => {
 
     if (userExist) {
       const errors = [];
-      if (userExist.address === siwe.address) {
+      if (userExist.address === siweMessage.address) {
         const validationError = new ValidationError(
           'address',
           `Already registered.`,
@@ -202,7 +89,7 @@ const signUp = async (req, res) => {
 
     const userSessionData = await prisma.user.create({
       data: {
-        address: siwe.address,
+        address: siweMessage.address,
         email: formData.email,
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -236,7 +123,7 @@ const signUp = async (req, res) => {
       maxAge: 60 * 60 * 1000,
       httpOnly: true,
     });
-    
+
     res.status(200).json({ message: 'The account has been successfully created.', user: userSessionData });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -251,6 +138,7 @@ const signUp = async (req, res) => {
 };
 
 const createNonce = (req, res) => {
+  //TODO! Save nonce in db or in redis cache
   res.status(200).json({ nonce: generateNonce() });
 };
 
@@ -263,11 +151,11 @@ const verifyMessage = async (req, res) => {
     // }
 
     // await siwe.validate(signature);
-    const siwe = await validateSiweMessage(message, signature);
+    const siweMessage = await validateSiweMessage(message, signature);
 
     const userSessionData = await prisma.user.findFirst({
       where: {
-        address: siwe.address,
+        address: siweMessage.address,
       },
       include: {
         avatar: true,
@@ -303,7 +191,7 @@ const verifyMessage = async (req, res) => {
       createValidationError('Account not registered. Sign in first.', 'No user found', 'user', 'user');
     }
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     if (err instanceof ValidationError) throw err;
     // createValidationErrors();
     // res.send(false);
