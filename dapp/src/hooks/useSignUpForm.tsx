@@ -4,6 +4,7 @@ import { Close } from '@/components/utils';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
 import { useDisconnect } from 'wagmi';
@@ -14,7 +15,6 @@ import {
   ValidationError,
   ZodParseErrors,
 } from '../types';
-import useLocalStorage from './useLocalStorage';
 
 type FormData = {
   firstName: string;
@@ -27,8 +27,6 @@ type FormData = {
 type State = {
   data: FormData;
   status: AsyncStatus;
-  step: number;
-  // errors: ValidationError[] | null;
 };
 
 const initialState: State = {
@@ -40,43 +38,36 @@ const initialState: State = {
     address: null,
   },
   status: 'idle',
-  step: 1,
-  // errors: null,
 };
 
 export const useSignUpForm = () => {
   const { openConnectModal } = useConnectModal();
-   const { disconnectAsync } = useDisconnect();
+  const { disconnectAsync } = useDisconnect();
   // store form data in url query ?
-  const [formState, setFormState] = useLocalStorage<State>(
-    'formState',
-    initialState
-  );
-  const setStep = (cb: (step: number) => number) =>
-    setFormState((state) => ({ ...state, step: cb(state.step) }));
-
-  const setFormData = (formData: FormData) =>
-    setFormState((state) => ({ ...state, data: formData }));
+  // const [formState, setFormState] = useState<State>(initialState);
+  // const [formState, setFormState] = useLocalStorage<State>(
+  //   'formState',
+  //   initialState
+  // );
+  const formStateRef = useRef<State>(initialState);
+  const [step, setStep] = useState(1);
 
   const router = useRouter();
   const { setStatus, setUser } = useUser();
 
-
   const formik = useFormik({
-    initialValues: formState.data,
+    initialValues: formStateRef.current.data,
     validateOnChange: false,
     onSubmit: async (values) => {
       try {
         if (!Object.keys(formik.errors).length) {
-          if (formState.step === 1) {
+          if (step === 1) {
             //validate userData on backend
             try {
               const data = await validateFormData(values);
-              setFormState((state) => ({
-                ...state,
-                data: values,
-                step: ++state.step,
-              }));
+              // formStateRef.current.data = values
+              formStateRef.current = { data: values, status: 'success' };
+              setStep((prev) => ++prev);
             } catch (error: any) {
               const errorsTemp: ZodParseErrors = {};
               error.forEach((error: ValidationError) => {
@@ -85,8 +76,8 @@ export const useSignUpForm = () => {
 
               formik.setErrors(errorsTemp);
             }
-          } else if (formState.step === 2) {
-            await disconnectAsync();
+          } else if (step === 2) {
+            // await disconnectAsync();
             openConnectModal?.();
           }
         }
@@ -104,10 +95,11 @@ export const useSignUpForm = () => {
       const response = await signUp({
         message: message,
         signature,
-        formData: formState.data,
+        formData: formStateRef.current.data,
       });
       setStatus('authenticated');
       setUser(response.user);
+      toast.success(response.message);
       router.push('/user/dashboard');
       return true;
     } catch (errors: any) {
@@ -143,5 +135,12 @@ export const useSignUpForm = () => {
   };
   //TODO clear LocalStorage after signup
 
-  return { formik, formState, setStep, setFormData, register };
+  return {
+    formik,
+    formState: formStateRef.current,
+    setStep,
+    // setFormData,
+    register,
+    step,
+  };
 };

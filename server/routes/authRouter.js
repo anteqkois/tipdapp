@@ -1,21 +1,15 @@
 import { Router } from 'express';
-// import { authorization, login, logout, signin } from '../controllers/authController.js';
-import { createNonce, logout, signUp, validate, verifyMessage } from '../controllers/authController.js';
+import { createNonce, logout, signUp, validate, verifyMessageAndLogin } from '../controllers/authController.js';
 import { catchAsyncErrors } from '../middlewares/error.js';
 
 const router = Router();
 
-// router.use(catchAsyncErrors(auth));
-
-// //GET
+//GET
 router.get('/nonce', catchAsyncErrors(createNonce));
 router.get('/logout', catchAsyncErrors(logout));
-// //POST
-router.post('/verify', catchAsyncErrors(verifyMessage));
+//POST
+router.post('/verify', catchAsyncErrors(verifyMessageAndLogin));
 router.post('/validate', catchAsyncErrors(validate));
 router.post('/signup', catchAsyncErrors(signUp));
-// router.post('/login', catchAsyncErrors(login));
-// router.post('/signin', catchAsyncErrors(signin));
-// router.post('/authorization', catchAsyncErrors(authorization));
 
 export default router;

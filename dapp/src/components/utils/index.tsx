@@ -14,4 +14,5 @@ export { ProtectPageGuard } from './ProtectPageGuard';
 export { Spinner } from './Spinner';
 export { StateUI } from './StateUI';
 export { Stepper } from './Stepper';
+export { InfoMessage } from './InfoMessage';
 export { Tooltip } from './Tooltip';

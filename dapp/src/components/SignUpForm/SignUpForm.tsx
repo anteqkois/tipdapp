@@ -7,7 +7,7 @@ import { Stepper } from '../utils/Stepper';
 import { FormikStep } from './FormikStep';
 
 export const SignUpForm = () => {
-  const { formik, formState, setStep, setFormData } = useSignUpForm();
+  const { formik, formState, setStep, step } = useSignUpForm();
 
   const FormSteps = [
     <FormikStep
@@ -87,28 +87,26 @@ export const SignUpForm = () => {
   return (
     <>
       <h1 className="flex-center text-2xl mb-3 ">
-        {console.log(formState.step - 1)}
-        {console.log(formState.step)}
-        {console.log(FormSteps[formState.step - 1])}
-        {FormSteps[formState.step - 1].props.label}
+        {FormSteps[step - 1].props.label}
       </h1>
       <Stepper
         stepCount={FormSteps.length}
         icons={StepIcons}
-        activeStep={formState.step}
+        activeStep={step}
       />
       <form onSubmit={formik.handleSubmit}>
-        {FormSteps[formState.step - 1]}
+        {FormSteps[step - 1]}
         <div className="flex gap-3">
-          {formState.step > 1 && (
+          {step > 1 && (
             <Button
               className="w-full mt-3"
-              onClick={() => setStep((prev) => --prev)}
+              onClick={() => setStep((prev) => prev-1)}
+              type='button'
             >
               Back
             </Button>
           )}
-          {formState.step < FormSteps.length && (
+          {step < FormSteps.length && (
             <Button
               className="w-full mt-3"
               type="submit"

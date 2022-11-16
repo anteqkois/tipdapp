@@ -18,7 +18,7 @@ const findByAddress = async (req, res) => {
     skip,
     take: pageSize,
     where: {
-      userAddress: req.uesr.metadata.address,
+      userAddress: req.user.metadata.address,
     },
     orderBy: {
       date: 'asc',

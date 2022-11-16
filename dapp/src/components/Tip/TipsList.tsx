@@ -1,4 +1,5 @@
 import { TipUI } from '@/types/models';
+import { InfoMessage } from '../utils';
 import TipCard from './Tip';
 import TipMinimalist from './TipMinimalist';
 
@@ -16,7 +17,9 @@ const tipViewComponents = {
 export const TipsList = ({ tips, tipView }: Props) => {
   const TipView = tipViewComponents[tipView];
 
-  return (
+  return tips.length === 0 ? (
+    <InfoMessage>No tips to show!</InfoMessage>
+  ) : (
     <ul className="space-y-3">
       {tips.map((tip: TipUI) => (
         <li

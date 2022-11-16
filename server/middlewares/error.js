@@ -97,8 +97,20 @@ export const createApiError = (message, status) => {
   throw new ApiError(message, status);
 };
 
+export const isOperational = (err, helpMessage) => {
+  if (err instanceof ApiError || err instanceof ValidationError || err instanceof ValidationErrors || err instanceof ZodError) {
+    throw err;
+    // return true;
+  } else if (helpMessage) {
+    console.log(err);
+    createApiError(helpMessage);
+  }
+  console.log(err);
+  throw err;
+  // return false;
+};
+
 export const handleErrors = (err, req, res, next) => {
-  //logApierror to file !
   console.log(err);
   // console.log(util.inspect(err, { showHidden: false, depth: null, colors: true }));
   // console.table(err);
@@ -106,10 +118,11 @@ export const handleErrors = (err, req, res, next) => {
     return res.status(err.status || 500).send({ error: [err] });
   }
   if (err instanceof ValidationErrors) {
+    console.log(err);
     return res.status(err.status || 500).json({ error: err.errors });
   }
   if (err instanceof ZodError) {
-    return res.status(err.status || 500).json({ error: new ValidationErrors().fromZodErrorArray(err.issues) });
+    return res.status(err.status || 500).json({ error: new ValidationErrors().fromZodErrorArray(err.issues).errors });
   }
   return res.status(err.status || 500).json(err?.message);
 };

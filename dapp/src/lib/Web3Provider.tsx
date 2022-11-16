@@ -45,7 +45,7 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
   const { setUser, setStatus, status, logout, verify } = useUser();
   const {
     register,
-    formState: { data },
+    // formState: { data },
   } = useSignUpForm();
   const isMobile = useMediaQuery(['(max-width: 1024px)'], [true], true);
 
@@ -56,11 +56,12 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
     },
     createMessage: ({ nonce, address, chainId }) => {
       if (pathname?.includes('signup')) {
-        const { email, firstName, lastName, nick } = data;
+        // const { email, firstName, lastName, nick } = data;
         return new SiweMessage({
           domain: window.location.host,
           address,
-          statement: `First name: ${firstName}, last name: ${lastName}, nick: ${nick}, e-mail: ${email}`,
+          // statement: `Your account details: first name: ${firstName}, last name: ${lastName}, nick: ${nick}, e-mail: ${email}`,
+          statement: `Sign up with Ethereum to the app.`,
           uri: window.location.origin,
           version: '1',
           chainId,

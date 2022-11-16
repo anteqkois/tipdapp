@@ -1,28 +1,15 @@
-import { ZodError } from 'zod';
-import { prisma } from '../config/db.js';
-import {
-  createApiError,
-  createValidationError,
-  createValidationErrors,
-  ValidationError,
-  ValidationErrors,
-} from '../middlewares/error.js';
-import { signUpValidation } from '../validation/signUpValidaion.old.js';
-// const { PrismaClientKnownRequestError } = Prisma;
-
 import jwt from 'jsonwebtoken';
 import { generateNonce, SiweMessage } from 'siwe';
+import { createValidationError, createValidationErrors, isOperational, ValidationError } from '../middlewares/error.js';
+import { User } from '../services/userService.js';
+import { signUpValidation } from '../validation/signUpValidaion.old.js';
 //     //TODO add refresh token
 
 const validateSiweMessage = async (message, signature) => {
-  //TODO! SAVE NONCE IN COOKIES ONLYSERVER
   const siwe = new SiweMessage(message || {});
 
-  // if (siwe.domain !== new URL(process.env.FRONTEND_URL).host) {
-  //   createValidationError('Signature domain is wrong', 'Wrong domian', 'domain', 'domain');
-  // }
-
-  const { data, success } = await siwe.verify({ signature, domain: process.env.FRONTEND_URL });
+  //TODO! Check if domain checking works
+  const { data, success } = await siwe.verify({ signature, domain: process.env.DOMAIN });
 
   return success
     ? data
@@ -37,11 +24,16 @@ const createAuthToken = (userSessionData) => {
     },
     process.env.JWT_TOKEN_SECRET,
     {
-      // 1 hour
+      // 1 hour = 3600s
       expiresIn: 3600,
     },
   );
   return accessToken;
+};
+
+const createNonce = (req, res) => {
+  //TODO! Save nonce in db or in redis cache
+  res.status(200).json({ nonce: generateNonce() });
 };
 
 const signUp = async (req, res) => {
@@ -54,17 +46,13 @@ const signUp = async (req, res) => {
     signUpValidation.parse(formData);
 
     //Validate unique
-    const userExist = await prisma.user.findFirst({
-      where: {
-        OR: [{ address: siweMessage.address }, { email: formData.email }, { nick: formData.nick }],
-      },
-      select: {
-        address: true,
-        email: true,
-        nick: true,
-      },
-    });
+    const userExist = await User.checkIfExist(
+      { address: siweMessage.address },
+      { email: formData.email },
+      { nick: formData.nick },
+    );
 
+    //throw error if exist
     if (userExist) {
       const errors = [];
       if (userExist.address === siweMessage.address) {
@@ -87,33 +75,8 @@ const signUp = async (req, res) => {
       createValidationErrors(errors);
     }
 
-    const userSessionData = await prisma.user.create({
-      data: {
-        address: siweMessage.address,
-        email: formData.email,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        nick: formData.nick,
-        page: {
-          create: {
-            url: formData.nick,
-          },
-        },
-      },
-      include: {
-        avatar: true,
-        token: {
-          select: {
-            address: true,
-            chainId: true,
-            name: true,
-            symbol: true,
-            txHash: true,
-          },
-        },
-        page: true,
-      },
-    });
+    const userSessionData = await User.create({ ...formData, address: siweMessage.address });
+    console.log(userSessionData);
 
     const authToken = createAuthToken(userSessionData);
 
@@ -126,55 +89,17 @@ const signUp = async (req, res) => {
 
     res.status(200).json({ message: 'The account has been successfully created.', user: userSessionData });
   } catch (error) {
-    if (error instanceof ZodError) {
-      throw new ValidationErrors().fromZodErrorArray(error.issues);
-    } else if (error instanceof ValidationErrors) {
-      throw error;
-    } else {
-      console.log(error);
-      throw error;
-    }
+    isOperational(error, "Something went wrong, account didn't created.");
   }
 };
 
-const createNonce = (req, res) => {
-  //TODO! Save nonce in db or in redis cache
-  res.status(200).json({ nonce: generateNonce() });
-};
-
-const verifyMessage = async (req, res) => {
+const verifyMessageAndLogin = async (req, res) => {
   const { message, signature } = req.body;
-  // const siwe = new SiweMessage(message);
   try {
-    // if (siwe.domain !== new URL(process.env.FRONTEND_URL).host) {
-    //   createValidationError('Signature domain is wrong', 'Wrong domian', 'domain', 'domain');
-    // }
-
-    // await siwe.validate(signature);
     const siweMessage = await validateSiweMessage(message, signature);
 
-    const userSessionData = await prisma.user.findFirst({
-      where: {
-        address: siweMessage.address,
-      },
-      include: {
-        avatar: true,
-        token: {
-          select: {
-            address: true,
-            chainId: true,
-            name: true,
-            symbol: true,
-            txHash: true,
-          },
-        },
-        page: true,
-        // Widget: true,
-        // Withdraw: true,
-      },
-    });
+    const userSessionData = await User.find(siweMessage);
 
-    //TODO test if error works
     if (userSessionData) {
       //TODO add refresh token
       const authToken = createAuthToken(userSessionData);
@@ -191,10 +116,7 @@ const verifyMessage = async (req, res) => {
       createValidationError('Account not registered. Sign in first.', 'No user found', 'user', 'user');
     }
   } catch (err) {
-    console.log(err);
-    if (err instanceof ValidationError) throw err;
-    // createValidationErrors();
-    // res.send(false);
+    isOperational(errors, "Something went wrong, you didn't login.");
   }
 };
 
@@ -219,15 +141,7 @@ const validate = async (req, res) => {
     signUpValidation.parse(req.body);
 
     //Validate unique
-    const user = await prisma.user.findFirst({
-      where: {
-        OR: [{ email }, { nick }],
-      },
-      select: {
-        email: true,
-        nick: true,
-      },
-    });
+    const user = await User.checkIfExist({ email, nick });
 
     if (user) {
       const errors = [];
@@ -242,18 +156,10 @@ const validate = async (req, res) => {
       createValidationErrors(errors);
     }
   } catch (errors) {
-    if (errors instanceof ZodError) {
-      throw new ValidationErrors().fromZodErrorArray(errors.issues);
-    } else if (errors instanceof ValidationErrors) {
-      throw errors;
-    } else {
-      console.log(errors);
-      createApiError('Something went wrong, you. Account not created.');
-    }
+    isOperational(errors, "Something went wrong, data didn't pass validation.");
   }
 
   res.status(200).json({ message: 'Validation passed' });
 };
 
-export { validate, createNonce, verifyMessage, logout, signUp };
-// export default { auth, validate, createNonce };
+export { validate, createNonce, verifyMessageAndLogin, logout, signUp };
