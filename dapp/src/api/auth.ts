@@ -2,10 +2,12 @@ import { UserSession } from '@/types/models';
 import { SiweMessage } from 'siwe';
 import { api } from './apiConfig';
 
-//TODO use get with queryParams
-export const validateFormData = async (body: any) =>
-  await api.post('/auth/validate', body);
 
+// VALIDATE
+export const validateFormData = async (body: any) =>
+await api.post('/auth/validate', body);
+
+// NONCE
 type GetNonceResponse = {
   nonce: string;
 };
@@ -13,6 +15,7 @@ type GetNonceResponse = {
 export const getNonce = async () =>
   await api.get<any, GetNonceResponse>('/auth/nonce');
 
+// VERIFY
 type PostVerifyMessageResponse = {
   user: UserSession;
 };
@@ -25,6 +28,7 @@ type VerifyMessageBody = {
 export const verifyMessage = async (body: VerifyMessageBody) =>
   await api.post<any, PostVerifyMessageResponse>('/auth/verify', body);
 
+// LOGOUT
 type LogoutResponse = {
   message: string;
 };
@@ -32,6 +36,7 @@ type LogoutResponse = {
 export const logoutUser = async () =>
   await api.get<any, LogoutResponse>('/auth/logout');
 
+// SIGNUP
 type SignUpResponse = {
   message: string;
   user: UserSession,
@@ -45,3 +50,12 @@ type SignUpBody = {
 
 export const signUp = async (body: SignUpBody) =>
   await api.post<any, SignUpResponse>('/auth/signup', body);
+  
+  // REFRESH 
+type RefreshResponse = {
+  message: string;
+};
+
+export const refreshToken = async () =>
+  await api.get< RefreshResponse>('/auth/refresh');
+  

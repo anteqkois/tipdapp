@@ -18,6 +18,7 @@ async function main() {
       lastName: 'Kois',
       nick: 'anteqkois',
       address: ADDRESS_WALLET_DEV,
+      roles: ['streamer', 'tiper'],
       page: {
         create: {
           url: 'anteqkois',

@@ -1,9 +1,15 @@
-import { ReactNode } from "react";
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import { ReactNode } from 'react';
 
 type Props = {
   message?: string;
-  children: ReactNode
+  children: ReactNode;
 };
 export const InfoMessage = ({ message, children }: Props) => {
-  return <h6 className="text-secondary text-center">{children}</h6>;
+  return (
+    <h6 className="text-secondary text-center flex-center">
+      <InformationCircleIcon className="icon bg-transparent stroke-secondary-600 stroke-2" />
+      {children}
+    </h6>
+  );
 };

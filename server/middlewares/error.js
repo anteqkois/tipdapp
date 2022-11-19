@@ -30,6 +30,7 @@ export const catchErrors = (handler) => {
 
 export class ApiError {
   constructor(message, status) {
+    // super();
     this.type = 'ApiError';
     this.status = status;
     this.message = message;
@@ -105,13 +106,15 @@ export const isOperational = (err, helpMessage) => {
     console.log(err);
     createApiError(helpMessage);
   }
-  console.log(err);
+  console.log('NO OPERATIONAL ERROR', err);
   throw err;
   // return false;
 };
 
 export const handleErrors = (err, req, res, next) => {
-  console.log(err);
+  //TODO! check why server crushed when error even if catchError
+  //TODO! Add logger erro
+  console.log('ERROR:', err);
   // console.log(util.inspect(err, { showHidden: false, depth: null, colors: true }));
   // console.table(err);
   if (err instanceof ApiError || err instanceof ValidationError) {
@@ -124,7 +127,7 @@ export const handleErrors = (err, req, res, next) => {
   if (err instanceof ZodError) {
     return res.status(err.status || 500).json({ error: new ValidationErrors().fromZodErrorArray(err.issues).errors });
   }
-  return res.status(err.status || 500).json(err?.message);
+  return res.status(err.status || 500).json(err.message || 'Something went wrong, try later.');
 };
 
 export default {

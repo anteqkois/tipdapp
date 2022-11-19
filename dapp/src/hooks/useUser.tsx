@@ -1,5 +1,5 @@
 // 'use client';
-import { logoutUser, verifyMessage } from '@/api/auth';
+import { logoutUser, refreshToken, verifyMessage } from '@/api/auth';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useRouter } from 'next/navigation';
 import {
@@ -8,6 +8,7 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
+  useEffect,
 } from 'react';
 import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
@@ -44,6 +45,20 @@ export const UserProvider = ({ children }: Props) => {
   const { disconnectAsync } = useDisconnect();
   const router = useRouter();
 
+  useEffect(() => {
+    let interval: NodeJS.Timer;
+    if (status === 'authenticated') {
+      refreshToken();
+      interval = setInterval(() => {
+        refreshToken();
+      }, 2500);
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [status]);
+
   //TODO add function to check if session is still valid (in interwal, becouse token is remowe but storage flag no)
   const login = () => {
     status === 'unauthenticated'
@@ -62,20 +77,9 @@ export const UserProvider = ({ children }: Props) => {
       router.push('/user/dashboard');
       return true;
     } catch (err: any) {
-      console.log(err);
-      // if (axios.isAxiosError(err)) {
-      // if (err?.[0]?.message) {
-      //   // toast.error(err.response?.data.error[0].message);
-      //   toast.error(err[0].message);
-      // }
       toast.error(
         err[0].message ?? 'Something went wrong ! You can not login now.'
       );
-      // if (err?.[0]?.message) {
-      //   // toast.error(err.response?.data.error[0].message);
-      //   toast.error(err[0].message);
-      // }
-      // toast.error('Something went wrong ! You can not login now.');
       return false;
     }
   };
@@ -96,15 +100,9 @@ export const UserProvider = ({ children }: Props) => {
       toast.error(
         error[0].message ?? 'Something went wrong ! You can not logout.'
       );
-
-      // if (axios.isAxiosError(err)) {
-      //   toast.error(err.response?.data.error[0].message);
-      // } else {
-      //   toast.error('Something went wrong ! You can not logout.');
-      // }
     }
-    // signOut({ callbackUrl: `${window.location.origin}/login` });
   };
+
   return (
     <UserContext.Provider
       value={{ login, logout, verify, user, setUser, status, setStatus }}

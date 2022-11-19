@@ -1,6 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { generateNonce, SiweMessage } from 'siwe';
-import { createValidationError, createValidationErrors, isOperational, ValidationError } from '../middlewares/error.js';
+import {
+  createApiError,
+  createValidationError,
+  createValidationErrors,
+  isOperational,
+  ValidationError,
+} from '../middlewares/error.js';
 import { User } from '../services/userService.js';
 import { signUpValidation } from '../validation/signUpValidaion.old.js';
 //     //TODO add refresh token
@@ -19,7 +25,7 @@ const validateSiweMessage = async (message, signature) => {
 const createAuthToken = (userSessionData) => {
   const accessToken = jwt.sign(
     {
-      role: 'user',
+      roles: userSessionData.roles,
       metadata: { address: userSessionData.address, nick: userSessionData.nick },
     },
     process.env.JWT_TOKEN_SECRET,
@@ -30,6 +36,27 @@ const createAuthToken = (userSessionData) => {
   );
   return accessToken;
 };
+
+const createRefreshToken = (userSessionData) => {
+  const refreshToken = jwt.sign(
+    {
+      role: userSessionData.roles,
+      metadata: { address: userSessionData.address, nick: userSessionData.nick },
+    },
+    process.env.JWT_TOKEN_REFRESH,
+    {
+      // 1 hour = 3600s
+      // 1 day
+      expiresIn: '1d',
+    },
+  );
+
+  User.addRefreshToken({ address: userSessionData.address, refreshToken });
+
+  return refreshToken;
+};
+
+const clearSessionCookies = (res) => {};
 
 const createNonce = (req, res) => {
   //TODO! Save nonce in db or in redis cache
@@ -76,7 +103,6 @@ const signUp = async (req, res) => {
     }
 
     const userSessionData = await User.create({ ...formData, address: siweMessage.address });
-    console.log(userSessionData);
 
     const authToken = createAuthToken(userSessionData);
 
@@ -103,11 +129,21 @@ const verifyMessageAndLogin = async (req, res) => {
     if (userSessionData) {
       //TODO add refresh token
       const authToken = createAuthToken(userSessionData);
+      const refreshToken = createRefreshToken(userSessionData);
 
       res.cookie('authToken', authToken, {
         secure: true,
-        // 1h
-        maxAge: 60 * 60 * 1000,
+        // 5s
+        maxAge: 5 * 1000,
+        // // 1h
+        // maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+      });
+
+      res.cookie('refreshToken', refreshToken, {
+        secure: true,
+        // 24h
+        maxAge: 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
 
@@ -116,7 +152,7 @@ const verifyMessageAndLogin = async (req, res) => {
       createValidationError('Account not registered. Sign in first.', 'No user found', 'user', 'user');
     }
   } catch (err) {
-    isOperational(errors, "Something went wrong, you didn't login.");
+    isOperational(err, "Something went wrong, you didn't login.");
   }
 };
 
@@ -126,9 +162,15 @@ const logout = async (req, res) => {
     expries: Date.now(),
     httpOnly: true,
   });
-  res.cookie('authStatus', '', {
+  res.cookie('refreshToken', '', {
+    maxAge: 0,
+    expries: Date.now(),
+    httpOnly: true,
+  });
+  await User.removeRefreshToken({ address: req.user.address, refreshToken: null });
+  res.cookie('authStatus', 'unauthenticated', {
     // 1h
-    maxAge: 60 * 60 * 1000,
+    // maxAge: 60 * 60 * 1000,
   });
   res.status(200).send({ message: 'You are succesfully logout.' });
 };
@@ -162,4 +204,66 @@ const validate = async (req, res) => {
   res.status(200).json({ message: 'Validation passed' });
 };
 
-export { validate, createNonce, verifyMessageAndLogin, logout, signUp };
+const refreshToken = async (req, res) => {
+  const { refreshToken, authToken } = req.cookies;
+
+  if (!refreshToken) {
+    if (!authToken) res.cookie('authStatus', 'unauthenticated');
+    createApiError(`Missing refresh token.`, 401);
+  }
+
+  // Clear cookie
+  res.cookie('refreshToken', '', {
+    maxAge: 0,
+    expries: Date.now(),
+    httpOnly: true,
+  });
+  const user = await User.findByRefreshToken({ refreshToken });
+
+  // No token in database
+  if (!user) {
+    await jwt.verify(refreshToken, process.env.JWT_TOKEN_REFRESH, async (err, data) => {
+      if (err) {
+        res.cookie('authStatus', 'unauthenticated');
+        createApiError(`Invalid refresh token.`, 403);
+      }
+      await User.updateRefreshTokens({ address: data.metadata.address, refreshTokens: [] });
+      createApiError(`Token has been already used.`, 403);
+    });
+  } else {
+    // Remove token from database
+    await User.removeRefreshToken({ address: user.address, refreshToken });
+
+    await jwt.verify(refreshToken, process.env.JWT_TOKEN_REFRESH, async (err, data) => {
+      if (err) {
+        res.cookie('authStatus', 'unauthenticated');
+        createApiError('Refresh token is stale', 403);
+      }
+      // Stolen token
+      if (data.metadata.address !== user.address) createApiError('Invalid refresh token', 403);
+
+      const authToken = createAuthToken(user);
+      const refreshToken = createRefreshToken(user);
+
+      res.cookie('authToken', authToken, {
+        secure: true,
+        // 1min
+        maxAge: 30 * 1000,
+        // // 1h
+        // maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+      });
+
+      res.cookie('refreshToken', refreshToken, {
+        secure: true,
+        // 24h
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+
+      res.status(200).json({ message: 'Token was successfully refreshed.' });
+    });
+  }
+};
+
+export { validate, createNonce, verifyMessageAndLogin, logout, signUp, refreshToken };

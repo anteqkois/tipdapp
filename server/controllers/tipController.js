@@ -10,7 +10,7 @@ const findByAddress = async (req, res) => {
 
   const count = await prisma.tip.count({
     where: {
-      userAddress: req.user.metadata.address,
+      userAddress: req.user.address,
     },
   });
 
@@ -18,7 +18,7 @@ const findByAddress = async (req, res) => {
     skip,
     take: pageSize,
     where: {
-      userAddress: req.user.metadata.address,
+      userAddress: req.user.address,
     },
     orderBy: {
       date: 'asc',

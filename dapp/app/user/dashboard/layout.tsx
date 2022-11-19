@@ -57,7 +57,7 @@ export default function RootLayout({ children }: Props) {
         {children}
         <div className="flex justify-end">
           <Button className="mt-4">
-            <Link href="/tips">See more tips</Link>
+            <Link href="/user/tips">See more tips</Link>
           </Button>
         </div>
       </Card>
