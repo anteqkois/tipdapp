@@ -9,7 +9,7 @@ import { useState } from 'react';
 const Tips = () => {
   //TODO get page from URL
   //TODO create global settings store to store information about default tips view for user
-  const [pageSize, setPageSize] = useState<number>(5);
+  const [pageSize, setPageSize] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
   const { data } = useTipsPaginated({ page, pageSize });
 

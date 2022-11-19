@@ -20,16 +20,15 @@ export default function Error({ error, reset }: Props) {
   return (
     <div>
       {error[0].message === 'You are not authorized.' ? (
-        <>
-          <p>Session expired.</p>
+        <ErrorMessage>
+          Session expired.
           <Button option="danger">
             <Link href="/login">Login again</Link>
           </Button>
-        </>
+        </ErrorMessage>
       ) : (
         <ErrorMessage>{error[0].message}</ErrorMessage>
       )}
-      <button onClick={() => reset()}>Reset error boundary</button>
     </div>
   );
 }
