@@ -1,13 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 // import { apiSlice } from './apiSlice.js';
 import { combineReducers } from 'redux';
-import signUpFormReducer from './signUpFormSlice';
 import tipReducer from './tipSlice.js';
 // import userReducer from './userSlice.js';
 
 const reducer = combineReducers({
   tips: tipReducer,
-  signUpForm: signUpFormReducer,
 });
 
 const store = configureStore({

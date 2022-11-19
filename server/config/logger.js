@@ -31,4 +31,8 @@ if (process.env.NODE_ENV === 'production') {
   );
 }
 
+const errorLogger = createLogger({
+  level: ''
+})
+
 export { requestLogger };

@@ -1,18 +1,13 @@
-import { prisma } from '../config/db.js';
 import { createApiError } from '../middlewares/error.js';
+import { UserToken } from '../services/userTokenService.js';
 import { userTokenValidation } from '../validation/userTokenValidation.old.js';
 
 const find = async (req, res) => {
-  // typeof req.query?.address === 'undefined' && createApiError('Missing token address.');
+  //TODO! make req.query validation ! to prevent hack
 
-  const token = await prisma.userToken.findFirst({
-    where: {
-      ...req.query,
-    },
-  });
+  const token = UserToken.find({ where: req.query });
 
   if (token) {
-    console.log(token);
     return res.status(200).send({ token });
   } else {
     createApiError('No token found.', 404);
@@ -20,33 +15,12 @@ const find = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  // console.log('REQUEST BODY', req.body);
+  userTokenValidation.createBody.parse(req.body);
 
-  // try {
-
-  userTokenValidation.parse(req.body);
-  const { address, symbol, name, chainId, txHash, user } = req.body;
-
-  const token = await prisma.userToken.create({
-    data: {
-      address,
-      symbol,
-      name,
-      chainId,
-      txHash,
-      user: {
-        connect: {
-          address: user,
-        },
-      },
-    },
-  });
+  const token = await UserToken.create(req.body);
 
   console.log('create new token', token);
   return res.status(200).send({ token });
-  // } catch (error) {
-  //   console.log(error);
-  // }
 };
 
 export { find, create };

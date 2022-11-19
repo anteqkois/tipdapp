@@ -65,7 +65,6 @@ const checkIfExist = async ({ nick, email, address }) => {
 };
 
 const updateRefreshTokens = async ({ address, refreshTokens }) => {
-  console.log('scalar lists have to be empty', refreshTokens);
   await prisma.user.update({
     where: {
       address: address,

@@ -2,7 +2,7 @@ import { useClipboard, useMediaQuery, useUserToken } from '@/hooks';
 import { dateFormat } from '@/lib/dayjs';
 import cutAddress from '@/utils/cutAddress';
 // import { UserToken } from '@prisma/client';
-import { ethers } from '../../lib/ethersProvider';
+import { ethers } from '@/lib';
 import { Button, Card } from '../utils';
 
 type UserToken = any;

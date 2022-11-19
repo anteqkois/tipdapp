@@ -14,7 +14,7 @@ const getUserTokenData = async ({ userToken, userAddress, txHash }) => {
     name,
     chainId,
     txHash,
-    user: userAddress,
+    userAddress,
   };
 
   return data;
