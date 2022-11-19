@@ -9,12 +9,10 @@ import {
 } from '../middlewares/error.js';
 import { User } from '../services/userService.js';
 import { signUpValidation } from '../validation/signUpValidaion.old.js';
-//     //TODO add refresh token
 
 const validateSiweMessage = async (message, signature) => {
   const siwe = new SiweMessage(message || {});
 
-  //TODO! Check if domain checking works
   const { data, success } = await siwe.verify({ signature, domain: process.env.DOMAIN });
 
   return success
@@ -30,8 +28,7 @@ const createAuthToken = (userSessionData) => {
     },
     process.env.JWT_TOKEN_SECRET,
     {
-      // 1 hour = 3600s
-      expiresIn: 3600,
+      expiresIn: '1m',
     },
   );
   return accessToken;
@@ -45,8 +42,6 @@ const createRefreshToken = (userSessionData) => {
     },
     process.env.JWT_TOKEN_REFRESH,
     {
-      // 1 hour = 3600s
-      // 1 day
       expiresIn: '1d',
     },
   );
@@ -56,11 +51,38 @@ const createRefreshToken = (userSessionData) => {
   return refreshToken;
 };
 
-const clearSessionCookies = (res) => {};
-
 const createNonce = (req, res) => {
   //TODO! Save nonce in db or in redis cache
   res.status(200).json({ nonce: generateNonce() });
+};
+
+const validate = async (req, res) => {
+  const { email, nick } = req.body;
+
+  try {
+    //Validate schema
+    signUpValidation.parse(req.body);
+
+    //Validate unique
+    const user = await User.checkIfExist({ email, nick });
+
+    if (user) {
+      const errors = [];
+      if (user.email === email) {
+        const validationError = new ValidationError('email', `Email used.`, `Email already used by someone.`, `email.unique`);
+        errors.push(validationError);
+      }
+      if (user.nick === nick) {
+        const validationError = new ValidationError('nick', `Nick used.`, `Nick already used by someone.`, `nick.unique`);
+        errors.push(validationError);
+      }
+      createValidationErrors(errors);
+    }
+  } catch (errors) {
+    isOperational(errors, "Something went wrong, data didn't pass validation.");
+  }
+
+  res.status(200).json({ message: 'Validation passed' });
 };
 
 const signUp = async (req, res) => {
@@ -105,11 +127,19 @@ const signUp = async (req, res) => {
     const userSessionData = await User.create({ ...formData, address: siweMessage.address });
 
     const authToken = createAuthToken(userSessionData);
+    const refreshToken = createRefreshToken(userSessionData);
 
     res.cookie('authToken', authToken, {
       secure: true,
-      // 1h
-      maxAge: 60 * 60 * 1000,
+      // 0.5min = 0.5 * 60 * 1000ms
+      maxAge: 0.5 * 60 * 1000,
+      httpOnly: true,
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+      secure: true,
+      // 24h
+      maxAge: 24 * 60 * 60 * 1000,
       httpOnly: true,
     });
 
@@ -127,16 +157,13 @@ const verifyMessageAndLogin = async (req, res) => {
     const userSessionData = await User.find(siweMessage);
 
     if (userSessionData) {
-      //TODO add refresh token
       const authToken = createAuthToken(userSessionData);
       const refreshToken = createRefreshToken(userSessionData);
 
       res.cookie('authToken', authToken, {
         secure: true,
-        // 5s
-        maxAge: 5 * 1000,
-        // // 1h
-        // maxAge: 60 * 60 * 1000,
+        // 1min = 1 * 60 * 1000ms
+        maxAge: 1 * 60 * 1000,
         httpOnly: true,
       });
 
@@ -168,40 +195,9 @@ const logout = async (req, res) => {
     httpOnly: true,
   });
   await User.removeRefreshToken({ address: req.user.address, refreshToken: null });
-  res.cookie('authStatus', 'unauthenticated', {
-    // 1h
-    // maxAge: 60 * 60 * 1000,
-  });
+  res.cookie('authStatus', 'unauthenticated');
+
   res.status(200).send({ message: 'You are succesfully logout.' });
-};
-
-const validate = async (req, res) => {
-  const { email, nick } = req.body;
-
-  try {
-    //Validate schema
-    signUpValidation.parse(req.body);
-
-    //Validate unique
-    const user = await User.checkIfExist({ email, nick });
-
-    if (user) {
-      const errors = [];
-      if (user.email === email) {
-        const validationError = new ValidationError('email', `Email used.`, `Email already used by someone.`, `email.unique`);
-        errors.push(validationError);
-      }
-      if (user.nick === nick) {
-        const validationError = new ValidationError('nick', `Nick used.`, `Nick already used by someone.`, `nick.unique`);
-        errors.push(validationError);
-      }
-      createValidationErrors(errors);
-    }
-  } catch (errors) {
-    isOperational(errors, "Something went wrong, data didn't pass validation.");
-  }
-
-  res.status(200).json({ message: 'Validation passed' });
 };
 
 const refreshToken = async (req, res) => {
@@ -220,7 +216,7 @@ const refreshToken = async (req, res) => {
   });
   const user = await User.findByRefreshToken({ refreshToken });
 
-  // No token in database
+  // Somebody want to reuse refresh token, maybe stolen token ?
   if (!user) {
     await jwt.verify(refreshToken, process.env.JWT_TOKEN_REFRESH, async (err, data) => {
       if (err) {
@@ -248,9 +244,7 @@ const refreshToken = async (req, res) => {
       res.cookie('authToken', authToken, {
         secure: true,
         // 1min
-        maxAge: 30 * 1000,
-        // // 1h
-        // maxAge: 60 * 60 * 1000,
+        maxAge: 1 * 60 * 1000,
         httpOnly: true,
       });
 

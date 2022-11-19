@@ -49,9 +49,10 @@ export const UserProvider = ({ children }: Props) => {
     let interval: NodeJS.Timer;
     if (status === 'authenticated') {
       refreshToken();
+      //Refresh in 30s interval
       interval = setInterval(() => {
         refreshToken();
-      }, 2500);
+      }, 30000);
     }
 
     return () => {
@@ -59,7 +60,6 @@ export const UserProvider = ({ children }: Props) => {
     };
   }, [status]);
 
-  //TODO add function to check if session is still valid (in interwal, becouse token is remowe but storage flag no)
   const login = () => {
     status === 'unauthenticated'
       ? openConnectModal?.()
