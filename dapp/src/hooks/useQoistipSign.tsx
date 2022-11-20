@@ -9,6 +9,7 @@ import {
 } from 'wagmi';
 import { useClipboard, useUser } from '.';
 import QoistipSign from '../artifacts/localhost/QoistipSign.json';
+
 const contractInstance = {
   addressOrName: QoistipSign.address,
   contractInterface: QoistipSign.abi,

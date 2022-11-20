@@ -31,7 +31,7 @@ export const Avatar = ({
         {...rest}
         // create utils function to build url to image
         //TODO change avatarPath to url
-        src={`http://localhost:3001/api/uesr/${avatar?.filename}`}
+        src={`${process.env.NEXT_PUBLIC_SERVER_URL}/user/${avatar?.filename}`}
         alt="Avatar"
       />
       <AvatarPrimitive.Fallback

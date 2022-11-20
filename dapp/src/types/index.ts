@@ -1,10 +1,3 @@
-export enum asyncStatus {
-  'idle' = 'idle',
-  'loading' = 'loading',
-  'success' = 'success',
-  'fail' = 'fail',
-}
-
 export type AsyncStatus = 'idle' | 'loading' | 'success' | 'fail';
 // export type asyncStatus = 'idle' | 'loading' | 'success' | 'fail';
 

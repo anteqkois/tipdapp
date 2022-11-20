@@ -20,7 +20,7 @@ export default function Error({ error, reset }: Props) {
   return (
     <div>
       {error[0].message === 'You are not authorized.' ? (
-        <ErrorMessage className='flex-center'>
+        <ErrorMessage className="flex-center flex-row">
           Session expired.
           <Button option="danger">
             <Link href="/login">Login again</Link>
