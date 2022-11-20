@@ -31,19 +31,19 @@ export const Avatar = ({
         {...rest}
         // create utils function to build url to image
         //TODO change avatarPath to url
-        src={`${avatar?.filename}`}
+        src={`http://localhost:3001/api/uesr/${avatar?.filename}`}
         alt="Avatar"
       />
       <AvatarPrimitive.Fallback
         delayMs={100}
         className={className}
       >
-          <Image
-            fill={true}
-            {...rest}
-            alt="user avatar"
-            src={`https://avatars.dicebear.com/api/pixel-art-neutral/${address}.svg`}
-          />
+        <Image
+          fill={true}
+          {...rest}
+          alt="user avatar"
+          src={`https://avatars.dicebear.com/api/pixel-art-neutral/${address}.svg`}
+        />
       </AvatarPrimitive.Fallback>
     </AvatarPrimitive.Root>
   );

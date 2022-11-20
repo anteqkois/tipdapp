@@ -1,38 +1,98 @@
 import { createLogger, format, transports } from 'winston';
+import 'winston-daily-rotate-file';
+
+const customFormatRequestConsole = format.printf(({ level, message, label, timestamp, url, method, host }) => {
+  return `${level} - [${label}] ${timestamp} ${method} ${host} ${url}`;
+});
+const customFormatRequestFile = format.printf(({ level, message, timestamp, url, method, host }) => {
+  return JSON.stringify({ level, timestamp, message, method, host, url });
+});
+
+const fileRotateTransportRequest = new transports.DailyRotateFile({
+  filename: './.log/request-%DATE%.log',
+  datePattern: 'YYYY-MM-DD',
+  maxFiles: '3d',
+  format: format.combine(
+    format.timestamp({
+      format: 'MMM-DD-YYYY HH:mm:ss',
+    }),
+    customFormatRequestFile,
+  ),
+});
 
 const requestLogger = createLogger({
-  // level: 'info',
-  format: format.json(),
-  defaultMeta: { service: 'backend' },
+  level: 'info',
+  defaultMeta: { service: 'server' },
   transports: [
-    new transports.File({ dirname: './.log', filename: 'requestError.log', level: 'error' }),
-    new transports.File({ dirname: './.log', filename: 'request.log' }),
+    fileRotateTransportRequest,
+    new transports.Console({
+      format: format.combine(
+        format.colorize({ colors: { info: 'blue', error: 'bold red' } }),
+        format.label({ label: 'REQUEST' }),
+        format.timestamp({
+          format: 'MMM-DD-YYYY HH:mm:ss',
+        }),
+        customFormatRequestConsole,
+      ),
+    }),
+    // new transports.File({
+    //   dirname: './.log',
+    //   filename: 'request.log',
+    //   format: format.combine(
+    //     format.timestamp({
+    //       format: 'MMM-DD-YYYY HH:mm:ss',
+    //     }),
+    //     customFormatRequestFile,
+    //   ),
+    // }),
   ],
 });
 
-const customFormat = format.printf(({ level, message, label, timestamp, url, method, host }) => {
-  return `[${label}] ${level}: ${method} ${host} ${url}`;
-  // return `${timestamp} [${label}] ${level}: ${message}`;
+const customFormatErrorConsole = format.printf(({ level, message, label, timestamp, ...rest }) => {
+  return `${level} - [${rest.type ?? message}] ${message} ${rest.stack}`;
+});
+const customFormatErrorFile = format.printf(({ level, message, timestamp, ...rest }) => {
+  return JSON.stringify({ level, timestamp, message, details: { type: rest.type, message: message, stack: rest.stack } });
 });
 
-if (process.env.NODE_ENV === 'production') {
-  requestLogger.add(new transports.File({ dirname: './.log', filename: 'requestError.log', level: 'error' }));
-  requestLogger.add(new transports.File({ dirname: './.log', filename: 'request.log' }));
-} else {
-  requestLogger.add(
-    new transports.Console({
-      format: format.combine(
-        format.colorize({ colors: { info: 'blue', error: 'red' } }),
-        format.label({ label: 'REQUEST' }),
-        format.timestamp(),
-        customFormat,
-      ),
+const fileRotateTransportError = new transports.DailyRotateFile({
+  filename: './.log/error-%DATE%.log',
+  datePattern: 'YYYY-MM-DD',
+  maxFiles: '3d',
+  format: format.combine(
+    format.timestamp({
+      format: 'MMM-DD-YYYY HH:mm:ss',
     }),
-  );
-}
+    customFormatErrorFile,
+  ),
+});
 
 const errorLogger = createLogger({
-  level: ''
-})
+  level: 'warn',
+  defaultMeta: { service: 'server' },
+  transports: [
+    fileRotateTransportError,
+    new transports.Console({
+      format: format.combine(
+        format.colorize({ colors: { warn: 'cyan', error: 'bold red' } }),
+        format.label({ label: 'ERROR' }),
+        format.timestamp({
+          format: 'MMM-DD-YYYY HH:mm:ss',
+        }),
+        customFormatErrorConsole,
+      ),
+    }),
+    // new transports.File({
+    //   dirname: './.log',
+    //   filename: 'error.log',
+    //   format: format.combine(
+    //     format.timestamp({
+    //       format: 'MMM-DD-YYYY HH:mm:ss',
+    //     }),
+    //     customFormatErrorFile,
+    //   ),
+    // }),
+  ],
+});
 
-export { requestLogger };
+export { requestLogger, errorLogger };

@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+
+//TODO! add base url to .env
 export const api = axios.create({
   // export default axios.create({
   baseURL: 'http://localhost:3001/api',

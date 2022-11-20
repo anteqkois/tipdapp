@@ -1,8 +1,8 @@
 import { ZodError } from 'zod';
-import { requestLogger } from '../config/logger.js';
+import { errorLogger, requestLogger } from '../config/logger.js';
 
 export const notFound = (req, res, next) => {
-  requestLogger.error({ url: req.url, method: req.method });
+  requestLogger.error('not found', { url: req.url, method: req.method, host: req.hostname });
   const err = new Error('404 api endpoint not found');
   err.status = 404;
   next(err);
@@ -28,9 +28,9 @@ export const catchErrors = (handler) => {
   };
 };
 
-export class ApiError {
+export class ApiError extends Error {
   constructor(message, status) {
-    // super();
+    super();
     this.type = 'ApiError';
     this.status = status;
     this.message = message;
@@ -98,6 +98,7 @@ export const createApiError = (message, status) => {
   throw new ApiError(message, status);
 };
 
+//If operational throw away and handle in handelErrors middleware, other way create ApiError with given message
 export const isOperational = (err, helpMessage) => {
   if (err instanceof ApiError || err instanceof ValidationError || err instanceof ValidationErrors || err instanceof ZodError) {
     throw err;
@@ -106,27 +107,25 @@ export const isOperational = (err, helpMessage) => {
     console.log(err);
     createApiError(helpMessage);
   }
-  console.log('NO OPERATIONAL ERROR', err);
+  errorLogger.error('no operational', err);
   throw err;
   // return false;
 };
 
 export const handleErrors = (err, req, res, next) => {
-  //TODO! check why server crushed when error even if catchError
-  //TODO! Add logger erro
-  console.log('ERROR:', err);
-  // console.log(util.inspect(err, { showHidden: false, depth: null, colors: true }));
-  // console.table(err);
   if (err instanceof ApiError || err instanceof ValidationError) {
+    errorLogger.error('', err);
     return res.status(err.status || 500).send({ error: [err] });
   }
   if (err instanceof ValidationErrors) {
-    console.log(err);
+    errorLogger.error('ValidationErrors', err.errors);
     return res.status(err.status || 500).json({ error: err.errors });
   }
   if (err instanceof ZodError) {
+    errorLogger.error('ZodError', new ValidationErrors().fromZodErrorArray(err.issues).errors);
     return res.status(err.status || 500).json({ error: new ValidationErrors().fromZodErrorArray(err.issues).errors });
   }
+  errorLogger.error('no operational', err);
   return res.status(err.status || 500).json(err.message || 'Something went wrong, try later.');
 };
 
