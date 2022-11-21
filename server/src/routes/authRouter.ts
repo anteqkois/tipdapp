@@ -1,5 +1,12 @@
 import { Router } from 'express';
-import { createNonce, logout, signUp, validate, verifyMessageAndLogin, refreshToken } from '../controllers/authController.js';
+import {
+  createNonce,
+  logout,
+  refreshToken,
+  signUp,
+  validate,
+  verifyMessageAndLogin,
+} from '../controllers/authController';
 import { authenticate } from '../middlewares/authenticate.js';
 import { catchAsyncErrors } from '../middlewares/error.js';
 

@@ -4,9 +4,8 @@
   "engines ": {
     "node": "18.12.0"
   },
-  "type": "module",
   "description": "frontend and backend to qoisdapp",
-  "main": "server.js",
+  "main": "server.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anteqkois/qoisdapp.git"
@@ -21,9 +20,9 @@
     "lib": "lib"
   },
   "scripts": {
-    "dev": "NODE_ENV=development dotenv_config_path=.env.development nodemon server.js",
+    "dev": "NODE_ENV=development dotenv_config_path=.env.development nodemon",
     "dev-update": "npm run prisma-update && npm run dev",
-    "start": "NODE_ENV=production node src/server.js",
+    "start": "NODE_ENV=production node dist/server.js",
     "prisma-update": "npx prisma db push && npx prisma db seed",
     "prisma-updateold": "npx prisma migrate reset --force --skip-seed && npx prisma db seed"
   },
@@ -44,20 +43,26 @@
   "devDependencies": {
     "@faker-js/faker": "^7.5.0",
     "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.14",
+    "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "^18.8.3",
-    "@typescript-eslint/eslint-plugin": "^5.39.0",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.39.0",
-    "eslint": "8.23.1",
+    "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.5.1",
+    "eslint-plugin-promise": "^6.1.1",
     "ethers": "^5.7.1",
     "nodemon": "^2.0.20",
     "prettier": "^2.7.1",
     "prisma": "^4.3.1",
     "ts-node": "^10.9.1",
     "tsc": "^2.0.4",
-    "typescript": "^4.8.4"
+    "typescript": "^4.9.3"
   },
   "prisma": {
     "seed": "node prisma/seed.js"

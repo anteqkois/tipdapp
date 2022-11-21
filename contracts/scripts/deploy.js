@@ -32,7 +32,7 @@ const saveToService = async (tokenAddr, contractName, txDeploy, TokenArtifact, f
   );
 };
 
-const servicesPath = ['/server/artifacts/', '/dapp/src/artifacts/', '/blockchainListeners/artifacts/'];
+const servicesPath = ['/server/src/artifacts/', '/dapp/src/artifacts/', '/blockchainListeners/artifacts/'];
 
 const saveDataToServices = async (tokenAddr, contractName, txDeploy) => {
   const TokenArtifact = artifacts.readArtifactSync(contractName);

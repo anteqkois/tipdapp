@@ -1,20 +1,26 @@
+import { Prisma } from '@prisma/client';
 import prisma from '../config/db.js';
 
-const create = async (data) => {
+const create = async (data: Prisma.UserCreateArgs) => {
   return await prisma.user.create({
     data: {
-      address: data.address,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      nick: data.nick,
-      roles: ['streamer'],
-      page: {
-        create: {
-          url: data.nick,
-        },
-      },
+      roles: ['streamer', 'tiper'],
+      ...data.data,
     },
+    // data: data.data,
+    // data: {
+    //   address: data.address,
+    //   email: data.email,
+    //   firstName: data.firstName,
+    //   lastName: data.lastName,
+    //   nick: data.nick,
+    //   roles: ['streamer'],
+    //   page: {
+    //     create: {
+    //       url: data.nick,
+    //     },
+    //   },
+    // },
     include: {
       avatar: true,
       token: {
@@ -31,11 +37,9 @@ const create = async (data) => {
   });
 };
 
-const find = async (data) => {
+const find = async (data: Prisma.UserFindFirstArgs) => {
   return await prisma.user.findFirst({
-    where: {
-      address: data.address,
-    },
+    where: data.where,
     include: {
       avatar: true,
       token: {
@@ -51,12 +55,9 @@ const find = async (data) => {
     },
   });
 };
-
-const checkIfExist = async ({ nick, email, address }) => {
+const checkIfExist = async (data: Prisma.UserWhereInput) => {
   return await prisma.user.findFirst({
-    where: {
-      OR: [{ email }, { nick }, { address }],
-    },
+    where: data,
     // select: {
     //   email: true,
     //   nick: true,
@@ -64,7 +65,13 @@ const checkIfExist = async ({ nick, email, address }) => {
   });
 };
 
-const updateRefreshTokens = async ({ address, refreshTokens }) => {
+const updateRefreshTokens = async ({
+  address,
+  refreshTokens,
+}: {
+  address: string;
+  refreshTokens: string[];
+}) => {
   await prisma.user.update({
     where: {
       address: address,
@@ -77,14 +84,27 @@ const updateRefreshTokens = async ({ address, refreshTokens }) => {
   });
 };
 
-const removeRefreshToken = async ({ address, refreshToken }) => {
+const removeRefreshToken = async ({
+  address,
+  refreshToken,
+}: {
+  address: string;
+  refreshToken: string;
+}) => {
   const user = await findByRefreshToken({ refreshToken });
-  const refreshTokens = user.refreshTokens.filter((rt) => rt !== refreshToken);
+  const refreshTokens =
+    user?.refreshTokens.filter((rt) => rt !== refreshToken) ?? [];
 
   await updateRefreshTokens({ address, refreshTokens });
 };
 
-const addRefreshToken = async ({ address, refreshToken }) => {
+const addRefreshToken = async ({
+  address,
+  refreshToken,
+}: {
+  address: string;
+  refreshToken: string;
+}) => {
   return await prisma.user.update({
     where: {
       address: address,
@@ -97,7 +117,11 @@ const addRefreshToken = async ({ address, refreshToken }) => {
   });
 };
 
-const findByRefreshToken = async ({ refreshToken }) => {
+const findByRefreshToken = async ({
+  refreshToken,
+}: {
+  refreshToken: string;
+}) => {
   return await prisma.user.findFirst({
     where: {
       refreshTokens: {
@@ -113,5 +137,13 @@ const findByRefreshToken = async ({ refreshToken }) => {
   });
 };
 
-const User = { create, find, checkIfExist, updateRefreshTokens, findByRefreshToken, addRefreshToken, removeRefreshToken };
-export { User };
+const UserService = {
+  create,
+  find,
+  checkIfExist,
+  updateRefreshTokens,
+  findByRefreshToken,
+  addRefreshToken,
+  removeRefreshToken,
+};
+export { UserService };

@@ -2,10 +2,10 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import { corsConfig } from './config/cors.js';
-import { handleErrors, notFound } from './middlewares/error.js';
-import { logRequest } from './middlewares/logRequest.js';
-import apiRouter from './routes/index.js';
+import { corsConfig } from './src/config/cors.js';
+import { handleErrors, notFound } from './src/middlewares/error.js';
+import { logRequest } from './src/middlewares/logRequest.js';
+import apiRouter from './src/routes';
 const { config } = dotenv;
 config({ path: process.env.dotenv_config_path ? process.env.dotenv_config_path : '.env.development' });
 
@@ -28,7 +28,11 @@ server.use('/api', apiRouter);
 server.use(handleErrors);
 server.use(notFound);
 
-server.listen(port, (err) => {
+server.listen(port, () => {
   // if (err) throw err;
   console.log(`> Ready on http://localhost:${port}`);
 });
+// server.listen(port, (err: any) => {
+//   // if (err) throw err;
+//   console.log(`> Ready on http://localhost:${port}`);
+// });

@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      // "*": ["node_modules/*", "src/types/*"]
+      // "@/src/*": ["src/*"],
+    },
+    "module": "commonjs",
+    "outDir": "dist",
+    "lib": ["es2019"],
+    "target": "es2019",
+    "isolatedModules": false,
+    "noEmit": false,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true
+    // "noUncheckedIndexedAccess": true,
+    // "typeRoots": ["./node_modules/*", "./src/types/*"]
+    // "typeRoots": ["./src/types/*", "./node_modules/*"]
+  },
+  "include": ["src/types/**/*", "src/**/*"],
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*",
+    "./.log",
+    "dist",
+    "./src/artifacts",
+    "./prisma/**/*"
+  ]
+}

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from '../middlewares/authenticate.js';
-import authorizationRoutes from './authRouter.js';
+import authorizationRoutes from './authRouter';
 import tipRoutes from './tipRouter.js';
 import userRoutes from './userRouter.js';
 import userTokenRoutes from './userTokenRouter.js';
