@@ -2,7 +2,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import { corsConfig } from './src/config/cors.js';
+import { corsConfig } from './src/config/cors';
 import { handleErrors, notFound } from './src/middlewares/error.js';
 import { logRequest } from './src/middlewares/logRequest.js';
 import apiRouter from './src/routes';

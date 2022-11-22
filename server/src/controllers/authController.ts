@@ -132,14 +132,14 @@ const signUp = async (req: Request, res: Response) => {
     const siweMessage = await validateSiweMessage(message, signature);
 
     //Validate schema
-    signUpValidation.parse(formData);
+    const validatedFormData = signUpValidation.parse(formData);
 
     //Validate unique
     const userExist = await UserService.checkIfExist({
       OR: [
         { address: siweMessage.address },
-        { email: formData.email },
-        { nick: formData.nick },
+        { email: validatedFormData.email },
+        { nick: validatedFormData.nick },
       ],
     });
 
@@ -155,7 +155,7 @@ const signUp = async (req: Request, res: Response) => {
         );
         errors.push(validationError);
       }
-      if (userExist.email === formData.email) {
+      if (userExist.email === validatedFormData.email) {
         const validationError = new ValidationError(
           'email',
           `Email used.`,
@@ -164,7 +164,7 @@ const signUp = async (req: Request, res: Response) => {
         );
         errors.push(validationError);
       }
-      if (userExist.nick === formData.nick) {
+      if (userExist.nick === validatedFormData.nick) {
         const validationError = new ValidationError(
           'nick',
           `Nick used.`,
@@ -177,12 +177,11 @@ const signUp = async (req: Request, res: Response) => {
     }
 
     const userSessionData = await UserService.create({
-      data: {
-        ...formData,
-        page: {
-          create: {
-            url: formData.nick,
-          },
+      address: siweMessage.address,
+      ...validatedFormData,
+      page: {
+        create: {
+          url: validatedFormData.nick,
         },
       },
     });

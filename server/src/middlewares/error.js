@@ -1,5 +1,5 @@
 import { ZodError } from 'zod';
-import { errorLogger, requestLogger } from '../config/logger.js';
+import { errorLogger, requestLogger } from '../config/logger';
 
 export const notFound = (req, res, next) => {
   requestLogger.error('not found', { url: req.url, method: req.method, host: req.hostname });

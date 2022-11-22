@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import prisma from '../config/db.js';
+import prisma from '../config/db';
 
 const findMany = async ({ skip, take, where }: Prisma.TipAggregateArgs) => {
   return await prisma.tip.findMany({

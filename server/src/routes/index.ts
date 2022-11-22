@@ -3,7 +3,7 @@ import { authenticate } from '../middlewares/authenticate.js';
 import authorizationRoutes from './authRouter';
 import tipRoutes from './tipRouter';
 import userRoutes from './userRouter';
-import userTokenRoutes from './userTokenRouter.js';
+import userTokenRoutes from './userTokenRouter';
 
 const router = Router();
 

@@ -1,5 +1,4 @@
-import { validationHelper } from '@/lib/zod';
-import { z } from 'zod';
+import { validationHelper, z } from '../config/zod';
 
 export const userTokenFormValidation = z.object({
   symbol: z
@@ -12,18 +11,18 @@ export const userTokenFormValidation = z.object({
     .max(20, { message: 'Token name can be up to 20 characters long.' }),
 });
 
-export const userTokenValidation = userTokenFormValidation.extend({
+export const userTokenCreateValidation = userTokenFormValidation.extend({
   address: z.string().length(42, { message: 'Wrong token address' }),
-  user: z.string().length(42, { message: 'Wrong wallet address' }),
+  userAddress: z.string().length(42, { message: 'Wrong wallet address' }),
   chainId: z.number({ required_error: 'ChainId is required' }),
   txHash: z.string().length(66, { message: 'Wrong transaction hash' }),
 });
 
 export type UserTokenFormObject = z.infer<typeof userTokenFormValidation>;
-export type UserTokenObject = z.infer<typeof userTokenValidation>;
+export type UserTokenObject = z.infer<typeof userTokenCreateValidation>;
 
 export const userTokenFormParse = (data: UserTokenFormObject) =>
   validationHelper<UserTokenFormObject>(data, userTokenFormValidation);
 
 export const userTokenParse = (data: UserTokenObject) =>
-  validationHelper<UserTokenObject>(data, userTokenValidation);
+  validationHelper<UserTokenObject>(data, userTokenCreateValidation);

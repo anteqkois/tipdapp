@@ -1,11 +1,11 @@
 import { Prisma } from '@prisma/client';
-import prisma from '../config/db.js';
+import prisma from '../config/db';
 
-const create = async (data: Prisma.UserCreateArgs) => {
+const create = async (createData: Prisma.UserCreateInput) => {
   return await prisma.user.create({
     data: {
       roles: ['streamer', 'tiper'],
-      ...data.data,
+      ...createData,
     },
     include: {
       avatar: true,
@@ -41,9 +41,9 @@ const find = async (data: Prisma.UserFindFirstArgs) => {
     },
   });
 };
-const checkIfExist = async (data: Prisma.UserWhereInput) => {
+const checkIfExist = async (where: Prisma.UserWhereInput) => {
   return await prisma.user.findFirst({
-    where: data,
+    where,
     // select: {
     //   email: true,
     //   nick: true,
