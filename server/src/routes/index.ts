@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { authenticate } from '../middlewares/authenticate.js';
 import authorizationRoutes from './authRouter';
-import tipRoutes from './tipRouter.js';
-import userRoutes from './userRouter.js';
+import tipRoutes from './tipRouter';
+import userRoutes from './userRouter';
 import userTokenRoutes from './userTokenRouter.js';
 
 const router = Router();

@@ -18,7 +18,6 @@ export default function Error({
   return (
     <div>
       <ErrorMessage>{error[0].message}</ErrorMessage>
-      <button onClick={() => reset()}>Reset error boundary</button>
     </div>
   );
 }

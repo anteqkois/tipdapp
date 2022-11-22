@@ -1,11 +1,10 @@
 // import { prisma } from '../../services/prisma';
-import { prisma } from '../config/db.js';
+import { Request, Response } from 'express';
+import { UserService } from '../services/userService';
 import { createApiError } from '../middlewares/error.js';
 
-const find = async (req, res) => {
-  const user = await prisma.user.findFirst({
-    where: { id: req.user.user_metadata.id },
-  });
+const find = async (req: Request, res: Response) => {
+  const user = await UserService.find({ where: { address: req.user.address } });
 
   if (user) {
     return res.status(200).send({ user: user });

@@ -1,8 +1,10 @@
+import { Prisma } from '@prisma/client';
 import prisma from '../config/db.js';
 
-const findMany = async ({ option, where }) => {
+const findMany = async ({ skip, take, where }: Prisma.TipAggregateArgs) => {
   return await prisma.tip.findMany({
-    ...option,
+    skip,
+    take,
     where,
     orderBy: {
       date: 'asc',
@@ -24,13 +26,11 @@ const findMany = async ({ option, where }) => {
   });
 };
 
-const count = async ({ address }) => {
+const count = async (data: Prisma.TipWhereInput) => {
   return await prisma.tip.count({
-    where: {
-      userAddress: address,
-    },
+    where: data,
   });
 };
 
-const Tip = { findMany, count };
-export { Tip };
+const TipService = { findMany, count };
+export { TipService };

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { findByAddress } from '../controllers/tipController.js';
+import { findByAddress } from '../controllers/tipController';
 import { catchAsyncErrors } from '../middlewares/error.js';
 
 const router = Router();

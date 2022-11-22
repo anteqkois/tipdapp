@@ -7,20 +7,6 @@ const create = async (data: Prisma.UserCreateArgs) => {
       roles: ['streamer', 'tiper'],
       ...data.data,
     },
-    // data: data.data,
-    // data: {
-    //   address: data.address,
-    //   email: data.email,
-    //   firstName: data.firstName,
-    //   lastName: data.lastName,
-    //   nick: data.nick,
-    //   roles: ['streamer'],
-    //   page: {
-    //     create: {
-    //       url: data.nick,
-    //     },
-    //   },
-    // },
     include: {
       avatar: true,
       token: {
