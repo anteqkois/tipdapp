@@ -7,8 +7,8 @@ import {
   validate,
   verifyMessageAndLogin,
 } from '../controllers/authController';
-import { authenticate } from '../middlewares/authenticate.js';
-import { catchAsyncErrors } from '../middlewares/error.js';
+import { authenticate } from '../middlewares/authenticate';
+import { catchAsyncErrors } from '../middlewares/error';
 
 const router = Router();
 

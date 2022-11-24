@@ -8,7 +8,7 @@ import {
   createValidationErrors,
   isOperational,
   ValidationError,
-} from '../middlewares/error.js';
+} from '../middlewares/error';
 import { UserService } from '../services/userService';
 import { SignUpObject, signUpValidation } from '../validation/signUpValidaion';
 
@@ -40,10 +40,8 @@ const createAuthToken = (
   const accessToken = jwt.sign(
     {
       roles: userSessionData.roles,
-      metadata: {
-        address: userSessionData.address,
-        nick: userSessionData.nick,
-      },
+      address: userSessionData.address,
+      nick: userSessionData.nick,
     },
     process.env.JWT_TOKEN_SECRET,
     {
@@ -59,10 +57,8 @@ const createRefreshToken = (
   const refreshToken = jwt.sign(
     {
       role: userSessionData.roles,
-      metadata: {
-        address: userSessionData.address,
-        nick: userSessionData.nick,
-      },
+      address: userSessionData.address,
+      nick: userSessionData.nick,
     },
     process.env.JWT_TOKEN_REFRESH,
     {
@@ -116,7 +112,7 @@ const validate = async (req: Request<{}, {}, SignUpObject>, res: Response) => {
         );
         errors.push(validationError);
       }
-      createValidationErrors(errors);
+      createValidationErrors(errors, 422);
     }
   } catch (errors) {
     isOperational(errors, "Something went wrong, data didn't pass validation.");
@@ -301,9 +297,9 @@ const refreshToken = async (req: Request, res: Response) => {
       const decoded = jwt.verify(
         refreshToken,
         process.env.JWT_TOKEN_SECRET
-      ) as decodedJWT;
+      ) as DecodedUser;
       await UserService.updateRefreshTokens({
-        address: decoded.metadata.address,
+        address: decoded.address,
         refreshTokens: [],
       });
       createApiError(`Token has been already used.`, 403);
@@ -322,9 +318,9 @@ const refreshToken = async (req: Request, res: Response) => {
       const decoded = jwt.verify(
         refreshToken,
         process.env.JWT_TOKEN_REFRESH
-      ) as decodedJWT;
+      ) as DecodedUser;
 
-      if (decoded.metadata.address !== user.address)
+      if (decoded.address !== user.address)
         createApiError('Invalid refresh token', 403);
 
       const newAuthToken = createAuthToken(user);

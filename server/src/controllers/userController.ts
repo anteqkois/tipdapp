@@ -1,7 +1,7 @@
 // import { prisma } from '../../services/prisma';
 import { Request, Response } from 'express';
+import { createApiError } from '../middlewares/error';
 import { UserService } from '../services/userService';
-import { createApiError } from '../middlewares/error.js';
 
 const find = async (req: Request, res: Response) => {
   const user = await UserService.find({ where: { address: req.user.address } });

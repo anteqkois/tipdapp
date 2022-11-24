@@ -1,8 +1,10 @@
-import { Request, Response } from 'express';
-import { createApiError } from '../middlewares/error.js';
+import { Request, Response,  } from 'express';
+import { createApiError } from '../middlewares/error';
 import { TipService } from '../services/tipService';
+// import { Query } from 'express-static-serve-core';
 
 const findByAddress = async (
+  // req: Request<{}, {}, {}, TypedRequestQuery>,
   req: Request<{}, {}, {}, { page: string; pageSize: string }>,
   res: Response
 ) => {

@@ -1,13 +1,15 @@
 export {};
 
-type UserJWT = {
-  address: string;
-};
+// type AuthUser = {
+//   address: string;
+// };
 
 declare global {
   namespace Express {
     export interface Request {
-      user: UserJWT;
+      user: DecodedUser;
+      address: string;
+      roles: string[];
     }
   }
 }

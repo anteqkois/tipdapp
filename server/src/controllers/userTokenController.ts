@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { Request, Response } from 'express';
-import { createApiError } from '../middlewares/error.js';
+import { createApiError } from '../middlewares/error';
 import { UserTokenService } from '../services/userTokenService';
 import { userTokenCreateValidation } from '../validation/userTokenValidation';
 

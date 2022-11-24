@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { findByAddress } from '../controllers/tipController';
-import { catchAsyncErrors } from '../middlewares/error.js';
+import { catchAsyncErrors } from '../middlewares/error';
 
 const router = Router();
 //GET

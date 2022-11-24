@@ -1,7 +1,8 @@
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { createApiError } from './error.js';
+import { createApiError } from './error';
 
-const authenticate = (req, res, next) => {
+const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const { authToken, authStatus } = req.cookies;
 
   if (authToken === null || authToken === undefined) {
@@ -13,11 +14,18 @@ const authenticate = (req, res, next) => {
     // res.redirect(req.get('referer'));
     createApiError(`You are not authorized.`, 401);
   }
-  jwt.verify(authToken, process.env.JWT_TOKEN_SECRET, (err, data) => {
-    if (err) createApiError(`Invalid authentication token.`, 403);
-    req.user = { roles: data.roles, ...data.metadata };
+
+  try {
+    const decoded = jwt.verify(
+      authToken,
+      process.env.JWT_TOKEN_SECRET
+    ) as DecodedUser;
+
+    req.user = decoded;
     next();
-  });
+  } catch (error) {
+    createApiError(`Invalid authentication token.`, 403);
+  }
 };
 
 export { authenticate };
