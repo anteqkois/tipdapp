@@ -1,11 +1,11 @@
 import { api } from './apiConfig';
 
+type Tip = any;
+
 type FindParams = {
   page?: number;
   pageSize?: number;
 };
-
-type Tip = any;
 
 type FindResponse = {
   tips: (Tip & {
@@ -20,7 +20,7 @@ type FindResponse = {
   count: number;
 };
 
-export const find = async (params: FindParams) =>
+export const find = async (queryParams: FindParams) =>
   await api.get<never, FindResponse>('tip', {
-    params,
+    params: queryParams,
   });

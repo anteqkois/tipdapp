@@ -1,6 +1,5 @@
-import { useLocalStorage } from '@/hooks';
-import { useQoistipSign } from '@/hooks';
-import { ZodParseErrors } from '@/types';
+import { useLocalStorage, useQoistipSign } from '@/hooks';
+import { ZodParseErrors } from '@/types/index';
 import {
   UserTokenFormObject,
   userTokenFormParse,

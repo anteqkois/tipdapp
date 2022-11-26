@@ -1,6 +1,12 @@
 // 'use client'
 import { signUp, validateFormData } from '@/api/auth';
 import { Close } from '@/components/utils';
+import {
+  ApiError,
+  AsyncStatus,
+  ValidationError,
+  ZodParseErrors,
+} from '@/types';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
@@ -9,12 +15,6 @@ import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
 import { useDisconnect } from 'wagmi';
 import { useUser } from '.';
-import {
-  ApiError,
-  AsyncStatus,
-  ValidationError,
-  ZodParseErrors,
-} from '../types';
 
 type FormData = {
   firstName: string;
@@ -100,7 +100,7 @@ export const useSignUpForm = () => {
       setStatus('authenticated');
       setUser(response.user);
       toast.success(response.message);
-      router.push('/user/dashboard');
+      router.push('/streamer/dashboard');
       return true;
     } catch (errors: any) {
       toast(

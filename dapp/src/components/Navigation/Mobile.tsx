@@ -1,14 +1,5 @@
 'use client';
 import { NavigationOption } from '@/types';
-import {
-  AdjustmentsHorizontalIcon,
-  BanknotesIcon,
-  ChatBubbleBottomCenterTextIcon,
-  Cog6ToothIcon,
-  ComputerDesktopIcon,
-  CurrencyDollarIcon,
-  RectangleGroupIcon,
-} from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { UserSession } from 'src/types/models';
@@ -16,59 +7,15 @@ import Hamburger from './Hamburger';
 import Navlink from './Navlink';
 import { RainbowKitButtonMobile } from './RainbowKitButtonMobile';
 
-const optionStyle =
+const defaultOptionStyle =
   'flex items-center gap-3 p-4 border-b border-neutral-150 font-semibold uppercase group text-neutral-600 hover:text-neutral-900 hover:cursor-pointer hover:bg-neutral-150';
-
-const navigationOption: NavigationOption[] = [
-  {
-    label: 'dashboard',
-    href: '/user/dashboard',
-    icon: <RectangleGroupIcon className="w-7" />,
-    className: optionStyle,
-  },
-  {
-    label: 'tips',
-    href: '/user/tips',
-    icon: <ChatBubbleBottomCenterTextIcon className="w-7" />,
-    className: optionStyle,
-  },
-  {
-    label: 'creator',
-    href: '/user/creator',
-    icon: <AdjustmentsHorizontalIcon className="w-7" />,
-    className: optionStyle,
-  },
-  {
-    label: 'token',
-    href: '/user/token',
-    icon: <CurrencyDollarIcon className="w-7" />,
-    className: optionStyle,
-  },
-  {
-    label: 'your page',
-    href: '/user/page',
-    icon: <ComputerDesktopIcon className="w-7" />,
-    className: optionStyle,
-  },
-  {
-    label: 'balance',
-    href: '/user/balance',
-    icon: <BanknotesIcon className="w-7" />,
-    className: optionStyle,
-  },
-  {
-    label: 'settings',
-    href: '/user/settings',
-    icon: <Cog6ToothIcon className="w-7" />,
-    className: optionStyle,
-  },
-];
 
 type Props = {
   user: UserSession;
+  navigationOption: NavigationOption[];
 };
 
-const Mobile = ({ user }: Props) => {
+const Mobile = ({ user, navigationOption }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -98,7 +45,7 @@ const Mobile = ({ user }: Props) => {
               >
                 <Navlink
                   href={href}
-                  className={className}
+                  className={`${defaultOptionStyle} ${className}`}
                 >
                   {icon}
                   {label}
@@ -107,7 +54,7 @@ const Mobile = ({ user }: Props) => {
             ))}
           </ul>
           <li>
-            <RainbowKitButtonMobile classNameButton={optionStyle} />
+            <RainbowKitButtonMobile classNameButton={defaultOptionStyle} />
           </li>
         </ul>
       </nav>

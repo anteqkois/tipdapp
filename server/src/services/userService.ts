@@ -1,43 +1,63 @@
 import { Prisma } from '@prisma/client';
 import prisma from '../config/db';
 
-const create = async (createData: Prisma.UserCreateInput) => {
+const createStreamer = async (createData: Prisma.UserCreateInput) => {
   return await prisma.user.create({
     data: {
-      roles: ['streamer', 'tiper'],
+      roles: ['streamer', 'tipper'],
+      defaultRole: 'streamer',
       ...createData,
     },
     include: {
-      avatar: true,
-      token: {
-        select: {
-          address: true,
-          chainId: true,
-          name: true,
-          symbol: true,
-          txHash: true,
-        },
-      },
-      page: true,
+      streamer: true,
+      // avatar: true,
+      // token: {
+      //   select: {
+      //     address: true,
+      //     chainId: true,
+      //     name: true,
+      //     symbol: true,
+      //     txHash: true,
+      //   },
+      // },
+      // page: true,
+    },
+  });
+};
+const createTipper = async (createData: Prisma.UserCreateInput) => {
+  return await prisma.user.create({
+    data: {
+      roles: ['tipper'],
+      defaultRole: 'tipper',
+      ...createData,
+    },
+    include: {
+      tipper: true,
+      // avatar: true,
     },
   });
 };
 
 const find = async (data: Prisma.UserFindFirstArgs) => {
+  //TODO change in future to fetch only default role, to get better performance
+
   return await prisma.user.findFirst({
     where: data.where,
     include: {
       avatar: true,
-      token: {
-        select: {
-          address: true,
-          chainId: true,
-          name: true,
-          symbol: true,
-          txHash: true,
-        },
-      },
-      page: true,
+      streamer: true,
+      tipper: true,
+      userToken: true,
+      // token: {
+      //   select: {
+      //     address: true,
+      //     chainId: true,
+      //     name: true,
+      //     symbol: true,
+      //     txHash: true,
+      //   },
+      // },
+      // page: true,
     },
   });
 };
@@ -124,7 +144,8 @@ const findByRefreshToken = async ({
 };
 
 const UserService = {
-  create,
+  createStreamer,
+  createTipper,
   find,
   checkIfExist,
   updateRefreshTokens,

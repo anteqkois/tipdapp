@@ -10,10 +10,10 @@ const find = async (
 ) => {
   //TODO! make req.query validation ! to prevent hack
 
-  const token = await UserTokenService.find(req.query);
+  const userToken = await UserTokenService.find(req.query);
 
-  if (token) {
-    return res.status(200).send({ token });
+  if (userToken) {
+    return res.status(200).send({ userToken });
   } else {
     createApiError('No token found.', 404);
   }

@@ -41,7 +41,7 @@ const Page = () => {
     <section>
       <Card className="grid">
         <form onSubmit={formik.handleSubmit}>
-          <Link href={`user/${user.page?.url}`}>
+          <Link href={`streamer/${user.page?.url}`}>
             <Button option="link">See your page</Button>
           </Link>
           <Tooltip content="Disabled option now">
@@ -58,7 +58,7 @@ const Page = () => {
                 error={formik.errors.url}
               ></Input>
               <span className="absolute text-neutral-light top-[29px] left-[1px] p-2 bg-neutral-200 rounded  rounded-tr-none rounded-br-none">
-                https://cryptotip/user/
+                https://cryptotip/streamer/
               </span>
               <span className="absolute text-neutral-light top-[29px] right-[1px] p-2 bg-neutral-200 rounded  rounded-tl-none rounded-bl-none">
                 {user.page?.url.length}/20

@@ -1,19 +1,17 @@
+import { PublicNav } from '@/components/Navigation/Public';
 import { ReactNode } from 'react';
-import Navigation from './Navigation/Streamer';
 
 type Props = {
   children: ReactNode;
 };
 
-const UserLayout = ({ children }: Props) => {
+export default function RootLayout({ children }: Props) {
   return (
     <>
-      <Navigation />
+      <PublicNav />
       <main className="max-w-6xl p-2 mx-auto mt-12 lg:p-8 lg:mt-32">
         {children}
       </main>
     </>
   );
-};
-
-export default UserLayout;
+}

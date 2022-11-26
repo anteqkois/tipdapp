@@ -1,4 +1,4 @@
-import { ApiError, AsyncStatus, ValidationError } from '@/types/index';
+import { ApiError, AsyncStatus, ValidationError } from '@/types';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const getSettingsByUser = createAsyncThunk(

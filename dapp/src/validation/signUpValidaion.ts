@@ -1,5 +1,4 @@
-import { validationHelper } from '@/lib/zod';
-import { z } from 'zod';
+import { validationHelper, z } from '@/lib/zod';
 
 export const signUpValidation = z.object({
   email: z.string().email(),

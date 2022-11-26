@@ -19,96 +19,102 @@ enum Role {
   streamer
   charity
   shop
-  tiper
+  tipper
+}
+
+enum ApperanceMode {
+  dark
+  light
 }
 
 //change AvatarPath to url
 model User {
-  address        String     @id @unique @db.VarChar(42)
-  email          String     @unique
-  emailVerified  DateTime?
-  firstName      String
-  lastName       String
-  roles          Role[]     @default([streamer])
-  nick           String     @unique
-  verified       Boolean    @default(false)
-  avatar         File?      @relation(fields: [avatarFileId], references: [id])
-  avatarFileId   String?
-  createdAt      DateTime   @default(now())
-  updateAt       DateTime   @updatedAt
-  // nonce store in Redis ! becouse is needed before signup
-  // nonce          String?
-  refreshTokens   String[]
-  token          UserToken?
-  widget         Widget[]
-  //If it necessary below fields (read speed?)
-  tipsCount      Int        @default(0)
-  tipsValue      Decimal    @default(0) @db.Decimal(78, 0)
-  withdrawsValue Decimal    @default(0) @db.Decimal(78, 0)
-  activeToken    Token[]
-  tip            Tip[]
-  withdraw       Withdraw[]
-  page           Page?
+  address           String        @id @unique @db.VarChar(42)
+  nick              String        @unique
+  email             String        @unique
+  emailVerified     DateTime?
+  firstName         String?
+  lastName          String?
+  verified          Boolean       @default(false)
+  createdAt         DateTime      @default(now())
+  updateAt          DateTime      @updatedAt
+  allTipsCount      Int           @default(0)
+  allTipsValue      Decimal       @default(0) @db.Decimal(78, 0)
+  allWithdrawsValue Decimal       @default(0) @db.Decimal(78, 0)
+  apperanceMode     ApperanceMode @default(light)
+  roles             Role[]        @default([streamer, tipper])
+  defaultRole       Role          @default(tipper)
+  refreshTokens     String[]
+  avatar            File?         @relation(fields: [avatarId], references: [id])
+  avatarId          String?
+  witdraws          Withdraw[]
+  userToken         UserToken?
+  tips              Tip[]
+  streamer          Streamer?
+  tipper            Tipper?
 }
 
-model Tip {
-  txHash        String   @id @db.VarChar(66)
-  amount        Decimal  @db.Decimal(78, 0)
-  value         Decimal  @db.Decimal(78, 0)
-  message       String
-  displayed     Boolean
-  date          DateTime @default(now())
-  user          User     @relation(fields: [userAddress], references: [address])
-  userAddress   String   @db.VarChar(42)
-  token         Token    @relation(fields: [tokenAddress], references: [address])
-  tokenAddress  String   @db.VarChar(42)
-  tipper        Tipper   @relation(fields: [tipperAddress], references: [address])
-  tipperAddress String   @db.VarChar(42)
-}
-
-model Token {
-  address       String     @id @unique @db.VarChar(42)
-  symbol        String     @unique
-  name          String     @unique
-  chainId       Int
-  imgPath       String?
-  latestPrice   Decimal?   @db.Decimal(78, 0)
-  priceUpdateAt DateTime?
-  tip           Tip[]
-  withdraw      Withdraw[]
-  user          User[]
-  userAddress   String?    @db.VarChar(42)
-}
-
-//you can use data from blockchain (total suplly, all transaction etc.)
-model UserToken {
-  address     String  @id @unique @db.VarChar(42)
-  symbol      String  @unique
-  name        String  @unique
-  chainId     Int
-  txHash      String  @db.VarChar(66)
-  user        User?   @relation(fields: [userAddress], references: [address])
-  userAddress String? @unique @db.VarChar(42)
-}
-
-model Page {
-  id          String  @id @default(cuid())
-  url         String  @db.VarChar(60)
-  description String? @default("") @db.VarChar(200)
-  user        User?   @relation(fields: [userAddress], references: [address])
-  userAddress String? @unique @db.VarChar(42)
+model Streamer {
+  user            User     @relation(fields: [address], references: [address])
+  address         String   @id @db.VarChar(42)
+  // address         String   @id @unique @db.VarChar(42)
+  tipsCount       Int      @default(0)
+  tipsValue       Decimal  @default(0) @db.Decimal(78, 0)
+  affixUrl        String   @db.VarChar(60)
+  pageDescription String?  @default("") @db.VarChar(200)
+  activeTokens    Token[]
+  widgets         Widget[]
 }
 
 model Tipper {
-  address   String  @id @unique @db.VarChar(42)
-  nick      String  @unique
-  nonce     String?
-  tipsValue Int     @default(0)
-  tip       Tip[]
+  user      User   @relation(fields: [address], references: [address])
+  address   String @id @db.VarChar(42)
+  // address   String @id @unique @db.VarChar(42)
+  nick      String @unique
+  tipsValue Int    @default(0)
+  tips      Tip[]
+}
+
+model Tip {
+  txHash               String    @id @db.VarChar(66)
+  amount               Decimal   @db.Decimal(78, 0)
+  value                Decimal   @db.Decimal(78, 0)
+  message              String
+  displayed            Boolean
+  date                 DateTime  @default(now())
+  receivedTokensAmount Decimal   @db.Decimal(78, 0)
+  userRole             Role
+  user                 User      @relation(fields: [userAddress], references: [address])
+  userAddress          String    @db.VarChar(42)
+  userToken            UserToken @relation(fields: [userTokenAddress], references: [address])
+  userTokenAddress     String    @db.VarChar(42)
+  token                Token     @relation(fields: [tokenAddress], references: [address])
+  tokenAddress         String    @db.VarChar(42)
+  tipper               Tipper    @relation(fields: [tipperAddress], references: [address])
+  tipperAddress        String    @db.VarChar(42)
+}
+
+// model SimplePage {
+//   id              String   @id @default(cuid())
+//   url             String   @db.VarChar(60)
+//   description     String?  @default("") @db.VarChar(200)
+//   streamer        Streamer @relation(fields: [streamerAddress], references: [address])
+//   streamerAddress String   @unique @db.VarChar(42)
+// }
+
+model UserToken {
+  address     String @id @unique @db.VarChar(42)
+  symbol      String @unique
+  name        String @unique
+  chainId     Int
+  txHash      String @db.VarChar(66)
+  user        User   @relation(fields: [userAddress], references: [address])
+  userAddress String @unique @db.VarChar(42)
+  Tip         Tip[]
 }
 
 model Widget {
-  id              String  @id @default(cuid())
+  id              String    @id @default(cuid())
   url             String
   songPath        String
   backgroundPath  String
@@ -119,26 +125,37 @@ model Widget {
   filterProfanity Boolean
   // filterWord WordList
   voiceMessage    Boolean
-  user            User?   @relation(fields: [userAddress], references: [address])
-  userAddress     String? @db.VarChar(42)
+  Streamer        Streamer? @relation(fields: [streamerAddress], references: [address])
+  streamerAddress String?   @db.VarChar(42)
+}
+
+model Token {
+  address         String    @id @unique @db.VarChar(42)
+  symbol          String    @unique
+  name            String    @unique
+  chainId         Int
+  image           File?     @relation(fields: [imageId], references: [id])
+  imageId         String?
+  latestPrice     Decimal?  @db.Decimal(78, 0)
+  priceUpdateAt   DateTime?
+  Streamer        Streamer? @relation(fields: [streamerAddress], references: [address])
+  streamerAddress String?   @db.VarChar(42)
+  Tip             Tip[]
 }
 
 model Withdraw {
-  id           String   @id @default(cuid())
-  user         User     @relation(fields: [userAddress], references: [address])
-  userAddress  String   @db.VarChar(42)
-  amount       Decimal  @db.Decimal(78, 0)
-  token        Token    @relation(fields: [tokenAddress], references: [address])
-  tokenAddress String   @db.VarChar(42)
-  date         DateTime @default(now())
-  txHash       String   @unique @db.VarChar(66)
+  id          String   @id @default(cuid())
+  amount      Decimal  @db.Decimal(78, 0)
+  date        DateTime @default(now())
+  txHash      String   @unique @db.VarChar(66)
+  User        User?    @relation(fields: [userAddress], references: [address])
+  userAddress String?  @db.VarChar(42)
 }
 
 model File {
-  id        String @id @default(cuid())
+  id        String  @id @default(cuid())
   filename  String
   extension String
   User      User[]
+  Token     Token[]
 }
-
-//sudo -u postgres psql

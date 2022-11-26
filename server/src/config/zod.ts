@@ -3,6 +3,7 @@ import { ZodParseErrors } from '../types';
 export * from 'zod';
 // export { z } from 'zod';
 
+//TODO! change to return my ValidationError
 export const validationHelper = <D>(
   data: D,
   validation: ZodTypeAny

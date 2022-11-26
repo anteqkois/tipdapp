@@ -10,7 +10,10 @@ import {
   ValidationError,
 } from '../middlewares/error';
 import { UserService } from '../services/userService';
-import { SignUpObject, signUpValidation } from '../validation/signUpValidaion';
+import {
+  CreateUserObject,
+  UserValidation,
+} from '../validation/signUpValidaion';
 
 const validateSiweMessage = async (
   message: Partial<SiweMessage>,
@@ -79,12 +82,20 @@ const createNonce = (req: Request, res: Response) => {
   res.status(200).json({ nonce: generateNonce() });
 };
 
-const validate = async (req: Request<{}, {}, SignUpObject>, res: Response) => {
+const validate = async (
+  req: Request<{}, {}, CreateUserObject>,
+  res: Response
+) => {
   const { email, nick } = req.body;
 
   try {
     //Validate schema
-    signUpValidation.parse(req.body);
+
+    if (req.body.role.includes('streamer')) {
+      UserValidation.createStreamer.parse(req.body);
+    } else {
+      UserValidation.createTipper.parse(req.body);
+    }
 
     //Validate unique
     // const user = await UserService.checkIfExist({ email, nick });
@@ -128,7 +139,14 @@ const signUp = async (req: Request, res: Response) => {
     const siweMessage = await validateSiweMessage(message, signature);
 
     //Validate schema
-    const validatedFormData = signUpValidation.parse(formData);
+
+    // if (req.body.role.includes('streamer')) {
+    //   UserValidation.createStreamer.parse(req.body);
+    // } else {
+    //   UserValidation.createTipper.parse(req.body);
+    // }
+    const validatedFormData = UserValidation.createHelper(formData);
+    // const validatedFormData = signUpValidation.parse(formData);
 
     //Validate unique
     const userExist = await UserService.checkIfExist({
@@ -172,15 +190,27 @@ const signUp = async (req: Request, res: Response) => {
       createValidationErrors(errors);
     }
 
-    const userSessionData = await UserService.create({
-      address: siweMessage.address,
-      ...validatedFormData,
-      page: {
-        create: {
-          url: validatedFormData.nick,
-        },
-      },
-    });
+    let userSessionData;
+    switch (validatedFormData.role) {
+      case 'streamer':
+        userSessionData = await UserService.createStreamer({
+          address: siweMessage.address,
+          ...validatedFormData,
+          streamer: {
+            create: {
+              affixUrl: validatedFormData.nick,
+            },
+          },
+        });
+        userSessionData;
+        break;
+      default:
+        userSessionData = await UserService.createTipper({
+          address: siweMessage.address,
+          ...validatedFormData,
+        });
+        break;
+    }
 
     const authToken = createAuthToken(userSessionData);
     const refreshToken = createRefreshToken(userSessionData);
@@ -266,6 +296,7 @@ const logout = async (req: Request, res: Response) => {
     expires: new Date(Date.now()),
     httpOnly: true,
   });
+
   await UserService.removeRefreshToken({
     address: req.user.address,
     refreshToken: refreshToken,

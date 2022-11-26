@@ -1,5 +1,6 @@
-import { ZodParseErrors } from '@/types';
 import { ZodError, ZodIssue, ZodTypeAny } from 'zod';
+import { ZodParseErrors } from '../types';
+export * from 'zod';
 
 export const validationHelper = <D>(
   data: D,

@@ -1,10 +1,11 @@
 export type AsyncStatus = 'idle' | 'loading' | 'success' | 'fail';
+export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
 // export type asyncStatus = 'idle' | 'loading' | 'success' | 'fail';
 
 export type NavigationOption = {
   href: string;
   icon: JSX.Element;
-  className: string;
+  className?: string;
   tooltipLabel?: string;
   label?: string;
 };

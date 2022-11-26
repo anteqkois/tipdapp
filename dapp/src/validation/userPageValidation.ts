@@ -1,5 +1,5 @@
-import { validationHelper } from '@/lib/zod';
-import { z } from 'zod';
+import { validationHelper, z } from '@/lib/zod';
+
 export const userPageFormValidation = z.object({
   url: z
     .string()

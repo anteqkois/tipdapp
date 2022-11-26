@@ -5,7 +5,7 @@
       // "@/src/*": ["src/*"],
       "@/components/*": ["src/components/*"],
       "@/types/*": ["src/types/*"],
-      "@/types": ["src/types/index.ts"],
+      "@/types": ["src/types"],
       "@/api/*": ["src/api/*"],
       "@/utils/*": ["src/utils/*"],
       "@/lib/*": ["src/lib/*"],

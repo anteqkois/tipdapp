@@ -18,10 +18,11 @@ async function main() {
       lastName: 'Kois',
       nick: 'anteqkois',
       address: ADDRESS_WALLET_DEV,
-      roles: ['streamer', 'tiper'],
-      page: {
+      roles: ['tipper', 'streamer'],
+      defaultRole: 'streamer',
+      streamer: {
         create: {
-          url: 'anteqkois',
+          affixUrl: 'anteqkois',
         },
       },
     },
@@ -40,22 +41,66 @@ async function main() {
   console.log('Create SAND:', sand);
 
   //create tipers
-  await prisma.tipper.createMany({
-    data: [
-      {
-        address: faker.finance.ethereumAddress(),
-        nick: faker.name.firstName(),
+  // await prisma.tipper.createMany({
+  //   data: [
+  //     {
+  //       address: faker.finance.ethereumAddress(),
+  //       nick: faker.name.firstName(),
+  //     },
+  //     {
+  //       address: faker.finance.ethereumAddress(),
+  //       nick: faker.name.firstName(),
+  //     },
+  //     {
+  //       address: faker.finance.ethereumAddress(),
+  //       nick: faker.name.firstName(),
+  //     },
+  //   ],
+  // });
+
+  await prisma.user.create({
+    data: {
+      address: faker.finance.ethereumAddress(),
+      email: faker.internet.email(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      nick: faker.name.firstName(),
+      tipper: {
+        create: {
+          nick: faker.name.firstName(),
+        },
       },
-      {
-        address: faker.finance.ethereumAddress(),
-        nick: faker.name.firstName(),
-      },
-      {
-        address: faker.finance.ethereumAddress(),
-        nick: faker.name.firstName(),
-      },
-    ],
+    },
   });
+  await prisma.user.create({
+    data: {
+      address: faker.finance.ethereumAddress(),
+      email: faker.internet.email(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      nick: faker.name.firstName(),
+      tipper: {
+        create: {
+          nick: faker.name.firstName(),
+        },
+      },
+    },
+  });
+  await prisma.user.create({
+    data: {
+      address: faker.finance.ethereumAddress(),
+      email: faker.internet.email(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      nick: faker.name.firstName(),
+      tipper: {
+        create: {
+          nick: faker.name.firstName(),
+        },
+      },
+    },
+  });
+
   const tipers = await prisma.tipper.findMany({
     select: {
       address: true,
@@ -65,25 +110,47 @@ async function main() {
   console.log('Create tipers:', tipers);
   const tippersAddress = tipers.map((tipper) => tipper.address);
 
+  const userToken = await prisma.userToken.create({
+    data: {
+      address: faker.finance.ethereumAddress(),
+      chainId: 31337,
+      name: faker.finance.currencyName(),
+      symbol: faker.finance.currencyCode(),
+      txHash: faker.datatype.hexadecimal({ length: 10 }),
+      user: {
+        connect: {
+          address: ADDRESS_WALLET_DEV,
+        },
+      },
+    },
+  });
+
   for (let i = 0; i < 50; i++) {
     // const element = array[i];
+    const value = faker.datatype.number({
+      min: 1000_000000000000000000,
+      max: 10000_000000000000000000,
+    });
     const newTip = await prisma.tip.create({
       data: {
-        message: faker.lorem.paragraph(),
         txHash: faker.datatype.hexadecimal({ length: 10 }),
+        message: faker.lorem.paragraph(),
         amount: faker.datatype.number({
           min: 1000_000000000000000000,
           max: 10000_000000000000000000,
         }),
-        value: faker.datatype.number({
-          min: 1000_000000000000000000,
-          max: 10000_000000000000000000,
-        }),
+        value,
         date: faker.datatype.datetime({
           min: 1577836800000,
           max: 1893456000000,
         }),
         displayed: faker.datatype.boolean(),
+        userRole: 'streamer',
+        user: {
+          connect: {
+            address: ADDRESS_WALLET_DEV,
+          },
+        },
         token: {
           connect: {
             address: ADDRESS_SAND,
@@ -94,9 +161,10 @@ async function main() {
             address: faker.helpers.arrayElement(tippersAddress),
           },
         },
-        user: {
+        receivedTokensAmount: value,
+        userToken: {
           connect: {
-            address: ADDRESS_WALLET_DEV,
+            address: userToken.address,
           },
         },
 
@@ -123,4 +191,4 @@ main()
     await prisma.$disconnect();
   });
 
-export {};
+// export {};

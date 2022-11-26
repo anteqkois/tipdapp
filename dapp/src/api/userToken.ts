@@ -12,7 +12,17 @@ import { api } from './apiConfig';
 //   });
 // };
 
+type FindParams = {
+  userAddress: string
+};
+
+type FindResponse = {
+  userToken: any;
+};
+
 // use get with queryParams
-export const find = async (queryParams) => {
-  return await api.get('/userToken', { params: queryParams });
+export const find = async (queryParams: FindParams) => {
+  return await api.get<never, FindResponse>('/userToken', {
+    params: queryParams,
+  });
 };

@@ -1,6 +1,5 @@
 // 'use client';
-import { logoutUser, refreshToken, verifyMessage } from '@/api/auth';
-import { AuthStatus } from '@/types';
+import { logoutUser, refreshToken, verifyMessageTipper } from '@/api/auth';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useRouter } from 'next/navigation';
 import {
@@ -10,37 +9,44 @@ import {
   SetStateAction,
   useContext,
   useEffect,
+  useState,
 } from 'react';
 import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
-import { UserSession } from 'src/types/models';
+// import { TipperSession } from 'src/types/models';
+import { AuthStatus } from '@/types';
 import { useDisconnect } from 'wagmi';
-import useCookie from './useCookie';
 import useLocalStorage from './useLocalStorage';
 
-export const UserContext = createContext<ReturnType>({} as ReturnType);
+export const TipperContext = createContext<ReturnType>({} as ReturnType);
 
-const tempUser = {} as UserSession;
+type TipperSession = any;
+
+const tempTipper = {} as TipperSession;
 
 type ReturnType = {
   login: () => void;
   logout: () => Promise<void>;
-  verify: (message: SiweMessage, signature: string) => Promise<boolean>;
-  user: UserSession | null;
-  setUser: Dispatch<SetStateAction<UserSession | null>>;
+  verifyTipperMessage: (
+    message: SiweMessage,
+    signature: string
+  ) => Promise<boolean>;
+  tipper: TipperSession | null;
+  setTipper: Dispatch<SetStateAction<TipperSession | null>>;
   status: AuthStatus;
   setStatus: Dispatch<SetStateAction<AuthStatus>>;
 };
 
 type Props = { children: ReactNode };
 
-export const UserProvider = ({ children }: Props) => {
-  const [user, setUser] = useLocalStorage<UserSession>('user', null);
-  const [status, setStatus] = useCookie<AuthStatus>(
-    'authStatus',
-    'unauthenticated',
-    { path: '/' }
-  );
+export const TipperProvider = ({ children }: Props) => {
+  const [tipper, setTipper] = useLocalStorage<TipperSession>('tipper', null);
+  // const [status, setStatus] = useCookie<AuthStatus>(
+  //   'authStatus',
+  //   'unauthenticated',
+  //   { path: '/' }
+  // );
+  const [status, setStatus] = useState<AuthStatus>('authenticated');
   const { openConnectModal } = useConnectModal();
   const { disconnectAsync } = useDisconnect();
   const router = useRouter();
@@ -66,21 +72,15 @@ export const UserProvider = ({ children }: Props) => {
       : toast.error('You are already login.');
   };
 
-  const verify = async (
+  const verifyTipperMessage = async (
     message: SiweMessage,
     signature: string
   ): Promise<boolean> => {
     try {
-      const data = await verifyMessage({ message, signature });
-      setUser(data.user);
-      //! Get from use default role type and redirect there
-      //! if use is at page to make a tip, no redirect
+      const data = await verifyMessageTipper({ message, signature });
+      setTipper(data.tipper);
       setStatus('authenticated');
-
-      router.push(`/${data.user.defaultRole}/dashboard`);
-      // if (data.user.roles.includes('streamer'))
-      //   router.push('/streamer/dashboard');
-      // else router.push('/tipper/dashboard');
+      router.push('/streamer/dashboard');
       return true;
     } catch (err: any) {
       toast.error(
@@ -97,7 +97,7 @@ export const UserProvider = ({ children }: Props) => {
         const data = await logoutUser();
         toast.success(data.message);
         setStatus('unauthenticated');
-        setUser(null);
+        setTipper(null);
       } else {
         toast.error('You are not conneted.');
       }
@@ -110,22 +110,22 @@ export const UserProvider = ({ children }: Props) => {
   };
 
   return (
-    <UserContext.Provider
+    <TipperContext.Provider
       value={{
         login,
         logout,
-        verify,
-        user,
-        setUser,
+        verifyTipperMessage,
+        tipper: tipper,
+        setUser: setTipper,
         status,
         setStatus,
       }}
     >
       {children}
-    </UserContext.Provider>
+    </TipperContext.Provider>
   );
 };
 
-const useUser = () => useContext<ReturnType>(UserContext);
+const useUser = () => useContext<ReturnType>(TipperContext);
 
 export { useUser };

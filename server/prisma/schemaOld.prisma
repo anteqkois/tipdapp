@@ -1,0 +1,144 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  // binaryTargets = ["debian-openssl-1.1.x"]
+  binaryTargets = ["native", "linux-arm64-openssl-1.1.x"]
+  // binaryTargets = ["native"]
+}
+
+datasource db {
+  provider = "postgresql"
+  // url      = "postgres://postgres:password@db:5432/qoistip"
+  url      = env("DATABASE_URL")
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+enum Role {
+  streamer
+  charity
+  shop
+  tiper
+}
+
+//change AvatarPath to url
+model User {
+  address        String     @id @unique @db.VarChar(42)
+  email          String     @unique
+  emailVerified  DateTime?
+  firstName      String
+  lastName       String
+  roles          Role[]     @default([streamer])
+  nick           String     @unique
+  verified       Boolean    @default(false)
+  avatar         File?      @relation(fields: [avatarFileId], references: [id])
+  avatarFileId   String?
+  createdAt      DateTime   @default(now())
+  updateAt       DateTime   @updatedAt
+  // nonce store in Redis ! becouse is needed before signup
+  // nonce          String?
+  refreshTokens  String[]
+  token          UserToken?
+  widget         Widget[]
+  //If it necessary below fields (read speed?)
+  tipsCount      Int        @default(0)
+  tipsValue      Decimal    @default(0) @db.Decimal(78, 0)
+  withdrawsValue Decimal    @default(0) @db.Decimal(78, 0)
+  activeToken    Token[]
+  tip            Tip[]
+  withdraw       Withdraw[]
+  page           Page?
+}
+
+model Tip {
+  txHash        String   @id @db.VarChar(66)
+  amount        Decimal  @db.Decimal(78, 0)
+  value         Decimal  @db.Decimal(78, 0)
+  message       String
+  displayed     Boolean
+  date          DateTime @default(now())
+  user          User     @relation(fields: [userAddress], references: [address])
+  userAddress   String   @db.VarChar(42)
+  token         Token    @relation(fields: [tokenAddress], references: [address])
+  tokenAddress  String   @db.VarChar(42)
+  tipper        Tipper   @relation(fields: [tipperAddress], references: [address])
+  tipperAddress String   @db.VarChar(42)
+}
+
+model Token {
+  address       String     @id @unique @db.VarChar(42)
+  symbol        String     @unique
+  name          String     @unique
+  chainId       Int
+  imgPath       String?
+  latestPrice   Decimal?   @db.Decimal(78, 0)
+  priceUpdateAt DateTime?
+  tip           Tip[]
+  withdraw      Withdraw[]
+  user          User[]
+  userAddress   String?    @db.VarChar(42)
+}
+
+//you can use data from blockchain (total suplly, all transaction etc.)
+model UserToken {
+  address     String  @id @unique @db.VarChar(42)
+  symbol      String  @unique
+  name        String  @unique
+  chainId     Int
+  txHash      String  @db.VarChar(66)
+  user        User?   @relation(fields: [userAddress], references: [address])
+  userAddress String? @unique @db.VarChar(42)
+}
+
+model Page {
+  id          String  @id @default(cuid())
+  url         String  @db.VarChar(60)
+  description String? @default("") @db.VarChar(200)
+  user        User?   @relation(fields: [userAddress], references: [address])
+  userAddress String? @unique @db.VarChar(42)
+}
+
+model Tipper {
+  address   String  @id @unique @db.VarChar(42)
+  nick      String  @unique
+  nonce     String?
+  tipsValue Int     @default(0)
+  tip       Tip[]
+}
+
+model Widget {
+  id              String  @id @default(cuid())
+  url             String
+  songPath        String
+  backgroundPath  String
+  nickColor       String
+  messageColor    String
+  valueColor      String
+  showTime        Int
+  filterProfanity Boolean
+  // filterWord WordList
+  voiceMessage    Boolean
+  user            User?   @relation(fields: [userAddress], references: [address])
+  userAddress     String? @db.VarChar(42)
+}
+
+model Withdraw {
+  id           String   @id @default(cuid())
+  user         User     @relation(fields: [userAddress], references: [address])
+  userAddress  String   @db.VarChar(42)
+  amount       Decimal  @db.Decimal(78, 0)
+  token        Token    @relation(fields: [tokenAddress], references: [address])
+  tokenAddress String   @db.VarChar(42)
+  date         DateTime @default(now())
+  txHash       String   @unique @db.VarChar(66)
+}
+
+model File {
+  id        String @id @default(cuid())
+  filename  String
+  extension String
+  User      User[]
+}
+
+//sudo -u postgres psql
