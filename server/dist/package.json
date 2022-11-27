@@ -1,0 +1,16 @@
+{
+  "name": "@anteqkois/server",
+  "version": "0.0.1",
+  "private": "true",
+  "description": "Types from Prisma for models and other shared code to my web3 app",
+  "main": "lib/es5/index.js",
+  "module": "lib/es6/index.js",
+  "types": "lib/es6/package.d.ts",
+  "sideEffects": false,
+  "files": [
+    "lib",
+    "package.json"
+  ],
+  "author": "Antek Kois",
+  "license": "ISC"
+}

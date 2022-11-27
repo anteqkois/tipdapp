@@ -1,5 +1,4 @@
 'use client';
-
 import { useCookie } from '@/hooks';
 
 export default function Page() {

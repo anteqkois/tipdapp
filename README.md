@@ -7,3 +7,16 @@ Install `zx` package globally
 ~~~
 npm i -g zx
 ~~~
+
+build package with shared code `@anteqkois/server` and install in dapp
+~~~
+cd server && npm run lib
+~~~
+and next linkt to library
+~~~
+cd dapp && npm link @anteqkois/server
+~~~
+or install as a file 
+~~~
+npm install --S ../server/dist
+~~~

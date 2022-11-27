@@ -22,6 +22,7 @@ type FormData = {
   email: string;
   nick: string;
   address: null;
+  roles: [string, string];
 };
 
 type State = {
@@ -36,6 +37,7 @@ const initialState: State = {
     email: '',
     nick: '',
     address: null,
+    roles: ['streamer', 'tipper'],
   },
   status: 'idle',
 };

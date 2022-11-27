@@ -6,6 +6,7 @@ import { Button, Input } from '../utils';
 import { Stepper } from '../utils/Stepper';
 import { FormikStep } from './FormikStep';
 
+//TODO add suport for more roles, in ferst step chose role
 export const SignUpForm = () => {
   const { formik, formState, setStep, step } = useSignUpForm();
 

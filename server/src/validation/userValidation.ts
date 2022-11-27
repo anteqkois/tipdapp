@@ -1,13 +1,13 @@
 import { Role } from '@prisma/client';
 import { z } from '../config/zod';
 
-export const createUser = z.object({
+const createUser = z.object({
   email: z.string().email(),
   nick: z.string().min(2, { message: 'Nick must have 2 or more characters.' }),
   // role: z.array(z.nativeEnum(Role)),
 });
 
-export const createStreamer = createUser.merge(
+const createStreamer = createUser.merge(
   z.object({
     firstName: z
       .string()
@@ -21,7 +21,7 @@ export const createStreamer = createUser.merge(
   })
 );
 
-export const createTipper = createUser.merge(
+const createTipper = createUser.merge(
   z.object({
     firstName: z
       .string()
@@ -35,15 +35,10 @@ export const createTipper = createUser.merge(
   })
 );
 
-type CreateStreamerObject = z.infer<typeof createStreamer>;
-type CreateTipperObject = z.infer<typeof createTipper>;
-
-export type CreateUserObject = CreateStreamerObject | CreateTipperObject;
-
 // const createStreamerParse = (data: CreateStreamerObject) =>
 //   validationHelper<CreateStreamerObject>(data, createStreamer);
 
-const createHelper = (body: CreateUserObject) => {
+const createHelper = (body: UserValidation.CreateUser) => {
   if (body.role === 'streamer') {
     return createStreamer.parse(body);
     // return createStreamer.parse(body) as CreateStreamerObject;
@@ -53,7 +48,13 @@ const createHelper = (body: CreateUserObject) => {
   }
 };
 
-export const UserValidation = {
+export namespace UserValidation {
+  export type CreateStreamer = z.infer<typeof createStreamer>;
+  export type CreateTipper = z.infer<typeof createTipper>;
+  export type CreateUser = CreateStreamer | CreateTipper;
+}
+
+export const userValidation = {
   createTipper,
   createStreamer,
   createHelper,

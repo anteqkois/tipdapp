@@ -28,6 +28,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "preserveSymlinks": true,
     "plugins": [
       {
         "name": "next"

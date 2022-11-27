@@ -10,10 +10,7 @@ import {
   ValidationError,
 } from '../middlewares/error';
 import { UserService } from '../services/userService';
-import {
-  CreateUserObject,
-  UserValidation,
-} from '../validation/signUpValidaion';
+import { UserValidation, userValidation } from '../validation/userValidation';
 
 const validateSiweMessage = async (
   message: Partial<SiweMessage>,
@@ -83,7 +80,7 @@ const createNonce = (req: Request, res: Response) => {
 };
 
 const validate = async (
-  req: Request<{}, {}, CreateUserObject>,
+  req: Request<{}, {}, UserValidation.CreateUser>,
   res: Response
 ) => {
   const { email, nick } = req.body;
@@ -92,9 +89,9 @@ const validate = async (
     //Validate schema
 
     if (req.body.role.includes('streamer')) {
-      UserValidation.createStreamer.parse(req.body);
+      userValidation.createStreamer.parse(req.body);
     } else {
-      UserValidation.createTipper.parse(req.body);
+      userValidation.createTipper.parse(req.body);
     }
 
     //Validate unique
@@ -145,7 +142,7 @@ const signUp = async (req: Request, res: Response) => {
     // } else {
     //   UserValidation.createTipper.parse(req.body);
     // }
-    const validatedFormData = UserValidation.createHelper(formData);
+    const validatedFormData = userValidation.createHelper(formData);
     // const validatedFormData = signUpValidation.parse(formData);
 
     //Validate unique

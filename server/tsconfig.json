@@ -6,7 +6,7 @@
       // "@/src/*": ["src/*"],
     },
     "module": "commonjs",
-    "outDir": "dist",
+    "outDir": "./dist",
     "lib": ["es2019"],
     "target": "es2019",
     "isolatedModules": false,
