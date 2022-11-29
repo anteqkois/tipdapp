@@ -1,12 +1,11 @@
 'use client';
-import { NavigationOption } from '@/types/index';
+import { NavigationOption } from '@/types';
 import {
   AdjustmentsHorizontalIcon,
   ChatBubbleBottomCenterTextIcon,
   RectangleGroupIcon,
 } from '@heroicons/react/24/outline';
-import { CustomConnectButton } from '../../utils';
-import Tooltip from '../../utils/Tooltip';
+import { CustomConnectButton, Tooltip } from '@/components/utils';
 import Navlink from '../Navlink';
 
 const optionStyle =

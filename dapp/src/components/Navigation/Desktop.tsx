@@ -1,7 +1,6 @@
 'use client';
 import { NavigationOption } from '@/types';
-import { CustomConnectButton } from '../utils';
-import Tooltip from '../utils/Tooltip';
+import { CustomConnectButton, Tooltip } from '../utils';
 import Navlink from './Navlink';
 
 const defaultOptionStyle =

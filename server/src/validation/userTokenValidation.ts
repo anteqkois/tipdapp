@@ -1,6 +1,6 @@
 import { validationHelper, z } from '../config/zod';
 
-export const userTokenFormValidation = z.object({
+const createForm = z.object({
   symbol: z
     .string()
     .min(2, { message: 'Token symbol must have 2 or more characters.' })
@@ -11,18 +11,25 @@ export const userTokenFormValidation = z.object({
     .max(20, { message: 'Token name can be up to 20 characters long.' }),
 });
 
-export const userTokenCreateValidation = userTokenFormValidation.extend({
+const create = createForm.extend({
   address: z.string().length(42, { message: 'Wrong token address' }),
   userAddress: z.string().length(42, { message: 'Wrong wallet address' }),
   chainId: z.number({ required_error: 'ChainId is required' }),
   txHash: z.string().length(66, { message: 'Wrong transaction hash' }),
 });
 
-export type UserTokenFormObject = z.infer<typeof userTokenFormValidation>;
-export type UserTokenObject = z.infer<typeof userTokenCreateValidation>;
+const userTokenFormParse = (data: UserTokenValidation.CreateForm) =>
+  validationHelper<UserTokenValidation.CreateForm>(data, createForm);
 
-export const userTokenFormParse = (data: UserTokenFormObject) =>
-  validationHelper<UserTokenFormObject>(data, userTokenFormValidation);
+const userTokenParse = (data: UserTokenValidation.Create) =>
+  validationHelper<UserTokenValidation.Create>(data, create);
 
-export const userTokenParse = (data: UserTokenObject) =>
-  validationHelper<UserTokenObject>(data, userTokenCreateValidation);
+export namespace UserTokenValidation {
+  export type CreateForm = z.infer<typeof createForm>;
+  export type Create = z.infer<typeof create>;
+}
+
+export const userTokenValidation = {
+  create,
+  createForm,
+};

@@ -1,5 +1,5 @@
-import { Role } from '@prisma/client';
 import { z } from '../config/zod';
+import { Role } from '../types';
 var createUser = z.object({
     email: z.string().email(),
     nick: z.string().min(2, { message: 'Nick must have 2 or more characters.' }),

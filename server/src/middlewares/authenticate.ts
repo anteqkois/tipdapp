@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { DecodedUser } from 'src/types';
 import { createApiError } from './error';
 
 const authenticate = (req: Request, res: Response, next: NextFunction) => {

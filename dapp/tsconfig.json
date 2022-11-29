@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "paths": {
       // "@/src/*": ["src/*"],
+      // "@prisma/client": ["./node_modules/@anteqkois/server/lib/es6/src/types/prisma.d.ts"],
       "@/components/*": ["src/components/*"],
       "@/types/*": ["src/types/*"],
       "@/types": ["src/types"],

@@ -6,7 +6,6 @@
   "main": "lib/es5/index.js",
   "module": "lib/es6/index.js",
   "types": "lib/es6/package.d.ts",
-  "sideEffects": false,
   "files": [
     "lib",
     "package.json"

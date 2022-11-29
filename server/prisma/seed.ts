@@ -3,7 +3,6 @@ import client from '@prisma/client';
 // import * as runtime from '@prisma/client/runtime/index.js';
 const { PrismaClient } = client;
 // const { Decimal } = runtime;
-// import { userValidation, UserValidation, UserPageValidation } from '../package/src/index';
 
 const prisma = new PrismaClient();
 

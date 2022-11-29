@@ -2,6 +2,7 @@ import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { generateNonce, SiweMessage } from 'siwe';
+import { DecodedUser, UserSession } from 'src/types';
 import {
   createApiError,
   createValidationError,
@@ -136,14 +137,7 @@ const signUp = async (req: Request, res: Response) => {
     const siweMessage = await validateSiweMessage(message, signature);
 
     //Validate schema
-
-    // if (req.body.role.includes('streamer')) {
-    //   UserValidation.createStreamer.parse(req.body);
-    // } else {
-    //   UserValidation.createTipper.parse(req.body);
-    // }
     const validatedFormData = userValidation.createHelper(formData);
-    // const validatedFormData = signUpValidation.parse(formData);
 
     //Validate unique
     const userExist = await UserService.checkIfExist({
@@ -187,7 +181,7 @@ const signUp = async (req: Request, res: Response) => {
       createValidationErrors(errors);
     }
 
-    let userSessionData;
+    let userSessionData: UserSession;
     switch (validatedFormData.role) {
       case 'streamer':
         userSessionData = await UserService.createStreamer({

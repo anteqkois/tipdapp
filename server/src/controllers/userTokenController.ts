@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { Request, Response } from 'express';
 import { createApiError } from '../middlewares/error';
 import { UserTokenService } from '../services/userTokenService';
-import { userTokenCreateValidation } from '../validation/userTokenValidation';
+import { create } from '../validation/userTokenValidation';
 
 const find = async (
   req: Request<{}, {}, {}, Prisma.UserTokenWhereInput>,
@@ -20,8 +20,9 @@ const find = async (
 };
 
 const create = async (req: Request, res: Response) => {
-  const { address, chainId, name, symbol, txHash, userAddress } =
-    userTokenCreateValidation.parse(req.body);
+  const { address, chainId, name, symbol, txHash, userAddress } = create.parse(
+    req.body
+  );
 
   const token = await UserTokenService.create({
     address,

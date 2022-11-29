@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, ErrorMessage } from '@/components/utils';
-import { ApiError } from '@/types/index';
+import { ApiError } from '@anteqkois/server';
 import Link from 'next/link';
 
 type Props = {

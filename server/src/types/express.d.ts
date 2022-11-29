@@ -1,8 +1,6 @@
-export {};
+import { DecodedUser } from './models';
 
-// type AuthUser = {
-//   address: string;
-// };
+export {};
 
 declare global {
   namespace Express {

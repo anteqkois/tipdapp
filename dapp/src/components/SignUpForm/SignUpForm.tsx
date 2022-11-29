@@ -2,8 +2,7 @@
 import { useSignUpForm } from '@/hooks';
 import { UserIcon, WalletIcon } from '@heroicons/react/24/outline';
 import ConnectWallet from '../../assets/connectWallet.svg';
-import { Button, Input } from '../utils';
-import { Stepper } from '../utils/Stepper';
+import { Button, Input, Stepper } from '../utils';
 import { FormikStep } from './FormikStep';
 
 //TODO add suport for more roles, in ferst step chose role

@@ -1,1 +1,1 @@
-export * from './src/validation/userValidation';
+export * from './src/validation/index';

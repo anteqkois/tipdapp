@@ -1,4 +1,4 @@
-import { UserSession } from '@/types/models';
+import { UserSession } from '@anteqkois/server';
 import { SiweMessage } from 'siwe';
 import { api } from './apiConfig';
 

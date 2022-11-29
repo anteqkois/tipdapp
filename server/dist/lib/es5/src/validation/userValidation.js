@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userValidation = void 0;
-var client_1 = require("@prisma/client");
 var zod_1 = require("../config/zod");
+var types_1 = require("../types");
 var createUser = zod_1.z.object({
     email: zod_1.z.string().email(),
     nick: zod_1.z.string().min(2, { message: 'Nick must have 2 or more characters.' }),
@@ -14,7 +14,7 @@ var createStreamer = createUser.merge(zod_1.z.object({
     lastName: zod_1.z
         .string()
         .min(3, { message: 'Last name must have 3 or more characters.' }),
-    role: zod_1.z.literal(client_1.Role.streamer),
+    role: zod_1.z.literal(types_1.Role.streamer),
 }));
 var createTipper = createUser.merge(zod_1.z.object({
     firstName: zod_1.z
@@ -25,7 +25,7 @@ var createTipper = createUser.merge(zod_1.z.object({
         .string()
         .min(3, { message: 'Last name must have 3 or more characters.' })
         .optional(),
-    role: zod_1.z.literal(client_1.Role.tipper),
+    role: zod_1.z.literal(types_1.Role.tipper),
 }));
 var createHelper = function (body) {
     if (body.role === 'streamer') {

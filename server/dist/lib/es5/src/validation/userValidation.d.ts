@@ -7,17 +7,17 @@ declare const createStreamer: z.ZodObject<z.extendShape<{
     lastName: z.ZodString;
     role: z.ZodLiteral<"streamer">;
 }>, "strip", z.ZodTypeAny, {
-    nick?: string;
-    email?: string;
-    firstName?: string;
-    lastName?: string;
-    role?: "streamer";
+    email: string;
+    nick: string;
+    firstName: string;
+    lastName: string;
+    role: "streamer";
 }, {
-    nick?: string;
-    email?: string;
-    firstName?: string;
-    lastName?: string;
-    role?: "streamer";
+    email: string;
+    nick: string;
+    firstName: string;
+    lastName: string;
+    role: "streamer";
 }>;
 declare const createTipper: z.ZodObject<z.extendShape<{
     email: z.ZodString;
@@ -27,17 +27,17 @@ declare const createTipper: z.ZodObject<z.extendShape<{
     lastName: z.ZodOptional<z.ZodString>;
     role: z.ZodLiteral<"tipper">;
 }>, "strip", z.ZodTypeAny, {
-    nick?: string;
-    email?: string;
-    firstName?: string;
-    lastName?: string;
-    role?: "tipper";
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    email: string;
+    nick: string;
+    role: "tipper";
 }, {
-    nick?: string;
-    email?: string;
-    firstName?: string;
-    lastName?: string;
-    role?: "tipper";
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    email: string;
+    nick: string;
+    role: "tipper";
 }>;
 export declare namespace UserValidation {
     type CreateStreamer = z.infer<typeof createStreamer>;
@@ -53,17 +53,17 @@ export declare const userValidation: {
         lastName: z.ZodOptional<z.ZodString>;
         role: z.ZodLiteral<"tipper">;
     }>, "strip", z.ZodTypeAny, {
-        nick?: string;
-        email?: string;
-        firstName?: string;
-        lastName?: string;
-        role?: "tipper";
+        firstName?: string | undefined;
+        lastName?: string | undefined;
+        email: string;
+        nick: string;
+        role: "tipper";
     }, {
-        nick?: string;
-        email?: string;
-        firstName?: string;
-        lastName?: string;
-        role?: "tipper";
+        firstName?: string | undefined;
+        lastName?: string | undefined;
+        email: string;
+        nick: string;
+        role: "tipper";
     }>;
     createStreamer: z.ZodObject<z.extendShape<{
         email: z.ZodString;
@@ -73,30 +73,30 @@ export declare const userValidation: {
         lastName: z.ZodString;
         role: z.ZodLiteral<"streamer">;
     }>, "strip", z.ZodTypeAny, {
-        nick?: string;
-        email?: string;
-        firstName?: string;
-        lastName?: string;
-        role?: "streamer";
+        email: string;
+        nick: string;
+        firstName: string;
+        lastName: string;
+        role: "streamer";
     }, {
-        nick?: string;
-        email?: string;
-        firstName?: string;
-        lastName?: string;
-        role?: "streamer";
+        email: string;
+        nick: string;
+        firstName: string;
+        lastName: string;
+        role: "streamer";
     }>;
     createHelper: (body: UserValidation.CreateUser) => {
-        nick?: string;
-        email?: string;
-        firstName?: string;
-        lastName?: string;
-        role?: "streamer";
+        email: string;
+        nick: string;
+        firstName: string;
+        lastName: string;
+        role: "streamer";
     } | {
-        nick?: string;
-        email?: string;
-        firstName?: string;
-        lastName?: string;
-        role?: "tipper";
+        firstName?: string | undefined;
+        lastName?: string | undefined;
+        email: string;
+        nick: string;
+        role: "tipper";
     };
 };
 export {};

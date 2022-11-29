@@ -1,8 +1,8 @@
 'use client';
 import { NavigationOption } from '@/types';
+import { UserPageValidation, UserSession } from '@anteqkois/server';
 import classNames from 'classnames';
 import { useState } from 'react';
-import { UserSession } from 'src/types/models';
 import Hamburger from './Hamburger';
 import Navlink from './Navlink';
 import { RainbowKitButtonMobile } from './RainbowKitButtonMobile';
@@ -14,6 +14,8 @@ type Props = {
   user: UserSession;
   navigationOption: NavigationOption[];
 };
+
+// const t: UserPageValidation.Create = {};
 
 const Mobile = ({ user, navigationOption }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

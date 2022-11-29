@@ -2,7 +2,6 @@
 import classNames from 'classnames';
 import Link, { LinkProps } from 'next/link';
 import { usePathname } from 'next/navigation';
-// import { useRouter } from 'next/router';
 import { AnchorHTMLAttributes } from 'react';
 
 type Props = {
@@ -18,20 +17,16 @@ const Navlink = ({
   ...props
 }: Props) => {
   const pathname = usePathname();
-  // const router = useRouter();
 
   return (
     <Link
       {...props}
       href={href}
       className={classNames(className, [
-        pathname.includes(href.toString()) && classNameActive,
+        pathname?.includes(href.toString()) && classNameActive,
       ])}
     >
-      {/* <a */}
-      {/* > */}
       {children}
-      {/* </a> */}
     </Link>
   );
 };

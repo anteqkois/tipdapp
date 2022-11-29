@@ -1,5 +1,5 @@
-import { Role } from '@prisma/client';
 import { z } from '../config/zod';
+import { Role } from '../types';
 
 const createUser = z.object({
   email: z.string().email(),

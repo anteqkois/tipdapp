@@ -1,6 +1,6 @@
-import { UserPageFormObject } from '@/validation/userPageValidation';
+import { UserPageValidation } from '@anteqkois/server';
 import { api } from './apiConfig';
 
-export const update = async (body: UserPageFormObject) => {
+export const update = async (body: UserPageValidation.Create) => {
   return await api.put('/page', body);
 };

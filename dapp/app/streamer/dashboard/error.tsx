@@ -1,7 +1,6 @@
 'use client';
 
 import { ErrorMessage } from '@/components/utils';
-import { ApiError } from '@/types/index';
 import { useEffect } from 'react';
 
 export default function Error({

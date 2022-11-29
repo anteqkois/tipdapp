@@ -21,12 +21,13 @@
     "build": "npx tsc",
     "dev": "NODE_ENV=development dotenv_config_path=.env.development nodemon",
     "dev:update": "npm run prisma:update && npm run dev",
-    "lib": "npm run lib:build && npm run lib:link",
+    "prelib" : "npx prisma generate",
+    "lib": "npm run lib:build && npm run lib:link && npm run lib:copy",
     "lib:build": "rm -rf dist/package && tsc --build tsconfig.es6.json && tsc --build tsconfig.es5.json",
     "lib:link": "cd dist && npm link",
-    "prisma:update": "npx prisma db push && ts-node prisma/seed.ts",
-    "prisma:updateold2": "npx prisma db push && npx prisma db seed",
-    "prisma:updateold": "npx prisma migrate reset --force --skip-seed && npx prisma db seed"
+    "lib:copy": "cp ./node_modules/.prisma/client/index.d.ts ./dist/lib/es6/src/types/prisma.d.ts && cp ./node_modules/.prisma/client/index.d.ts ./dist/lib/es5/src/types/prisma.d.ts",
+    "prisma:generate": "npx prisma generate && cp ./node_modules/.prisma/client/index.d.ts ./src/types/prisma.d.ts",
+    "prisma:update": "npx prisma db push && ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^4.3.1",
