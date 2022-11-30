@@ -1,8 +1,8 @@
 import { Prisma } from '@prisma/client';
 import { Request, Response } from 'express';
 import { createApiError } from '../middlewares/error';
-import { UserTokenService } from '../services/userTokenService';
-import { create } from '../validation/userTokenValidation';
+import { userTokenService } from '../services/userTokenService';
+import { userTokenValidation } from '../validation/userTokenValidation';
 
 const find = async (
   req: Request<{}, {}, {}, Prisma.UserTokenWhereInput>,
@@ -10,7 +10,7 @@ const find = async (
 ) => {
   //TODO! make req.query validation ! to prevent hack
 
-  const userToken = await UserTokenService.find(req.query);
+  const userToken = await userTokenService.find(req.query);
 
   if (userToken) {
     return res.status(200).send({ userToken });
@@ -20,11 +20,10 @@ const find = async (
 };
 
 const create = async (req: Request, res: Response) => {
-  const { address, chainId, name, symbol, txHash, userAddress } = create.parse(
-    req.body
-  );
+  const { address, chainId, name, symbol, txHash, userAddress } =
+    userTokenValidation.create.parse(req.body);
 
-  const token = await UserTokenService.create({
+  const token = await userTokenService.create({
     address,
     chainId,
     name,

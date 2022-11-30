@@ -2,7 +2,6 @@ import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { generateNonce, SiweMessage } from 'siwe';
-import { DecodedUser, UserSession } from 'src/types';
 import {
   createApiError,
   createValidationError,
@@ -10,7 +9,8 @@ import {
   isOperational,
   ValidationError,
 } from '../middlewares/error';
-import { UserService } from '../services/userService';
+import { userService } from '../services/userService';
+import { DecodedUser, UserSession } from '../types';
 import { UserValidation, userValidation } from '../validation/userValidation';
 
 const validateSiweMessage = async (
@@ -67,7 +67,7 @@ const createRefreshToken = (
     }
   );
 
-  UserService.addRefreshToken({
+  userService.addRefreshToken({
     address: userSessionData.address,
     refreshToken,
   });
@@ -96,13 +96,13 @@ const validate = async (
     }
 
     //Validate unique
-    // const user = await UserService.checkIfExist({ email, nick });
-    const user = await UserService.checkIfExist({
+    // const user = awaituserService.checkIfExist({ email, nick });
+    const user = await userService.checkIfExist({
       OR: [{ email }, { nick }],
     });
 
     if (user) {
-      const errors = [];
+      const errors: ValidationError[] = [];
       if (user.email === email) {
         const validationError = new ValidationError(
           'email',
@@ -140,7 +140,7 @@ const signUp = async (req: Request, res: Response) => {
     const validatedFormData = userValidation.createHelper(formData);
 
     //Validate unique
-    const userExist = await UserService.checkIfExist({
+    const userExist = await userService.checkIfExist({
       OR: [
         { address: siweMessage.address },
         { email: validatedFormData.email },
@@ -150,7 +150,7 @@ const signUp = async (req: Request, res: Response) => {
 
     //throw error if exist
     if (userExist) {
-      const errors = [];
+      const errors: ValidationError[] = [];
       if (userExist.address === siweMessage.address) {
         const validationError = new ValidationError(
           'address',
@@ -184,7 +184,7 @@ const signUp = async (req: Request, res: Response) => {
     let userSessionData: UserSession;
     switch (validatedFormData.role) {
       case 'streamer':
-        userSessionData = await UserService.createStreamer({
+        userSessionData = await userService.createStreamer({
           address: siweMessage.address,
           ...validatedFormData,
           streamer: {
@@ -196,7 +196,7 @@ const signUp = async (req: Request, res: Response) => {
         userSessionData;
         break;
       default:
-        userSessionData = await UserService.createTipper({
+        userSessionData = await userService.createTipper({
           address: siweMessage.address,
           ...validatedFormData,
         });
@@ -234,7 +234,7 @@ const verifyMessageAndLogin = async (req: Request, res: Response) => {
   try {
     const siweMessage = await validateSiweMessage(message, signature);
 
-    const userSessionData = await UserService.find({
+    const userSessionData = await userService.find({
       where: {
         address: siweMessage.address,
       },
@@ -288,7 +288,7 @@ const logout = async (req: Request, res: Response) => {
     httpOnly: true,
   });
 
-  await UserService.removeRefreshToken({
+  await userService.removeRefreshToken({
     address: req.user.address,
     refreshToken: refreshToken,
   });
@@ -311,7 +311,7 @@ const refreshToken = async (req: Request, res: Response) => {
     expires: new Date(Date.now()),
     httpOnly: true,
   });
-  const user = await UserService.findByRefreshToken({ refreshToken });
+  const user = await userService.findByRefreshToken({ refreshToken });
 
   // Somebody want to reuse refresh token, maybe stolen token ?
   if (!user) {
@@ -320,7 +320,7 @@ const refreshToken = async (req: Request, res: Response) => {
         refreshToken,
         process.env.JWT_TOKEN_SECRET
       ) as DecodedUser;
-      await UserService.updateRefreshTokens({
+      await userService.updateRefreshTokens({
         address: decoded.address,
         refreshTokens: [],
       });
@@ -331,7 +331,7 @@ const refreshToken = async (req: Request, res: Response) => {
     }
   } else {
     // Remove token from database
-    await UserService.removeRefreshToken({
+    await userService.removeRefreshToken({
       address: user.address,
       refreshToken,
     });

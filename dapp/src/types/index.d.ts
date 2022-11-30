@@ -1,6 +1,5 @@
 export type AsyncStatus = 'idle' | 'loading' | 'success' | 'fail';
 export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
-// export type asyncStatus = 'idle' | 'loading' | 'success' | 'fail';
 
 export type NavigationOption = {
   href: string;
@@ -11,8 +10,3 @@ export type NavigationOption = {
 };
 
 export type ZodParseErrors = Record<string, string>;
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export type ApiError = any;
-export type ValidationErrors = any;
-export type ValidationError = any;

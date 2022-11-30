@@ -143,7 +143,7 @@ const findByRefreshToken = async ({
   });
 };
 
-const UserService = {
+const userService = {
   createStreamer,
   createTipper,
   find,
@@ -153,4 +153,4 @@ const UserService = {
   addRefreshToken,
   removeRefreshToken,
 };
-export { UserService };
+export { userService };

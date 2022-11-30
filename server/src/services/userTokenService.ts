@@ -13,5 +13,5 @@ const create = async (data: Prisma.UserTokenCreateInput) => {
   });
 };
 
-const UserTokenService = { find, create };
-export { UserTokenService };
+const userTokenService = { find, create };
+export { userTokenService };

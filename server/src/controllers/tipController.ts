@@ -1,6 +1,6 @@
 import { Request, Response,  } from 'express';
 import { createApiError } from '../middlewares/error';
-import { TipService } from '../services/tipService';
+import { tipService } from '../services/tipService';
 // import { Query } from 'express-static-serve-core';
 
 const findByAddress = async (
@@ -13,13 +13,13 @@ const findByAddress = async (
   const pageSize = parseInt(req.query?.pageSize ?? 20);
   const skip = (page - 1) * pageSize;
 
-  const count = await TipService.count({
+  const count = await tipService.count({
     userAddress: req.user.address,
   });
 
   //{option:{}, where:{}, }
   //TODO With Typescript it will  be easier to protoect use right option and where argument
-  const tips = await TipService.findMany({
+  const tips = await tipService.findMany({
     skip,
     take: pageSize,
     where: { userAddress: req.user.address },
