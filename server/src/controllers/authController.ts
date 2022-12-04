@@ -1,14 +1,14 @@
-import { User } from '@prisma/client';
-import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import { generateNonce, SiweMessage } from 'siwe';
 import {
   createApiError,
   createValidationError,
   createValidationErrors,
-  isOperational,
   ValidationError,
-} from '../middlewares/error';
+} from '@middlewares/error';
+import { isOperational } from '@middlewares/handleError';
+import { User } from '@prisma/client';
+import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import { generateNonce, SiweMessage } from 'siwe';
 import { userService } from '../services/userService';
 import { DecodedUser, UserSession } from '../types';
 import { UserValidation, userValidation } from '../validation/userValidation';
@@ -37,7 +37,6 @@ const validateSiweMessage = async (
 const createAuthToken = (
   userSessionData: Pick<User, 'roles' | 'address' | 'nick'>
 ) => {
-  // const test = process.env.JWT_TOKEN_SECRET;
   const accessToken = jwt.sign(
     {
       roles: userSessionData.roles,
@@ -88,15 +87,9 @@ const validate = async (
 
   try {
     //Validate schema
-
-    if (req.body.role.includes('streamer')) {
-      userValidation.createStreamer.parse(req.body);
-    } else {
-      userValidation.createTipper.parse(req.body);
-    }
+    userValidation.createParse(req.body);
 
     //Validate unique
-    // const user = awaituserService.checkIfExist({ email, nick });
     const user = await userService.checkIfExist({
       OR: [{ email }, { nick }],
     });
@@ -137,7 +130,7 @@ const signUp = async (req: Request, res: Response) => {
     const siweMessage = await validateSiweMessage(message, signature);
 
     //Validate schema
-    const validatedFormData = userValidation.createHelper(formData);
+    const validatedFormData = userValidation.createParse(formData);
 
     //Validate unique
     const userExist = await userService.checkIfExist({

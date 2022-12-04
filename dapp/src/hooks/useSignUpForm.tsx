@@ -1,12 +1,8 @@
 // 'use client'
 import { signUp, validateFormData } from '@/api/auth';
 import { Close } from '@/components/utils';
-import {
-  ApiError,
-  AsyncStatus,
-  ValidationError,
-  ZodParseErrors,
-} from '@/types';
+import { AsyncStatus } from '@/types';
+// import { ValidationErrors } from '@anteqkois/server';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
@@ -71,12 +67,12 @@ export const useSignUpForm = () => {
               formStateRef.current = { data: values, status: 'success' };
               setStep((prev) => ++prev);
             } catch (error: any) {
-              const errorsTemp: ZodParseErrors = {};
-              error.forEach((error: ValidationError) => {
-                errorsTemp[error.field] = error.message;
-              });
-
-              formik.setErrors(errorsTemp);
+              // if (error instanceof ValidationErrors) {
+              if (error) {
+                formik.setErrors(error.mapByField());
+              } else {
+                console.log(error);
+              }
             }
           } else if (step === 2) {
             // await disconnectAsync();
@@ -105,6 +101,7 @@ export const useSignUpForm = () => {
       router.push('/streamer/dashboard');
       return true;
     } catch (errors: any) {
+      console.log(errors);
       toast(
         (t) => (
           <span>
@@ -113,7 +110,8 @@ export const useSignUpForm = () => {
               <Close onClick={() => toast.dismiss(t.id)} />
             </span>
             <ul className="px-4 flex flex-col gap-3 list-['📌']">
-              {errors.map((error: ApiError) => (
+              {/* {errors.map((error: ValidationError) => ( */}
+              {errors.map((error: any) => (
                 <li
                   key={error.code}
                   className="pl-1"
@@ -126,12 +124,17 @@ export const useSignUpForm = () => {
         ),
         { duration: Infinity, id: 'validationError' }
       );
-      const errorsTemp: ZodParseErrors = {};
-      errors.forEach((error: ValidationError) => {
-        errorsTemp[error.field] = error.message;
-      });
+      // const errorsTemp: ZodParseErrors = {};
+      // errors.forEach((error: ValidationError) => {
+      //   errorsTemp[error.field] = error.message;
+      // });
 
-      formik.setErrors(errorsTemp);
+      // if (errors instanceof ValidationErrors) {
+      if (errors) {
+        formik.setErrors(errors.mapByField());
+      } else {
+        console.log(errors);
+      }
       return false;
     }
   };

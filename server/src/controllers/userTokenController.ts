@@ -21,7 +21,7 @@ const find = async (
 
 const create = async (req: Request, res: Response) => {
   const { address, chainId, name, symbol, txHash, userAddress } =
-    userTokenValidation.create.parse(req.body);
+    userTokenValidation.createParse(req.body);
 
   const token = await userTokenService.create({
     address,

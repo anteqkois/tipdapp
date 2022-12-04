@@ -1,6 +1,6 @@
+import { catchAsyncErrors } from '@middlewares/handleError';
 import { Router } from 'express';
 import { create, find } from '../controllers/userTokenController';
-import { catchAsyncErrors } from '../middlewares/error';
 
 const router = Router();
 //GET

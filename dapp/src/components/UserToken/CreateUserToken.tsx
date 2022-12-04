@@ -1,9 +1,8 @@
 import { useLocalStorage, useQoistipSign } from '@/hooks';
-import { ZodParseErrors } from '@/types/index';
-import {
-  UserTokenFormObject,
-  userTokenFormParse,
-} from '@/validation/userTokenValidation';
+// import {
+//   userTokenValidation,
+//   UserTokenValidation,
+// } from '../../../node_modules/@anteqkois/server';
 import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Button, Card, Input } from '../utils';
@@ -15,9 +14,11 @@ const initialUserToken = {
 };
 
 export const CreateUserToken = () => {
-  const [errors, setErrors] = useState<ZodParseErrors>({} as ZodParseErrors);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  // const [errors, setErrors] = useState<ZodParseErrors>({} as ZodParseErrors);
   const [userTokenFormData, setUserTokenFormData] =
-    useLocalStorage<UserTokenFormObject>('userTokenFormData', initialUserToken);
+    // useLocalStorage<UserTokenValidation.CreateForm>(
+    useLocalStorage<any>('userTokenFormData', initialUserToken);
   //TODO Refreshh user data after create user token
   // const { refreshSessionData } = useSession();
 
@@ -55,41 +56,43 @@ export const CreateUserToken = () => {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      setErrors({} as ZodParseErrors);
-      const error = userTokenFormParse(userTokenFormData);
+      setErrors({});
+      // userTokenValidation.createFormParse(userTokenFormData);
+      // const t: TipUI = {} as TipUI
 
-      if (Object.keys(error).length !== 0) {
-        setErrors(error);
+      if (registerUser?.writeAsync) {
+        const writePromise = registerUser.writeAsync({
+          recklesslySetUnpreparedArgs: [
+            userTokenFormData.symbol,
+            userTokenFormData.name,
+          ],
+        });
+        toast.promise(
+          writePromise,
+          {
+            loading: 'Wait for send transaction',
+            success: 'Your token was succesfully create!',
+            error: 'Something went wrong, we can not create your token.',
+          },
+          { id: 'registerUserPromise' }
+        );
       } else {
-        if (registerUser?.writeAsync) {
-          const writePromise = registerUser.writeAsync({
-            recklesslySetUnpreparedArgs: [
-              userTokenFormData.symbol,
-              userTokenFormData.name,
-            ],
-          });
-          toast.promise(
-            writePromise,
-            {
-              loading: 'Wait for send transaction',
-              success: 'Your token was succesfully create!',
-              error: 'Something went wrong, we can not create your token.',
-            },
-            { id: 'registerUserPromise' }
-          );
-        } else {
-          toast.error('Something went wrong, we can not create your token.', {
-            id: 'registerUserPromise',
-          });
-        }
+        toast.error('Something went wrong, we can not create your token.', {
+          id: 'registerUserPromise',
+        });
       }
-    } catch (error) {
-      // console.log(error);
+    } catch (error: any) {
+      // const e: ValidationErrors = error as ValidationErrors;
+      if (error?.type === 'ValidationErrors') {
+        setErrors(error.mapByField());
+      }
+      console.log(error);
     }
   };
 
   // TODO useDebounce!!!
   const handleChange = (e: FormEvent<HTMLInputElement>) => {
+    //@ts-ignore
     setUserTokenFormData((prev) => ({
       ...prev,
       // [e.target.id]: e.target.value,

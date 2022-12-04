@@ -9,4 +9,4 @@ export type NavigationOption = {
   label?: string;
 };
 
-export type ZodParseErrors = Record<string, string>;
+// export type ZodParseErrors = Record<string, string>;

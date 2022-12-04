@@ -11,7 +11,7 @@ const create = z.object({
     .max(200, { message: 'Url can be up to 200 characters long.' }),
 });
 
-const userPageFormParse = (data: UserPageValidation.Create) =>
+const createParse = (data: UserPageValidation.Create) =>
   validationHelper<UserPageValidation.Create>(data, create);
 
 export namespace UserPageValidation {
@@ -19,5 +19,5 @@ export namespace UserPageValidation {
 }
 
 export const userPageValidation = {
-  create,
+  createParse,
 };

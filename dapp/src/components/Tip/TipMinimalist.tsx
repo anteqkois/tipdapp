@@ -3,17 +3,14 @@ import { useClipboard, useModal } from '@/hooks';
 import { dateFormat } from '@/lib/dayjs';
 import cutAddress from '@/utils/cutAddress';
 import { parseNotation } from '@/utils/format';
+import { TipUI } from '@anteqkois/server';
 import {
   ArrowPathIcon,
   ArrowsPointingOutIcon,
   AtSymbolIcon,
 } from '@heroicons/react/24/outline';
-import { TipUI } from 'src/types/models';
 import Avatar from '../utils/Avatar';
 import Button from '../utils/Button';
-// const { parseUnits, formatUnits } = ethers.utils;
-
-// type Props { type: 'full'|'patial'}
 
 const TipMinimalist = ({
   txHash,

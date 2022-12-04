@@ -1,4 +1,4 @@
-import { TipUI } from '@/types/models';
+import { TipUI } from '@anteqkois/server';
 import { InfoMessage } from '../utils';
 import TipCard from './Tip';
 import TipMinimalist from './TipMinimalist';
@@ -10,6 +10,7 @@ type Props = {
 
 type TipView = keyof typeof tipViewComponents;
 
+//TODO! chnage it to accept ReactCompnent wchich Tip as a Prop, string not literal
 const tipViewComponents = {
   Card: TipCard,
   Minimalist: TipMinimalist,

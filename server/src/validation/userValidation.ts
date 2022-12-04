@@ -1,5 +1,6 @@
-import { z } from '../config/zod';
-import { Role } from '../types';
+import { Role } from '@prisma/client';
+import { validationHelper, z } from '../config/zod';
+// import { Role } from '../types';
 
 const createUser = z.object({
   email: z.string().email(),
@@ -35,18 +36,27 @@ const createTipper = createUser.merge(
   })
 );
 
-// const createStreamerParse = (data: CreateStreamerObject) =>
-//   validationHelper<CreateStreamerObject>(data, createStreamer);
+const createStreamerParse = (data: UserValidation.CreateStreamer) =>
+  validationHelper(data, createStreamer);
 
-const createHelper = (body: UserValidation.CreateUser) => {
+const createTipperParse = (data: UserValidation.CreateTipper) =>
+  validationHelper(data, createTipper);
+
+const createParse = (body: UserValidation.CreateUser) => {
   if (body.role === 'streamer') {
-    return createStreamer.parse(body);
-    // return createStreamer.parse(body) as CreateStreamerObject;
+    return createStreamerParse(body);
   } else {
-    return createTipper.parse(body);
-    // return createTipper.parse(body) as CreateTipperObject;
+    return createTipperParse(body);
   }
 };
+
+// const create = (body: UserValidation.CreateUser) => {
+//   if (body.role === 'streamer') {
+//     return createStreamer.parse(body);
+//   } else {
+//     return createTipper.parse(body);
+//   }
+// };
 
 export namespace UserValidation {
   export type CreateStreamer = z.infer<typeof createStreamer>;
@@ -55,7 +65,8 @@ export namespace UserValidation {
 }
 
 export const userValidation = {
-  createTipper,
-  createStreamer,
-  createHelper,
+  // createTipper,
+  // createStreamer,
+  // create,
+  createParse,
 };

@@ -4,8 +4,7 @@ import cutAddress from '@/utils/cutAddress';
 // import { UserToken } from '@prisma/client';
 import { ethers } from '@/lib';
 import { Button, Card } from '../utils';
-
-type UserToken = any;
+import { UserToken } from '@anteqkois/server';
 
 type Props = {
   token: UserToken;

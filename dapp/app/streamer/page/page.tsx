@@ -2,14 +2,14 @@
 import { update } from '@/api/page';
 import { Button, Card, Input, Tooltip } from '@/components/utils';
 import { useUser } from '@/hooks';
-import {
-  UserPageFormObject,
-  userPageFormParse,
-} from '@/validation/userPageValidation';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import {
+  UserPageFormObject,
+  userPageFormParse,
+} from 'src/validationOld/userPageValidation';
 
 //TODO? use page to be ability in future to change this element by user(for example can change to show default top tiper)
 const Page = () => {

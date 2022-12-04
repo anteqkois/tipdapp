@@ -1,14 +1,13 @@
 'use client';
 import { PageSpinner } from '@/components/utils';
 import { useUser } from '@/hooks';
+import { Role } from '@anteqkois/server';
 import { useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 
-type Roles = 'tipper' | 'streamer';
-
 type Props = {
   children: ReactNode;
-  allowedRoles: Roles[];
+  allowedRoles: Role[];
 };
 
 export const ProtectPageGuard = ({ children, allowedRoles }: Props) => {
@@ -25,7 +24,7 @@ export const ProtectPageGuard = ({ children, allowedRoles }: Props) => {
   if (
     status === 'unauthenticated' ||
     !roles
-      .map((role: Roles) => allowedRoles.includes(role))
+      .map((role: Role) => allowedRoles.includes(role))
       .find((val: boolean) => val === true)
   ) {
     router?.push('/login');

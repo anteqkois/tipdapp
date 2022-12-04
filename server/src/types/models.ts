@@ -1,4 +1,6 @@
-import { Prisma, Streamer, Tipper, User } from "./prisma";
+// import { Prisma, Streamer, Tipper, User } from "./prisma";
+
+import { Prisma, Streamer, Tipper, User } from "@prisma/client";
 
 export type UserSession =
   | (User & {

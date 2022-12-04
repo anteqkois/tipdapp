@@ -1,3 +1,4 @@
+import { catchAsyncErrors } from '@middlewares/handleError';
 import { Router } from 'express';
 import {
   createNonce,
@@ -8,7 +9,6 @@ import {
   verifyMessageAndLogin,
 } from '../controllers/authController';
 import { authenticate } from '../middlewares/authenticate';
-import { catchAsyncErrors } from '../middlewares/error';
 
 const router = Router();
 

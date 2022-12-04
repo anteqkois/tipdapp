@@ -1,8 +1,7 @@
-import { TipUI } from 'src/types/models';
+import { TipUI } from '@anteqkois/server';
 import Tip from './Tip';
 
 type Props = {
-  // tips:any;
   tips: TipUI[];
 };
 

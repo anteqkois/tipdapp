@@ -1,0 +1,42 @@
+{
+  "name": "@anteqkois/server",
+  "version": "0.0.1",
+  "private": "true",
+  "description": "Types from Prisma for models and other shared code to my web3 app",
+  "main": "lib/cjs/package.js",
+  "module": "lib/esm/package.js",
+  "types": "lib/esm/package.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/esm/package.d.ts",
+        "default": "./lib/esm/package.js"
+      },
+      "require": {
+        "types": "./lib/cjs/package.d.ts",
+        "default": "./lib/cjs/package.js"
+      }
+    }
+  },
+  "scripts": {
+    "build": "npm run bundle && npm run build:ts && cp ../prisma/schema.prisma .",
+    "bundle": "node esbuild.config.js",
+    "NOpostinstall": "npx prisma generate",
+    "build:ts": "rm -rf dist && tsc --build tsconfig.esm.json && tsc --build tsconfig.cjs.json",
+    "buildOLD": "npm run compile && npm run link && npm run copy",
+    "copyOLD": "for f in index.js:prisma.js index.d.ts:prisma.d.ts; do IN=$(echo $f | cut -d ':' -f1) OUT=$(echo $f | cut -d ':' -f2) && cp ../node_modules/.prisma/client/$IN ./dist/es6/src/types/$OUT; done"
+  },
+  "files": [
+    "lib",
+    "package.json",
+    "schema.prisma"
+  ],
+  "author": "Antek Kois",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.15.16"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.7.1"
+  }
+}

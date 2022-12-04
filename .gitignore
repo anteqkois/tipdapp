@@ -22,6 +22,7 @@ dapp/.vercel
 # server
 server/artifacts
 server/node_modules
+server/package/lib
 
 # local env files
 **/.env

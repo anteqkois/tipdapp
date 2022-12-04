@@ -1,6 +1,12 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
+    "paths": {
+      "@middlewares/*": ["src/middlewares/*"],
+      "@types/*": ["src/types/*"],
+      "@types": ["src/types"]
+    },
+    "typeRoots": ["./src/types", "./node_modules/@types"],
     "module": "commonjs",
     "outDir": "./dist",
     "lib": ["es2019"],
@@ -15,17 +21,19 @@
     "esModuleInterop": true,
     "moduleResolution": "Node",
     "resolveJsonModule": true
+    // importsNotUsedAsValues
     // "strictNullChecks": true,
     // "noUncheckedIndexedAccess": true,
     // "typeRoots": ["./node_modules/*", "./src/types/*"]
     // "typeRoots": ["./src/types/*", "./node_modules/*"]
   },
-  "include": ["src/types/**/*", "src/**/*"],
+  "include": ["server.ts", "**/*.ts", "**/*.d.ts", "**/*.js"],
   "exclude": [
     "node_modules",
     "**/node_modules/*",
     "./.log",
     "dist",
-    "./src/artifacts"
+    "./src/artifacts",
+    "./package.ts"
   ]
 }

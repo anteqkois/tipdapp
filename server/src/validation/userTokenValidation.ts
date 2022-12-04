@@ -18,10 +18,10 @@ const create = createForm.extend({
   txHash: z.string().length(66, { message: 'Wrong transaction hash' }),
 });
 
-const userTokenFormParse = (data: UserTokenValidation.CreateForm) =>
+const createFormParse = (data: UserTokenValidation.CreateForm) =>
   validationHelper<UserTokenValidation.CreateForm>(data, createForm);
 
-const userTokenParse = (data: UserTokenValidation.Create) =>
+const createParse = (data: UserTokenValidation.Create) =>
   validationHelper<UserTokenValidation.Create>(data, create);
 
 export namespace UserTokenValidation {
@@ -30,6 +30,8 @@ export namespace UserTokenValidation {
 }
 
 export const userTokenValidation = {
-  create,
-  createForm,
+  // create,
+  createParse,
+  // createForm,
+  createFormParse,
 };
