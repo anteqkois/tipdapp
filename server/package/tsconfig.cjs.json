@@ -2,13 +2,15 @@
   "compilerOptions": {
     "strict": true,
     "module": "commonjs",
-    "target": "ES5",
-    "lib": ["ES2020", "DOM"],
+    "target": "ES6",
+    "lib": ["ES2020"],
     "declaration": true,
-    "outDir": "./lib/cjs",
+    "emitDeclarationOnly": true,
+    // "outDir": "./lib/cjs",
+    "outFile": "./lib/cjs/package.d.ts",
     "moduleResolution": "node",
     "removeComments": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["../src/config/paths.ts", "../package.ts"]
+  "include": ["../package.ts"]
 }

@@ -3,32 +3,14 @@
     "strict": true,
     "module": "ES6",
     "target": "ES6",
-    // "target": "ES5",
-    "lib": ["ES2020", "DOM"],
-    "emitDeclarationOnly": true,
+    "lib": ["ES2020"],
     "declaration": true,
+    "emitDeclarationOnly": true,
     // "outDir": "./lib/esm",
     "outFile": "./lib/esm/package.d.ts",
     "moduleResolution": "node",
     "removeComments": true,
-    "allowSyntheticDefaultImports": false,
-    
-    // "typeRoots": ["../node_modules/.prisma/client/index.d.ts"]
-    // "types": [ "@prisma/client"]
-    // "typeRoots": ["../node_modules/.prisma/client/index.d.ts","../node_modules/@prisma/client/index.d.ts", ]
-    // "outFile": "test",
-
-    // "strict": true,
-    // "module": "ES6",
-    // "target": "ES6",
-    // // "target": "ES5",
-    // "lib": ["ES2020", "DOM"],
-    // "declaration": true,
-    // "outDir": "./dist/es6",
-    // "moduleResolution": "node",
-    // "removeComments": true,
-    // "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true
   },
-  "include": [ "../package.ts"]
-  // "include": ["../src/config/paths.ts", "../package.ts"]
+  "include": ["../package.ts"]
 }
