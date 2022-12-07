@@ -73,7 +73,7 @@ const TipMinimalist = ({
       <DetailsModal>
         <DetailsTrigger>
           <Button
-            option="minimalist"
+            variant="minimalist"
             className="h-7"
           >
             <ArrowsPointingOutIcon className="inline w-5 mr-1" />
@@ -117,7 +117,7 @@ const TipMinimalist = ({
               rel="noreferrer"
             >
               <Button
-                option="link"
+                variant="link"
                 className="font-medium text-neutral-700 mr-1"
               >
                 View token on Explorer
@@ -147,7 +147,7 @@ const TipMinimalist = ({
                 rel="noreferrer"
               >
                 <Button
-                  option="link"
+                  variant="link"
                   className="font-medium text-neutral-700 mr-1"
                 >
                   View on Explorer
@@ -178,7 +178,7 @@ const TipMinimalist = ({
                 rel="noreferrer"
               >
                 <Button
-                  option="link"
+                  variant="link"
                   className="font-medium text-neutral-700 mr-1"
                 >
                   View on Explorer
@@ -205,7 +205,7 @@ const TipMinimalist = ({
               </Button>
               <Button
                 onClick={() => setShowDetails(false)}
-                option="danger"
+                variant="danger"
                 className="flex gap-2 items-center"
               >
                 Close

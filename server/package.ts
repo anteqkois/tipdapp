@@ -14,6 +14,7 @@ export {
   Widget,
   Withdraw,
 } from '@prisma/client';
+export { validationHelper } from './src/config/zod';
 export {
   ApiError,
   ValidationError,

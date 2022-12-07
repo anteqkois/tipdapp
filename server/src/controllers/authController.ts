@@ -175,7 +175,7 @@ const signUp = async (req: Request, res: Response) => {
     }
 
     let userSessionData: UserSession;
-    switch (validatedFormData.role) {
+    switch (userValidation.type( validatedFormData)) {
       case 'streamer':
         userSessionData = await userService.createStreamer({
           address: siweMessage.address,
@@ -195,7 +195,6 @@ const signUp = async (req: Request, res: Response) => {
         });
         break;
     }
-
     const authToken = createAuthToken(userSessionData);
     const refreshToken = createRefreshToken(userSessionData);
 

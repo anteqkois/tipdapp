@@ -1,6 +1,5 @@
+import { Tip, TipUI } from '@anteqkois/server';
 import { api } from './apiConfig';
-
-type Tip = any;
 
 type FindParams = {
   page?: number;
@@ -8,15 +7,7 @@ type FindParams = {
 };
 
 type FindResponse = {
-  tips: (Tip & {
-    token: {
-      symbol: string;
-      name: string;
-    };
-    tipper: {
-      nick: string;
-    };
-  })[];
+  tips: TipUI[];
   count: number;
 };
 

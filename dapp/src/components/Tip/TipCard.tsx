@@ -11,9 +11,6 @@ import {
 } from '@heroicons/react/24/outline';
 import Avatar from '../utils/Avatar';
 import Button from '../utils/Button';
-// const { parseUnits, formatUnits } = ethers.utils;
-
-// type Props { type: 'full'|'patial'}
 
 const TipCard = ({
   txHash,
@@ -76,7 +73,7 @@ const TipCard = ({
       <DetailsModal>
         <DetailsTrigger>
           <Button
-            option="minimalist"
+            variant="minimalist"
             className="h-7"
           >
             <ArrowsPointingOutIcon className="inline w-5 mr-1" />
@@ -120,7 +117,7 @@ const TipCard = ({
               rel="noreferrer"
             >
               <Button
-                option="link"
+                variant="link"
                 className="font-medium text-neutral-700 mr-1"
               >
                 View token on Explorer
@@ -150,7 +147,7 @@ const TipCard = ({
                 rel="noreferrer"
               >
                 <Button
-                  option="link"
+                  variant="link"
                   className="font-medium text-neutral-700 mr-1"
                 >
                   View on Explorer
@@ -181,7 +178,7 @@ const TipCard = ({
                 rel="noreferrer"
               >
                 <Button
-                  option="link"
+                  variant="link"
                   className="font-medium text-neutral-700 mr-1"
                 >
                   View on Explorer
@@ -208,7 +205,7 @@ const TipCard = ({
               </Button>
               <Button
                 onClick={() => setShowDetails(false)}
-                option="danger"
+                variant="danger"
                 className="flex gap-2 items-center"
               >
                 Close

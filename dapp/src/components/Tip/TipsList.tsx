@@ -10,7 +10,7 @@ type Props = {
 
 type TipView = keyof typeof tipViewComponents;
 
-//TODO! chnage it to accept ReactCompnent wchich Tip as a Prop, string not literal
+//TODO! chnage it to accept tipView props as a ReactCompnent which get tips as a props
 const tipViewComponents = {
   Card: TipCard,
   Minimalist: TipMinimalist,

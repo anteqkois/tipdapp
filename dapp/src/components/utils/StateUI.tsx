@@ -19,27 +19,9 @@ export const StateUI = ({
   EmptyComponent = <Spinner />,
   children,
 }: StateUIProps): JSX.Element => {
-  return (
-    <>
-      {error ? (
-        <ErrorMessage>{error}</ErrorMessage>
-        ) : loading ? (
-        LoadingComponent
-      ) : empty ? (
-        EmptyComponent
-      ) : (
-        children
-      )}
-      {/* {loading ? (
-        LoadingComponent
-      ) : error ? (
-        <ErrorMessage>{error}</ErrorMessage>
-      ) : empty ? (
-        EmptyComponent
-      ) : (
-        children
-      )} */}
-    </>
-  );
+  if (error) return <ErrorMessage>{error}</ErrorMessage>;
+  if (loading) return LoadingComponent;
+  if (empty) return EmptyComponent;
+  return <>children</>;
   // return <>{loading ? LoadingComponent : empty ? EmptyComponent : children}</>;
 };

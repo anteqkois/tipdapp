@@ -1,6 +1,7 @@
 // 'use client';
 import { logoutUser, refreshToken, verifyMessage } from '@/api/auth';
 import { AuthStatus } from '@/types';
+import { UserSession } from '@anteqkois/server';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useRouter } from 'next/navigation';
 import {
@@ -13,7 +14,6 @@ import {
 } from 'react';
 import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
-import { UserSession } from 'src/types/models';
 import { useDisconnect } from 'wagmi';
 import useCookie from './useCookie';
 import useLocalStorage from './useLocalStorage';
@@ -26,8 +26,8 @@ type ReturnType = {
   login: () => void;
   logout: () => Promise<void>;
   verify: (message: SiweMessage, signature: string) => Promise<boolean>;
-  user: UserSession | null;
-  setUser: Dispatch<SetStateAction<UserSession | null>>;
+  user?: UserSession;
+  setUser: Dispatch<SetStateAction<UserSession | undefined>>;
   status: AuthStatus;
   setStatus: Dispatch<SetStateAction<AuthStatus>>;
 };
@@ -35,7 +35,7 @@ type ReturnType = {
 type Props = { children: ReactNode };
 
 export const UserProvider = ({ children }: Props) => {
-  const [user, setUser] = useLocalStorage<UserSession>('user', null);
+  const [user, setUser] = useLocalStorage<UserSession>('user');
   const [status, setStatus] = useCookie<AuthStatus>(
     'authStatus',
     'unauthenticated',
@@ -97,7 +97,7 @@ export const UserProvider = ({ children }: Props) => {
         const data = await logoutUser();
         toast.success(data.message);
         setStatus('unauthenticated');
-        setUser(null);
+        setUser(undefined);
       } else {
         toast.error('You are not conneted.');
       }

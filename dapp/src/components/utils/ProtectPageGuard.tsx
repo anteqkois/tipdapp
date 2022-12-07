@@ -11,10 +11,7 @@ type Props = {
 };
 
 export const ProtectPageGuard = ({ children, allowedRoles }: Props) => {
-  const {
-    status,
-    user: { roles },
-  } = useUser();
+  const { status, user } = useUser();
   const router = useRouter();
 
   if (status === 'loading') {
@@ -23,7 +20,7 @@ export const ProtectPageGuard = ({ children, allowedRoles }: Props) => {
   //TODO add callback feature
   if (
     status === 'unauthenticated' ||
-    !roles
+    !user?.roles
       .map((role: Role) => allowedRoles.includes(role))
       .find((val: boolean) => val === true)
   ) {

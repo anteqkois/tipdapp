@@ -63,7 +63,7 @@ export const CustomConnectButton = () => {
                       onClick={openChainModal}
                       className="flex items-center justify-between gap-2"
                       type="button"
-                      option="overlay"
+                      variant="overlay"
                     >
                       {chain.hasIcon && (
                         <div
@@ -91,7 +91,7 @@ export const CustomConnectButton = () => {
                       onClick={openAccountModal}
                       className="flex items-center justify-center gap-2"
                       type="button"
-                      option="overlay"
+                      variant="overlay"
                     >
                       {/* <Avatar aaddress=alletAddress} className="w-6 h-6" /> */}
                       {account.displayName}

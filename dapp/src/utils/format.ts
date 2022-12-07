@@ -1,3 +1,4 @@
+import { Prisma } from '@anteqkois/server';
 import { BigNumber, utils } from 'ethers';
 
 const cutNumber = (amount: string) => {
@@ -6,7 +7,7 @@ const cutNumber = (amount: string) => {
   return `${exponent}${mantissa ? '.' + mantissa.slice(0, 5) : ''}`;
 };
 
-const parseNotation = (number: string) => {
+const parseNotation = (number: Prisma.Decimal) => {
   const hevNumber = utils.hexValue(`0x${Number(number).toString(16)}`);
   const BN = BigNumber.from(hevNumber);
   // const parsedNumber = utils.formatEther(BN, 5);

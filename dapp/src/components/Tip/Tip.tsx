@@ -3,7 +3,7 @@ import { useClipboard, useModal } from '@/hooks';
 import { dateFormat } from '@/lib/dayjs';
 import cutAddress from '@/utils/cutAddress';
 import { parseNotation } from '@/utils/format';
-import { TipUI, UserValidation } from '@anteqkois/server';
+import { TipUI } from '@anteqkois/server';
 import {
   ArrowPathIcon,
   ArrowsPointingOutIcon,
@@ -72,7 +72,7 @@ const Tip = ({
       <DetailsModal>
         <DetailsTrigger>
           <Button
-            option="minimalist"
+            variant="minimalist"
             className="h-7"
           >
             <ArrowsPointingOutIcon className="inline w-5 mr-1" />
@@ -116,7 +116,7 @@ const Tip = ({
               rel="noreferrer"
             >
               <Button
-                option="link"
+                variant="link"
                 className="font-medium text-neutral-700 mr-1"
               >
                 View token on Explorer
@@ -146,7 +146,7 @@ const Tip = ({
                 rel="noreferrer"
               >
                 <Button
-                  option="link"
+                  variant="link"
                   className="font-medium text-neutral-700 mr-1"
                 >
                   View on Explorer
@@ -177,7 +177,7 @@ const Tip = ({
                 rel="noreferrer"
               >
                 <Button
-                  option="link"
+                  variant="link"
                   className="font-medium text-neutral-700 mr-1"
                 >
                   View on Explorer
@@ -204,7 +204,7 @@ const Tip = ({
               </Button>
               <Button
                 onClick={() => setShowDetails(false)}
-                option="danger"
+                variant="danger"
                 className="flex gap-2 items-center"
               >
                 Close

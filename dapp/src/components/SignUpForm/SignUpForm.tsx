@@ -65,7 +65,7 @@ export const SignUpForm = () => {
       </p>
       <Button
         className="w-full mt-4"
-        option="success"
+        variant="success"
         type="submit"
       >
         Connect wallet
@@ -100,8 +100,8 @@ export const SignUpForm = () => {
           {step > 1 && (
             <Button
               className="w-full mt-3"
-              onClick={() => setStep((prev) => prev-1)}
-              type='button'
+              onClick={() => setStep((prev) => prev - 1)}
+              type="button"
             >
               Back
             </Button>
@@ -110,7 +110,7 @@ export const SignUpForm = () => {
             <Button
               className="w-full mt-3"
               type="submit"
-              option="success"
+              variant="success"
             >
               Next
             </Button>

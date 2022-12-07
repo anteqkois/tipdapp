@@ -1,4 +1,4 @@
-import { Role } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 import { validationHelper, z } from '../config/zod';
 // import { Role } from '../types';
 
@@ -16,7 +16,8 @@ const createStreamer = createUser.merge(
     lastName: z
       .string()
       .min(3, { message: 'Last name must have 3 or more characters.' }),
-    role: z.literal(Role.streamer),
+    roles: z.tuple([z.literal(Role.tipper), z.literal(Role.streamer)]),
+    // role: z.literal(Role.streamer),
     // role: z.array(Role.streamer),
     // address: z.string().length(42, { message: 'Wrong user address' }),
   })
@@ -32,7 +33,8 @@ const createTipper = createUser.merge(
       .string()
       .min(3, { message: 'Last name must have 3 or more characters.' })
       .optional(),
-    role: z.literal(Role.tipper),
+    roles: z.tuple([z.literal(Role.tipper)]),
+    // role: z.literal(Role.tipper),
   })
 );
 
@@ -43,10 +45,11 @@ const createTipperParse = (data: UserValidation.CreateTipper) =>
   validationHelper(data, createTipper);
 
 const createParse = (body: UserValidation.CreateUser) => {
-  if (body.role === 'streamer') {
-    return createStreamerParse(body);
-  } else {
-    return createTipperParse(body);
+  switch (type(body)) {
+    case 'streamer':
+      return createStreamerParse(body as UserValidation.CreateStreamer);
+    case 'tipper':
+      return createTipperParse(body as UserValidation.CreateTipper);
   }
 };
 
@@ -58,10 +61,20 @@ const createParse = (body: UserValidation.CreateUser) => {
 //   }
 // };
 
+const type = (body: Pick<User, 'roles'>) => {
+  if (body.roles.includes(Role.streamer)) {
+    return Role.streamer;
+  } else {
+    return Role.tipper;
+  }
+};
+
 export namespace UserValidation {
   export type CreateStreamer = z.infer<typeof createStreamer>;
   export type CreateTipper = z.infer<typeof createTipper>;
-  export type CreateUser = CreateStreamer | CreateTipper;
+  export type CreateUser = Omit<CreateStreamer | CreateTipper, 'roles'> & {
+    roles: Role[];
+  };
 }
 
 export const userValidation = {
@@ -69,4 +82,5 @@ export const userValidation = {
   // createStreamer,
   // create,
   createParse,
+  type,
 };

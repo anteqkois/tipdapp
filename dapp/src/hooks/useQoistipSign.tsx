@@ -17,7 +17,7 @@ const contractInstance = {
 
 export const useQoistipSign = () => {
   const {
-    user: { address },
+    user,
   } = useUser();
 
   const { ClipboardIcon } = useClipboard();
@@ -26,7 +26,7 @@ export const useQoistipSign = () => {
   const userToken = useContractRead({
     ...contractInstance,
     functionName: 'userToken',
-    args: address,
+    args: user?.address,
   });
 
   // WRITE
@@ -80,7 +80,7 @@ export const useQoistipSign = () => {
                 rel="noreferrer"
               >
                 <Button
-                  option="link"
+                  variant="link"
                   className="font-medium text-neutral-700 mr-1"
                 >
                   View token on Explorer
@@ -88,7 +88,7 @@ export const useQoistipSign = () => {
               </a>
               <Button
                 onClick={() => toast.dismiss(t.id)}
-                option="minimalist"
+                variant="minimalist"
               >
                 Close
               </Button>

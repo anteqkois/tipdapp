@@ -133,7 +133,7 @@ export const CreateUserToken = () => {
           className="ml-3"
           onClick={resetForm}
           type="reset"
-          option="danger"
+          variant="danger"
         >
           Reset from
         </Button>

@@ -9,18 +9,10 @@ const createStreamer = async (createData: Prisma.UserCreateInput) => {
       ...createData,
     },
     include: {
+      tipper: true,
       streamer: true,
-      // avatar: true,
-      // token: {
-      //   select: {
-      //     address: true,
-      //     chainId: true,
-      //     name: true,
-      //     symbol: true,
-      //     txHash: true,
-      //   },
-      // },
-      // page: true,
+      userToken: true,
+      avatar:true,
     },
   });
 };
@@ -33,6 +25,7 @@ const createTipper = async (createData: Prisma.UserCreateInput) => {
     },
     include: {
       tipper: true,
+      avatar: true,
       // avatar: true,
     },
   });

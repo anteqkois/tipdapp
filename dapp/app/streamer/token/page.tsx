@@ -6,12 +6,16 @@ import { useUser } from '@/hooks';
 
 const Token = () => {
   const {
-    user: { token },
+    user
   } = useUser();
 
   return (
     <section>
-      {token ? <TokenPanel token={token} /> : <CreateUserToken />}
+      {user?.userToken ? (
+        <TokenPanel token={user?.userToken} />
+      ) : (
+        <CreateUserToken />
+      )}
     </section>
   );
 };

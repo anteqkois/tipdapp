@@ -2,14 +2,11 @@
 import { update } from '@/api/page';
 import { Button, Card, Input, Tooltip } from '@/components/utils';
 import { useUser } from '@/hooks';
+import { UserPageValidation, userPageValidation } from '@anteqkois/server';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import {
-  UserPageFormObject,
-  userPageFormParse,
-} from 'src/validationOld/userPageValidation';
 
 //TODO? use page to be ability in future to change this element by user(for example can change to show default top tiper)
 const Page = () => {
@@ -18,12 +15,12 @@ const Page = () => {
   const formik = useFormik({
     initialValues: {
       // baner/themecolor/link to yt.../display total supply of token/link to etherscan token
-      url: user?.page?.url ?? '',
-      description: user?.page?.description ?? '',
+      url: user?.streamer?.affixUrl ?? '',
+      description: user?.streamer?.pageDescription ?? '',
     },
-    validate: userPageFormParse,
-    // validate: userPageValidation,
-    onSubmit: async (values: UserPageFormObject) => {
+    // validate: userPageFormParse,
+    // validate: userPageValidation.createParse,
+    onSubmit: async (values: UserPageValidation.Create) => {
       if (!Object.keys(formik.errors).length) {
         try {
           // console.log(values);
@@ -41,8 +38,8 @@ const Page = () => {
     <section>
       <Card className="grid">
         <form onSubmit={formik.handleSubmit}>
-          <Link href={`streamer/${user.page?.url}`}>
-            <Button option="link">See your page</Button>
+          <Link href={`streamer/${user?.streamer?.affixUrl}`}>
+            <Button variant="link">See your page</Button>
           </Link>
           <Tooltip content="Disabled option now">
             <div className="relative">
@@ -61,7 +58,7 @@ const Page = () => {
                 https://cryptotip/streamer/
               </span>
               <span className="absolute text-neutral-light top-[29px] right-[1px] p-2 bg-neutral-200 rounded  rounded-tl-none rounded-bl-none">
-                {user.page?.url.length}/20
+                {user?.streamer?.affixUrl.length}/20
               </span>
             </div>
           </Tooltip>

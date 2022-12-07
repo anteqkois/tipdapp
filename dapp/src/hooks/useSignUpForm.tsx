@@ -2,6 +2,7 @@
 import { signUp, validateFormData } from '@/api/auth';
 import { Close } from '@/components/utils';
 import { AsyncStatus } from '@/types';
+import { UserValidation } from '@anteqkois/server';
 // import { ValidationErrors } from '@anteqkois/server';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFormik } from 'formik';
@@ -12,17 +13,8 @@ import { SiweMessage } from 'siwe';
 import { useDisconnect } from 'wagmi';
 import { useUser } from '.';
 
-type FormData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  nick: string;
-  address: null;
-  roles: [string, string];
-};
-
 type State = {
-  data: FormData;
+  data: UserValidation.CreateUser & {address?: string};
   status: AsyncStatus;
 };
 
@@ -32,8 +24,9 @@ const initialState: State = {
     lastName: '',
     email: '',
     nick: '',
-    address: null,
-    roles: ['streamer', 'tipper'],
+    // address: null,
+    roles: ['tipper', 'streamer']
+    // roles: ['streamer', 'tipper'],
   },
   status: 'idle',
 };

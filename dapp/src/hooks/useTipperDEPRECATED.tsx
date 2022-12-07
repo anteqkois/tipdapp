@@ -1,4 +1,5 @@
 // 'use client';
+//@ts-nocheck
 import { logoutUser, refreshToken, verifyMessageTipper } from '@/api/auth';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useRouter } from 'next/navigation';

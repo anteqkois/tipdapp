@@ -2,7 +2,7 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import classnames from 'classnames';
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 
-type ButtonOption =
+type ButtonVariant =
   | 'default'
   | 'success'
   | 'danger'
@@ -14,11 +14,11 @@ type ButtonOption =
   | 'minimalist';
 
 type ButtonProps = {
-  option?: ButtonOption;
+  variant?: ButtonVariant;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ children, className, option = 'default', ...props }, ref) => {
+  ({ children, className, variant = 'default', ...props }, ref) => {
     return (
       <button
         {...props}
@@ -34,8 +34,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
               'success',
               'danger',
               'special',
-            ].includes(option),
-            'px-3.5 py-1.5': ['overlay', 'ghost'].includes(option),
+            ].includes(variant),
+            'px-3.5 py-1.5': ['overlay', 'ghost'].includes(variant),
           },
           {
             default:
@@ -54,11 +54,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
               'bg-gradient-to-tr from-primary  to-secondary-700 hover:from-primary-dark hover:to-secondary-800',
             minimalist:
               'block text-neutral-900 underline decoration-2 decoration-primary',
-          }[option]
+          }[variant]
         )}
       >
         {children}
-        {option === 'link' && <ArrowTopRightOnSquareIcon className="w-5" />}
+        {variant === 'link' && <ArrowTopRightOnSquareIcon className="w-5" />}
       </button>
     );
   }

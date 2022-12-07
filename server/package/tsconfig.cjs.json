@@ -6,8 +6,8 @@
     "lib": ["ES2020"],
     "declaration": true,
     "emitDeclarationOnly": true,
-    // "outDir": "./lib/cjs",
-    "outFile": "./lib/cjs/package.d.ts",
+    "outDir": "./lib/cjs",
+    // "outFile": "./lib/cjs/package.d.ts",
     "moduleResolution": "node",
     "removeComments": true,
     "allowSyntheticDefaultImports": true

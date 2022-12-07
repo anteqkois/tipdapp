@@ -3,8 +3,8 @@ import { dateFormat } from '@/lib/dayjs';
 import cutAddress from '@/utils/cutAddress';
 // import { UserToken } from '@prisma/client';
 import { ethers } from '@/lib';
-import { Button, Card } from '../utils';
 import { UserToken } from '@anteqkois/server';
+import { Button, Card } from '../utils';
 
 type Props = {
   token: UserToken;
@@ -51,7 +51,7 @@ export const TokenPanel = ({ token }: Props) => {
               rel="noreferrer"
             >
               <Button
-                option="link"
+                variant="link"
                 className="font-medium text-neutral-700 mr-1"
               >
                 View token on Explorer
@@ -112,7 +112,7 @@ export const TokenPanel = ({ token }: Props) => {
             rel="noreferrer"
           >
             <Button
-              option="link"
+              variant="link"
               className="font-medium text-neutral-700 mr-1"
             >
               View transaction on Explorer
