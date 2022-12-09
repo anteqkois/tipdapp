@@ -2,7 +2,7 @@
   "name": "@anteqkois/server",
   "author": "Antek Kois",
   "license": "MIT",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Types from Prisma for models and other shared code to my web3 app",
   "main": "lib/cjs/package.js",
   "module": "lib/esm/package.js",
@@ -46,11 +46,14 @@
     "share"
   ],
   "scripts": {
+    "prebuild": "rm -rf lib",
     "build": "npm run bundle && npm run build:ts && cp ../prisma/schema.prisma .",
     "bundle": "node esbuild.config.js",
     "prepack": "npm run build",
+    "publish": " npm publish",
+    "publish1": "npm version patch && npm publish",
     "postinstall": "npx prisma generate",
-    "build:ts": "rm -rf lib && tsc --build tsconfig.esm.json && tsc --build tsconfig.cjs.json"
+    "build:ts": "tsc --build tsconfig.esm.json && tsc --build tsconfig.cjs.json"
   },
   "dependencies": {
     "@prisma/client": "^4.7.1"

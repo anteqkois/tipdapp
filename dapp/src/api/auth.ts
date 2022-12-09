@@ -1,4 +1,4 @@
-import { UserSession } from '@anteqkois/server';
+import { UserSession, UserValidation } from '@anteqkois/server';
 import { SiweMessage } from 'siwe';
 import { api } from './apiConfig';
 
@@ -45,7 +45,8 @@ type SignUpResponse = {
 type SignUpBody = {
   message: SiweMessage;
   signature: string;
-  formData: any;
+  formData: UserValidation.CreateUser;
+  // formData: any;
 };
 
 export const signUp = async (body: SignUpBody) =>

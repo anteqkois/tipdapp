@@ -2,31 +2,30 @@
 import { signUp, validateFormData } from '@/api/auth';
 import { Close } from '@/components/utils';
 import { AsyncStatus } from '@/types';
+import { mapValidationErrors } from '@/utils/error';
 import { UserValidation } from '@anteqkois/server';
-// import { ValidationErrors } from '@anteqkois/server';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
 import { useDisconnect } from 'wagmi';
-import { useUser } from '.';
+import { useLocalStorage, useUser } from '.';
 
 type State = {
-  data: UserValidation.CreateUser & {address?: string};
+  data: UserValidation.CreateUser & { address?: string };
   status: AsyncStatus;
 };
 
 const initialState: State = {
   data: {
+    nick: '',
+    email: '',
     firstName: '',
     lastName: '',
-    email: '',
-    nick: '',
-    // address: null,
-    roles: ['tipper', 'streamer']
-    // roles: ['streamer', 'tipper'],
+    roles: ['tipper', 'streamer'],
+    // address: '',
   },
   status: 'idle',
 };
@@ -35,19 +34,17 @@ export const useSignUpForm = () => {
   const { openConnectModal } = useConnectModal();
   const { disconnectAsync } = useDisconnect();
   // store form data in url query ?
-  // const [formState, setFormState] = useState<State>(initialState);
-  // const [formState, setFormState] = useLocalStorage<State>(
-  //   'formState',
-  //   initialState
-  // );
-  const formStateRef = useRef<State>(initialState);
+  const [formData, setFormData, clearFormData] = useLocalStorage<State['data']>(
+    'formData',
+    initialState.data
+  );
   const [step, setStep] = useState(1);
 
   const router = useRouter();
   const { setStatus, setUser } = useUser();
 
   const formik = useFormik({
-    initialValues: formStateRef.current.data,
+    initialValues: formData,
     validateOnChange: false,
     onSubmit: async (values) => {
       try {
@@ -56,19 +53,19 @@ export const useSignUpForm = () => {
             //validate userData on backend
             try {
               const data = await validateFormData(values);
-              // formStateRef.current.data = values
-              formStateRef.current = { data: values, status: 'success' };
+              setFormData(values);
               setStep((prev) => ++prev);
             } catch (error: any) {
-              // if (error instanceof ValidationErrors) {
-              if (error) {
-                formik.setErrors(error.mapByField());
+              if (error[0].type === 'ValidationError') {
+                formik.setErrors(mapValidationErrors(error));
               } else {
                 console.log(error);
+                toast.error(
+                  'Something went wrong, can not update your page details.'
+                );
               }
             }
           } else if (step === 2) {
-            // await disconnectAsync();
             openConnectModal?.();
           }
         }
@@ -78,23 +75,29 @@ export const useSignUpForm = () => {
     },
   });
 
-  const register = async (
-    message: SiweMessage,
-    signature: string
-  ): Promise<boolean> => {
+  // TODO implement ability to fill form with previous data
+  useEffect(() => {
+    window.onbeforeunload = () => clearFormData();
+
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
+
+  const register = async (message: SiweMessage, signature: string) => {
     try {
       const response = await signUp({
         message: message,
         signature,
-        formData: formStateRef.current.data,
+        formData: JSON.parse(localStorage.getItem('formData') ?? ''),
       });
       setStatus('authenticated');
       setUser(response.user);
       toast.success(response.message);
+      clearFormData();
       router.push('/streamer/dashboard');
       return true;
-    } catch (errors: any) {
-      console.log(errors);
+    } catch (error: any) {
       toast(
         (t) => (
           <span>
@@ -103,8 +106,7 @@ export const useSignUpForm = () => {
               <Close onClick={() => toast.dismiss(t.id)} />
             </span>
             <ul className="px-4 flex flex-col gap-3 list-['📌']">
-              {/* {errors.map((error: ValidationError) => ( */}
-              {errors.map((error: any) => (
+              {error.map((error: any) => (
                 <li
                   key={error.code}
                   className="pl-1"
@@ -117,27 +119,21 @@ export const useSignUpForm = () => {
         ),
         { duration: Infinity, id: 'validationError' }
       );
-      // const errorsTemp: ZodParseErrors = {};
-      // errors.forEach((error: ValidationError) => {
-      //   errorsTemp[error.field] = error.message;
-      // });
 
-      // if (errors instanceof ValidationErrors) {
-      if (errors) {
-        formik.setErrors(errors.mapByField());
+      if (error[0].type === 'ValidationError') {
+        console.log(mapValidationErrors(error));
+        formik.setErrors(mapValidationErrors(error));
       } else {
-        console.log(errors);
+        console.log(error);
       }
       return false;
     }
   };
-  //TODO clear LocalStorage after signup
 
   return {
     formik,
-    formState: formStateRef.current,
+    formData,
     setStep,
-    // setFormData,
     register,
     step,
   };

@@ -4,11 +4,15 @@ export function useLocalStorage<S>(
   key: string,
   initialState: S | (() => S)
   // initialState?: S | (() => S)
-): [S, Dispatch<SetStateAction<S>>];
+): [S, Dispatch<SetStateAction<S>>, (keyToRemove?:string) => void];
 
 export function useLocalStorage<S = undefined>(
   key: string
-): [S | undefined, Dispatch<SetStateAction<S | undefined>>];
+): [
+  S | undefined,
+  Dispatch<SetStateAction<S | undefined>>,
+  (keyToRemove?: string) => void
+];
 
 export function useLocalStorage<S = undefined>(
   key: string,
@@ -21,7 +25,7 @@ export function useLocalStorage<S = undefined>(
         initialValue instanceof Function ? initialValue() : initialValue;
       return item ? JSON.parse(item) : valueToStore;
     } catch (error) {
-      return initialValue instanceof Function ? initialValue() : initialValue;;
+      return initialValue instanceof Function ? initialValue() : initialValue;
     }
   });
 
@@ -37,7 +41,11 @@ export function useLocalStorage<S = undefined>(
       console.log(error);
     }
   };
-  return [storedValue, setValue] as const;
+
+  const removeItem = (keyToRemove: string) =>
+    localStorage.removeItem(keyToRemove ?? key);
+
+  return [storedValue, setValue, removeItem] as const;
 }
 
 // export const useLocalStorage = <S,>(key: string, initialValue?: S) => {

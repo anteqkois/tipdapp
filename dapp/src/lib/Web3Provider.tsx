@@ -45,7 +45,6 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
   const { setUser, setStatus, status, logout, verify } = useUser();
   const {
     register,
-    // formState: { data },
   } = useSignUpForm();
   const isMobile = useMediaQuery(['(max-width: 1024px)'], [true], true);
 

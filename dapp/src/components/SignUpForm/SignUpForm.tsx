@@ -7,7 +7,7 @@ import { FormikStep } from './FormikStep';
 
 //TODO add suport for more roles, in ferst step chose role
 export const SignUpForm = () => {
-  const { formik, formState, setStep, step } = useSignUpForm();
+  const { formik, setStep, step } = useSignUpForm();
 
   const FormSteps = [
     <FormikStep
@@ -59,7 +59,7 @@ export const SignUpForm = () => {
       label="Connect Wallet"
       key="Connect Wallet"
     >
-      <ConnectWallet className="w-5/6 h-52 mx-auto my-5" />
+      <ConnectWallet className="w-5/6 mx-auto my-5 h-52" />
       <p className="text-danger-600 ">
         {formik.errors.address && `* ${formik.errors.address}`}
       </p>
@@ -76,17 +76,17 @@ export const SignUpForm = () => {
   const StepIcons = [
     <UserIcon
       key="userIcon"
-      className="stroke-current h-6"
+      className="h-6 stroke-current"
     />,
     <WalletIcon
       key="WalletIcon"
-      className="stroke-current h-6"
+      className="h-6 stroke-current"
     />,
   ];
 
   return (
     <>
-      <h1 className="flex-center text-2xl mb-3 ">
+      <h1 className="mb-3 text-2xl flex-center ">
         {FormSteps[step - 1].props.label}
       </h1>
       <Stepper

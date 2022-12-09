@@ -2,7 +2,7 @@
 import { update } from '@/api/page';
 import { Button, Card, Input, Tooltip } from '@/components/utils';
 import { useUser } from '@/hooks';
-import { UserPageValidation, userPageValidation } from '@anteqkois/server';
+import { UserPageValidation, userPageValidation, ValidationErrors } from '@anteqkois/server';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
 import Link from 'next/link';
@@ -18,17 +18,20 @@ const Page = () => {
       url: user?.streamer?.affixUrl ?? '',
       description: user?.streamer?.pageDescription ?? '',
     },
-    // validate: userPageFormParse,
-    // validate: userPageValidation.createParse,
     onSubmit: async (values: UserPageValidation.Create) => {
       if (!Object.keys(formik.errors).length) {
         try {
-          // console.log(values);
+          userPageValidation.createParse(values);
           await update(values);
-        } catch (error) {
-          toast.error(
-            'Something went wrong, can not update your page details.'
-          );
+        } catch (error: any) {
+          if (error[0].type === 'ValidationError') {
+            formik.setErrors(new ValidationErrors(error).mapByField());
+          } else {
+            console.log(error);
+            toast.error(
+              'Something went wrong, can not update your page details.'
+            );
+          }
         }
       }
     },

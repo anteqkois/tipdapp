@@ -44,6 +44,25 @@ export const catchErrors = (
 
 //If  error is operational throw away and handle in handelErrors middleware, other way create ApiError with given message
 export const isOperational = (err: any, helpMessage: string) => {
+  //! TODO handle Siwe Error
+//   {
+//    success: false,
+//    data: SiweMessage {
+//      domain: 'localhost:3000',
+//      address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+//      statement: 'Sign up with Ethereum to the app.',
+//      uri: 'http://localhost:3000',
+//      version: '1',
+//      chainId: 31337,
+//      nonce: 'KHsLMZbr9x3KSiIgZ',
+//      issuedAt: '2022-12-09T07:25:00.239Z'
+//    },
+//    error: SiweError {
+//      type: 'Signature does not match address of the message.',
+//      expected: '0x79fF60f8b96b9eC7a2fc5Cf1f434354472e41eDd',
+//      received: 'Resolved address to be 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+//    }
+//  }
   if (err?.isOperational || err instanceof ZodError) {
     throw err;
   } else if (helpMessage) {

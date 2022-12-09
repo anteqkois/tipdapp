@@ -1,4 +1,4 @@
-import { ValidationError, ValidationErrors } from '@middlewares/error';
+import { ValidationError, ValidationErrors } from '../middlewares/error';
 import { ZodError, ZodTypeAny } from 'zod';
 export * from 'zod';
 
