@@ -22,7 +22,11 @@ async function main() {
       defaultRole: 'streamer',
       streamer: {
         create: {
-          affixUrl: 'anteqkois',
+          page: {
+            create: {
+              affixUrl: 'anteqkois',
+            },
+          },
         },
       },
     },

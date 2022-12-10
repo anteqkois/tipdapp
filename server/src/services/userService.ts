@@ -10,9 +10,9 @@ const createStreamer = async (createData: Prisma.UserCreateInput) => {
     },
     include: {
       tipper: true,
-      streamer: true,
+      streamer: { include: { page: true } },
       userToken: true,
-      avatar:true,
+      avatar: true,
     },
   });
 };
@@ -38,7 +38,7 @@ const find = async (data: Prisma.UserFindFirstArgs) => {
     where: data.where,
     include: {
       avatar: true,
-      streamer: true,
+      streamer: { include: { page: true } },
       tipper: true,
       userToken: true,
       // token: {

@@ -3,7 +3,7 @@ export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
 
 export type NavigationOption = {
   href: string;
-  icon: JSX.Element;
+  icon?: JSX.Element;
   className?: string;
   tooltipLabel?: string;
   label?: string;

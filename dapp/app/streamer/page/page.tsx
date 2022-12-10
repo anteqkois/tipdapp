@@ -2,7 +2,8 @@
 import { update } from '@/api/page';
 import { Button, Card, Input, Tooltip } from '@/components/utils';
 import { useUser } from '@/hooks';
-import { UserPageValidation, userPageValidation, ValidationErrors } from '@anteqkois/server';
+import { mapValidationErrors } from '@/utils/error';
+import { UserPageValidation, userPageValidation } from '@anteqkois/server';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
 import Link from 'next/link';
@@ -15,8 +16,8 @@ const Page = () => {
   const formik = useFormik({
     initialValues: {
       // baner/themecolor/link to yt.../display total supply of token/link to etherscan token
-      url: user?.streamer?.affixUrl ?? '',
-      description: user?.streamer?.pageDescription ?? '',
+      url: user?.streamer?.page?.affixUrl ?? '',
+      description: user?.streamer?.page?.description ?? '',
     },
     onSubmit: async (values: UserPageValidation.Create) => {
       if (!Object.keys(formik.errors).length) {
@@ -25,7 +26,7 @@ const Page = () => {
           await update(values);
         } catch (error: any) {
           if (error[0].type === 'ValidationError') {
-            formik.setErrors(new ValidationErrors(error).mapByField());
+            formik.setErrors(mapValidationErrors(error));
           } else {
             console.log(error);
             toast.error(
@@ -61,7 +62,7 @@ const Page = () => {
                 https://cryptotip/streamer/
               </span>
               <span className="absolute text-neutral-light top-[29px] right-[1px] p-2 bg-neutral-200 rounded  rounded-tl-none rounded-bl-none">
-                {user?.streamer?.affixUrl.length}/20
+                {user?.streamer?.page?.affixUrl.length}/20
               </span>
             </div>
           </Tooltip>

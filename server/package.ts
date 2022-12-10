@@ -13,6 +13,7 @@ export {
   UserToken,
   Widget,
   Withdraw,
+  Page,
 } from '@prisma/client';
 export { validationHelper } from './src/config/zod';
 export {

@@ -175,14 +175,18 @@ const signUp = async (req: Request, res: Response) => {
     }
 
     let userSessionData: UserSession;
-    switch (userValidation.type( validatedFormData)) {
+    switch (userValidation.type(validatedFormData)) {
       case 'streamer':
         userSessionData = await userService.createStreamer({
           address: siweMessage.address,
           ...validatedFormData,
           streamer: {
             create: {
-              affixUrl: validatedFormData.nick,
+              page: {
+                create: {
+                  affixUrl: validatedFormData.nick,
+                },
+              },
             },
           },
         });

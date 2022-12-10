@@ -46,7 +46,9 @@ export default function RootLayout({ children }: Props) {
                     position="top-center"
                     reverseOrder={false}
                   />
+                  {/* <main className="max-w-6xl p-2 mx-auto mt-12 lg:p-8 lg:mt-32"> */}
                   {children}
+                  {/* <main>{children}</main> */}
                 </RainbowKitProviders>
               </UserProvider>
             </ReduxProvider>

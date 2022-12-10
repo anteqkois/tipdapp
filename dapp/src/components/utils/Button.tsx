@@ -7,6 +7,7 @@ type ButtonVariant =
   | 'success'
   | 'danger'
   | 'info'
+  | 'clear'
   | 'overlay'
   | 'link'
   | 'ghost'
@@ -45,10 +46,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             danger:
               'bg-gradient-to-tr from-danger-400 via-danger-500 to-danger-500 hover:text-danger-200 hover:from-danger-500 hover:via-danger-600 hover:to-danger-600',
             info: '',
+            clear: 'text-neutral-500 hover:text-neutral-900',
             overlay:
               'bg-neutral-100 text-neutral-800 shadow-md hover:bg-neutral-150',
             ghost:
-              'border-2 border-neutral-300 outline-2 text-neutral-800 hover:bg-neutral-150',
+              'border-2 border-neutral-200 outline-2 text-neutral-800 hover:bg-neutral-150',
             link: 'flex items-center gap-1 underline decoration-1.5 decoration-primary-light',
             special:
               'bg-gradient-to-tr from-primary  to-secondary-700 hover:from-primary-dark hover:to-secondary-800',

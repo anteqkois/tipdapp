@@ -1,7 +1,7 @@
 'use client';
 import { NavigationOption } from '@/types';
-import { CustomConnectButton, Tooltip } from '../utils';
-import Navlink from './Navlink';
+import { CustomConnectButton, Tooltip } from '../../utils';
+import Navlink from '../Navlink';
 
 const defaultOptionStyle =
   'flex p-3 rounded hover:cursor-pointer hover:bg-neutral-200';

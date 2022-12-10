@@ -56,15 +56,17 @@ model User {
 }
 
 model Streamer {
-  user            User     @relation(fields: [address], references: [address])
-  address         String   @id @db.VarChar(42)
+  user         User     @relation(fields: [address], references: [address])
+  address      String   @id @db.VarChar(42)
   // address         String   @id @unique @db.VarChar(42)
-  tipsCount       Int      @default(0)
-  tipsValue       Decimal  @default(0) @db.Decimal(78, 0)
-  affixUrl        String   @db.VarChar(60)
-  pageDescription String?  @default("") @db.VarChar(200)
-  activeTokens    Token[]
-  widgets         Widget[]
+  tipsCount    Int      @default(0)
+  tipsValue    Decimal  @default(0) @db.Decimal(78, 0)
+  page         Page     @relation(fields: [pageId], references: [id])
+  // affixUrl        String   @db.VarChar(60)
+  // pageDescription String?  @default("") @db.VarChar(200)
+  activeTokens Token[]
+  widgets      Widget[]
+  pageId       String
 }
 
 model Tipper {
@@ -74,6 +76,15 @@ model Tipper {
   nick      String @unique
   tipsValue Int    @default(0)
   tips      Tip[]
+}
+
+model Page {
+  id          String     @id @default(cuid())
+  affixUrl    String     @db.VarChar(60)
+  description String?    @default("") @db.VarChar(200)
+  baner       File?      @relation(fields: [banerId], references: [id])
+  banerId     String?
+  Streamer    Streamer[]
 }
 
 model Tip {
@@ -159,4 +170,5 @@ model File {
   extension String
   User      User[]
   Token     Token[]
+  Page      Page[]
 }

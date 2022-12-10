@@ -1,11 +1,11 @@
 'use client';
 import { NavigationOption } from '@/types';
-import { UserPageValidation, UserSession } from '@anteqkois/server';
+import { UserSession } from '@anteqkois/server';
 import classNames from 'classnames';
 import { useState } from 'react';
-import Hamburger from './Hamburger';
-import Navlink from './Navlink';
-import { RainbowKitButtonMobile } from './RainbowKitButtonMobile';
+import Hamburger from '../Hamburger';
+import Navlink from '../Navlink';
+import { RainbowKitButtonMobile } from '../RainbowKitButtonMobile';
 
 const defaultOptionStyle =
   'flex items-center gap-3 p-4 border-b border-neutral-150 font-semibold uppercase group text-neutral-600 hover:text-neutral-900 hover:cursor-pointer hover:bg-neutral-150';
