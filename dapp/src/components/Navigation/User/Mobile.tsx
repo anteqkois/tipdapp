@@ -15,8 +15,6 @@ type Props = {
   navigationOption: NavigationOption[];
 };
 
-// const t: UserPageValidation.Create = {};
-
 const Mobile = ({ user, navigationOption }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
