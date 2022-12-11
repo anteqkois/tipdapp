@@ -1,5 +1,6 @@
 import { DecodedUser } from '@types';
 import { NextFunction, Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import { createApiError } from './error';
 
@@ -11,9 +12,7 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
       res.cookie('authStatus', 'unauthenticated', {
         maxAge: 60 * 60 * 1000,
       });
-    // return res.status(err.status || 500).send({ error: [err] });
-    // res.redirect(req.get('referer'));
-    createApiError(`You are not authorized.`, 401);
+    createApiError(`You are not authorized.`, StatusCodes.UNAUTHORIZED);
   }
 
   try {
@@ -25,7 +24,7 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
     req.user = decoded;
     next();
   } catch (error) {
-    createApiError(`Invalid authentication token.`, 403);
+    createApiError(`Invalid authentication token.`, StatusCodes.BAD_REQUEST);
   }
 };
 

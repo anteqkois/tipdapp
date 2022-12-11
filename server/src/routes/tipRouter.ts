@@ -6,6 +6,6 @@ const router = Router();
 //GET
 // router.get('/', authenticate, catchAsyncErrors(findByUseraddress));
 
-//change to use find with queryParams
+//TODO change to use find with queryParams
 router.get('/', catchAsyncErrors(findByAddress));
 export default router;

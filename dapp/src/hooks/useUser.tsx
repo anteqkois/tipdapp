@@ -99,7 +99,7 @@ export const UserProvider = ({ children }: Props) => {
         setStatus('unauthenticated');
         setUser(undefined);
       } else {
-        toast.error('You are not conneted.');
+        // toast.error('You are not conneted.');
       }
     } catch (error: any) {
       console.log(error);

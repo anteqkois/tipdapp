@@ -36,7 +36,9 @@ export const Mobile = ({ navigationOption }: Props) => {
         >
           <ul className="flex flex-col min-h-[calc(100%-3rem)]">
             <ul>
-              <li className={`${defaultOptionStyle} flex flex-col`}>
+              <li
+                className={`${defaultOptionStyle} hover:bg-transparent flex flex-col`}
+              >
                 <Button
                   onClick={openConnectModal}
                   variant="special"

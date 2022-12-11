@@ -47,7 +47,8 @@
   ],
   "scripts": {
     "prebuild": "rm -rf lib",
-    "build": "npm run bundle && npm run build:ts && cp ../prisma/schema.prisma .",
+    "build": "npx prisma generate && npm run bundle && npm run build:ts && cp ../prisma/schema.prisma .",
+    "build:local": "npm run build && cp -r ./lib ../../dapp/node_modules/@anteqkois/server/ && cp ./{schema.prisma,package.json,README.md} ../../dapp/node_modules/@anteqkois/server/",
     "bundle": "node esbuild.config.js",
     "prepack": "npm run build",
     "publishPackage": "npm version patch && npm publish",

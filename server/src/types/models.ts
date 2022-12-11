@@ -1,6 +1,6 @@
 // import { Prisma, Streamer, Tipper, User } from "./prisma";
 
-import { Prisma, Role } from '@prisma/client';
+import { Prisma, Role, User } from '@prisma/client';
 import { PartialExcept } from '.';
 
 const user = Prisma.validator<Prisma.UserArgs>()({
@@ -8,7 +8,11 @@ const user = Prisma.validator<Prisma.UserArgs>()({
     avatar: true,
     tipper: true,
     userToken: true,
-    streamer: true,
+    streamer: {
+      include: {
+        page: true,
+      },
+    },
   },
 });
 
@@ -37,10 +41,22 @@ export type UserSession = PartialExcept<
 // export type UserSession =  Prisma.UserGetPayload<Partial< typeof user>>;
 // export type UserSesion<U> = UserSesion & U
 
-export type DecodedUser = {
-  address: string;
-  nick: string;
-  roles: string[];
+// export type DecodedUser = {
+//   address: string;
+//   nick: string;
+//   roles: Role[];
+// };
+
+export type DecodedUser = Pick<
+  User,
+  'address' | 'nick' | 'roles' | 'activeRole'
+>;
+
+export const mockDecodedUser: DecodedUser = {
+  address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+  nick: 'anteqkois',
+  roles: ['tipper', 'streamer'],
+  activeRole: 'streamer',
 };
 
 const tipUI = Prisma.validator<Prisma.TipArgs>()({

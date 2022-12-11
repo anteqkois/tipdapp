@@ -31,7 +31,7 @@ export type User = {
   allWithdrawsValue: Prisma.Decimal
   apperanceMode: ApperanceMode
   roles: Role[]
-  defaultRole: Role
+  activeRole: Role
   refreshTokens: string[]
   avatarId: string | null
 }
@@ -1470,7 +1470,7 @@ export namespace Prisma {
     allTipsValue: Decimal | null
     allWithdrawsValue: Decimal | null
     apperanceMode: ApperanceMode | null
-    defaultRole: Role | null
+    activeRole: Role | null
     avatarId: string | null
   }
 
@@ -1488,7 +1488,7 @@ export namespace Prisma {
     allTipsValue: Decimal | null
     allWithdrawsValue: Decimal | null
     apperanceMode: ApperanceMode | null
-    defaultRole: Role | null
+    activeRole: Role | null
     avatarId: string | null
   }
 
@@ -1507,7 +1507,7 @@ export namespace Prisma {
     allWithdrawsValue: number
     apperanceMode: number
     roles: number
-    defaultRole: number
+    activeRole: number
     refreshTokens: number
     avatarId: number
     _all: number
@@ -1540,7 +1540,7 @@ export namespace Prisma {
     allTipsValue?: true
     allWithdrawsValue?: true
     apperanceMode?: true
-    defaultRole?: true
+    activeRole?: true
     avatarId?: true
   }
 
@@ -1558,7 +1558,7 @@ export namespace Prisma {
     allTipsValue?: true
     allWithdrawsValue?: true
     apperanceMode?: true
-    defaultRole?: true
+    activeRole?: true
     avatarId?: true
   }
 
@@ -1577,7 +1577,7 @@ export namespace Prisma {
     allWithdrawsValue?: true
     apperanceMode?: true
     roles?: true
-    defaultRole?: true
+    activeRole?: true
     refreshTokens?: true
     avatarId?: true
     _all?: true
@@ -1690,7 +1690,7 @@ export namespace Prisma {
     allWithdrawsValue: Decimal
     apperanceMode: ApperanceMode
     roles: Role[]
-    defaultRole: Role
+    activeRole: Role
     refreshTokens: string[]
     avatarId: string | null
     _count: UserCountAggregateOutputType | null
@@ -1729,7 +1729,7 @@ export namespace Prisma {
     allWithdrawsValue?: boolean
     apperanceMode?: boolean
     roles?: boolean
-    defaultRole?: boolean
+    activeRole?: boolean
     refreshTokens?: boolean
     avatar?: boolean | FileArgs
     avatarId?: boolean
@@ -11407,7 +11407,7 @@ export namespace Prisma {
     allWithdrawsValue: 'allWithdrawsValue',
     apperanceMode: 'apperanceMode',
     roles: 'roles',
-    defaultRole: 'defaultRole',
+    activeRole: 'activeRole',
     refreshTokens: 'refreshTokens',
     avatarId: 'avatarId'
   };
@@ -11478,7 +11478,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFilter | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFilter | ApperanceMode
     roles?: EnumRoleNullableListFilter
-    defaultRole?: EnumRoleFilter | Role
+    activeRole?: EnumRoleFilter | Role
     refreshTokens?: StringNullableListFilter
     avatar?: XOR<FileRelationFilter, FileWhereInput> | null
     avatarId?: StringNullableFilter | string | null
@@ -11504,7 +11504,7 @@ export namespace Prisma {
     allWithdrawsValue?: SortOrder
     apperanceMode?: SortOrder
     roles?: SortOrder
-    defaultRole?: SortOrder
+    activeRole?: SortOrder
     refreshTokens?: SortOrder
     avatar?: FileOrderByWithRelationInput
     avatarId?: SortOrder
@@ -11536,7 +11536,7 @@ export namespace Prisma {
     allWithdrawsValue?: SortOrder
     apperanceMode?: SortOrder
     roles?: SortOrder
-    defaultRole?: SortOrder
+    activeRole?: SortOrder
     refreshTokens?: SortOrder
     avatarId?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -11564,7 +11564,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalWithAggregatesFilter | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeWithAggregatesFilter | ApperanceMode
     roles?: EnumRoleNullableListFilter
-    defaultRole?: EnumRoleWithAggregatesFilter | Role
+    activeRole?: EnumRoleWithAggregatesFilter | Role
     refreshTokens?: StringNullableListFilter
     avatarId?: StringNullableWithAggregatesFilter | string | null
   }
@@ -12098,7 +12098,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatar?: FileCreateNestedOneWithoutUserInput
     witdraws?: WithdrawCreateNestedManyWithoutUserInput
@@ -12123,7 +12123,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatarId?: string | null
     witdraws?: WithdrawUncheckedCreateNestedManyWithoutUserInput
@@ -12148,7 +12148,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatar?: FileUpdateOneWithoutUserNestedInput
     witdraws?: WithdrawUpdateManyWithoutUserNestedInput
@@ -12173,7 +12173,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatarId?: NullableStringFieldUpdateOperationsInput | string | null
     witdraws?: WithdrawUncheckedUpdateManyWithoutUserNestedInput
@@ -12198,7 +12198,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatarId?: string | null
   }
@@ -12218,7 +12218,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
   }
 
@@ -12237,7 +12237,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatarId?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -13010,7 +13010,7 @@ export namespace Prisma {
     allWithdrawsValue?: SortOrder
     apperanceMode?: SortOrder
     roles?: SortOrder
-    defaultRole?: SortOrder
+    activeRole?: SortOrder
     refreshTokens?: SortOrder
     avatarId?: SortOrder
   }
@@ -13035,7 +13035,7 @@ export namespace Prisma {
     allTipsValue?: SortOrder
     allWithdrawsValue?: SortOrder
     apperanceMode?: SortOrder
-    defaultRole?: SortOrder
+    activeRole?: SortOrder
     avatarId?: SortOrder
   }
 
@@ -13053,7 +13053,7 @@ export namespace Prisma {
     allTipsValue?: SortOrder
     allWithdrawsValue?: SortOrder
     apperanceMode?: SortOrder
-    defaultRole?: SortOrder
+    activeRole?: SortOrder
     avatarId?: SortOrder
   }
 
@@ -14992,7 +14992,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatar?: FileCreateNestedOneWithoutUserInput
     witdraws?: WithdrawCreateNestedManyWithoutUserInput
@@ -15016,7 +15016,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatarId?: string | null
     witdraws?: WithdrawUncheckedCreateNestedManyWithoutUserInput
@@ -15137,7 +15137,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatar?: FileUpdateOneWithoutUserNestedInput
     witdraws?: WithdrawUpdateManyWithoutUserNestedInput
@@ -15161,7 +15161,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatarId?: NullableStringFieldUpdateOperationsInput | string | null
     witdraws?: WithdrawUncheckedUpdateManyWithoutUserNestedInput
@@ -15267,7 +15267,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatar?: FileCreateNestedOneWithoutUserInput
     witdraws?: WithdrawCreateNestedManyWithoutUserInput
@@ -15291,7 +15291,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatarId?: string | null
     witdraws?: WithdrawUncheckedCreateNestedManyWithoutUserInput
@@ -15363,7 +15363,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatar?: FileUpdateOneWithoutUserNestedInput
     witdraws?: WithdrawUpdateManyWithoutUserNestedInput
@@ -15387,7 +15387,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatarId?: NullableStringFieldUpdateOperationsInput | string | null
     witdraws?: WithdrawUncheckedUpdateManyWithoutUserNestedInput
@@ -15521,7 +15521,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatar?: FileCreateNestedOneWithoutUserInput
     witdraws?: WithdrawCreateNestedManyWithoutUserInput
@@ -15545,7 +15545,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatarId?: string | null
     witdraws?: WithdrawUncheckedCreateNestedManyWithoutUserInput
@@ -15646,7 +15646,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatar?: FileUpdateOneWithoutUserNestedInput
     witdraws?: WithdrawUpdateManyWithoutUserNestedInput
@@ -15670,7 +15670,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatarId?: NullableStringFieldUpdateOperationsInput | string | null
     witdraws?: WithdrawUncheckedUpdateManyWithoutUserNestedInput
@@ -15761,7 +15761,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatar?: FileCreateNestedOneWithoutUserInput
     witdraws?: WithdrawCreateNestedManyWithoutUserInput
@@ -15785,7 +15785,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatarId?: string | null
     witdraws?: WithdrawUncheckedCreateNestedManyWithoutUserInput
@@ -15857,7 +15857,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatar?: FileUpdateOneWithoutUserNestedInput
     witdraws?: WithdrawUpdateManyWithoutUserNestedInput
@@ -15881,7 +15881,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatarId?: NullableStringFieldUpdateOperationsInput | string | null
     witdraws?: WithdrawUncheckedUpdateManyWithoutUserNestedInput
@@ -16101,7 +16101,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatar?: FileCreateNestedOneWithoutUserInput
     userToken?: UserTokenCreateNestedOneWithoutUserInput
@@ -16125,7 +16125,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     avatarId?: string | null
     userToken?: UserTokenUncheckedCreateNestedOneWithoutUserInput
@@ -16159,7 +16159,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatar?: FileUpdateOneWithoutUserNestedInput
     userToken?: UserTokenUpdateOneWithoutUserNestedInput
@@ -16183,7 +16183,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     avatarId?: NullableStringFieldUpdateOperationsInput | string | null
     userToken?: UserTokenUncheckedUpdateOneWithoutUserNestedInput
@@ -16207,7 +16207,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     witdraws?: WithdrawCreateNestedManyWithoutUserInput
     userToken?: UserTokenCreateNestedOneWithoutUserInput
@@ -16231,7 +16231,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
     witdraws?: WithdrawUncheckedCreateNestedManyWithoutUserInput
     userToken?: UserTokenUncheckedCreateNestedOneWithoutUserInput
@@ -16340,7 +16340,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFilter | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFilter | ApperanceMode
     roles?: EnumRoleNullableListFilter
-    defaultRole?: EnumRoleFilter | Role
+    activeRole?: EnumRoleFilter | Role
     refreshTokens?: StringNullableListFilter
     avatarId?: StringNullableFilter | string | null
   }
@@ -16748,7 +16748,7 @@ export namespace Prisma {
     allWithdrawsValue?: Decimal | DecimalJsLike | number | string
     apperanceMode?: ApperanceMode
     roles?: UserCreaterolesInput | Enumerable<Role>
-    defaultRole?: Role
+    activeRole?: Role
     refreshTokens?: UserCreaterefreshTokensInput | Enumerable<string>
   }
 
@@ -16783,7 +16783,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     witdraws?: WithdrawUpdateManyWithoutUserNestedInput
     userToken?: UserTokenUpdateOneWithoutUserNestedInput
@@ -16807,7 +16807,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
     witdraws?: WithdrawUncheckedUpdateManyWithoutUserNestedInput
     userToken?: UserTokenUncheckedUpdateOneWithoutUserNestedInput
@@ -16831,7 +16831,7 @@ export namespace Prisma {
     allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
     roles?: UserUpdaterolesInput | Enumerable<Role>
-    defaultRole?: EnumRoleFieldUpdateOperationsInput | Role
+    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     refreshTokens?: UserUpdaterefreshTokensInput | Enumerable<string>
   }
 

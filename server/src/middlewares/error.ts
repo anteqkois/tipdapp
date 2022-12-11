@@ -1,4 +1,4 @@
-import { ZodIssue } from '../config/zod';
+import { number, ZodIssue } from '../config/zod';
 
 export class ApiError extends Error {
   type: string = 'ApiError';
@@ -103,9 +103,10 @@ export const createValidationError = (
   message: string,
   title: string,
   field: string,
-  code: string
+  code: string,
+  status?: number,
 ) => {
-  throw new ValidationError(field, title, message, code);
+  throw new ValidationError(field, title, message, code, status);
 };
 
 export const createApiError = (message: string, status?: number) => {

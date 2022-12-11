@@ -3,7 +3,7 @@ import { update } from '@/api/page';
 import { Button, Card, Input, Tooltip } from '@/components/utils';
 import { useUser } from '@/hooks';
 import { mapValidationErrors } from '@/utils/error';
-import { UserPageValidation, userPageValidation } from '@anteqkois/server';
+import { PageValidation, pageValidation } from '@anteqkois/server';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
 import Link from 'next/link';
@@ -16,13 +16,13 @@ const Page = () => {
   const formik = useFormik({
     initialValues: {
       // baner/themecolor/link to yt.../display total supply of token/link to etherscan token
-      url: user?.streamer?.page?.affixUrl ?? '',
+      affixUrl: user?.streamer?.page?.affixUrl ?? '',
       description: user?.streamer?.page?.description ?? '',
     },
-    onSubmit: async (values: UserPageValidation.Create) => {
+    onSubmit: async (values: PageValidation.Update) => {
       if (!Object.keys(formik.errors).length) {
         try {
-          userPageValidation.createParse(values);
+          pageValidation.updateParse(values);
           await update(values);
         } catch (error: any) {
           if (error[0].type === 'ValidationError') {
@@ -42,21 +42,21 @@ const Page = () => {
     <section>
       <Card className="grid">
         <form onSubmit={formik.handleSubmit}>
-          <Link href={`streamer/${user?.streamer?.affixUrl}`}>
+          <Link href={`streamer/${user?.streamer?.page?.affixUrl}`}>
             <Button variant="link">See your page</Button>
           </Link>
           <Tooltip content="Disabled option now">
             <div className="relative">
               <Input
-                id="url"
-                name="url"
+                id="affixUrl"
+                name="affixUrl"
                 label="URL of your side"
                 type="text"
                 className="pl-52"
                 disabled={true}
                 onChange={formik.handleChange}
-                value={formik.values.url}
-                error={formik.errors.url}
+                value={formik.values.affixUrl}
+                error={formik.errors.affixUrl}
               ></Input>
               <span className="absolute text-neutral-light top-[29px] left-[1px] p-2 bg-neutral-200 rounded  rounded-tr-none rounded-br-none">
                 https://cryptotip/streamer/

@@ -43,9 +43,7 @@ const wagmiClient = createClient({
 const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const { setUser, setStatus, status, logout, verify } = useUser();
-  const {
-    register,
-  } = useSignUpForm();
+  const { register } = useSignUpForm();
   const isMobile = useMediaQuery(['(max-width: 1024px)'], [true], true);
 
   const authAdapter = createAuthenticationAdapter({

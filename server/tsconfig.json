@@ -1,10 +1,16 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    // "baseUrl": "./",
     "paths": {
-      "@middlewares/*": ["src/middlewares/*"],
-      "@types/*": ["src/types/*"],
-      "@types": ["src/types"]
+      "@middlewares/*": ["./src/middlewares/*"],
+      "@config/*": ["./src/config/*"],
+      "@services/*": ["./src/services/*"],
+      "@types/*": ["./src/types/*"],
+      "@types": ["./src/types"]
+      // "@middlewares/*": ["/src/middlewares/*"],
+      // "@config/*": ["src/config/*"],
+      // "@types/*": ["src/types/*"],
+      // "@types": ["src/types"]
     },
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "module": "commonjs",

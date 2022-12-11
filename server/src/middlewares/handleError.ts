@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import { errorLogger, requestLogger } from '../config/logger';
 import { ZodError } from '../config/zod';
 import { ApiError, createApiError, ValidationErrors } from './error';
@@ -9,8 +10,7 @@ export const notFound = (req: Request, res: Response, next: NextFunction) => {
     method: req.method,
     host: req.hostname,
   });
-  const err = new ApiError('Api endpoint not found', 404);
-  err.status = 404;
+  const err = new ApiError('Api endpoint not found',StatusCodes.NOT_FOUND);
   next(err);
 };
 
@@ -74,6 +74,7 @@ export const isOperational = (err: any, helpMessage: string) => {
   // return false;
 };
 
+//! TODO handle message statusMessage method from res object 
 export const handleErrors = (
   err: any,
   req: Request,
@@ -82,12 +83,14 @@ export const handleErrors = (
 ) => {
   if (err.type === 'ApiError' || err.type === 'ValidationError') {
     errorLogger.error('', err);
-    return res.status(err.status || 500).send({ error: [err] });
+    return res
+      .status(err.status || StatusCodes.INTERNAL_SERVER_ERROR)
+      .send({ error: [err] });
   }
   // if(err instanceof ValidationErrors){}
   if (err.type === 'ValidationErrors') {
     errorLogger.error('ValidationErrors', err.errors);
-    return res.status(err.status || 500).json({ error: err.errors });
+    return res.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.errors });
   }
   if (err instanceof ZodError) {
     errorLogger.error(
@@ -100,6 +103,6 @@ export const handleErrors = (
   }
   errorLogger.error('no operational', err);
   return res
-    .status(err.status || 500)
+    .status(err.status || StatusCodes.INTERNAL_SERVER_ERROR)
     .json(err.message || 'Something went wrong, try later.');
 };

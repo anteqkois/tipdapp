@@ -13,6 +13,6 @@ export const find = async (queryParams: FindParams) => {
   return await api.get<never, FindResponse>('/page', { params: queryParams });
 };
 
-// export const update = async (body: UserPageValidation.Create) => {
-//   return await api.put('/page', body);
-// };
+export const update = async (body: UserPageValidation.Create) => {
+  return await api.put('/page', body);
+};

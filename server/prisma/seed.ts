@@ -19,7 +19,7 @@ async function main() {
       nick: 'anteqkois',
       address: ADDRESS_WALLET_DEV,
       roles: ['tipper', 'streamer'],
-      defaultRole: 'streamer',
+      activeRole: 'streamer',
       streamer: {
         create: {
           page: {

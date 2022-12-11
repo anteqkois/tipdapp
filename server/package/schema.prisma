@@ -44,7 +44,7 @@ model User {
   allWithdrawsValue Decimal       @default(0) @db.Decimal(78, 0)
   apperanceMode     ApperanceMode @default(light)
   roles             Role[]        @default([streamer, tipper])
-  defaultRole       Role          @default(tipper)
+  activeRole       Role          @default(tipper)
   refreshTokens     String[]
   avatar            File?         @relation(fields: [avatarId], references: [id])
   avatarId          String?
@@ -62,11 +62,11 @@ model Streamer {
   tipsCount    Int      @default(0)
   tipsValue    Decimal  @default(0) @db.Decimal(78, 0)
   page         Page     @relation(fields: [pageId], references: [id])
+  pageId       String
   // affixUrl        String   @db.VarChar(60)
   // pageDescription String?  @default("") @db.VarChar(200)
   activeTokens Token[]
   widgets      Widget[]
-  pageId       String
 }
 
 model Tipper {
@@ -84,7 +84,7 @@ model Page {
   description String?    @default("") @db.VarChar(200)
   baner       File?      @relation(fields: [banerId], references: [id])
   banerId     String?
-  Streamer    Streamer[]
+  streamer    Streamer[]
 }
 
 model Tip {
@@ -137,7 +137,7 @@ model Widget {
   filterProfanity Boolean
   // filterWord WordList
   voiceMessage    Boolean
-  Streamer        Streamer? @relation(fields: [streamerAddress], references: [address])
+  streamer        Streamer? @relation(fields: [streamerAddress], references: [address])
   streamerAddress String?   @db.VarChar(42)
 }
 
@@ -150,7 +150,7 @@ model Token {
   imageId         String?
   latestPrice     Decimal?  @db.Decimal(78, 0)
   priceUpdateAt   DateTime?
-  Streamer        Streamer? @relation(fields: [streamerAddress], references: [address])
+  streamer        Streamer? @relation(fields: [streamerAddress], references: [address])
   streamerAddress String?   @db.VarChar(42)
   Tip             Tip[]
 }
@@ -160,7 +160,7 @@ model Withdraw {
   amount      Decimal  @db.Decimal(78, 0)
   date        DateTime @default(now())
   txHash      String   @unique @db.VarChar(66)
-  User        User?    @relation(fields: [userAddress], references: [address])
+  user        User?    @relation(fields: [userAddress], references: [address])
   userAddress String?  @db.VarChar(42)
 }
 
@@ -168,7 +168,7 @@ model File {
   id        String  @id @default(cuid())
   filename  String
   extension String
-  User      User[]
-  Token     Token[]
-  Page      Page[]
+  user      User[]
+  token     Token[]
+  page      Page[]
 }

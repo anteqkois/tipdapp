@@ -5,7 +5,7 @@ const createStreamer = async (createData: Prisma.UserCreateInput) => {
   return await prisma.user.create({
     data: {
       roles: ['streamer', 'tipper'],
-      defaultRole: 'streamer',
+      activeRole: 'streamer',
       ...createData,
     },
     include: {
@@ -20,7 +20,7 @@ const createTipper = async (createData: Prisma.UserCreateInput) => {
   return await prisma.user.create({
     data: {
       roles: ['tipper'],
-      defaultRole: 'tipper',
+      activeRole: 'tipper',
       ...createData,
     },
     include: {
@@ -131,6 +131,7 @@ const findByRefreshToken = async ({
       refreshTokens: true,
       address: true,
       roles: true,
+      activeRole: true,
       nick: true,
     },
   });
