@@ -31,8 +31,8 @@ server.use('*', logRequest);
 server.use('/api', apiRouter);
 
 //handling errors
-server.use(handleErrors);
 server.use(notFound);
+server.use(handleErrors);
 
 server.listen(port, () => {
   // if (err) throw err;

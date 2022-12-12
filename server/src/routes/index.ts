@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate } from '../middlewares/authenticate';
+import { verifyJWT } from '../middlewares/verifyJWT';
 import authorizationRoutes from './authRouter';
 import pageRoutes from './pageRouter';
 import tipRoutes from './tipRouter';
@@ -11,7 +11,7 @@ const router = Router();
 router.use('/auth', authorizationRoutes);
 //auth middleware added in pageRouter
 router.use('/page', pageRoutes);
-router.use('/user', authenticate, userRoutes);
-router.use('/tip', authenticate, tipRoutes);
-router.use('/userToken', authenticate, userTokenRoutes);
+router.use('/user', verifyJWT, userRoutes);
+router.use('/tip', verifyJWT, tipRoutes);
+router.use('/userToken', verifyJWT, userTokenRoutes);
 export default router;

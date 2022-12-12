@@ -22,7 +22,7 @@ export const ProtectPageGuard = ({ children, allowedRoles }: Props) => {
     status === 'unauthenticated' ||
     !user?.roles
       .map((role: Role) => allowedRoles.includes(role))
-      .find((val: boolean) => val === true)
+      .some((val: boolean) => val === true)
   ) {
     router?.push('/login');
     return <PageSpinner />;

@@ -8,13 +8,13 @@ import {
   validate,
   verifyMessageAndLogin,
 } from '../controllers/authController';
-import { authenticate } from '../middlewares/authenticate';
+import { verifyJWT } from '../middlewares/verifyJWT';
 
 const router = Router();
 
 //GET
 router.get('/nonce', catchAsyncErrors(createNonce));
-router.get('/logout', authenticate, catchAsyncErrors(logout));
+router.get('/logout', verifyJWT, catchAsyncErrors(logout));
 router.get('/refresh', catchAsyncErrors(refreshToken));
 //POST
 router.post('/verify', catchAsyncErrors(verifyMessageAndLogin));

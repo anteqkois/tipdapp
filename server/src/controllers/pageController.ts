@@ -1,8 +1,8 @@
 import { createApiError } from '@middlewares/error';
 import { pageService } from '@services/pageService';
-import { mockDecodedUser } from '../types/models';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { mockDecodedUser } from '../types/models';
 import { pageValidation } from '../validation';
 
 const findByNick = async (
@@ -23,19 +23,26 @@ const findByNick = async (
 };
 
 const update = async (req: Request, res: Response) => {
-  // const 
+  // const
   const parsedData = pageValidation.updateParse(req.body);
+  
+  //! TODO implement role based auth
+  switch (req.user.activeRole) {
+    case 'streamer':
+      await pageService.update({
+        where: { streamer: { some: { address: req.user.address } } },
+        data: parsedData,
+      });
+      break;
+    default:
+      createApiError(
+        "Change active role. The currently selected can't have a page",
+        StatusCodes.FORBIDDEN
+      );
+      break;
+  }
 
-  req.user = mockDecodedUser;
-  //! check if somenone add aditional body data it will pass?
-
-  //! TODO create method to get active role form decodedUser and use it to update properly related page
-  const data = await pageService.update({
-    where: { streamer: { some: { address: req.user.address } } },
-    data: req.body,
-  });
-
-  res.status(StatusCodes.CREATED).send({ page: data });
+  res.status(StatusCodes.CREATED).send({ message: 'Page was updated' });
 };
 
 export const pageController = { findByNick, update };

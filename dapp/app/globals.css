@@ -12,7 +12,7 @@
   }
 
   main {
-    @apply p-2 mx-auto pt-12 bg-neutral-150 text-neutral-800 max-w-6xl lg:p-8 lg:pt-24;
+    @apply p-2 mx-auto pt-12 bg-neutral-150 text-neutral-800 max-w-6xl lg:p-8 lg:pt-32;
   }
 
   footer {

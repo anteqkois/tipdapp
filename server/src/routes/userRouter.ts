@@ -1,7 +1,7 @@
 import { Router } from 'express';
-// import { authenticate } from '../middlewares/authenticate.js';
+// import { verifyJWT } from '../middlewares/verifyJWT.js';
 
 const router = Router();
 //GET
-// router.get('/', authenticate, catchAsyncErrors(find));
+// router.get('/', verifyJWT, catchAsyncErrors(find));
 export default router;

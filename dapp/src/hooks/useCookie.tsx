@@ -1,3 +1,4 @@
+'use client'
 import { Dispatch, SetStateAction, useState } from 'react';
 
 type Options = {

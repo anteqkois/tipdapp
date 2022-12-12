@@ -14,9 +14,9 @@ const fileRotateTransportRequest = new transports.DailyRotateFile({
   maxFiles: '3d',
   format: format.combine(
     format.timestamp({
-      format: 'MMM-DD-YYYY HH:mm:ss',
+      format: 'MMM-DD-YYYY HH:mm:ss.SSS',
     }),
-    customFormatRequestFile,
+    customFormatRequestFile
   ),
 });
 
@@ -30,9 +30,9 @@ const requestLogger = createLogger({
         format.colorize({ colors: { info: 'blue', error: 'bold red' } }),
         format.label({ label: 'REQUEST' }),
         format.timestamp({
-          format: 'MMM-DD-YYYY HH:mm:ss',
+          format: 'MMM-DD-YYYY HH:mm:ss.SSS',
         }),
-        customFormatRequestConsole,
+        customFormatRequestConsole
       ),
     }),
     // new transports.File({
@@ -61,9 +61,9 @@ const fileRotateTransportError = new transports.DailyRotateFile({
   maxFiles: '3d',
   format: format.combine(
     format.timestamp({
-      format: 'MMM-DD-YYYY HH:mm:ss',
+      format: 'MMM-DD-YYYY HH:mm:ss.SSS',
     }),
-    customFormatErrorFile,
+    customFormatErrorFile
   ),
 });
 
@@ -77,9 +77,9 @@ const errorLogger = createLogger({
         format.colorize({ colors: { warn: 'cyan', error: 'bold red' } }),
         format.label({ label: 'ERROR' }),
         format.timestamp({
-          format: 'MMM-DD-YYYY HH:mm:ss',
+          format: 'MMM-DD-YYYY HH:mm:ss.SSS',
         }),
-        customFormatErrorConsole,
+        customFormatErrorConsole
       ),
     }),
     // new transports.File({

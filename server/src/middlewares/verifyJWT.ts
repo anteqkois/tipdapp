@@ -1,10 +1,10 @@
-import { DecodedUser } from '@types';
+import { DecodedUser, mockDecodedUser } from '@types';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import { createApiError } from './error';
 
-const authenticate = (req: Request, res: Response, next: NextFunction) => {
+const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
   const { authToken, authStatus } = req.cookies;
 
   if (authToken === null || authToken === undefined) {
@@ -26,6 +26,9 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     createApiError(`Invalid authentication token.`, StatusCodes.BAD_REQUEST);
   }
+
+  // req.user = mockDecodedUser;
+  // next();
 };
 
-export { authenticate };
+export { verifyJWT };

@@ -11,9 +11,13 @@ export default function Error({
   error: ApiError[];
   reset: () => void;
 }) {
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
   return (
     <div>
-      <ErrorMessage>{error[0]?.message ?? 'Something went wrong'}</ErrorMessage>
+      <ErrorMessage>{error[0].message}</ErrorMessage>
     </div>
   );
 }

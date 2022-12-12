@@ -77,7 +77,7 @@ export const UserProvider = ({ children }: Props) => {
       //! if use is at page to make a tip, no redirect
       setStatus('authenticated');
 
-      router.push(`/${data.user.defaultRole}/dashboard`);
+      router.push(`/${data.user.activeRole}/dashboard`);
       // if (data.user.roles.includes('streamer'))
       //   router.push('/streamer/dashboard');
       // else router.push('/tipper/dashboard');

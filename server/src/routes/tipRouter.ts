@@ -4,7 +4,7 @@ import { findByAddress } from '../controllers/tipController';
 
 const router = Router();
 //GET
-// router.get('/', authenticate, catchAsyncErrors(findByUseraddress));
+// router.get('/', verifyJWT, catchAsyncErrors(findByUseraddress));
 
 //TODO change to use find with queryParams
 router.get('/', catchAsyncErrors(findByAddress));

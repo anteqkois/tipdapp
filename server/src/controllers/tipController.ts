@@ -1,4 +1,4 @@
-import { Request, Response,  } from 'express';
+import { Request, Response } from 'express';
 import { createApiError } from '../middlewares/error';
 import { tipService } from '../services/tipService';
 // import { Query } from 'express-static-serve-core';
@@ -17,7 +17,6 @@ const findByAddress = async (
     userAddress: req.user.address,
   });
 
-  //{option:{}, where:{}, }
   //TODO With Typescript it will  be easier to protoect use right option and where argument
   const tips = await tipService.findMany({
     skip,

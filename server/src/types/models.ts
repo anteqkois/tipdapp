@@ -55,6 +55,7 @@ export type DecodedUser = Pick<
 export const mockDecodedUser: DecodedUser = {
   address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
   nick: 'anteqkois',
+  // roles: ['tipper'],
   roles: ['tipper', 'streamer'],
   activeRole: 'streamer',
 };

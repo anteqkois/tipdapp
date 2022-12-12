@@ -1,4 +1,4 @@
-import { Tip, TipUI } from '@anteqkois/server';
+import { TipUI } from '@anteqkois/server';
 import { api } from './apiConfig';
 
 type FindParams = {
