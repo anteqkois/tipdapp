@@ -31,7 +31,7 @@
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "8.26.0",
-    "eslint-config-next": "13.0.3",
+    "eslint-config-next": "13.0.7",
     "hardhat": "^2.12.4",
     "nodemon": "^2.0.20",
     "standard-version": "^9.3.2"
