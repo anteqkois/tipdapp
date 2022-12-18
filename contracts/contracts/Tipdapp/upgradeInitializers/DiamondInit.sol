@@ -24,11 +24,11 @@ contract DiamondInit {
     // data to set your own state variables
     function init() external {
         // adding ERC165 data
-        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
-        ds.supportedInterfaces[type(IERC165).interfaceId] = true;
-        ds.supportedInterfaces[type(IDiamondCut).interfaceId] = true;
-        ds.supportedInterfaces[type(IDiamondLoupe).interfaceId] = true;
-        ds.supportedInterfaces[type(IERC173).interfaceId] = true;
+        LibDiamond.AppStorage storage s = LibDiamond.appStorage();
+        s.supportedInterfaces[type(IERC165).interfaceId] = true;
+        s.supportedInterfaces[type(IDiamondCut).interfaceId] = true;
+        s.supportedInterfaces[type(IDiamondLoupe).interfaceId] = true;
+        s.supportedInterfaces[type(IERC173).interfaceId] = true;
 
         // add your own state variables 
         // EIP-2535 specifies that the `diamondCut` function takes two optional 
