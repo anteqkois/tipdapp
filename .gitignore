@@ -12,6 +12,13 @@ contracts/cache
 contracts/artifacts
 contracts/node_modules
 
+diamond-2-hardhat
+contractsDeprecated
+contractsDeprecated/typechain
+contractsDeprecated/cache
+contractsDeprecated/artifacts
+contractsDeprecated/node_modules
+
 # dapp
 dapp/.next/
 dapp/out/

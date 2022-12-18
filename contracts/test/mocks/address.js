@@ -1,5 +1,0 @@
-const USER_ADDRESS = {
-  SAND_HOLDER: '0x203520F4ec42Ea39b03F62B20e20Cf17DB5fdfA7',
-};
-
-module.exports = { USER_ADDRESS };

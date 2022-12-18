@@ -15,15 +15,15 @@
   "scripts": {
     "dev": "NODE_ENV=development SERVER_COMMAND='npm run dev' docker compose up && zx ./scripts/hardhat.js",
     "dev:update": "NODE_ENV=development SERVER_COMMAND='npm run dev:update' docker compose up",
-    "dev:old": "sudo service postgresql start & sleep 5 && NODE_ENV=development cd dapp && npm run dev & cd contracts && npx hardhat node & sleep 10 && cd contracts && npm run deploy:dev",
+    "dev:old": "sudo service postgresql start & sleep 5 && NODE_ENV=development cd dapp && npm run dev & cd contractsDeprecated && npx hardhat node & sleep 10 && cd contractsDeprecated && npm run deploy:dev",
     "posttdev": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}') & kill $(lsof -Pi | grep :3000 | awk '{ print $2}')",
     "clean": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}') & kill $(lsof -Pi | grep :3000 | awk '{ print $2}')",
     "commit": "git add . && cz",
     "postcommit": "git push",
     "release": "standard-version",
     "postgres": "[ ! -f .env ] || export $(grep -v '^#' .env | xargs) | sudo service postgresql start | $DATABASE_PASSWORD",
-    "sc:test:i": "cd contracts && npm run test:integration",
-    "sc:test:u": "cd contracts && npm run test:unit"
+    "sc:test:i": "cd contractsDeprecated && npm run test:integration",
+    "sc:test:u": "cd contractsDeprecated && npm run test:unit"
   },
   "dependencies": {
     "zx": "^7.1.1"
@@ -32,6 +32,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "8.26.0",
     "eslint-config-next": "13.0.3",
+    "hardhat": "^2.12.4",
     "nodemon": "^2.0.20",
     "standard-version": "^9.3.2"
   },
