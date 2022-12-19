@@ -6,6 +6,7 @@ pragma solidity ^0.8.0;
 * EIP-2535 Diamonds: https://eips.ethereum.org/EIPS/eip-2535
 /******************************************************************************/
 import { IDiamondCut } from "../interfaces/IDiamondCut.sol";
+import { AggregatorV3Interface } from "../interfaces/AggregatorV3Interface.sol";
 
 // Remember to add the loupe functions from DiamondLoupeFacet to the diamond.
 // The loupe functions are required by the EIP2535 Diamonds standard
@@ -259,4 +260,7 @@ library LibDiamond {
         }
         require(contractSize > 0, _errorMessage);
     }
+
+        AggregatorV3Interface constant ethUsdOracle =
+        AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
 }
