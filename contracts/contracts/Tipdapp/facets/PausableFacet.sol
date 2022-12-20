@@ -11,7 +11,6 @@ contract PausableFacet is Modifier {
     function pause() external virtual onlyOwner {
         s.paused = true;
     }
-
     function unPause() external virtual onlyOwner {
         s.paused = false;
     }

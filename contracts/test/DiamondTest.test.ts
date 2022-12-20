@@ -309,7 +309,7 @@ describe("DiamondTest", async function () {
     const facetAddresses = await diamondLoupeFacet.facetAddresses();
     assert.equal(facetAddresses.length, 5);
     assert.equal(facets.length, 5);
-    assert.sameMembers(facetAddresses, addresses.concat(addressesTestFacet));
+    assert.includeMembers(addresses.concat(addressesTestFacet), facetAddresses);
     assert.equal(facets[0][0], facetAddresses[0], "first facet");
     assert.equal(facets[1][0], facetAddresses[1], "second facet");
     assert.equal(facets[2][0], facetAddresses[2], "third facet");

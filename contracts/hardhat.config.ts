@@ -1,6 +1,14 @@
 import "@nomicfoundation/hardhat-toolbox";
 import { HardhatUserConfig } from "hardhat/config";
 
+import dotenv from "dotenv";
+
+dotenv.config({
+  path: process.env.dotenv_config_path
+    ? process.env.dotenv_config_path
+    : ".env.development",
+});
+
 const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.17",
@@ -11,8 +19,22 @@ const config: HardhatUserConfig = {
       },
     },
   },
+  networks: {
+    hardhat: {
+      accounts: [
+        {
+          privateKey: process.env.DEPLOYER_WALLET_PRIVATE_KEY,
+          balance: "100000000000000000000",
+        },
+        {
+          privateKey: process.env.SIGNER_WALLET_PRIVATE_KEY,
+          balance: "100000000000000000000",
+        },
+      ],
+    },
+  },
   gasReporter: {
-    enabled: true,
+    enabled: false,
     currency: "USD",
     maxMethodDiff: 20,
     coinmarketcap: process.env.COINMARKETCAP_API_KEY,

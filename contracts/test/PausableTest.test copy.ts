@@ -6,7 +6,7 @@ import { getSelectors } from "../scripts/libraries/diamond";
 import { deployDiamond } from "../scripts/deploy";
 
 // const { assert } = require('chai')
-import { assert, expect } from "chai";
+import { assert } from "chai";
 import { ethers } from "hardhat";
 import {
   DiamondCutFacet,
@@ -15,9 +15,9 @@ import {
   PausableFacet,
 } from "../typechain-types";
 
-describe("PausableFacet", async function () {
-  let accounts: Awaited<ReturnType<typeof ethers.getSigners>>;
-  let contractOwner;
+describe("DiamondTest", async function () {
+  const accounts = await ethers.getSigners();
+  const contractOwner = accounts[0];
 
   let diamondAddress: string;
   let diamondCutFacet: DiamondCutFacet;
@@ -30,9 +30,6 @@ describe("PausableFacet", async function () {
   const addresses: string[] = [];
 
   before(async function () {
-    accounts = await ethers.getSigners();
-    contractOwner = accounts[0];
-
     diamondAddress = await deployDiamond();
     diamondCutFacet = await ethers.getContractAt(
       "DiamondCutFacet",
@@ -93,19 +90,11 @@ describe("PausableFacet", async function () {
     assert.isFalse(flag);
   });
 
-  it("only owner can change paused veriable", async () => {
-    await expect(pausableFacet.connect(accounts[1]).pause()).to.be.revertedWith(
-      "LibDiamond: Must be contract owner"
-    );
-  });
-
-  it("owner can change paused veriable", async () => {
-    await pausableFacet.pause();
-    expect(await pausableFacet.paused()).to.be.true;
-
-    await pausableFacet.unPause();
-    expect(await pausableFacet.paused()).to.be.false;
-  });
-
-  xit("function should not be execute when smart contract is paused", async () => {});
+  // it("only owner can change paused veriable", async () => {
+  //   await expect(pausableFacet.connect(accounts[1]).pause()).to.be.revertedWith(
+  //     "Unlock time should be in the future"
+  //   );
+  //   // const flag = await pausableFacet.paused();
+  //   // assert.isFalse(flag);
+  // });
 });
