@@ -7,6 +7,7 @@ import { FacetCutAction, getSelectors } from "./libraries/diamond";
 async function deployDiamond() {
   const accounts = await ethers.getSigners();
   const contractOwner = accounts[0];
+  const signerAdmin = accounts[1];
 
   // deploy DiamondCutFacet
   const DiamondCutFacet = await ethers.getContractFactory("DiamondCutFacet");
@@ -18,7 +19,8 @@ async function deployDiamond() {
   const Diamond = await ethers.getContractFactory("Diamond");
   const diamond = await Diamond.deploy(
     contractOwner.address,
-    diamondCutFacet.address
+    diamondCutFacet.address,
+    signerAdmin.address
   );
   await diamond.deployed();
   console.log("Diamond deployed:", diamond.address);
@@ -34,7 +36,11 @@ async function deployDiamond() {
   // deploy facets
   // console.log("");
   // console.log("Deploying facets");
-  const FacetNames = ["DiamondLoupeFacet", "OwnershipFacet", "PausableFacet"];
+  const FacetNames = [
+    "DiamondLoupeFacet",
+    "OwnershipFacet",
+    "AdministrationFacet",
+  ];
   const cut = [];
   for (const FacetName of FacetNames) {
     const Facet = await ethers.getContractFactory(FacetName);

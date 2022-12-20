@@ -9,12 +9,17 @@ pragma solidity ^0.8.0;
 /******************************************************************************/
 
 import {LibDiamond} from "./libraries/LibDiamond.sol";
+import {LibAppStorage, AppStorage} from "./libraries/LibAppStorage.sol";
 // import {LibAppStorage, AppStorage} from "./libraries/LibAppStorage.sol";
 import {IDiamondCut} from "./interfaces/IDiamondCut.sol";
 
 contract Diamond {
-    constructor(address _contractOwner, address _diamondCutFacet) payable {
+    constructor(address _contractOwner, address _diamondCutFacet, address _signerAdmin) payable {
         LibDiamond.setContractOwner(_contractOwner);
+
+        AppStorage storage s = LibAppStorage.appStorage();
+        s.signerAdmin = _signerAdmin;
+        s.donateFee = 300;
 
         // Add the diamondCut external function from the diamondCutFacet
         IDiamondCut.FacetCut[] memory cut = new IDiamondCut.FacetCut[](1);

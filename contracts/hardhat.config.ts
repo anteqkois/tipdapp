@@ -30,6 +30,10 @@ const config: HardhatUserConfig = {
           privateKey: process.env.SIGNER_WALLET_PRIVATE_KEY,
           balance: "100000000000000000000",
         },
+        {
+          privateKey: process.env.THIRD_WALLET_PRIVATE_KEY,
+          balance: "100000000000000000000",
+        },
       ],
     },
   },

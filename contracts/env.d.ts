@@ -4,8 +4,9 @@ interface IProcessEnv {
   NETWORK: string;
   COINMARKETCAP_API_KEY: string;
   ALCHEMY_API_KEY: string;
-  SIGNER_WALLET_PRIVATE_KEY: string;
   DEPLOYER_WALLET_PRIVATE_KEY: string;
+  SIGNER_WALLET_PRIVATE_KEY: string;
+  THIRD_WALLET_PRIVATE_KEY: string;
   ETHERNAL_EMAIL: string;
   ETHERNAL_PASSWORD: string;
 }
