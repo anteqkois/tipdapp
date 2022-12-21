@@ -13,6 +13,11 @@ async function deployDiamond() {
   const DiamondCutFacet = await ethers.getContractFactory("DiamondCutFacet");
   const diamondCutFacet = await DiamondCutFacet.deploy();
   await diamondCutFacet.deployed();
+
+  // UserTokenImplementation
+  const UserToken = await ethers.getContractFactory("UserToken");
+  const userToken = await UserToken.deploy();
+  await userToken.deployed();
   // console.log("DiamondCutFacet deployed:", diamondCutFacet.address);
 
   // deploy Diamond
@@ -20,7 +25,8 @@ async function deployDiamond() {
   const diamond = await Diamond.deploy(
     contractOwner.address,
     diamondCutFacet.address,
-    signerAdmin.address
+    signerAdmin.address,
+    userToken.address
   );
   await diamond.deployed();
   console.log("Diamond deployed:", diamond.address);

@@ -13,6 +13,7 @@ struct AppStorage {
     mapping(address => uint256) balanceETH;
     mapping(address => mapping(address => uint256)) addressToTokenToBalance;
     mapping(address => address) tokenToUser;
+    address userTokenImplementation;
 }
 
 library LibAppStorage {

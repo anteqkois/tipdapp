@@ -5,8 +5,8 @@ pragma solidity ^0.8.0;
 * Author: Nick Mudge <nick@perfectabstractions.com> (https://twitter.com/mudgen)
 * EIP-2535 Diamonds: https://eips.ethereum.org/EIPS/eip-2535
 /******************************************************************************/
-import { IDiamondCut } from "../interfaces/IDiamondCut.sol";
-import { AggregatorV3Interface } from "../interfaces/AggregatorV3Interface.sol";
+import {IDiamondCut} from "../interfaces/IDiamondCut.sol";
+import {AggregatorV3Interface} from "../interfaces/AggregatorV3Interface.sol";
 
 // Remember to add the loupe functions from DiamondLoupeFacet to the diamond.
 // The loupe functions are required by the EIP2535 Diamonds standard
@@ -68,17 +68,13 @@ library LibDiamond {
     // 'Facet[] calldata _diamondCut'.
     // The code is duplicated to prevent copying calldata to memory which
     // causes an error for a two dimensional array.
-    function diamondCut(
-        IDiamondCut.FacetCut[] memory _diamondCut,
-        address _init,
-        bytes memory _calldata
-    ) internal {
+    function diamondCut(IDiamondCut.FacetCut[] memory _diamondCut, address _init, bytes memory _calldata) internal {
         DiamondStorage storage ds = diamondStorage();
         uint256 originalSelectorCount = ds.selectorCount;
         uint256 selectorCount = originalSelectorCount;
         bytes32 selectorSlot;
         // Check if last selector slot is not full
-        // "selectorCount & 7" is a gas efficient modulo by eight "selectorCount % 8" 
+        // "selectorCount & 7" is a gas efficient modulo by eight "selectorCount % 8"
         if (selectorCount & 7 > 0) {
             // get last selectorSlot
             // "selectorSlot >> 3" is a gas efficient division by 8 "selectorSlot / 8"
@@ -102,7 +98,7 @@ library LibDiamond {
             ds.selectorCount = uint16(selectorCount);
         }
         // If last selector slot is not full
-        // "selectorCount & 7" is a gas efficient modulo by eight "selectorCount % 8" 
+        // "selectorCount & 7" is a gas efficient modulo by eight "selectorCount % 8"
         if (selectorCount & 7 > 0) {
             // "selectorSlot >> 3" is a gas efficient division by 8 "selectorSlot / 8"
             ds.selectorSlots[selectorCount >> 3] = selectorSlot;
@@ -128,7 +124,7 @@ library LibDiamond {
                 require(address(bytes20(oldFacet)) == address(0), "LibDiamondCut: Can't add function that already exists");
                 // add facet for selector
                 ds.facets[selector] = bytes20(_newFacetAddress) | bytes32(_selectorCount);
-                // "_selectorCount & 7" is a gas efficient modulo by eight "_selectorCount % 8" 
+                // "_selectorCount & 7" is a gas efficient modulo by eight "_selectorCount % 8"
                 // " << 5 is the same as multiplying by 32 ( * 32)
                 uint256 selectorInSlotPosition = (_selectorCount & 7) << 5;
                 // clear selector position in slot and add selector
@@ -166,7 +162,7 @@ library LibDiamond {
             require(_newFacetAddress == address(0), "LibDiamondCut: Remove facet address must be address(0)");
             // "_selectorCount >> 3" is a gas efficient division by 8 "_selectorCount / 8"
             uint256 selectorSlotCount = _selectorCount >> 3;
-            // "_selectorCount & 7" is a gas efficient modulo by eight "_selectorCount % 8" 
+            // "_selectorCount & 7" is a gas efficient modulo by eight "_selectorCount % 8"
             uint256 selectorInSlotIndex = _selectorCount & 7;
             for (uint256 selectorIndex; selectorIndex < _selectors.length; ) {
                 if (_selectorSlot == 0) {
@@ -199,7 +195,7 @@ library LibDiamond {
                     uint256 oldSelectorCount = uint16(uint256(oldFacet));
                     // "oldSelectorCount >> 3" is a gas efficient division by 8 "oldSelectorCount / 8"
                     oldSelectorsSlotCount = oldSelectorCount >> 3;
-                    // "oldSelectorCount & 7" is a gas efficient modulo by eight "oldSelectorCount % 8" 
+                    // "oldSelectorCount & 7" is a gas efficient modulo by eight "oldSelectorCount % 8"
                     // " << 5 is the same as multiplying by 32 ( * 32)
                     oldSelectorInSlotPosition = (oldSelectorCount & 7) << 5;
                 }
@@ -237,7 +233,7 @@ library LibDiamond {
         if (_init == address(0)) {
             return;
         }
-        enforceHasContractCode(_init, "LibDiamondCut: _init address has no code");        
+        enforceHasContractCode(_init, "LibDiamondCut: _init address has no code");
         (bool success, bytes memory error) = _init.delegatecall(_calldata);
         if (!success) {
             if (error.length > 0) {
@@ -261,6 +257,5 @@ library LibDiamond {
         require(contractSize > 0, _errorMessage);
     }
 
-        AggregatorV3Interface constant ethUsdOracle =
-        AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
+    AggregatorV3Interface constant ethUsdOracle = AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
 }

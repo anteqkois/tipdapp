@@ -14,12 +14,14 @@ import {LibAppStorage, AppStorage} from "./libraries/LibAppStorage.sol";
 import {IDiamondCut} from "./interfaces/IDiamondCut.sol";
 
 contract Diamond {
-    constructor(address _contractOwner, address _diamondCutFacet, address _signerAdmin) payable {
+    constructor(address _contractOwner, address _diamondCutFacet, address _signerAdmin, address _userTokenImplementation) payable {
         LibDiamond.setContractOwner(_contractOwner);
 
         AppStorage storage s = LibAppStorage.appStorage();
         s.signerAdmin = _signerAdmin;
         s.donateFee = 300;
+        // _minValue = 1e17;
+        s.userTokenImplementation = _userTokenImplementation;
 
         // Add the diamondCut external function from the diamondCutFacet
         IDiamondCut.FacetCut[] memory cut = new IDiamondCut.FacetCut[](1);

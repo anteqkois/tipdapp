@@ -13,6 +13,10 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "IERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20__factory>;
+    getContractFactory(
       name: "Lock",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Lock__factory>;
@@ -45,10 +49,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Test2Facet__factory>;
     getContractFactory(
-      name: "TipFacet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.TipFacet__factory>;
-    getContractFactory(
       name: "UserFacet",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.UserFacet__factory>;
@@ -73,6 +73,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC173__factory>;
     getContractFactory(
+      name: "IUserToken",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IUserToken__factory>;
+    getContractFactory(
       name: "LibDiamond",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.LibDiamond__factory>;
@@ -80,7 +84,20 @@ declare module "hardhat/types/runtime" {
       name: "DiamondInit",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DiamondInit__factory>;
+    getContractFactory(
+      name: "UserToken",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.UserToken__factory>;
+    getContractFactory(
+      name: "UserTokenSafeGas",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.UserTokenSafeGas__factory>;
 
+    getContractAt(
+      name: "IERC20",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20>;
     getContractAt(
       name: "Lock",
       address: string,
@@ -122,11 +139,6 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Test2Facet>;
     getContractAt(
-      name: "TipFacet",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.TipFacet>;
-    getContractAt(
       name: "UserFacet",
       address: string,
       signer?: ethers.Signer
@@ -157,6 +169,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC173>;
     getContractAt(
+      name: "IUserToken",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IUserToken>;
+    getContractAt(
       name: "LibDiamond",
       address: string,
       signer?: ethers.Signer
@@ -166,6 +183,16 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.DiamondInit>;
+    getContractAt(
+      name: "UserToken",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.UserToken>;
+    getContractAt(
+      name: "UserTokenSafeGas",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.UserTokenSafeGas>;
 
     // default types
     getContractFactory(
