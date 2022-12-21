@@ -6,6 +6,7 @@ import {LibAppStorage, AppStorage, Modifier} from "../libraries/LibAppStorage.so
 import {UserToken} from "../UserToken.sol";
 import {IERC20} from "@openzeppelin/contracts/interfaces/IERC20.sol";
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
+import "hardhat/console.sol";
 
 contract UserFacet is Modifier {
     event Donate(address indexed donator, address indexed addressToDonate, address tokenAddress, uint256 tokenAmount);
@@ -34,6 +35,8 @@ contract UserFacet is Modifier {
         //TODO check if it possible to change UserToken implementation when SC was deployed
         // address newToken = address(new UserToken(_tokenSymbol, _tokenName));
         // address newToken = createClone(s.userTokenImplementation);
+        // console.log("IN DIAMOND Diamond", address(this));
+        // console.log("IN DIAMOND msg.sender", msg.sender);
         address newToken = Clones.clone(s.userTokenImplementation);
         UserToken(newToken).initialize(_tokenSymbol, _tokenName);
 

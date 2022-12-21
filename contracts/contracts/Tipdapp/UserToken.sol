@@ -3,12 +3,14 @@
 pragma solidity ^0.8.0;
 
 import {IUserToken} from "./interfaces/IUserToken.sol";
+import "hardhat/console.sol";
 
 contract UserToken is IUserToken {
     string private _name;
     string private _symbol;
     uint256 private _totalSupply;
     address private _owner;
+    uint8 private _initialized;
 
     mapping(address => mapping(address => uint256)) private _allowance;
     mapping(address => uint256) private _balanceOf;
@@ -18,11 +20,18 @@ contract UserToken is IUserToken {
         _;
     }
 
-    constructor() {
-        _owner = msg.sender;
-    }
+    // constructor() {
+    //     console.log("IN USERTOKEN Owner", msg.sender);
+    //     _owner = msg.sender;
+    // }
 
-    function initialize(string memory symbol_, string memory name_) external virtual onlyOwner {
+    function initialize(string memory symbol_, string memory name_) external virtual {
+        // console.log("IN USERTOKEN _owner", _owner);
+        // console.log("IN USERTOKEN msg.sender", msg.sender);
+        //It is no lock, to have ability in future to change name when user left ?
+        require(_initialized == 0, "Contract is already initialized");
+        _initialized = 1;
+        _owner = msg.sender;
         _name = name_;
         _symbol = symbol_;
     }
