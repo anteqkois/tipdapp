@@ -101,6 +101,9 @@ contract UserFacet is Modifier {
         }
 
         UserToken(_userTokenAddress).mint(msg.sender, _mintTokenAmount);
+
+        //TODO REMOVE ?
+        emit Donate(msg.sender, _addressToDonate, _tokenAddress, _tokenAmount);
     }
 
     function donateETH(address _addressToDonate) external payable notPaused {
