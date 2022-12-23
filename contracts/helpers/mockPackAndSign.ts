@@ -8,14 +8,14 @@ const signerAdmin = new ethers.Wallet(
 );
 
 //TOD create config file !
-// FINAL -> string tokenAmount, string tokenQuote, string addressToDonate
+// FINAL -> string tokenAmountInEther, string tokenQuote, string addressToDonate
 export const packDataToSign = async ({
-  tokenAmount,
+  tokenAmountInEther,
   tokenQuote,
   addressToDonate,
   userTokenAddress,
 }: {
-  tokenAmount: string;
+  tokenAmountInEther: string;
   // TODO create all possible quote ?
   tokenQuote: keyof typeof ERC20_TOKEN_ADDRESS;
   addressToDonate: string;
@@ -25,7 +25,7 @@ export const packDataToSign = async ({
   if (addressToDonate === ethers.constants.AddressZero) {
     throw new Error("Address to donate can not be address zero.");
   }
-  const tokenAmountBN = ethers.utils.parseEther(tokenAmount);
+  const tokenAmountBN = ethers.utils.parseEther(tokenAmountInEther);
 
   //TODO get erc20 token address (donated token) from rigidly typed constants, when dapp grow up store in Redis, if not in DB throw error
   const tokenAddress = ERC20_TOKEN_ADDRESS[tokenQuote];
