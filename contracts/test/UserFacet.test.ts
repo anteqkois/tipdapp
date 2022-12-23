@@ -16,6 +16,7 @@ import {
   HOLDER_ADDRESS,
 } from "../constants";
 import { calculateFee } from "../helpers/calculateFee";
+import { calculateValue } from "../helpers/calculateValue";
 import { packDataToSign } from "../helpers/mockPackAndSign";
 import {
   AdministrationFacet,
@@ -305,10 +306,10 @@ describe("UserFacet", async function () {
     });
 
     it("check UserToken balance after tip", async function () {
-      const expectedBalance = ethers.utils
-        .parseEther("100.25")
-        .mul(ethers.utils.parseEther(ERC20_TOKEN_PRICE["SAND"]))
-        .div(ethers.constants.WeiPerEther);
+      const expectedBalance = calculateValue(
+        "100.25",
+        ERC20_TOKEN_PRICE["SAND"]
+      );
 
       userTokenBalanceAfterTips = expectedBalance;
 
@@ -386,14 +387,12 @@ describe("UserFacet", async function () {
         .parseEther("100101")
         .add(ethers.utils.parseUnits("1010", "wei"));
 
-      const expectedBalance = tokenAmount
-        .mul(ethers.utils.parseEther(ERC20_TOKEN_PRICE["SHIB"]))
-        .div(ethers.constants.WeiPerEther)
-        .add(userTokenBalanceAfterTips);
+      const expectedBalance = calculateValue(
+        ethers.utils.formatEther(tokenAmount),
+        ERC20_TOKEN_PRICE["SHIB"]
+      ).add(userTokenBalanceAfterTips);
 
-      userTokenBalanceAfterTips =
-        userTokenBalanceAfterTips.add(expectedBalance);
-
+      userTokenBalanceAfterTips = expectedBalance;
       // add fist tip!
       expect(await userToken.balanceOf(shibaHodler.address)).to.equal(
         expectedBalance
@@ -479,6 +478,13 @@ describe("UserFacet", async function () {
             0,
           ]
         );
+
+      const expectedBalance = calculateValue(
+        "100.25",
+        ERC20_TOKEN_PRICE["SAND"]
+      ).add(userTokenBalanceAfterTips);
+
+      userTokenBalanceAfterTips = expectedBalance;
     });
 
     it("revert when address to tip is address zero", async function () {
@@ -608,14 +614,12 @@ describe("UserFacet", async function () {
         CHAILINK_PRICE_ORACLE_ADDRESS_USD.ETH
       );
 
-      const expectedBalance = ethers.utils
-        .parseEther("1")
-        .mul(ethPrice)
-        .div(ethers.constants.WeiPerEther)
-        .add(userTokenBalanceAfterTips);
+      const expectedBalance = calculateValue(
+        "1",
+        ethers.utils.formatEther(ethPrice)
+      ).add(userTokenBalanceAfterTips);
 
-      userTokenBalanceAfterTips =
-        userTokenBalanceAfterTips.add(expectedBalance);
+      userTokenBalanceAfterTips = expectedBalance;
 
       expect(await userToken.balanceOf(sandHodler.address)).to.equal(
         expectedBalance
@@ -668,6 +672,74 @@ describe("UserFacet", async function () {
           [sandHodler, diamondAddress, userOne],
           [ethers.utils.parseEther("-1"), ethers.utils.parseEther("1"), 0]
         );
+
+      const ethPrice = await chailinkPriceFeeds.getLatestPrice(
+        CHAILINK_PRICE_ORACLE_ADDRESS_USD.ETH
+      );
+
+      const expectedBalance = calculateValue(
+        "1",
+        ethers.utils.formatEther(ethPrice)
+      ).add(userTokenBalanceAfterTips);
+
+      userTokenBalanceAfterTips = expectedBalance;
+    });
+
+    it("send tip in $ETH in indivisible amount", async function () {
+      await expect(() =>
+        userFacet.connect(sandHodler).tipETH(userOne.address, {
+          value: ethers.utils.parseUnits("1010", "wei"),
+        })
+      )
+        .to.emit(userFacet, "Tip")
+        .withArgs(
+          sandHodler.address,
+          userOne.address,
+          ethers.constants.AddressZero,
+          ethers.utils.parseUnits("1010", "wei")
+        )
+        .to.changeEtherBalances(
+          [sandHodler, diamondAddress, userOne],
+          [
+            ethers.utils.parseUnits("-1010", "wei"),
+            ethers.utils.parseUnits("1010", "wei"),
+            0,
+          ]
+        );
+    });
+    //TODO
+    it("check $ETH balance after tip", async function () {
+      const fee = calculateFee(ethers.utils.parseUnits("1010", "wei"));
+      const toUser = ethers.utils.parseUnits("1010", "wei").sub(fee);
+
+      const userBalanceBefore = ethers.utils
+        .parseEther("2")
+        .sub(calculateFee(ethers.utils.parseEther("1")).mul("2"));
+
+      expect(await userFacet.balanceETH(userOne.address)).to.be.closeTo(
+        userBalanceBefore.add(toUser),
+        1
+      );
+      expect(await userFacet.balanceETH(diamondAddress)).to.be.closeTo(
+        fee.add(calculateFee(ethers.utils.parseEther("1")).mul("2")),
+        1
+      );
+    });
+
+    it("Check UserToken balance after tip", async function () {
+      const ethPrice = await chailinkPriceFeeds.getLatestPrice(
+        CHAILINK_PRICE_ORACLE_ADDRESS_USD.ETH
+      );
+      const expectedBalance = calculateValue(
+        ethers.utils.formatEther("1010"),
+        ethers.utils.formatEther(ethPrice)
+      ).add(userTokenBalanceAfterTips);
+
+      userTokenBalanceAfterTips = expectedBalance;
+
+      expect(await userToken.balanceOf(sandHodler.address)).to.equal(
+        expectedBalance
+      );
     });
   });
 
@@ -806,4 +878,44 @@ describe("UserFacet", async function () {
     });
   });
 
+  describe("Withdraw ETH", async () => {
+    it("user can withdraw ETH", async () => {
+      const balance = await userFacet.balanceETH(userOne.address);
+
+      // In test were 3 ETH tips
+      expect(balance).to.be.closeTo(
+        ethers.utils
+          .parseEther("1")
+          .mul("2")
+          .add(ethers.utils.parseUnits("1010", "wei"))
+          .sub(
+            calculateFee(
+              ethers.utils
+                .parseEther("1")
+                .mul("2")
+                .add(ethers.utils.parseUnits("1010", "wei"))
+            )
+          ),
+        1
+      );
+
+      await expect(userFacet.connect(userOne).withdrawETH())
+        .to.emit(userFacet, "Withdraw")
+        .withArgs(userOne.address, ethers.constants.AddressZero, balance)
+        .to.changeEtherBalances(
+          [userOne, diamondAddress],
+          [balance, balance.mul("-1")]
+        );
+    });
+
+    it("user balance in diamond should be zero", async () => {
+      expect(await userFacet.balanceETH(userOne.address)).to.be.equal(0);
+    });
+
+    it("user can not withdraw when have zero token on balance", async () => {
+      await expect(userFacet.connect(userOne).withdrawETH()).to.be.revertedWith(
+        "You have 0 ETH on balance"
+      );
+    });
+  });
 });
