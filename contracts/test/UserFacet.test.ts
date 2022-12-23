@@ -7,7 +7,12 @@ import { deployDiamond } from "../scripts/deploy";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { ERC20_TOKEN_ADDRESS, HOLDER_ADDRESS } from "../constants";
+import {
+  ERC20_TOKEN_ADDRESS,
+  ERC20_TOKEN_PRICE,
+  HOLDER_ADDRESS,
+} from "../constants";
+import { calculateFee } from "../helpers/calculateFee";
 import { packDataToSign } from "../helpers/mockPackAndSign";
 import {
   DiamondLoupeFacet,
@@ -32,6 +37,10 @@ describe("AdministrationFacet", async function () {
   let userToken: UserToken;
   let sand: IERC20;
   let sandHodler: SignerWithAddress;
+  let shiba: IERC20;
+  let shibaHodler: SignerWithAddress;
+
+  let userTokenBalanceAfterFirtsDonate: typeof ethers.BigNumber.prototype;
 
   before(async function () {
     accounts = await ethers.getSigners();
@@ -60,6 +69,8 @@ describe("AdministrationFacet", async function () {
 
     sand = await ethers.getContractAt("IERC20", ERC20_TOKEN_ADDRESS.SAND);
     sandHodler = await ethers.getImpersonatedSigner(HOLDER_ADDRESS.SAND_HOLDER);
+    shiba = await ethers.getContractAt("IERC20", ERC20_TOKEN_ADDRESS.SHIB);
+    shibaHodler = sandHodler;
   });
 
   describe("Register", async () => {
@@ -163,13 +174,53 @@ describe("AdministrationFacet", async function () {
     });
   });
 
+  describe("Calculate fee", () => {
+    it("when number is indivisible (3% fee)", () => {
+      const baseNumber = ethers.BigNumber.from("1010");
+      const fee = calculateFee(baseNumber);
+      const toUser = baseNumber.sub(fee);
+      expect(fee).to.be.equal(ethers.BigNumber.from("31"));
+      expect(toUser).to.be.equal(ethers.BigNumber.from("979"));
+      expect(fee.add(toUser)).to.be.equal(baseNumber);
+
+      const baseNumberTwo = ethers.BigNumber.from("101");
+      const feeTwo = calculateFee(baseNumberTwo);
+      const toUserTwo = baseNumberTwo.sub(feeTwo);
+      expect(feeTwo).to.be.equal(ethers.BigNumber.from("4"));
+      expect(toUserTwo).to.be.equal(ethers.BigNumber.from("97"));
+      expect(feeTwo.add(toUserTwo)).to.be.equal(baseNumberTwo);
+    });
+    it("when number is divisible (3% fee)", () => {
+      const baseNumber = ethers.BigNumber.from("100");
+      const fee = calculateFee(baseNumber);
+      const toUser = baseNumber.sub(fee);
+
+      expect(fee).to.be.equal(ethers.BigNumber.from("3"));
+      expect(toUser).to.be.equal(ethers.BigNumber.from("97"));
+      expect(fee.add(toUser)).to.be.equal(baseNumber);
+    });
+    it("when number is indivisible and large (3% fee)", () => {
+      // 101.000000000000001010 $ETH
+      const baseNumber = ethers.utils
+        .parseEther("101")
+        .add(ethers.utils.parseUnits("1010", "wei"));
+      const fee = calculateFee(baseNumber);
+      const toUser = baseNumber.sub(fee);
+
+      expect(fee).to.be.equal(ethers.BigNumber.from("3030000000000000031"));
+      expect(toUser).to.be.equal(ethers.BigNumber.from("97970000000000000979"));
+      expect(fee.add(toUser)).to.be.equal(baseNumber);
+    });
+  });
+
+  //TODO Test in loop many varaints ?
   describe("Donate ERC20", async () => {
     it("user $SAND balance before donate should be 0", async function () {
       expect(
         await userFacet.balanceERC20(userOne.address, sand.address)
       ).to.equal(0);
     });
-    it("Send $SAND donate, check balance before and after", async function () {
+    it("send $SAND donate, check balance before and after", async function () {
       await sand
         .connect(sandHodler)
         .approve(diamondAddress, ethers.utils.parseEther("100.25"));
@@ -217,120 +268,120 @@ describe("AdministrationFacet", async function () {
             0,
           ]
         );
-
-      // const donateTx = userFacet
-      //   .connect(sandHodler)
-      //   .donateERC20(
-      //     signature,
-      //     signatureData.tokenAmountBN,
-      //     signatureData.amountToMint,
-      //     signatureData.tokenToUser,
-      //     signatureData.fee,
-      //     signatureData.timestamp,
-      //     userOne.address,
-      //     signatureData.tokenAddress,
-      //     signatureData.userTokenAddress
-      //   );
-
-      // await expect(donateTx)
-      //   .to.emit(userFacet, "Donate")
-      //   .withArgs(
-      //     sandHodler.address,
-      //     userOne.address,
-      //     ERC20_TOKEN_ADDRESS.SAND,
-      //     ethers.utils.parseEther("100.25")
-      //   );
-
-      // await expect(donateTx).to.changeTokenBalances(
-      //   ERC20_TOKEN_ADDRESS.SAND,
-      //   [sandHodler, userOne],
-      //   ["-100.25", "100.25"]
-      // );
     });
-    // it("Check $SAND balance after donate", async function () {
-    //   expect(
-    //     await qoistipSign.balanceERC20(user1.address, sand.address)
-    //   ).to.equal(parseUnits("97"));
-    //   expect(
-    //     await qoistipSign.balanceERC20(qoistipSign.address, sand.address)
-    //   ).to.equal(parseUnits("100").sub(parseUnits("97")));
-    //   expect(await sand.balanceOf(qoistipSign.address)).to.equal(
-    //     parseUnits("100")
-    //   );
-    // });
-    // it("Check $UT1 balance after donate", async function () {
-    //   const calculateExpectBalance = parseUnits("100")
-    //     .mul(sandPriceBN)
-    //     .div("1000000000000000000");
-    //   expect(await userToken1.balanceOf(sandHodler.address)).to.equal(
-    //     calculateExpectBalance
-    //   );
-    // });
-    // it("Check $SHIB balance before donate", async function () {
-    //   expect(
-    //     await qoistipSign.balanceERC20(user1.address, shib.address)
-    //   ).to.equal(0);
-    // });
-    // it("Send donate in $SHIB and check changeTokenBalance function", async function () {
-    //   await shib
-    //     .connect(shibHodler)
-    //     .approve(qoistipSign.address, parseUnits("10000"));
+    it("check $SAND balance in UserFacet", async function () {
+      expect(
+        await userFacet.balanceERC20(userOne.address, sand.address)
+      ).to.equal(
+        ethers.utils
+          .parseEther("100.25")
+          .sub(calculateFee(ethers.utils.parseEther("100.25")))
+      );
+      expect(
+        await userFacet.balanceERC20(diamondAddress, sand.address)
+      ).to.equal(calculateFee(ethers.utils.parseEther("100.25")));
+      expect(await sand.balanceOf(diamondAddress)).to.equal(
+        ethers.utils.parseEther("100.25")
+      );
+    });
+    it("check UserToken balance after donate", async function () {
+      const expectedBalance = ethers.utils
+        .parseEther("100.25")
+        .mul(ethers.utils.parseEther(ERC20_TOKEN_PRICE["SAND"]))
+        .div(ethers.constants.WeiPerEther);
 
-    //   const { signature, signatureData } = await packDataToSign(
-    //     "10000",
-    //     "SHIB",
-    //     user1.address,
-    //     userToken1.address
-    //   );
+      userTokenBalanceAfterFirtsDonate = await userToken.balanceOf(
+        sandHodler.address
+      );
 
-    //   await expect(() =>
-    //     qoistipSign
-    //       .connect(shibHodler)
-    //       .donateERC20(
-    //         signature,
-    //         signatureData.tokenAmountBN,
-    //         signatureData.amountToMint,
-    //         signatureData.tokenToUser,
-    //         signatureData.fee,
-    //         signatureData.timestamp,
-    //         user1.address,
-    //         signatureData.tokenAddress,
-    //         signatureData.userTokenAddress
-    //       )
-    //   ).to.changeTokenBalances(
-    //     shib,
-    //     [shibHodler, qoistipSign],
-    //     [parseUnits("-10000"), parseUnits("10000")]
-    //   );
-    // });
-    // it("Check $SHIB balance after donate", async function () {
-    //   expect(
-    //     await qoistipSign.balanceERC20(user1.address, shib.address)
-    //   ).to.equal(parseUnits("9700"));
-    //   expect(
-    //     await qoistipSign.balanceERC20(qoistipSign.address, shib.address)
-    //   ).to.equal(parseUnits("10000").sub(parseUnits("9700")));
-    //   expect(await shib.balanceOf(qoistipSign.address)).to.equal(
-    //     parseUnits("10000")
-    //   );
-    // });
-    // it("Check $UT1 balance after donate", async function () {
-    //   const calculateExpectBalance = parseUnits("10000")
-    //     .mul(shibPriceBN)
-    //     .div("1000000000000000000");
-    //   expect(await userToken1.balanceOf(shibHodler.address)).to.equal(
-    //     calculateExpectBalance
-    //   );
-    // });
-    // it("Can not send donate if worth is to small ($SAND)", async function () {
-    //   await sand
-    //     .connect(sandHodler)
-    //     .approve(qoistipSign.address, parseUnits("0.01"));
+      expect(userTokenBalanceAfterFirtsDonate).to.equal(expectedBalance);
+    });
+    it("check $SHIB balance before donate", async function () {
+      expect(
+        await userFacet.balanceERC20(userOne.address, ERC20_TOKEN_ADDRESS.SHIB)
+      ).to.equal(0);
+    });
+    it("send donate in $SHIB and check changeTokenBalance function", async function () {
+      const tokenAmount = ethers.utils
+        .parseEther("100101")
+        .add(ethers.utils.parseUnits("1010", "wei"));
 
-    //   await expect(
-    //     packDataToSign("0.01", "SAND", user1.address, userToken1.address)
-    //   ).to.eventually.be.rejectedWith(Error);
-    // });
+      await shiba.connect(shibaHodler).approve(diamondAddress, tokenAmount);
+
+      const { signature, signatureData } = await packDataToSign({
+        tokenAmount: ethers.utils.formatEther(tokenAmount.toString()),
+        // tokenAmount: "10000",
+        addressToDonate: userOne.address,
+        tokenQuote: "SHIB",
+        userTokenAddress: userToken.address,
+      });
+
+      await expect(
+        userFacet
+          .connect(shibaHodler)
+          .donateERC20(
+            signature,
+            signatureData.tokenAmountBN,
+            signatureData.amountToMint,
+            signatureData.tokenToUser,
+            signatureData.fee,
+            signatureData.timestamp,
+            userOne.address,
+            signatureData.tokenAddress,
+            signatureData.userTokenAddress
+          )
+      )
+        .to.emit(userFacet, "Donate")
+        .withArgs(
+          shibaHodler.address,
+          userOne.address,
+          ERC20_TOKEN_ADDRESS.SHIB,
+          tokenAmount
+        )
+        .to.changeTokenBalances(
+          shiba,
+          [shibaHodler, diamondAddress, userOne],
+          [tokenAmount.mul("-1"), tokenAmount, 0]
+        );
+    });
+    it("check $SHIB balance after donate", async function () {
+      const tokenAmount = ethers.utils
+        .parseEther("100101")
+        .add(ethers.utils.parseUnits("1010", "wei"));
+
+      expect(
+        await userFacet.balanceERC20(userOne.address, shiba.address)
+      ).to.equal(tokenAmount.sub(calculateFee(tokenAmount)));
+      expect(
+        await userFacet.balanceERC20(diamondAddress, shiba.address)
+      ).to.equal(calculateFee(tokenAmount));
+      expect(await shiba.balanceOf(diamondAddress)).to.equal(tokenAmount);
+    });
+    it("check User balance after donate", async function () {
+      const tokenAmount = ethers.utils
+        .parseEther("100101")
+        .add(ethers.utils.parseUnits("1010", "wei"));
+
+      const calculateExpectBalance = tokenAmount
+        .mul(ethers.utils.parseEther(ERC20_TOKEN_PRICE["SHIB"]))
+        .div(ethers.constants.WeiPerEther)
+        .add(userTokenBalanceAfterFirtsDonate);
+
+      // add fist donate!
+      expect(await userToken.balanceOf(shibaHodler.address)).to.equal(
+        calculateExpectBalance
+      );
+    });
+    it("can not send donate if worth is to small ($SHIB)", async function () {
+      await expect(
+        packDataToSign({
+          tokenAmount: "100",
+          addressToDonate: userOne.address,
+          tokenQuote: "SHIB",
+          userTokenAddress: userToken.address,
+        })
+      ).to.be.rejectedWith("Donate worth too little.");
+    });
     // it("Revert when smart contract locked", async function () {
     //   await sand
     //     .connect(sandHodler)

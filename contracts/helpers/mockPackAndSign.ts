@@ -1,26 +1,12 @@
-// const { signerAdmin, provider } = require("../../utils/ethersProvider");
 import { ethers } from "hardhat";
-import { ERC20_TOKEN_ADDRESS } from "../constants";
-
-const userAddressToUserTokenAddress = {
-  "0x70997970C51812dc3A010C7d01b50e0d17dc79C8":
-    "0x7542002642420d2eea9164caa79a536dee18ae7f",
-};
+import { ERC20_TOKEN_ADDRESS, ERC20_TOKEN_PRICE } from "../constants";
+import { calculateFee } from "./calculateFee";
 
 const signerAdmin = new ethers.Wallet(
   process.env.SIGNER_WALLET_PRIVATE_KEY,
   ethers.provider
 );
 
-const tokenPrice = {
-  SAND: 0.431765,
-  SHIB: 0.00000822,
-  ELON: 0.000000287509,
-  USDC: 1.0,
-  WETH: 1191.23,
-  DOGE: 0.075218103662,
-  ENJ: 0.25567,
-};
 //TOD create config file !
 // FINAL -> string tokenAmount, string tokenQuote, string addressToDonate
 export const packDataToSign = async ({
@@ -48,13 +34,12 @@ export const packDataToSign = async ({
   // const userTokenAddress = userTokenAddress;
 
   //TODO at the beginning get from coinmarketcap, when dapp grow up store price in Redis
-  const price = tokenPrice[tokenQuote];
-  const priceBN = ethers.utils.parseEther(
-    Number.parseFloat(price.toString()).toFixed(18)
-  );
+  const price = ERC20_TOKEN_PRICE[tokenQuote];
+
+  const priceBN = ethers.utils.parseEther(ERC20_TOKEN_PRICE[tokenQuote]);
 
   const amountToMint = priceBN
-    .mul(ethers.utils.parseEther(tokenAmount))
+    .mul(tokenAmountBN)
     .div(ethers.constants.WeiPerEther);
 
   if (amountToMint.lt(ethers.utils.parseEther("0.1"))) {
@@ -62,7 +47,7 @@ export const packDataToSign = async ({
   }
 
   //TODO get fee from settings ?
-  const fee = tokenAmountBN.mul("0300").div("10000");
+  const fee = calculateFee(tokenAmountBN);
   const tokenToUser = tokenAmountBN.sub(fee);
 
   const block = await ethers.provider.getBlockNumber();
