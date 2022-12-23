@@ -21,6 +21,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Lock__factory>;
     getContractFactory(
+      name: "ChailinkPriceFeeds",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ChailinkPriceFeeds__factory>;
+    getContractFactory(
       name: "Diamond",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Diamond__factory>;
@@ -103,6 +107,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Lock>;
+    getContractAt(
+      name: "ChailinkPriceFeeds",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ChailinkPriceFeeds>;
     getContractAt(
       name: "Diamond",
       address: string,

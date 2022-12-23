@@ -32,9 +32,9 @@ export interface UserFacetInterface extends utils.Interface {
   functions: {
     "balanceERC20(address,address)": FunctionFragment;
     "balanceETH(address)": FunctionFragment;
-    "donateERC20(bytes,uint256,uint256,uint256,uint256,uint256,address,address,address)": FunctionFragment;
-    "donateETH(address)": FunctionFragment;
     "registerUser(string,string)": FunctionFragment;
+    "tipERC20(bytes,uint256,uint256,uint256,uint256,uint256,address,address,address)": FunctionFragment;
+    "tipETH(address)": FunctionFragment;
     "userToken(address)": FunctionFragment;
     "withdrawERC20(address)": FunctionFragment;
     "withdrawETH()": FunctionFragment;
@@ -45,9 +45,9 @@ export interface UserFacetInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "balanceERC20"
       | "balanceETH"
-      | "donateERC20"
-      | "donateETH"
       | "registerUser"
+      | "tipERC20"
+      | "tipETH"
       | "userToken"
       | "withdrawERC20"
       | "withdrawETH"
@@ -63,7 +63,11 @@ export interface UserFacetInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "donateERC20",
+    functionFragment: "registerUser",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "tipERC20",
     values: [
       PromiseOrValue<BytesLike>,
       PromiseOrValue<BigNumberish>,
@@ -77,12 +81,8 @@ export interface UserFacetInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "donateETH",
+    functionFragment: "tipETH",
     values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "registerUser",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "userToken",
@@ -107,14 +107,11 @@ export interface UserFacetInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "balanceETH", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "donateERC20",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "donateETH", data: BytesLike): Result;
-  decodeFunctionResult(
     functionFragment: "registerUser",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "tipERC20", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "tipETH", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "userToken", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "withdrawERC20",
@@ -130,28 +127,15 @@ export interface UserFacetInterface extends utils.Interface {
   ): Result;
 
   events: {
-    "Donate(address,address,address,uint256)": EventFragment;
     "NewUser(address,address)": EventFragment;
+    "Tip(address,address,address,uint256)": EventFragment;
     "Withdraw(address,address,uint256)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "Donate"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NewUser"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Tip"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Withdraw"): EventFragment;
 }
-
-export interface DonateEventObject {
-  donator: string;
-  addressToDonate: string;
-  tokenAddress: string;
-  tokenAmount: BigNumber;
-}
-export type DonateEvent = TypedEvent<
-  [string, string, string, BigNumber],
-  DonateEventObject
->;
-
-export type DonateEventFilter = TypedEventFilter<DonateEvent>;
 
 export interface NewUserEventObject {
   userAddress: string;
@@ -160,6 +144,19 @@ export interface NewUserEventObject {
 export type NewUserEvent = TypedEvent<[string, string], NewUserEventObject>;
 
 export type NewUserEventFilter = TypedEventFilter<NewUserEvent>;
+
+export interface TipEventObject {
+  donator: string;
+  addressToTip: string;
+  tokenAddress: string;
+  tokenAmount: BigNumber;
+}
+export type TipEvent = TypedEvent<
+  [string, string, string, BigNumber],
+  TipEventObject
+>;
+
+export type TipEventFilter = TypedEventFilter<TipEvent>;
 
 export interface WithdrawEventObject {
   user: string;
@@ -211,28 +208,28 @@ export interface UserFacet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { _balance: BigNumber }>;
 
-    donateERC20(
+    registerUser(
+      _tokenSymbol: PromiseOrValue<string>,
+      _tokenName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    tipERC20(
       _signature: PromiseOrValue<BytesLike>,
       _tokenAmount: PromiseOrValue<BigNumberish>,
       _mintTokenAmount: PromiseOrValue<BigNumberish>,
       _toUser: PromiseOrValue<BigNumberish>,
       _fee: PromiseOrValue<BigNumberish>,
       _timestampOffChain: PromiseOrValue<BigNumberish>,
-      _addressToDonate: PromiseOrValue<string>,
+      _addressToTip: PromiseOrValue<string>,
       _tokenAddress: PromiseOrValue<string>,
       _userTokenAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    donateETH(
-      _addressToDonate: PromiseOrValue<string>,
+    tipETH(
+      _addressToTip: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    registerUser(
-      _tokenSymbol: PromiseOrValue<string>,
-      _tokenName: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     userToken(
@@ -266,28 +263,28 @@ export interface UserFacet extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  donateERC20(
+  registerUser(
+    _tokenSymbol: PromiseOrValue<string>,
+    _tokenName: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  tipERC20(
     _signature: PromiseOrValue<BytesLike>,
     _tokenAmount: PromiseOrValue<BigNumberish>,
     _mintTokenAmount: PromiseOrValue<BigNumberish>,
     _toUser: PromiseOrValue<BigNumberish>,
     _fee: PromiseOrValue<BigNumberish>,
     _timestampOffChain: PromiseOrValue<BigNumberish>,
-    _addressToDonate: PromiseOrValue<string>,
+    _addressToTip: PromiseOrValue<string>,
     _tokenAddress: PromiseOrValue<string>,
     _userTokenAddress: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  donateETH(
-    _addressToDonate: PromiseOrValue<string>,
+  tipETH(
+    _addressToTip: PromiseOrValue<string>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  registerUser(
-    _tokenSymbol: PromiseOrValue<string>,
-    _tokenName: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   userToken(
@@ -321,29 +318,29 @@ export interface UserFacet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    donateERC20(
+    registerUser(
+      _tokenSymbol: PromiseOrValue<string>,
+      _tokenName: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    tipERC20(
       _signature: PromiseOrValue<BytesLike>,
       _tokenAmount: PromiseOrValue<BigNumberish>,
       _mintTokenAmount: PromiseOrValue<BigNumberish>,
       _toUser: PromiseOrValue<BigNumberish>,
       _fee: PromiseOrValue<BigNumberish>,
       _timestampOffChain: PromiseOrValue<BigNumberish>,
-      _addressToDonate: PromiseOrValue<string>,
+      _addressToTip: PromiseOrValue<string>,
       _tokenAddress: PromiseOrValue<string>,
       _userTokenAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    donateETH(
-      _addressToDonate: PromiseOrValue<string>,
+    tipETH(
+      _addressToTip: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    registerUser(
-      _tokenSymbol: PromiseOrValue<string>,
-      _tokenName: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<string>;
 
     userToken(
       _userAddress: PromiseOrValue<string>,
@@ -364,19 +361,6 @@ export interface UserFacet extends BaseContract {
   };
 
   filters: {
-    "Donate(address,address,address,uint256)"(
-      donator?: PromiseOrValue<string> | null,
-      addressToDonate?: PromiseOrValue<string> | null,
-      tokenAddress?: null,
-      tokenAmount?: null
-    ): DonateEventFilter;
-    Donate(
-      donator?: PromiseOrValue<string> | null,
-      addressToDonate?: PromiseOrValue<string> | null,
-      tokenAddress?: null,
-      tokenAmount?: null
-    ): DonateEventFilter;
-
     "NewUser(address,address)"(
       userAddress?: PromiseOrValue<string> | null,
       userToken?: null
@@ -385,6 +369,19 @@ export interface UserFacet extends BaseContract {
       userAddress?: PromiseOrValue<string> | null,
       userToken?: null
     ): NewUserEventFilter;
+
+    "Tip(address,address,address,uint256)"(
+      donator?: PromiseOrValue<string> | null,
+      addressToTip?: PromiseOrValue<string> | null,
+      tokenAddress?: null,
+      tokenAmount?: null
+    ): TipEventFilter;
+    Tip(
+      donator?: PromiseOrValue<string> | null,
+      addressToTip?: PromiseOrValue<string> | null,
+      tokenAddress?: null,
+      tokenAmount?: null
+    ): TipEventFilter;
 
     "Withdraw(address,address,uint256)"(
       user?: PromiseOrValue<string> | null,
@@ -410,28 +407,28 @@ export interface UserFacet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    donateERC20(
+    registerUser(
+      _tokenSymbol: PromiseOrValue<string>,
+      _tokenName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    tipERC20(
       _signature: PromiseOrValue<BytesLike>,
       _tokenAmount: PromiseOrValue<BigNumberish>,
       _mintTokenAmount: PromiseOrValue<BigNumberish>,
       _toUser: PromiseOrValue<BigNumberish>,
       _fee: PromiseOrValue<BigNumberish>,
       _timestampOffChain: PromiseOrValue<BigNumberish>,
-      _addressToDonate: PromiseOrValue<string>,
+      _addressToTip: PromiseOrValue<string>,
       _tokenAddress: PromiseOrValue<string>,
       _userTokenAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    donateETH(
-      _addressToDonate: PromiseOrValue<string>,
+    tipETH(
+      _addressToTip: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    registerUser(
-      _tokenSymbol: PromiseOrValue<string>,
-      _tokenName: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     userToken(
@@ -466,28 +463,28 @@ export interface UserFacet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    donateERC20(
+    registerUser(
+      _tokenSymbol: PromiseOrValue<string>,
+      _tokenName: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    tipERC20(
       _signature: PromiseOrValue<BytesLike>,
       _tokenAmount: PromiseOrValue<BigNumberish>,
       _mintTokenAmount: PromiseOrValue<BigNumberish>,
       _toUser: PromiseOrValue<BigNumberish>,
       _fee: PromiseOrValue<BigNumberish>,
       _timestampOffChain: PromiseOrValue<BigNumberish>,
-      _addressToDonate: PromiseOrValue<string>,
+      _addressToTip: PromiseOrValue<string>,
       _tokenAddress: PromiseOrValue<string>,
       _userTokenAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    donateETH(
-      _addressToDonate: PromiseOrValue<string>,
+    tipETH(
+      _addressToTip: PromiseOrValue<string>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    registerUser(
-      _tokenSymbol: PromiseOrValue<string>,
-      _tokenName: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     userToken(

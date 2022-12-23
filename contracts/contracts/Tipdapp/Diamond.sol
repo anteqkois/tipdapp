@@ -19,7 +19,7 @@ contract Diamond {
 
         AppStorage storage s = LibAppStorage.appStorage();
         s.signerAdmin = _signerAdmin;
-        s.donateFee = 300;
+        s.tipFee = 300;
         // _minValue = 1e17;
         s.userTokenImplementation = _userTokenImplementation;
 

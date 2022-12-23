@@ -9,6 +9,7 @@ import type * as libraries from "./libraries";
 export type { libraries };
 import type * as upgradeInitializers from "./upgradeInitializers";
 export type { upgradeInitializers };
+export type { ChailinkPriceFeeds } from "./ChailinkPriceFeeds";
 export type { Diamond } from "./Diamond";
 export type { UserToken } from "./UserToken";
 export type { UserTokenSafeGas } from "./UserTokenSafeGas";

@@ -9,7 +9,7 @@ import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 import "hardhat/console.sol";
 
 contract UserFacet is Modifier {
-    event Donate(address indexed donator, address indexed addressToDonate, address tokenAddress, uint256 tokenAmount);
+    event Tip(address indexed donator, address indexed addressToTip, address tokenAddress, uint256 tokenAmount);
     event Withdraw(address indexed user, address tokenAddress, uint256 tokenAmount);
     event NewUser(address indexed userAddress, address userToken);
 
@@ -45,18 +45,18 @@ contract UserFacet is Modifier {
         return newToken;
     }
 
-    function donateERC20(
+    function tipERC20(
         bytes calldata _signature,
         uint256 _tokenAmount,
         uint256 _mintTokenAmount,
         uint256 _toUser,
         uint256 _fee,
         uint256 _timestampOffChain,
-        address _addressToDonate,
+        address _addressToTip,
         address _tokenAddress,
         address _userTokenAddress
     ) external virtual notPaused {
-        // donate worth check on backend
+        // tip worth check on backend
         //connect msg with onChain data with tx
 
         //TODO changeable time expired ?
@@ -96,33 +96,36 @@ contract UserFacet is Modifier {
         IERC20(_tokenAddress).transferFrom(msg.sender, address(this), _tokenAmount);
 
         unchecked {
-            s.addressToTokenToBalance[_addressToDonate][_tokenAddress] += _toUser;
+            s.addressToTokenToBalance[_addressToTip][_tokenAddress] += _toUser;
             s.addressToTokenToBalance[address(this)][_tokenAddress] += _fee;
         }
 
         UserToken(_userTokenAddress).mint(msg.sender, _mintTokenAmount);
 
         //TODO REMOVE ?
-        emit Donate(msg.sender, _addressToDonate, _tokenAddress, _tokenAmount);
+        emit Tip(msg.sender, _addressToTip, _tokenAddress, _tokenAmount);
     }
 
-    function donateETH(address _addressToDonate) external payable notPaused {
+    function tipETH(address _addressToTip) external payable notPaused {
         (, int256 price, , , ) = LibDiamond.ethUsdOracle.latestRoundData();
         uint256 tokenToMint = (uint(price) * msg.value) / 1e8;
 
-        //set to hard number?
-        // require(tokenToMint >= _minValue, "Donate worth too little");
+        address userTokenAddress = s.tokenToUser[_addressToTip];
+        require(userTokenAddress != address(0), "No registered account");
 
-        uint256 fee = (msg.value * s.donateFee) / 10000;
+        //set to hard number?
+        // require(tokenToMint >= _minValue, "Tip worth too little");
+
+        uint256 fee = (msg.value * s.tipFee) / 10000;
 
         unchecked {
             s.balanceETH[address(this)] += fee;
-            s.balanceETH[_addressToDonate] += msg.value - fee;
+            s.balanceETH[_addressToTip] += msg.value - fee;
         }
 
-        UserToken(s.tokenToUser[_addressToDonate]).mint(msg.sender, tokenToMint);
+        UserToken(userTokenAddress).mint(msg.sender, tokenToMint);
 
-        emit Donate(msg.sender, _addressToDonate, address(0), msg.value);
+        emit Tip(msg.sender, _addressToTip, address(0), msg.value);
     }
 
     function withdrawERC20(address _tokenAddress) public {

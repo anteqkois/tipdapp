@@ -30,13 +30,13 @@ describe("AdministrationFacet", async function () {
     diamondLoupeFacet = await ethers.getContractAt(
       "DiamondLoupeFacet",
       diamondAddress
-      );  
-    
-      administrationFacet = await ethers.getContractAt(
-        "AdministrationFacet",
-        diamondAddress
-      );
-      
+    );
+
+    administrationFacet = await ethers.getContractAt(
+      "AdministrationFacet",
+      diamondAddress
+    );
+
     for (const address of await diamondLoupeFacet.facetAddresses()) {
       addresses.push(address);
     }
@@ -81,16 +81,16 @@ describe("AdministrationFacet", async function () {
     );
   });
 
-  it("donate fee should be properly assigned", async () => {
-    expect(await administrationFacet.donateFee()).to.be.equal(300);
+  it("tip fee should be properly assigned", async () => {
+    expect(await administrationFacet.tipFee()).to.be.equal(300);
   });
 
-  it("donate fee can be change", async () => {
+  it("tip fee can be change", async () => {
     await administrationFacet.setFee("500");
-    expect(await administrationFacet.donateFee()).to.be.equal(500);
+    expect(await administrationFacet.tipFee()).to.be.equal(500);
 
     await administrationFacet.setFee("300");
-    expect(await administrationFacet.donateFee()).to.be.equal(300);
+    expect(await administrationFacet.tipFee()).to.be.equal(300);
   });
 
   it("diamond should have UserToken implementation address", async () => {
@@ -98,16 +98,16 @@ describe("AdministrationFacet", async function () {
       await administrationFacet.userTokenImplmentation();
     expect(implementationAddress).to.exist;
   });
-  
-    it("the UserToken implementation should belong to Diamond", async () => {
-      const implementationAddress =
-        await administrationFacet.userTokenImplmentation();
-      expect(implementationAddress).to.be.equal(diamondAddress);
-    });
-  
-    it("owner can change userTokenImplementation address", async () => {
-      const implementationAddress =
-        await administrationFacet.userTokenImplmentation();
-      expect(implementationAddress).to.be.equal(diamondAddress);
-    });
+
+  it("the UserToken implementation should belong to Diamond", async () => {
+    const implementationAddress =
+      await administrationFacet.userTokenImplmentation();
+    expect(implementationAddress).to.be.equal(diamondAddress);
+  });
+
+  it("owner can change userTokenImplementation address", async () => {
+    const implementationAddress =
+      await administrationFacet.userTokenImplmentation();
+    expect(implementationAddress).to.be.equal(diamondAddress);
+  });
 });

@@ -8,29 +8,29 @@ const signerAdmin = new ethers.Wallet(
 );
 
 //TOD create config file !
-// FINAL -> string tokenAmountInEther, string tokenQuote, string addressToDonate
+// FINAL -> string tokenAmountInEther, string tokenQuote, string addressToTip
 export const packDataToSign = async ({
   tokenAmountInEther,
   tokenQuote,
-  addressToDonate,
+  addressToTip,
   userTokenAddress,
 }: {
   tokenAmountInEther: string;
   // TODO create all possible quote ?
   tokenQuote: keyof typeof ERC20_TOKEN_ADDRESS;
-  addressToDonate: string;
+  addressToTip: string;
   //TODO in future remove below param
   userTokenAddress: string;
 }) => {
-  if (addressToDonate === ethers.constants.AddressZero) {
-    throw new Error("Address to donate can not be address zero.");
+  if (addressToTip === ethers.constants.AddressZero) {
+    throw new Error("Address to tip can not be address zero.");
   }
   const tokenAmountBN = ethers.utils.parseEther(tokenAmountInEther);
 
-  //TODO get erc20 token address (donated token) from rigidly typed constants, when dapp grow up store in Redis, if not in DB throw error
+  //TODO get erc20 token address (tipd token) from rigidly typed constants, when dapp grow up store in Redis, if not in DB throw error
   const tokenAddress = ERC20_TOKEN_ADDRESS[tokenQuote];
 
-  //TODO get userToken address FROM DB using addressToDonate, if not in DB throw error
+  //TODO get userToken address FROM DB using addressToTip, if not in DB throw error
   // const userTokenAddress = userTokenAddress;
 
   //TODO at the beginning get from coinmarketcap, when dapp grow up store price in Redis
@@ -43,7 +43,7 @@ export const packDataToSign = async ({
     .div(ethers.constants.WeiPerEther);
 
   if (amountToMint.lt(ethers.utils.parseEther("0.1"))) {
-    throw new Error("Donate worth too little.");
+    throw new Error("Tip worth too little.");
   }
 
   //TODO get fee from settings ?

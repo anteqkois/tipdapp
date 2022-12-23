@@ -96,16 +96,16 @@ describe("AdministrationFacet", async function () {
   });
 
   describe("Fee", async function () {
-    it("donate fee should be properly assigned", async () => {
-      expect(await administrationFacet.donateFee()).to.be.equal(300);
+    it("tip fee should be properly assigned", async () => {
+      expect(await administrationFacet.tipFee()).to.be.equal(300);
     });
 
-    it("donate fee can be change", async () => {
+    it("tip fee can be change", async () => {
       await administrationFacet.setFee("500");
-      expect(await administrationFacet.donateFee()).to.be.equal(500);
+      expect(await administrationFacet.tipFee()).to.be.equal(500);
 
       await administrationFacet.setFee("300");
-      expect(await administrationFacet.donateFee()).to.be.equal(300);
+      expect(await administrationFacet.tipFee()).to.be.equal(300);
     });
   });
 

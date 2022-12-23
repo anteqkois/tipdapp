@@ -4,12 +4,13 @@
 import { deployDiamond } from "../scripts/deploy";
 
 // const { assert } = require('chai')
-import { mine, time } from "@nomicfoundation/hardhat-network-helpers";
+import { time } from "@nomicfoundation/hardhat-network-helpers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import {
+  CHAILINK_PRICE_ORACLE_ADDRESS_USD,
   ERC20_TOKEN_ADDRESS,
   ERC20_TOKEN_PRICE,
   HOLDER_ADDRESS,
@@ -18,6 +19,7 @@ import { calculateFee } from "../helpers/calculateFee";
 import { packDataToSign } from "../helpers/mockPackAndSign";
 import {
   AdministrationFacet,
+  ChailinkPriceFeeds,
   DiamondLoupeFacet,
   IERC20,
   UserFacet,
@@ -25,7 +27,6 @@ import {
 } from "../typechain-types";
 
 describe("AdministrationFacet", async function () {
-  // let accounts: Awaited<ReturnType<typeof ethers.getSigners>>;
   let accounts: SignerWithAddress[];
   let contractOwner;
   let signerAdmin: SignerWithAddress;
@@ -36,6 +37,7 @@ describe("AdministrationFacet", async function () {
   let diamondLoupeFacet: DiamondLoupeFacet;
   let userFacet: UserFacet;
   let administrationFacet: AdministrationFacet;
+  let chailinkPriceFeeds: ChailinkPriceFeeds;
   const addresses: string[] = [];
 
   let userToken: UserToken;
@@ -44,7 +46,7 @@ describe("AdministrationFacet", async function () {
   let shiba: IERC20;
   let shibaHodler: SignerWithAddress;
 
-  let userTokenBalanceAfterFirtsDonate: typeof ethers.BigNumber.prototype;
+  let userTokenBalanceAfterTips: typeof ethers.BigNumber.prototype;
 
   before(async function () {
     accounts = await ethers.getSigners();
@@ -71,6 +73,11 @@ describe("AdministrationFacet", async function () {
       "AdministrationFacet",
       diamondAddress
     );
+
+    const ChailinkPriceFeeds = await ethers.getContractFactory(
+      "ChailinkPriceFeeds"
+    );
+    chailinkPriceFeeds = await ChailinkPriceFeeds.deploy();
 
     for (const address of await diamondLoupeFacet.facetAddresses()) {
       addresses.push(address);
@@ -224,15 +231,14 @@ describe("AdministrationFacet", async function () {
     });
   });
 
-  //TODO Test in loop many varaints ?
-  describe("Donate ERC20", async () => {
-    it("user $SAND balance before donate should be 0", async function () {
+  describe("Tip ERC20", async () => {
+    it("user $SAND balance before tip should be 0", async function () {
       expect(
         await userFacet.balanceERC20(userOne.address, sand.address)
       ).to.equal(0);
     });
 
-    it("send $SAND donate, check balance before and after", async function () {
+    it("send $SAND tip, check balance before and after", async function () {
       await sand
         .connect(sandHodler)
         .approve(diamondAddress, ethers.utils.parseEther("100.25"));
@@ -244,7 +250,7 @@ describe("AdministrationFacet", async function () {
 
       const { signature, signatureData } = await packDataToSign({
         tokenAmountInEther: "100.25",
-        addressToDonate: userOne.address,
+        addressToTip: userOne.address,
         tokenQuote: "SAND",
         userTokenAddress: userToken.address,
       });
@@ -252,7 +258,7 @@ describe("AdministrationFacet", async function () {
       await expect(
         userFacet
           .connect(sandHodler)
-          .donateERC20(
+          .tipERC20(
             signature,
             signatureData.tokenAmountBN,
             signatureData.amountToMint,
@@ -264,7 +270,7 @@ describe("AdministrationFacet", async function () {
             signatureData.userTokenAddress
           )
       )
-        .to.emit(userFacet, "Donate")
+        .to.emit(userFacet, "Tip")
         .withArgs(
           sandHodler.address,
           userOne.address,
@@ -298,26 +304,26 @@ describe("AdministrationFacet", async function () {
       );
     });
 
-    it("check UserToken balance after donate", async function () {
+    it("check UserToken balance after tip", async function () {
       const expectedBalance = ethers.utils
         .parseEther("100.25")
         .mul(ethers.utils.parseEther(ERC20_TOKEN_PRICE["SAND"]))
         .div(ethers.constants.WeiPerEther);
 
-      userTokenBalanceAfterFirtsDonate = await userToken.balanceOf(
-        sandHodler.address
-      );
+      userTokenBalanceAfterTips = expectedBalance;
 
-      expect(userTokenBalanceAfterFirtsDonate).to.equal(expectedBalance);
+      expect(await userToken.balanceOf(sandHodler.address)).to.equal(
+        expectedBalance
+      );
     });
 
-    it("check $SHIB balance before donate", async function () {
+    it("check $SHIB balance before tip", async function () {
       expect(
         await userFacet.balanceERC20(userOne.address, ERC20_TOKEN_ADDRESS.SHIB)
       ).to.equal(0);
     });
 
-    it("send donate in $SHIB and check changeTokenBalance function", async function () {
+    it("send tip in $SHIB and check changeTokenBalance function", async function () {
       const tokenAmount = ethers.utils
         .parseEther("100101")
         .add(ethers.utils.parseUnits("1010", "wei"));
@@ -327,7 +333,7 @@ describe("AdministrationFacet", async function () {
       const { signature, signatureData } = await packDataToSign({
         tokenAmountInEther: ethers.utils.formatEther(tokenAmount.toString()),
         // tokenAmount: "10000",
-        addressToDonate: userOne.address,
+        addressToTip: userOne.address,
         tokenQuote: "SHIB",
         userTokenAddress: userToken.address,
       });
@@ -335,7 +341,7 @@ describe("AdministrationFacet", async function () {
       await expect(
         userFacet
           .connect(shibaHodler)
-          .donateERC20(
+          .tipERC20(
             signature,
             signatureData.tokenAmountBN,
             signatureData.amountToMint,
@@ -347,7 +353,7 @@ describe("AdministrationFacet", async function () {
             signatureData.userTokenAddress
           )
       )
-        .to.emit(userFacet, "Donate")
+        .to.emit(userFacet, "Tip")
         .withArgs(
           shibaHodler.address,
           userOne.address,
@@ -361,7 +367,7 @@ describe("AdministrationFacet", async function () {
         );
     });
 
-    it("check $SHIB balance after donate", async function () {
+    it("check $SHIB balance after tip", async function () {
       const tokenAmount = ethers.utils
         .parseEther("100101")
         .add(ethers.utils.parseUnits("1010", "wei"));
@@ -375,31 +381,34 @@ describe("AdministrationFacet", async function () {
       expect(await shiba.balanceOf(diamondAddress)).to.equal(tokenAmount);
     });
 
-    it("check User balance after donate", async function () {
+    it("check UserToken balance after tip", async function () {
       const tokenAmount = ethers.utils
         .parseEther("100101")
         .add(ethers.utils.parseUnits("1010", "wei"));
 
-      const calculateExpectBalance = tokenAmount
+      const expectedBalance = tokenAmount
         .mul(ethers.utils.parseEther(ERC20_TOKEN_PRICE["SHIB"]))
         .div(ethers.constants.WeiPerEther)
-        .add(userTokenBalanceAfterFirtsDonate);
+        .add(userTokenBalanceAfterTips);
 
-      // add fist donate!
+      userTokenBalanceAfterTips =
+        userTokenBalanceAfterTips.add(expectedBalance);
+
+      // add fist tip!
       expect(await userToken.balanceOf(shibaHodler.address)).to.equal(
-        calculateExpectBalance
+        expectedBalance
       );
     });
 
-    it("can not send donate if worth is to small ($SHIB)", async function () {
+    it("can not send tip if worth is to small ($SHIB)", async function () {
       await expect(
         packDataToSign({
           tokenAmountInEther: "100",
-          addressToDonate: userOne.address,
+          addressToTip: userOne.address,
           tokenQuote: "SHIB",
           userTokenAddress: userToken.address,
         })
-      ).to.be.rejectedWith("Donate worth too little.");
+      ).to.be.rejectedWith("Tip worth too little.");
     });
 
     it("revert when smart contract paused", async function () {
@@ -416,14 +425,14 @@ describe("AdministrationFacet", async function () {
 
       const { signature, signatureData } = await packDataToSign({
         tokenAmountInEther: "100.25",
-        addressToDonate: userOne.address,
+        addressToTip: userOne.address,
         tokenQuote: "SAND",
         userTokenAddress: userToken.address,
       });
       await expect(
         userFacet
           .connect(sandHodler)
-          .donateERC20(
+          .tipERC20(
             signature,
             signatureData.tokenAmountBN,
             signatureData.amountToMint,
@@ -442,7 +451,7 @@ describe("AdministrationFacet", async function () {
       await expect(
         userFacet
           .connect(sandHodler)
-          .donateERC20(
+          .tipERC20(
             signature,
             signatureData.tokenAmountBN,
             signatureData.amountToMint,
@@ -454,7 +463,7 @@ describe("AdministrationFacet", async function () {
             signatureData.userTokenAddress
           )
       )
-        .to.emit(userFacet, "Donate")
+        .to.emit(userFacet, "Tip")
         .withArgs(
           sandHodler.address,
           userOne.address,
@@ -472,28 +481,28 @@ describe("AdministrationFacet", async function () {
         );
     });
 
-    it("revert when address to donate is address zero", async function () {
+    it("revert when address to tip is address zero", async function () {
       await expect(
         packDataToSign({
           tokenAmountInEther: "100",
-          addressToDonate: ethers.constants.AddressZero,
+          addressToTip: ethers.constants.AddressZero,
           tokenQuote: "SAND",
           userTokenAddress: userToken.address,
         })
-      ).to.be.rejectedWith("Address to donate can not be address zero.");
+      ).to.be.rejectedWith("Address to tip can not be address zero.");
     });
 
     xit("revert when address not register in smart contract (It mjust be handle with db when signature is sign !)", async function () {
       const { signature, signatureData } = await packDataToSign({
         tokenAmountInEther: "100.25",
-        addressToDonate: userOne.address,
+        addressToTip: userOne.address,
         tokenQuote: "SAND",
         userTokenAddress: userToken.address,
       });
       await expect(
         userFacet
           .connect(sandHodler)
-          .donateERC20(
+          .tipERC20(
             signature,
             signatureData.tokenAmountBN,
             signatureData.amountToMint,
@@ -510,14 +519,14 @@ describe("AdministrationFacet", async function () {
     it("revert when wrong signature", async function () {
       const { signature, signatureData } = await packDataToSign({
         tokenAmountInEther: "100.25",
-        addressToDonate: userOne.address,
+        addressToTip: userOne.address,
         tokenQuote: "SAND",
         userTokenAddress: userToken.address,
       });
       await expect(
         userFacet
           .connect(sandHodler)
-          .donateERC20(
+          .tipERC20(
             signature,
             signatureData.tokenAmountBN,
             signatureData.amountToMint,
@@ -538,17 +547,17 @@ describe("AdministrationFacet", async function () {
 
       const { signature, signatureData } = await packDataToSign({
         tokenAmountInEther: "100.25",
-        addressToDonate: userOne.address,
+        addressToTip: userOne.address,
         tokenQuote: "SAND",
         userTokenAddress: userToken.address,
       });
 
-      await time.increase(91)
-      
+      await time.increase(91);
+
       await await expect(
         userFacet
           .connect(sandHodler)
-          .donateERC20(
+          .tipERC20(
             signature,
             signatureData.tokenAmountBN,
             signatureData.amountToMint,
@@ -560,6 +569,105 @@ describe("AdministrationFacet", async function () {
             signatureData.userTokenAddress
           )
       ).to.be.revertedWith("Signature time expired");
+    });
+  });
+
+  describe("Tip ETH", async () => {
+    it("check $ETH balance in Diamond before tip", async () => {
+      expect(await userFacet.balanceETH(userOne.address)).to.be.equal(0);
+    });
+
+    it("send tip in $ETH and check balances", async function () {
+      await expect(() =>
+        userFacet
+          .connect(sandHodler)
+          .tipETH(userOne.address, { value: ethers.utils.parseEther("1") })
+      )
+        .to.emit(userFacet, "Tip")
+        .withArgs(
+          sandHodler.address,
+          userOne.address,
+          ethers.constants.AddressZero,
+          ethers.utils.parseEther("1")
+        )
+        .to.changeEtherBalances(
+          [sandHodler, diamondAddress, userOne],
+          [ethers.utils.parseEther("-1"), ethers.utils.parseEther("1"), 0]
+        );
+    });
+    it("check $ETH balance after tip", async function () {
+      expect(await userFacet.balanceETH(userOne.address)).to.be.equal(
+        ethers.utils.parseEther("0.97")
+      );
+      expect(await userFacet.balanceETH(diamondAddress)).to.be.equal(
+        ethers.utils.parseEther("0.03")
+      );
+    });
+    it("Check UserToken balance after tip", async function () {
+      const ethPrice = await chailinkPriceFeeds.getLatestPrice(
+        CHAILINK_PRICE_ORACLE_ADDRESS_USD.ETH
+      );
+
+      const expectedBalance = ethers.utils
+        .parseEther("1")
+        .mul(ethPrice)
+        .div(ethers.constants.WeiPerEther)
+        .add(userTokenBalanceAfterTips);
+
+      userTokenBalanceAfterTips =
+        userTokenBalanceAfterTips.add(expectedBalance);
+
+      expect(await userToken.balanceOf(sandHodler.address)).to.equal(
+        expectedBalance
+      );
+    });
+
+    it("revert when address to tip is address zero", async function () {
+      await expect(
+        userFacet.connect(sandHodler).tipETH(ethers.constants.AddressZero, {
+          value: ethers.utils.parseEther("1"),
+        })
+      ).to.be.revertedWith("No registered account");
+    });
+
+    it("revert when address not register in smart contract", async function () {
+      await expect(
+        userFacet.connect(sandHodler).tipETH(signerAdmin.address, {
+          value: ethers.utils.parseEther("1"),
+        })
+      ).to.be.revertedWith("No registered account");
+    });
+
+    it("revert when smart contract paused", async function () {
+      expect(await administrationFacet.paused()).to.be.false;
+      await administrationFacet.pause();
+      expect(await administrationFacet.paused()).to.be.true;
+
+      await expect(
+        userFacet.connect(sandHodler).tipETH(userOne.address, {
+          value: ethers.utils.parseEther("1"),
+        })
+      ).to.be.revertedWith("Smart Contract paused");
+
+      await administrationFacet.unPause();
+      expect(await administrationFacet.paused()).to.be.false;
+
+      await expect(
+        userFacet.connect(sandHodler).tipETH(userOne.address, {
+          value: ethers.utils.parseEther("1"),
+        })
+      )
+        .to.emit(userFacet, "Tip")
+        .withArgs(
+          sandHodler.address,
+          userOne.address,
+          ethers.constants.AddressZero,
+          ethers.utils.parseEther("1")
+        )
+        .to.changeEtherBalances(
+          [sandHodler, diamondAddress, userOne],
+          [ethers.utils.parseEther("-1"), ethers.utils.parseEther("1"), 0]
+        );
     });
   });
 });

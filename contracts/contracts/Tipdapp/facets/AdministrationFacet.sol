@@ -25,14 +25,14 @@ contract AdministrationFacet is Modifier {
         s.signerAdmin = _newSignerAdmin;
     }
 
-    function donateFee() external view returns (uint256) {
-        return s.donateFee;
+    function tipFee() external view returns (uint256) {
+        return s.tipFee;
     }
 
     function setFee(uint256 _newFee) external onlyOwner {
         // Fee must be below 15%
         require(_newFee < 1500);
-        s.donateFee = _newFee;
+        s.tipFee = _newFee;
     }
 
     function userTokenImplmentation() external view returns (address) {

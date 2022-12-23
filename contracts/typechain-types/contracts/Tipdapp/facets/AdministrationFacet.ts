@@ -27,12 +27,12 @@ import type {
 export interface AdministrationFacetInterface extends utils.Interface {
   functions: {
     "changeSignerAdmin(address)": FunctionFragment;
-    "donateFee()": FunctionFragment;
     "pause()": FunctionFragment;
     "paused()": FunctionFragment;
     "setFee(uint256)": FunctionFragment;
     "setUserTokenImplmentation(address)": FunctionFragment;
     "signerAdmin()": FunctionFragment;
+    "tipFee()": FunctionFragment;
     "unPause()": FunctionFragment;
     "userTokenImplmentation()": FunctionFragment;
     "withdrawERC20Admin(address)": FunctionFragment;
@@ -43,12 +43,12 @@ export interface AdministrationFacetInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "changeSignerAdmin"
-      | "donateFee"
       | "pause"
       | "paused"
       | "setFee"
       | "setUserTokenImplmentation"
       | "signerAdmin"
+      | "tipFee"
       | "unPause"
       | "userTokenImplmentation"
       | "withdrawERC20Admin"
@@ -60,7 +60,6 @@ export interface AdministrationFacetInterface extends utils.Interface {
     functionFragment: "changeSignerAdmin",
     values: [PromiseOrValue<string>]
   ): string;
-  encodeFunctionData(functionFragment: "donateFee", values?: undefined): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
@@ -75,6 +74,7 @@ export interface AdministrationFacetInterface extends utils.Interface {
     functionFragment: "signerAdmin",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "tipFee", values?: undefined): string;
   encodeFunctionData(functionFragment: "unPause", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "userTokenImplmentation",
@@ -97,7 +97,6 @@ export interface AdministrationFacetInterface extends utils.Interface {
     functionFragment: "changeSignerAdmin",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "donateFee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setFee", data: BytesLike): Result;
@@ -109,6 +108,7 @@ export interface AdministrationFacetInterface extends utils.Interface {
     functionFragment: "signerAdmin",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "tipFee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "unPause", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "userTokenImplmentation",
@@ -162,8 +162,6 @@ export interface AdministrationFacet extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    donateFee(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     pause(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -181,6 +179,8 @@ export interface AdministrationFacet extends BaseContract {
     ): Promise<ContractTransaction>;
 
     signerAdmin(overrides?: CallOverrides): Promise<[string]>;
+
+    tipFee(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     unPause(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -208,8 +208,6 @@ export interface AdministrationFacet extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  donateFee(overrides?: CallOverrides): Promise<BigNumber>;
-
   pause(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -227,6 +225,8 @@ export interface AdministrationFacet extends BaseContract {
   ): Promise<ContractTransaction>;
 
   signerAdmin(overrides?: CallOverrides): Promise<string>;
+
+  tipFee(overrides?: CallOverrides): Promise<BigNumber>;
 
   unPause(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -254,8 +254,6 @@ export interface AdministrationFacet extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    donateFee(overrides?: CallOverrides): Promise<BigNumber>;
-
     pause(overrides?: CallOverrides): Promise<void>;
 
     paused(overrides?: CallOverrides): Promise<boolean>;
@@ -271,6 +269,8 @@ export interface AdministrationFacet extends BaseContract {
     ): Promise<void>;
 
     signerAdmin(overrides?: CallOverrides): Promise<string>;
+
+    tipFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     unPause(overrides?: CallOverrides): Promise<void>;
 
@@ -297,8 +297,6 @@ export interface AdministrationFacet extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    donateFee(overrides?: CallOverrides): Promise<BigNumber>;
-
     pause(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -316,6 +314,8 @@ export interface AdministrationFacet extends BaseContract {
     ): Promise<BigNumber>;
 
     signerAdmin(overrides?: CallOverrides): Promise<BigNumber>;
+
+    tipFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     unPause(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -344,8 +344,6 @@ export interface AdministrationFacet extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    donateFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     pause(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -363,6 +361,8 @@ export interface AdministrationFacet extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     signerAdmin(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    tipFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     unPause(
       overrides?: Overrides & { from?: PromiseOrValue<string> }

@@ -5,6 +5,7 @@ export * as facets from "./facets";
 export * as interfaces from "./interfaces";
 export * as libraries from "./libraries";
 export * as upgradeInitializers from "./upgradeInitializers";
+export { ChailinkPriceFeeds__factory } from "./ChailinkPriceFeeds__factory";
 export { Diamond__factory } from "./Diamond__factory";
 export { UserToken__factory } from "./UserToken__factory";
 export { UserTokenSafeGas__factory } from "./UserTokenSafeGas__factory";
