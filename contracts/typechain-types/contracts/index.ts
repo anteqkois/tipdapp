@@ -3,4 +3,3 @@
 /* eslint-disable */
 import type * as tipdapp from "./Tipdapp";
 export type { tipdapp };
-export type { Lock } from "./Lock";

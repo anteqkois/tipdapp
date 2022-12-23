@@ -26,7 +26,7 @@ import {
   UserToken,
 } from "../typechain-types";
 
-describe("AdministrationFacet", async function () {
+describe("UserFacet", async function () {
   let accounts: SignerWithAddress[];
   let contractOwner;
   let signerAdmin: SignerWithAddress;
@@ -670,4 +670,140 @@ describe("AdministrationFacet", async function () {
         );
     });
   });
+
+  describe("Withdraw ERC20", async () => {
+    it("user can withdraw one ERC20 token", async () => {
+      const balance = await userFacet.balanceERC20(
+        userOne.address,
+        ERC20_TOKEN_ADDRESS.SAND
+      );
+
+      // In test were 2 SAND tips
+      expect(balance).to.be.equal(
+        ethers.utils
+          .parseEther("100.25")
+          .mul("2")
+          .sub(calculateFee(ethers.utils.parseEther("100.25").mul("2")))
+      );
+
+      await expect(
+        userFacet.connect(userOne).withdrawERC20(ERC20_TOKEN_ADDRESS.SAND)
+      )
+        .to.emit(userFacet, "Withdraw")
+        .withArgs(userOne.address, ERC20_TOKEN_ADDRESS.SAND, balance)
+        .to.changeTokenBalances(
+          sand,
+          [userOne, diamondAddress],
+          [balance, balance.mul("-1")]
+        );
+    });
+
+    it("user balance in diamond should be zero", async () => {
+      expect(
+        await userFacet.balanceERC20(userOne.address, ERC20_TOKEN_ADDRESS.SAND)
+      ).to.be.equal(0);
+    });
+
+    it("user can not withdraw when have zero token on balance", async () => {
+      await expect(
+        userFacet.connect(userOne).withdrawERC20(ERC20_TOKEN_ADDRESS.SAND)
+      ).to.be.revertedWith("You have 0 tokens on balance");
+    });
+
+    it("user can withdraw many ERC20 token", async () => {
+      const { signature, signatureData } = await packDataToSign({
+        tokenAmountInEther: "100.25",
+        addressToTip: userOne.address,
+        tokenQuote: "SAND",
+        userTokenAddress: userToken.address,
+      });
+
+      await expect(
+        userFacet
+          .connect(sandHodler)
+          .tipERC20(
+            signature,
+            signatureData.tokenAmountBN,
+            signatureData.amountToMint,
+            signatureData.tokenToUser,
+            signatureData.fee,
+            signatureData.timestamp,
+            userOne.address,
+            signatureData.tokenAddress,
+            signatureData.userTokenAddress
+          )
+      );
+
+      const balanceSand = await userFacet.balanceERC20(
+        userOne.address,
+        ERC20_TOKEN_ADDRESS.SAND
+      );
+      const balanceShiba = await userFacet.balanceERC20(
+        userOne.address,
+        ERC20_TOKEN_ADDRESS.SHIB
+      );
+      const expectedBalanceShiba = ethers.utils
+        .parseEther("100101")
+        .add(ethers.utils.parseUnits("1010", "wei"))
+        .sub(
+          calculateFee(
+            ethers.utils
+              .parseEther("100101")
+              .add(ethers.utils.parseUnits("1010", "wei"))
+          )
+        );
+
+      // Intest were 1 SAND tips adn 1 SHIB tip
+      expect(balanceSand).to.be.equal(
+        ethers.utils
+          .parseEther("100.25")
+          .sub(calculateFee(ethers.utils.parseEther("100.25")))
+      );
+      expect(balanceShiba).to.be.equal(expectedBalanceShiba);
+
+      await expect(
+        userFacet
+          .connect(userOne)
+          .withdrawManyERC20([
+            ERC20_TOKEN_ADDRESS.SAND,
+            ERC20_TOKEN_ADDRESS.SHIB,
+          ])
+      )
+        .to.emit(userFacet, "Withdraw")
+        .withArgs(userOne.address, ERC20_TOKEN_ADDRESS.SAND, balanceSand)
+        .to.emit(userFacet, "Withdraw")
+        .withArgs(userOne.address, ERC20_TOKEN_ADDRESS.SHIB, balanceShiba)
+        .to.changeTokenBalances(
+          sand,
+          [userOne, diamondAddress],
+          [balanceSand, balanceSand.mul("-1")]
+        )
+        .to.changeTokenBalances(
+          shiba,
+          [userOne, diamondAddress],
+          [balanceShiba, balanceShiba.mul("-1")]
+        );
+    });
+
+    it("user balance in diamond should be zero", async () => {
+      expect(
+        await userFacet.balanceERC20(userOne.address, ERC20_TOKEN_ADDRESS.SAND)
+      ).to.be.equal(0);
+      expect(
+        await userFacet.balanceERC20(userOne.address, ERC20_TOKEN_ADDRESS.SHIB)
+      ).to.be.equal(0);
+    });
+
+    it("user can not withdraw when have zero token on balance", async () => {
+      await expect(
+        userFacet
+          .connect(userOne)
+          .withdrawManyERC20([
+            ERC20_TOKEN_ADDRESS.SAND,
+            ERC20_TOKEN_ADDRESS.SHIB,
+          ])
+      ).to.be.revertedWith("You have 0 tokens on balance");
+    });
+  });
+
 });

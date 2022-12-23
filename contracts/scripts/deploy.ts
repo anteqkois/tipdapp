@@ -18,6 +18,7 @@ async function deployDiamond() {
   const UserToken = await ethers.getContractFactory("UserToken");
   const userToken = await UserToken.deploy();
   await userToken.deployed();
+  await userToken.initialize("UT", "UserToken");
   // console.log("DiamondCutFacet deployed:", diamondCutFacet.address);
 
   // deploy Diamond

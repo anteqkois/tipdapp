@@ -3,6 +3,8 @@
 //   reactStrictMode: true,
 // };
 
+import { NextConfig } from "next";
+
 // module.exports = {
 //   redirects() {
 //     return [
@@ -66,7 +68,7 @@ const nextConfig = {
   images: {
     domains: ['avatars.dicebear.com'],
   },
-  webpack(config) {
+  webpack(config: NextConfig) {
     config.module.rules.push({
       test: /\.svg$/,
       use: [{ loader: '@svgr/webpack', options: { icon: true } }],

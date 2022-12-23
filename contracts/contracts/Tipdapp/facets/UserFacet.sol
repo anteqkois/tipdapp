@@ -94,6 +94,8 @@ contract UserFacet is Modifier {
         );
 
         IERC20(_tokenAddress).transferFrom(msg.sender, address(this), _tokenAmount);
+        // console.log(_toUser);
+        // console.log(_fee);
 
         unchecked {
             s.addressToTokenToBalance[_addressToTip][_tokenAddress] += _toUser;
@@ -119,6 +121,7 @@ contract UserFacet is Modifier {
         uint256 fee = (msg.value * s.tipFee) / 10000;
 
         unchecked {
+            // MAX_UINT256 115792089237316195423570985008687907853269984665640564039457584007913129639935
             s.balanceETH[address(this)] += fee;
             s.balanceETH[_addressToTip] += msg.value - fee;
         }

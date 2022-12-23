@@ -8,8 +8,6 @@ export type { contracts };
 export * as factories from "./factories";
 export type { IERC20 } from "./@openzeppelin/contracts/token/ERC20/IERC20";
 export { IERC20__factory } from "./factories/@openzeppelin/contracts/token/ERC20/IERC20__factory";
-export type { Lock } from "./contracts/Lock";
-export { Lock__factory } from "./factories/contracts/Lock__factory";
 export type { ChailinkPriceFeeds } from "./contracts/Tipdapp/ChailinkPriceFeeds";
 export { ChailinkPriceFeeds__factory } from "./factories/contracts/Tipdapp/ChailinkPriceFeeds__factory";
 export type { Diamond } from "./contracts/Tipdapp/Diamond";

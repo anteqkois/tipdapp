@@ -106,25 +106,27 @@ describe("Cache bug test", async () => {
     }
   });
 
-  it("should not exhibit the cache bug", async () => {
-    // Get the test1Facet's registered functions
-    let selectors = await diamondLoupeFacet.facetFunctionSelectors(
-      test1Facet.address
-    );
+  describe("Cache bug", async function () {
+    it("should not exhibit the cache bug", async () => {
+      // Get the test1Facet's registered functions
+      let selectors = await diamondLoupeFacet.facetFunctionSelectors(
+        test1Facet.address
+      );
 
-    // Check individual correctness
-    assert.isTrue(selectors.includes(sel0), "Does not contain sel0");
-    assert.isTrue(selectors.includes(sel1), "Does not contain sel1");
-    assert.isTrue(selectors.includes(sel2), "Does not contain sel2");
-    assert.isTrue(selectors.includes(sel3), "Does not contain sel3");
-    assert.isTrue(selectors.includes(sel4), "Does not contain sel4");
-    assert.isTrue(selectors.includes(sel6), "Does not contain sel6");
-    assert.isTrue(selectors.includes(sel7), "Does not contain sel7");
-    assert.isTrue(selectors.includes(sel8), "Does not contain sel8");
-    assert.isTrue(selectors.includes(sel9), "Does not contain sel9");
+      // Check individual correctness
+      assert.isTrue(selectors.includes(sel0), "Does not contain sel0");
+      assert.isTrue(selectors.includes(sel1), "Does not contain sel1");
+      assert.isTrue(selectors.includes(sel2), "Does not contain sel2");
+      assert.isTrue(selectors.includes(sel3), "Does not contain sel3");
+      assert.isTrue(selectors.includes(sel4), "Does not contain sel4");
+      assert.isTrue(selectors.includes(sel6), "Does not contain sel6");
+      assert.isTrue(selectors.includes(sel7), "Does not contain sel7");
+      assert.isTrue(selectors.includes(sel8), "Does not contain sel8");
+      assert.isTrue(selectors.includes(sel9), "Does not contain sel9");
 
-    assert.isFalse(selectors.includes(ownerSel), "Contains ownerSel");
-    assert.isFalse(selectors.includes(sel10), "Contains sel10");
-    assert.isFalse(selectors.includes(sel5), "Contains sel5");
+      assert.isFalse(selectors.includes(ownerSel), "Contains ownerSel");
+      assert.isFalse(selectors.includes(sel10), "Contains sel10");
+      assert.isFalse(selectors.includes(sel5), "Contains sel5");
+    });
   });
 });

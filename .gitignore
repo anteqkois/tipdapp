@@ -11,6 +11,7 @@ contracts/typechain
 contracts/cache
 contracts/artifacts
 contracts/node_modules
+contracts/coverage
 
 diamond-2-hardhat
 contractsDeprecated
@@ -30,6 +31,7 @@ dapp/.vercel
 server/artifacts
 server/node_modules
 server/package/lib
+server/src/types/prisma.js
 
 # local env files
 **/.env
