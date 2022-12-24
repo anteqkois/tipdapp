@@ -1,12 +1,4 @@
 /* global describe it before ethers */
-//@ts-nocheck
-
-// const {
-//   getSelectors,
-//   FacetCutAction,
-//   removeSelectors,
-//   findAddressPositionInFacets
-// } = require('../scripts/libraries/diamond')
 
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import {
@@ -16,23 +8,26 @@ import {
   removeSelectors,
 } from "../scripts/libraries/diamond";
 
-// const { deployDiamond } = require('../scripts/deploy')
 import { deployDiamond } from "../scripts/deploy";
 
-// const { assert } = require('chai')
 import { assert, expect } from "chai";
-import { OwnershipFacet } from "../typechain-types";
+import { ethers } from "hardhat";
+import {
+  DiamondCutFacet,
+  DiamondLoupeFacet,
+  OwnershipFacet,
+} from "../typechain-types";
 
 describe("DiamondTest", async function () {
-  let diamondAddress;
-  let diamondCutFacet;
-  let diamondLoupeFacet;
+  let diamondAddress: string;
+  let diamondCutFacet: DiamondCutFacet;
+  let diamondLoupeFacet: DiamondLoupeFacet;
   let ownershipFacet: OwnershipFacet;
   let tx;
   let receipt;
   let result;
-  const addresses = [];
-  const addressesTestFacet = [];
+  const addresses: string[] = [];
+  const addressesTestFacet: string[] = [];
   let accounts: SignerWithAddress[];
 
   before(async function () {
@@ -375,18 +370,18 @@ describe("DiamondTest", async function () {
       const newDiamondOwner = await ownershipFacet.owner();
       expect(newDiamondOwner).to.be.equal(accounts[1].address);
     });
-    
+
     it("old owner can not do anything connected to admin role", async () => {
       await expect(
         ownershipFacet.transferOwnership(accounts[1].address)
-        ).to.be.revertedWith("LibDiamond: Must be contract owner");
+      ).to.be.revertedWith("LibDiamond: Must be contract owner");
     });
 
     it("ownership can return to first owner", async () => {
       await ownershipFacet
-      .connect(accounts[1])
-      .transferOwnership(accounts[0].address);
-      
+        .connect(accounts[1])
+        .transferOwnership(accounts[0].address);
+
       const diamondOwner = await ownershipFacet.owner();
       expect(diamondOwner).to.be.equal(accounts[0].address);
     });

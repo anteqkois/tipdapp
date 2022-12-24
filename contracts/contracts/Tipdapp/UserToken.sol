@@ -97,7 +97,7 @@ contract UserToken is IUserToken {
 
     function _transfer(address from, address to, uint256 amount) internal {
         require(to != address(0), "Transfer to zero address");
-        require(to != address(this), "Transfer to this address");
+        // require(to != address(this), "Transfer to this address");
 
         uint256 balance = _balanceOf[from];
         require(balance >= amount, "Amount exceeds balance");

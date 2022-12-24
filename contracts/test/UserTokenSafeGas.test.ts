@@ -4,7 +4,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { UserToken } from "../typechain-types";
 
-describe("UserToken", async function () {
+describe("UserTokenSafeGas", async function () {
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
   let addr2: SignerWithAddress;

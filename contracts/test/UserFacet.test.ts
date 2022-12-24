@@ -1,9 +1,6 @@
 /* global describe it before ethers */
-
-// const { deployDiamond } = require('../scripts/deploy')
 import { deployDiamond } from "../scripts/deploy";
 
-// const { assert } = require('chai')
 import { time } from "@nomicfoundation/hardhat-network-helpers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
