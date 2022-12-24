@@ -12,14 +12,14 @@ describe("UserTokenSafeGas", async function () {
 
   before(async function () {
     [owner, addr1, addr2] = await ethers.getSigners();
-    const Token = await ethers.getContractFactory("UserToken");
+    const Token = await ethers.getContractFactory("UserTokenSafeGas");
     userToken = await Token.deploy();
   });
   describe("Initialize", () => {
     it("should assign all the tokens to the owner and also", async () => {
-      await userToken.initialize("UT", "UserToken");
+      await userToken.initialize("UT", "UserTokenSafeGas");
 
-      expect(await userToken.name()).to.equal("UserToken");
+      expect(await userToken.name()).to.equal("UserTokenSafeGas");
       expect(await userToken.symbol()).to.equal("UT");
     });
   });
@@ -29,6 +29,7 @@ describe("UserTokenSafeGas", async function () {
       const ownerBalance = await userToken.balanceOf(owner.address);
 
       expect(await userToken.totalSupply()).to.equal(ownerBalance);
+      expect(await userToken.decimals()).to.equal(18);
     });
 
     it("should verify the owners address", async () => {
@@ -159,7 +160,11 @@ describe("UserTokenSafeGas", async function () {
           .approve(addr1.address, ethers.utils.parseEther("1000"))
       )
         .to.emit(userToken, "Approval")
-        .withArgs(owner.address, addr1.address, ethers.utils.parseEther("1000"));
+        .withArgs(
+          owner.address,
+          addr1.address,
+          ethers.utils.parseEther("1000")
+        );
 
       await expect(
         userToken
@@ -171,17 +176,13 @@ describe("UserTokenSafeGas", async function () {
           )
       ).to.be.revertedWith("Amount exceeds balance");
 
-            await expect(
-              userToken
-                .connect(owner)
-                .approve(addr1.address, ethers.utils.parseEther("0"))
-            )
-              .to.emit(userToken, "Approval")
-              .withArgs(
-                owner.address,
-                addr1.address,
-                ethers.utils.parseEther("0")
-              );
+      await expect(
+        userToken
+          .connect(owner)
+          .approve(addr1.address, ethers.utils.parseEther("0"))
+      )
+        .to.emit(userToken, "Approval")
+        .withArgs(owner.address, addr1.address, ethers.utils.parseEther("0"));
     });
 
     it("should revert when not allowed", async () => {

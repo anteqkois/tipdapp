@@ -69,10 +69,9 @@ contract UserTokenSafeGas is IUserToken {
     }
 
     function transferFrom(address from, address to, uint256 amount) external override returns (bool) {
-        // uint256 allowed = _allowance[from][msg.sender];
-        // require(allowed >= amount, "Insufficient allowance");
+        uint256 allowed = _allowance[from][msg.sender];
+        require(allowed >= amount, "Insufficient allowance");
 
-        // if (allowed != type(uint256).max)
         _allowance[from][msg.sender] -= amount;
 
         _transfer(from, to, amount);
@@ -87,11 +86,11 @@ contract UserTokenSafeGas is IUserToken {
     }
 
     function _transfer(address from, address to, uint256 amount) internal {
-        // require(to != address(0), "Transfer to zero address");
+        require(to != address(0), "Transfer to zero address");
         // require(to != address(this), "Transfer to this address");
 
-        // uint256 balance = _balanceOf[from];
-        // require(balance >= amount, "Amount exceeds balance");
+        uint256 balance = _balanceOf[from];
+        require(balance >= amount, "Amount exceeds balance");
 
         _balanceOf[from] -= amount;
         unchecked {
