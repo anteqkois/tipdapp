@@ -50,9 +50,9 @@ contract AdministrationFacet is Modifier {
     function withdrawERC20Admin(address _tokenAddress) public onlyOwner {
         //TODO delete tokenBalance veriable
         uint256 tokenBalance = s.addressToTokenToBalance[address(this)][_tokenAddress];
+        delete s.addressToTokenToBalance[address(this)][_tokenAddress];
         bool success = IERC20(_tokenAddress).transfer(msg.sender, tokenBalance);
         require(success, "Withdraw ERC20 not success");
-        delete s.addressToTokenToBalance[address(this)][_tokenAddress];
     }
 
     function withdrawManyERC20Admin(address[] calldata _tokenAddress) external onlyOwner {
@@ -67,8 +67,8 @@ contract AdministrationFacet is Modifier {
 
     function withdrawETHAdmin() external payable onlyOwner {
         uint256 ethBalance = s.balanceETH[address(this)];
+        delete s.balanceETH[address(this)];
         (bool sent, ) = address(msg.sender).call{value: ethBalance}("");
         require(sent, "Failed to withdraw Ether");
-        delete s.balanceETH[address(this)];
     }
 }

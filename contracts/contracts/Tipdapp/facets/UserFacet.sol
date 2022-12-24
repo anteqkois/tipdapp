@@ -93,7 +93,8 @@ contract UserFacet is Modifier {
             "Wrong signature"
         );
 
-        IERC20(_tokenAddress).transferFrom(msg.sender, address(this), _tokenAmount);
+        bool success = IERC20(_tokenAddress).transferFrom(msg.sender, address(this), _tokenAmount);
+        require(success, "Failed to tip ERC20 token");
         // console.log(_toUser);
         // console.log(_fee);
 
@@ -134,10 +135,9 @@ contract UserFacet is Modifier {
     function withdrawERC20(address _tokenAddress) public {
         uint256 tokenBalance = s.addressToTokenToBalance[msg.sender][_tokenAddress];
         require(tokenBalance != 0, "You have 0 tokens on balance");
-        bool success = IERC20(_tokenAddress).transfer(msg.sender, tokenBalance);
-        require(success, "Withdraw ERC20 not success");
-        // Delete balance after success transfer to prevent delete balance when transfer was not success
         delete s.addressToTokenToBalance[msg.sender][_tokenAddress];
+        bool success = IERC20(_tokenAddress).transfer(msg.sender, tokenBalance);
+        require(success, "Failed to withdraw ERC20 token");
         emit Withdraw(msg.sender, _tokenAddress, tokenBalance);
     }
 
@@ -154,9 +154,9 @@ contract UserFacet is Modifier {
     function withdrawETH() external payable {
         uint256 ethBalance = s.balanceETH[msg.sender];
         require(ethBalance != 0, "You have 0 ETH on balance");
+        delete s.balanceETH[msg.sender];
         (bool sent, ) = address(msg.sender).call{value: ethBalance}("");
         require(sent, "Failed to withdraw Ether");
-        delete s.balanceETH[msg.sender];
         emit Withdraw(msg.sender, address(0), ethBalance);
     }
 }
