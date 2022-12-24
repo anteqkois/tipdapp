@@ -72,6 +72,7 @@ contract UserToken is IUserToken {
 
     function approve(address spender, uint256 amount) external virtual override returns (bool) {
         // require(spender != address(0), "Approve to zero address");
+        //TODO to prevent hight gas, no check if user have token
         _allowance[msg.sender][spender] = amount;
         emit Approval(msg.sender, spender, amount);
         return true;
