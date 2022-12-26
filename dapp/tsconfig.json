@@ -50,7 +50,7 @@
     // "src/validation/signUpValidaion.old.js",
     // "src/server/controllers/authController.js"
     ".next/types/**/*.ts"
-  ],
+, "next.config.js"  ],
   "exclude": [
     "node_modules",
     "**/node_modules/*",

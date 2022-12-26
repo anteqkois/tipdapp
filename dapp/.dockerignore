@@ -7,6 +7,7 @@
 **/Dockerfile*
 **/node_modules
 **/npm-debug.log
+**/package-lock.json
 .next
 .vscode
 README.md

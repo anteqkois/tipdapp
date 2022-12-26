@@ -2,7 +2,7 @@
   "name": "@anteqkois/server",
   "author": "Antek Kois",
   "license": "MIT",
-  "version": "0.0.13",
+  "version": "0.0.15",
   "description": "Types from Prisma for models and other shared code to my web3 app",
   "main": "lib/cjs/package.js",
   "module": "lib/esm/package.js",
@@ -51,12 +51,12 @@
     "build:local": "npm run build && cp -r ./lib ../../dapp/node_modules/@anteqkois/server/ && cp ./{schema.prisma,package.json,README.md} ../../dapp/node_modules/@anteqkois/server/",
     "bundle": "node esbuild.config.js",
     "prepack": "npm run build",
-    "publishPackage": "npm version patch && npm publish",
+    "publish_package": "npm version patch && npm publish",
     "postinstall": "npx prisma generate",
     "build:ts": "tsc --build tsconfig.esm.json && tsc --build tsconfig.cjs.json"
   },
   "dependencies": {
-    "@prisma/client": "^4.7.1"
+    "@prisma/client": "^4.8.0"
   },
   "devDependencies": {
     "esbuild": "^0.15.16",

@@ -27,8 +27,14 @@ services:
       - ./server:/app
   dapp:
     build: dapp/
+    # platform: linux/amd64
+    # build:
+    #   dockerfile: dapp/
+    #   x-bake:
+    #     platforms:
+    #       - linux/amd64
     container_name: dapp
-    command: npm run dev
+    # command: npm run dev
     depends_on:
       - server
       # - hardhat

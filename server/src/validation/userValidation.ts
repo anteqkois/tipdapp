@@ -61,6 +61,7 @@ const createParse = (body: UserValidation.CreateUser) => {
 //   }
 // };
 
+//TODO use 'is' -> userIsStreamer(user)
 const type = (body: Pick<User, 'roles'>) => {
   if (body.roles.includes(Role.streamer)) {
     return Role.streamer;
