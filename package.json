@@ -1,5 +1,5 @@
 {
-  "name": "qoisdapp",
+  "name": "tipdapp",
   "version": "0.1.4",
   "type": "module",
   "private": true,
@@ -23,10 +23,9 @@
     "release": "standard-version",
     "postgres": "[ ! -f .env ] || export $(grep -v '^#' .env | xargs) | sudo service postgresql start | $DATABASE_PASSWORD",
     "sc:test:i": "cd contractsDeprecated && npm run test:integration",
-    "sc:test:u": "cd contractsDeprecated && npm run test:unit"
-  },
-  "dependencies": {
-    "zx": "^7.1.1"
+    "sc:test:u": "cd contractsDeprecated && npm run test:unit",
+    "db": "docker run --name db -p 5432:5432 -e POSTGRES_PASSWORD=password POSTGRES_HOST_AUTH=trust -v db:/var/lib/postgressql/data -d postgres",
+    "rabbitmq": "docker run --name rabbitmq -p 5672:5672 -d rabbitmq"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0",

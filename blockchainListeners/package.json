@@ -1,5 +1,5 @@
 {
-  "name": "blockchainlisteners",
+  "name": "@tipdapp/blockchainlisteners",
   "version": "0.0.1",
   "engineStrict": true,
   "engines ": {

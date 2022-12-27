@@ -13,7 +13,6 @@
 //   });
 
 // if (process.env.NODE_ENV !== 'production') global.prisma = prisma;
-
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 

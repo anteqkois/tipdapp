@@ -7,6 +7,7 @@ const { PrismaClient } = client;
 const prisma = new PrismaClient();
 
 const ADDRESS_WALLET_DEV = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
+const ADDRESS_WALLET_DEV_2 = '0x69E952d100e786aAA6B63a3473D67ccaF1183271';
 const ADDRESS_SAND = '0x3845badAde8e6dFF049820680d1F14bD3903a5d0';
 
 async function main() {
@@ -31,6 +32,26 @@ async function main() {
       },
     },
   });
+  const user2 = await prisma.user.create({
+    data: {
+      email: 'whitex@gmail.com',
+      firstName: 'Konrad',
+      lastName: 'Kois',
+      nick: 'whitex123',
+      address: ADDRESS_WALLET_DEV_2,
+      roles: ['tipper', 'streamer'],
+      activeRole: 'streamer',
+      streamer: {
+        create: {
+          page: {
+            create: {
+              affixUrl: 'whitex',
+            },
+          },
+        },
+      },
+    },
+  });
   console.log('Create user:', user);
 
   //create cryptocurenncy
@@ -43,24 +64,6 @@ async function main() {
     },
   });
   console.log('Create SAND:', sand);
-
-  //create tipers
-  // await prisma.tipper.createMany({
-  //   data: [
-  //     {
-  //       address: faker.finance.ethereumAddress(),
-  //       nick: faker.name.firstName(),
-  //     },
-  //     {
-  //       address: faker.finance.ethereumAddress(),
-  //       nick: faker.name.firstName(),
-  //     },
-  //     {
-  //       address: faker.finance.ethereumAddress(),
-  //       nick: faker.name.firstName(),
-  //     },
-  //   ],
-  // });
 
   await prisma.user.create({
     data: {
@@ -123,7 +126,7 @@ async function main() {
       txHash: faker.datatype.hexadecimal({ length: 10 }),
       user: {
         connect: {
-          address: ADDRESS_WALLET_DEV,
+          address: ADDRESS_WALLET_DEV_2,
         },
       },
     },

@@ -1,5 +1,5 @@
 {
-  "name": "@tipdapp/contract",
+  "name": "@tipdapp/contracts",
   "scripts": {
     "deploy:dev": "dotenv_config_path=.env.development npx hardhat run scripts/deploy.ts --network localhost",
     "port": "sudo lsof -iTCP -sTCP:LISTEN -n -P",

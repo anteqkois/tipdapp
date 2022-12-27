@@ -6,19 +6,15 @@
 /.pnp
 .pnp.js
 
+# blockchianListeners
+blockchainListeners-old
+
 #contracts files
 contracts/typechain
 contracts/cache
 contracts/artifacts
 contracts/node_modules
 contracts/coverage
-
-diamond-2-hardhat
-contractsDeprecated
-contractsDeprecated/typechain
-contractsDeprecated/cache
-contractsDeprecated/artifacts
-contractsDeprecated/node_modules
 
 # dapp
 dapp/.next/

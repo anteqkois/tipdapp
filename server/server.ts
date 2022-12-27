@@ -1,19 +1,13 @@
+import './src/config/dotenv';
 import './src/config/paths';
 
+import { handleErrors, notFound } from '@middlewares/handleError';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express from 'express';
 import { corsConfig } from './src/config/cors';
 import { logRequest } from './src/middlewares/logRequest';
 import apiRouter from './src/routes';
-import { handleErrors, notFound } from '@middlewares/handleError';
-const { config } = dotenv;
-config({
-  path: process.env.dotenv_config_path
-    ? process.env.dotenv_config_path
-    : '.env',
-});
 
 const port = process.env.PORT || 3001;
 const dev = process.env.NODE_ENV !== 'production';
