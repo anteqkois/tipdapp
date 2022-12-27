@@ -1,7 +1,7 @@
 'use client';
 
 import { ErrorMessage } from '@/components/utils';
-import { ApiError } from '@anteqkois/server';
+import { ApiError } from '@tipdapp/server';
 import { useEffect } from 'react';
 
 export default function Error({

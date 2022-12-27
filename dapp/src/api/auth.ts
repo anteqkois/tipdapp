@@ -1,11 +1,10 @@
-import { UserSession, UserValidation } from '@anteqkois/server';
+import { UserSession, UserValidation } from '@tipdapp/server';
 import { SiweMessage } from 'siwe';
 import { api } from './apiConfig';
 
-
 // VALIDATE
 export const validateFormData = async (body: any) =>
-await api.post('/auth/validate', body);
+  await api.post('/auth/validate', body);
 
 // NONCE
 type GetNonceResponse = {
@@ -39,7 +38,7 @@ export const logoutUser = async () =>
 // SIGNUP
 type SignUpResponse = {
   message: string;
-  user: UserSession,
+  user: UserSession;
 };
 
 type SignUpBody = {
@@ -51,12 +50,11 @@ type SignUpBody = {
 
 export const signUp = async (body: SignUpBody) =>
   await api.post<any, SignUpResponse>('/auth/signup', body);
-  
-  // REFRESH 
+
+// REFRESH
 type RefreshResponse = {
   message: string;
 };
 
 export const refreshToken = async () =>
-  await api.get< RefreshResponse>('/auth/refresh');
-  
+  await api.get<RefreshResponse>('/auth/refresh');

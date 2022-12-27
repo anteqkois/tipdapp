@@ -1,7 +1,7 @@
 'use client';
 import { PageSpinner } from '@/components/utils';
 import { useUser } from '@/hooks';
-import { Role } from '@anteqkois/server';
+import { Role } from '@tipdapp/server';
 import { useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 

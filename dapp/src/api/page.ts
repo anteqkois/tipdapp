@@ -1,4 +1,4 @@
-import { Page, PageValidation } from '@anteqkois/server';
+import { Page, PageValidation } from '@tipdapp/server';
 import { api } from './apiConfig';
 
 export type FindParams = {

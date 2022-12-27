@@ -1,6 +1,6 @@
 'use client';
 import { NavigationOption } from '@/types';
-import { UserSession } from '@anteqkois/server';
+import { UserSession } from '@tipdapp/server';
 import classNames from 'classnames';
 import { useState } from 'react';
 import Hamburger from '../Hamburger';

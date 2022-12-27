@@ -3,7 +3,7 @@ import { dateFormat } from '@/lib/dayjs';
 import cutAddress from '@/utils/cutAddress';
 // import { UserToken } from '@prisma/client';
 import { ethers } from '@/lib';
-import { UserToken } from '@anteqkois/server';
+import { UserToken } from '@tipdapp/server';
 import { Button, Card } from '../utils';
 
 type Props = {

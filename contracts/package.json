@@ -3,28 +3,17 @@
   "author": "Antek Kois",
   "license": "MIT",
   "version": "0.0.1",
-  "description": "Types from Prisma for models and other shared code to my web3 app",
-  "main": "lib/cjs/package.js",
-  "module": "lib/esm/package.js",
-  "types": "lib/esm/package.d.ts",
+  "description": "Smart Contracts and their types to my web3 dapp",
+  "main": "./artifacts",
+  "types": "./typechain-types",
   "files": [
-    "artifacts",
+    "artifacts/@openzeppelin",
+    "artifacts/address",
+    "artifacts/contracts",
     "package.json",
     "typechain-types",
     "README.md"
   ],
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./typechain-types",
-        "default": "./artifacts"
-      },
-      "require": {
-        "types": "./typechain-types",
-        "default": "./artifacts"
-      }
-    }
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/anteqkois/tipdapp.git",
@@ -52,7 +41,8 @@
     "deploy:dev": "dotenv_config_path=.env.development npx hardhat run scripts/deploy.ts --network localhost",
     "port": "sudo lsof -iTCP -sTCP:LISTEN -n -P",
     "clean:node": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}')",
-    "slither": "slither --solc-remaps @openzeppelin/=/home/anteqkois/project/tipdapp/contracts/node_modules/@openzeppelin/ ."
+    "slither": "slither --solc-remaps @openzeppelin/=/home/anteqkois/project/tipdapp/contracts/node_modules/@openzeppelin/ .",
+    "publishPackage": "npm version patch && npm publish"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",

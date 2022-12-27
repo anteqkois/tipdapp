@@ -3,7 +3,7 @@ import { update } from '@/api/page';
 import { Button, Card, Input, Tooltip } from '@/components/utils';
 import { useUser } from '@/hooks';
 import { mapValidationErrors } from '@/utils/error';
-import { PageValidation, pageValidation } from '@anteqkois/server';
+import { PageValidation, pageValidation } from '@tipdapp/server';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
 import Link from 'next/link';

@@ -3,8 +3,8 @@
     "baseUrl": ".",
     "paths": {
       // "@/src/*": ["src/*"],
-      // "@prisma/client": ["./node_modules/@anteqkois/server/lib/es6/src/types/prisma.d.ts"],
-      // "@anteqkois/server":["./@anteqkois/server"],
+      // "@prisma/client": ["./node_modules/@tipdapp/server/lib/es6/src/types/prisma.d.ts"],
+      // "@tipdapp/server":["./@tipdapp/server"],
       "@/components/*": ["src/components/*"],
       "@/types/*": ["src/types/*"],
       "@/types": ["src/types"],
@@ -14,8 +14,8 @@
       "@/lib": ["src/lib"],
       "@/validation/*": ["src/validationOld/*"],
       "@/hooks": ["src/hooks"],
-      "@/hooks/*": ["src/hooks/*"],
-      // "@anteqkois/server":["./node_modules/@anteqkois/server"],
+      "@/hooks/*": ["src/hooks/*"]
+      // "@tipdapp/server":["./node_modules/@tipdapp/server"],
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

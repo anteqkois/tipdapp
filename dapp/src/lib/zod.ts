@@ -1,3 +1,3 @@
 //@ts-expect-error
-export { validationHelper } from '@anteqkois/server';
+export { validationHelper } from '@tipdapp/server';
 export * from 'zod';

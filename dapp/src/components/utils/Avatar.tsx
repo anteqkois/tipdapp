@@ -8,8 +8,8 @@
  * file that was distributed with this source code.
  */
 // import { File } from '@prisma/client';
-import { File } from '@anteqkois/server';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
+import { File } from '@tipdapp/server';
 import Image, { ImageProps } from 'next/image';
 
 type AvatarProps = {

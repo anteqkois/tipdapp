@@ -3,12 +3,12 @@ import { useClipboard, useModal } from '@/hooks';
 import { dateFormat } from '@/lib/dayjs';
 import cutAddress from '@/utils/cutAddress';
 import { parseNotation } from '@/utils/format';
-import { TipUI } from '@anteqkois/server';
 import {
   ArrowPathIcon,
   ArrowsPointingOutIcon,
   AtSymbolIcon,
 } from '@heroicons/react/24/outline';
+import { TipUI } from '@tipdapp/server';
 import Avatar from '../utils/Avatar';
 import Button from '../utils/Button';
 

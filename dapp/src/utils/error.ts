@@ -1,3 +1,4 @@
-import { ValidationError, ValidationErrors } from "@anteqkois/server";
+import { ValidationError, ValidationErrors } from '@tipdapp/server';
 
-export const mapValidationErrors = (err: ValidationError[])=> new ValidationErrors(err).mapByField()
+export const mapValidationErrors = (err: ValidationError[]) =>
+  new ValidationErrors(err).mapByField();

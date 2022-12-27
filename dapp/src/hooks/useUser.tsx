@@ -1,8 +1,8 @@
 // 'use client';
 import { logoutUser, refreshToken, verifyMessage } from '@/api/auth';
 import { AuthStatus } from '@/types';
-import { UserSession } from '@anteqkois/server';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { UserSession } from '@tipdapp/server';
 import { useRouter } from 'next/navigation';
 import {
   createContext,

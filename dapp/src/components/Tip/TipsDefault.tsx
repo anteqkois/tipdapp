@@ -1,4 +1,4 @@
-import { TipUI } from '@anteqkois/server';
+import { TipUI } from '@tipdapp/server';
 import Tip from './Tip';
 
 type Props = {

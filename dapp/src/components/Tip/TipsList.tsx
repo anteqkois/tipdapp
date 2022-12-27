@@ -1,4 +1,4 @@
-import { TipUI } from '@anteqkois/server';
+import { TipUI } from '@tipdapp/server';
 import { InfoMessage } from '../utils';
 import TipCard from './Tip';
 import TipMinimalist from './TipMinimalist';
