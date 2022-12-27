@@ -8,17 +8,14 @@ import {
   usePrepareContractWrite,
 } from 'wagmi';
 import { useClipboard, useUser } from '.';
-import QoistipSign from '../artifacts/localhost/QoistipSign.json';
 
 const contractInstance = {
-  addressOrName: QoistipSign.address,
-  contractInterface: QoistipSign.abi,
+  addressOrName: TipdappSign.address,
+  contractInterface: TipdappSign.abi,
 };
 
-export const useQoistipSign = () => {
-  const {
-    user,
-  } = useUser();
+export const useTipdappSign = () => {
+  const { user } = useUser();
 
   const { ClipboardIcon } = useClipboard();
 

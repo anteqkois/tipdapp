@@ -5,12 +5,12 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anteqkois/qoisdapp.git"
+    "url": "git+https://github.com/anteqkois/tipdapp.git"
   },
   "author": "Antek Kois",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/anteqkois/qoisdapp/issues"
+    "url": "https://github.com/anteqkois/tipdapp/issues"
   },
   "scripts": {
     "dev": "NODE_ENV=development SERVER_COMMAND='npm run dev' docker compose up && zx ./scripts/hardhat.js",

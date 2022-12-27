@@ -4,18 +4,18 @@
   "engines ": {
     "node": "18.12.0"
   },
-  "description": "frontend and backend to qoisdapp",
+  "description": "frontend and backend to tipdapp",
   "main": "server.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anteqkois/qoisdapp.git"
+    "url": "git+https://github.com/anteqkois/tipdapp.git"
   },
   "author": "Antek Kois",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/anteqkois/qoisdapp/issues"
+    "url": "https://github.com/anteqkois/tipdapp/issues"
   },
-  "homepage": "https://github.com/anteqkois/qoisdapp#readme",
+  "homepage": "https://github.com/anteqkois/tipdapp#readme",
   "scripts": {
     "start": "NODE_ENV=production node dist/server.js",
     "build": "npx tsc",

@@ -10,14 +10,14 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anteqkois/qoisdapp.git"
+    "url": "git+https://github.com/anteqkois/tipdapp.git"
   },
   "author": "Antek Kois",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/anteqkois/qoisdapp/issues"
+    "url": "https://github.com/anteqkois/tipdapp/issues"
   },
-  "homepage": "https://github.com/anteqkois/qoisdapp#readme",
+  "homepage": "https://github.com/anteqkois/tipdapp#readme",
   "scripts": {
     "dev": "NODE_ENV=development nodemon --require dotenv/config index.js dotenv_config_path=.env.development",
     "start": "NODE_ENV=production node --require dotenv/config index.js dotenv_config_path=.env.development"

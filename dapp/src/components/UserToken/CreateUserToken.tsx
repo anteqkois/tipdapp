@@ -1,4 +1,4 @@
-import { useLocalStorage, useQoistipSign } from '@/hooks';
+import { useLocalStorage } from '@/hooks';
 // import {
 //   userTokenValidation,
 //   UserTokenValidation,
@@ -22,7 +22,7 @@ export const CreateUserToken = () => {
   //TODO Refreshh user data after create user token
   // const { refreshSessionData } = useSession();
 
-  const { registerUser } = useQoistipSign();
+  const { registerUser } = useTipdappSign();
 
   useEffect(() => {
     (async () => {

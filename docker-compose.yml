@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: qoistip
+      POSTGRES_DB: tipdapp
       POSTGRES_HOST_AUTH: trust
     ports:
       - '5432:5432'
