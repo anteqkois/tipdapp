@@ -1,8 +1,37 @@
 /* global ethers */
 /* eslint prefer-const: "off" */
-import { ethers } from "hardhat";
+import { ethers, network } from "hardhat";
+import fs from "node:fs/promises";
+import path from "node:path";
 
 import { FacetCutAction, getSelectors } from "./libraries/diamond";
+
+const fileExists = async (path: string) => {
+  try {
+    await fs.stat(path);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+const saveAddress = async (address: Record<string, string>) => {
+  const pathToDir = path.join(__dirname, "../", `artifacts/address`);
+  const pathToFile = path.join(pathToDir, `${network.name}.json`);
+
+  if (!(await fileExists(pathToDir))) await fs.mkdir(pathToDir);
+
+  if (!(await fileExists(pathToFile))) {
+    await fs.writeFile(pathToFile, JSON.stringify(address));
+    return;
+  }
+
+  const data = JSON.parse(
+    (await fs.readFile(pathToFile)) as unknown as string
+  ) as Record<string, string>;
+
+  await fs.writeFile(pathToFile, JSON.stringify(Object.assign(data, address)));
+};
 
 async function deployDiamond() {
   const accounts = await ethers.getSigners();
@@ -32,6 +61,8 @@ async function deployDiamond() {
   await diamond.deployed();
   console.log("Diamond deployed:", diamond.address);
 
+  saveAddress({ Diamond: diamond.address });
+
   // deploy DiamondInit
   // DiamondInit provides a function that is called when the diamond is upgraded to initialize state variables
   // Read about how the diamondCut function works here: https://eips.ethereum.org/EIPS/eip-2535#addingreplacingremoving-functions
@@ -60,6 +91,7 @@ async function deployDiamond() {
       action: FacetCutAction.Add,
       functionSelectors: getSelectors(facet),
     });
+    saveAddress({ [FacetName]: facet.address });
   }
 
   // upgrade diamond with facets
