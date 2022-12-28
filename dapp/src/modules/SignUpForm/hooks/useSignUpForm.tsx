@@ -61,9 +61,7 @@ export const useSignUpForm = () => {
                 formik.setErrors(mapValidationErrors(error));
               } else {
                 console.log(error);
-                toast.error(
-                  'Something went wrong, can not update your page details.'
-                );
+                toast.error('Something went wrong, can not register you now.');
               }
             }
           } else if (step === 2) {

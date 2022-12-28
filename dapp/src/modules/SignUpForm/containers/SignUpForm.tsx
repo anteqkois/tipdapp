@@ -59,7 +59,9 @@ export const SignUpForm = () => {
       label="Connect Wallet"
       key="Connect Wallet"
     >
-      <ConnectWallet className="w-5/6 mx-auto my-5 h-52" />
+      {/* <ConnectWallet /> */}
+      {/* <ConnectWallet className="w-5/6 mx-auto my-5 h-52" /> */}
+      <ConnectWallet className=" w-5/6 mx-auto my-5 h-52" />
       <p className="text-danger-600 ">
         {formik.errors.address && `* ${formik.errors.address}`}
       </p>

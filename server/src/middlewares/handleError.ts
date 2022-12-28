@@ -43,7 +43,11 @@ export const catchErrors = (
 };
 
 //If  error is operational throw away and handle in handelErrors middleware, other way create ApiError with given message
-export const isOperational = (err: any, helpMessage: string) => {
+export const isOperational = (
+  err: any,
+  helpMessage: string
+  // errorTypeToThrow: 'ApiError' | 'ValidationError'
+) => {
   //! TODO handle Siwe Error
   //   {
   //    success: false,
@@ -68,6 +72,15 @@ export const isOperational = (err: any, helpMessage: string) => {
   } else if (helpMessage) {
     console.log(err);
     createApiError(helpMessage);
+    // switch (errorTypeToThrow) {
+    //   case 'ValidationError':
+    //     createValidationError(helpMessage);
+    //     break;
+
+    //   default:
+    //     createApiError(helpMessage);
+    //     break;
+    // }
   }
   errorLogger.error('no operational', err);
   throw err;
