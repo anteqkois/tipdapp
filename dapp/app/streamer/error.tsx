@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, ErrorMessage } from '@/components/utils';
+import { Button, ErrorMessage } from '@/shared/ui';
 import { ApiError } from '@tipdapp/server';
 import Link from 'next/link';
 

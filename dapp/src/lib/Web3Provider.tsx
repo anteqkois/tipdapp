@@ -1,6 +1,8 @@
 'use client';
 import { getNonce } from '@/api/auth';
-import { useMediaQuery, useSignUpForm, useUser } from '@/hooks';
+import { useSignUpForm } from '@/modules/SignUpForm/hooks/useSignUpForm';
+import { useMediaQuery } from '@/shared/hooks';
+import { useUser } from '@/shared/User/hooks/useUser';
 import {
   createAuthenticationAdapter,
   getDefaultWallets,

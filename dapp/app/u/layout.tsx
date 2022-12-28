@@ -1,5 +1,5 @@
 'use client';
-import { PublicNav } from '@/components/Navigation/Public';
+import { PublicNav } from '@/modules/Navigation/containers';
 import { ReactNode } from 'react';
 type Props = {
   children: ReactNode;

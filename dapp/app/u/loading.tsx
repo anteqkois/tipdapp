@@ -1,4 +1,4 @@
-import { PageSpinner } from '@/components/utils';
+import { PageSpinner } from '@/shared/ui';
 
 export default function Loading() {
   return <PageSpinner />;

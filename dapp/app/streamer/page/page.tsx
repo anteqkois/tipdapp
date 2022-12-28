@@ -1,7 +1,7 @@
 'use client';
 import { update } from '@/api/page';
-import { Button, Card, Input, Tooltip } from '@/components/utils';
-import { useUser } from '@/hooks';
+import { Button, Card, Input, Tooltip } from '@/shared/ui';
+import { useUser } from '@/shared/User/hooks/useUser';
 import { mapValidationErrors } from '@/utils/error';
 import { PageValidation, pageValidation } from '@tipdapp/server';
 import classNames from 'classnames';

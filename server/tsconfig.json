@@ -39,7 +39,6 @@
     "**/node_modules/*",
     "./.log",
     "dist",
-    "./src/artifacts",
     "./package.ts"
   ]
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { ErrorMessage } from '@/components/utils';
+import { ErrorMessage } from '@/shared/ui';
 import { ApiError } from '@tipdapp/server';
 import { useEffect } from 'react';
 

@@ -1,7 +1,8 @@
 'use client';
-import { ModalProvider, UserProvider } from '@/hooks';
 import ReduxProvider from '@/lib/redux/ReduxProvider';
 import { RainbowKitProviders, WagmiProvider } from '@/lib/Web3Provider';
+import { ModalProvider } from '@/shared/hooks';
+import { UserProvider } from '@/shared/User/hooks/useUser';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';

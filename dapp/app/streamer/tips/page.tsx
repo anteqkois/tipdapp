@@ -1,8 +1,8 @@
 'use client';
-import Pagination from '@/components/Pagination';
-import { TipsList } from '@/components/Tip/TipsList';
-import { Card } from '@/components/utils';
-import { useTipsPaginated } from '@/hooks';
+import { TipsList } from '@/modules/Tip/containers/TipsList';
+import { useTipsPaginated } from '@/modules/Tip/hooks/useTips';
+import Pagination from '@/shared/Pagination';
+import { Card } from '@/shared/ui';
 import { useState } from 'react';
 
 //TODO? use page to be ability in future to change this element by user(for example can change to show default top tiper)

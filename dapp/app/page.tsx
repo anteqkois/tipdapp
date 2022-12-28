@@ -1,5 +1,5 @@
 'use client';
-import { useCookie } from '@/hooks';
+import { useCookie } from '@/shared/hooks';
 
 export default function Page() {
   const [value, setValue] = useCookie<any>('test2', 'teest');

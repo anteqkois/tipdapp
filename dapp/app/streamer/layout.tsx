@@ -1,6 +1,7 @@
-import { StreamerNav } from '@/components/Navigation/User/Streamer';
-import { ProtectPageGuard } from '@/components/utils';
+import { StreamerNav } from '@/modules/Navigation/containers';
+import { ProtectPageRoleBased } from '@/shared/User/ProtectPageRoleBased';
 import { ReactNode } from 'react';
+// import { StreamerNav } from 'src/modules/Navigation/User/Streamer';
 
 type Props = {
   children: ReactNode;
@@ -8,10 +9,10 @@ type Props = {
 
 export default function RootLayout({ children }: Props) {
   return (
-    <ProtectPageGuard allowedRoles={['streamer']}>
+    <ProtectPageRoleBased allowedRoles={['streamer']}>
       <StreamerNav />
       {/* <main className="max-w-6xl p-2 mx-auto mt-12 lg:p-8 lg:mt-32"> */}
       <main>{children}</main>
-    </ProtectPageGuard>
+    </ProtectPageRoleBased>
   );
 }

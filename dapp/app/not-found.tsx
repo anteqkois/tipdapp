@@ -1,4 +1,4 @@
-import { ErrorMessage } from '@/components/utils';
+import { ErrorMessage } from '@/shared/ui';
 
 export default function NotFound() {
   return (

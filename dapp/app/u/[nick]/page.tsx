@@ -1,6 +1,6 @@
 'use client';
 
-import { usePageFind } from '@/hooks/usePage';
+import { usePageFind } from '@/modules/Page/hooks/usePage';
 
 type Props = {
   params: {

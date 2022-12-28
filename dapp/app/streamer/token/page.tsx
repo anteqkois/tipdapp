@@ -1,13 +1,11 @@
 'use client';
 
-import { CreateUserToken } from '@/components/UserToken/CreateUserToken';
-import { TokenPanel } from '@/components/UserToken/TokenPanel';
-import { useUser } from '@/hooks';
+import { CreateUserToken } from '@/modules/UserToken/containers/CreateUserToken';
+import { TokenPanel } from '@/modules/UserToken/containers/TokenPanel';
+import { useUser } from '@/shared/User/hooks/useUser';
 
 const Token = () => {
-  const {
-    user
-  } = useUser();
+  const { user } = useUser();
 
   return (
     <section>
