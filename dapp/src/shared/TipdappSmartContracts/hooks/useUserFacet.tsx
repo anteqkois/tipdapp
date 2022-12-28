@@ -1,5 +1,6 @@
 import { useClipboard } from '@/shared/hooks';
 import { Button } from '@/shared/ui';
+import { useUser } from '@/shared/User/hooks/useUser';
 import { ethereum } from '@/utils/constants';
 import cutAddress from '@/utils/cutAddress';
 import toast from 'react-hot-toast';
@@ -8,7 +9,6 @@ import {
   useContractWrite,
   usePrepareContractWrite,
 } from 'wagmi';
-import { useUser } from './useUser';
 // import { useClipboard, useUser } from '../../hooks';
 
 const contractInstance = {

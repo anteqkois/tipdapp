@@ -13,12 +13,13 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 import { SiweMessage } from 'siwe';
-import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
+import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import { hardhat, mainnet, polygon } from 'wagmi/chains';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
 
 const { chains, provider } = configureChains(
-  [chain.hardhat, chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
+  [hardhat, mainnet, polygon],
   [
     publicProvider(),
     jsonRpcProvider({

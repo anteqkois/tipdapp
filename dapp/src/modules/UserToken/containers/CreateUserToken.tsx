@@ -1,23 +1,21 @@
 import { useLocalStorage } from '@/shared/hooks';
-// import {
-//   userTokenValidation,
-//   UserTokenValidation,
-// } from '../../../node_modules/@tipdapp/server';
 import { Button, Card, Details, Input } from '@/shared/ui';
+import { UserTokenValidation, userTokenValidation } from '@tipdapp/server';
 import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-const initialUserToken = {
+const initialUserToken: UserTokenValidation.CreateForm = {
   symbol: '',
   name: '',
 };
 
 export const CreateUserToken = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
-  // const [errors, setErrors] = useState<ZodParseErrors>({} as ZodParseErrors);
   const [userTokenFormData, setUserTokenFormData] =
-    // useLocalStorage<UserTokenValidation.CreateForm>(
-    useLocalStorage<any>('userTokenFormData', initialUserToken);
+    useLocalStorage<UserTokenValidation.CreateForm>(
+      'userTokenFormData',
+      initialUserToken
+    );
   //TODO Refreshh user data after create user token
   // const { refreshSessionData } = useSession();
 
@@ -58,8 +56,8 @@ export const CreateUserToken = () => {
     e.preventDefault();
     try {
       setErrors({});
-      // userTokenValidation.createFormParse(userTokenFormData);
-      // const t: TipUI = {} as TipUI
+
+      userTokenValidation.createFormParse(userTokenFormData);
 
       if (registerUser?.writeAsync) {
         const writePromise = registerUser.writeAsync({

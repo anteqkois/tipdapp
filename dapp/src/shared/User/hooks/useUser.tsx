@@ -51,7 +51,7 @@ export const UserProvider = ({ children }: Props) => {
       //Refresh in 30s interval
       interval = setInterval(() => {
         refreshToken();
-      }, 30000);
+      }, 3 * 60 * 1000);
     }
 
     return () => {
