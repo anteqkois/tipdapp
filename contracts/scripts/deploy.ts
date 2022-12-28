@@ -17,20 +17,29 @@ const fileExists = async (path: string) => {
 
 const saveAddress = async (address: Record<string, string>) => {
   const pathToDir = path.join(__dirname, "../", `artifacts/address`);
-  const pathToFile = path.join(pathToDir, `${network.name}.json`);
+  const pathToFile = path.join(pathToDir, "address.json");
 
   if (!(await fileExists(pathToDir))) await fs.mkdir(pathToDir);
 
+  // If file no exist
   if (!(await fileExists(pathToFile))) {
-    await fs.writeFile(pathToFile, JSON.stringify(address));
+    await fs.writeFile(pathToFile, JSON.stringify({ [network.name]: address }));
     return;
   }
 
+  // If file exist
   const data = JSON.parse(
     (await fs.readFile(pathToFile)) as unknown as string
-  ) as Record<string, string>;
+  ) as Record<string, Record<string, string>>;
 
-  await fs.writeFile(pathToFile, JSON.stringify(Object.assign(data, address)));
+  await fs.writeFile(
+    pathToFile,
+    JSON.stringify(
+      Object.assign(data, {
+        [network.name]: { ...address, ...data[network.name] },
+      })
+    )
+  );
 };
 
 async function deployDiamond() {
