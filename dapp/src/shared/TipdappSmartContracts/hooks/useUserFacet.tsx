@@ -1,7 +1,7 @@
 import { useClipboard } from '@/shared/hooks';
 import { useUser } from '@/shared/User/hooks/useUser';
 import { ethereum } from '@/utils/constants';
-import { address, UserFacetAbi } from '@tipdapp/contracts';
+import { address, UserFacetAbi} from '@tipdapp/contracts';
 import { useMemo } from 'react';
 import { useContractRead, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { AvaibleChains } from '../types';
@@ -12,7 +12,6 @@ import { AvaibleChains } from '../types';
 //   abi: UserFacetAbi,
 // } as any;
 
-
 export const useTipdappSign = () => {
   const { user } = useUser();
 
@@ -22,23 +21,22 @@ export const useTipdappSign = () => {
   const contractInstance = useMemo(
     () => ({
       address: address[chain?.name as AvaibleChains].Diamond,
-      abi: UserFacetAbi,
+      abi: UserFacetAbi
     }),
     [chain]
   );
-
-
 
   // const ABI = UserFacetAbi as Readonly<typeof UserFacetAbi>
   const ABI = UserFacetAbi as Readonly<typeof UserFacetAbi>;
 
   const userToken = useContractRead({
-    // ...contractInstance,
-    address: address[chain?.name as AvaibleChains].Diamond,
-    abi: UserFacetAbi,
+    ...contractInstance,
     functionName: '',
-    args: [user?.address],
+    // enabled: !!user?.address,
+    args: [user!.address],
   });
+
+  console.log(userToken);
 
   // WRITE
   const { config } = usePrepareContractWrite({
@@ -49,6 +47,7 @@ export const useTipdappSign = () => {
       ? (userToken.data as unknown as string) === ethereum.AddressZero
       : false,
   });
+  const registerUser = ()=>{}
 
   // const registerUser = useContractWrite({
   //   ...config,

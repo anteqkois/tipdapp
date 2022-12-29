@@ -5,6 +5,7 @@ const nextConfig = {
   images: {
     domains: ['avatars.dicebear.com'],
   },
+  transpilePackages: ['@tipdapp/contracts'],
   webpack(config, options) {
     config.module.rules.push({
       test: /\.svg$/,

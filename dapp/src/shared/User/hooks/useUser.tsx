@@ -1,7 +1,7 @@
 // 'use client';
 import { logoutUser, refreshToken, verifyMessage } from '@/api/auth';
 import { useCookie, useLocalStorage } from '@/shared/hooks';
-import { AuthStatus } from '@/types';
+import { AuthStatus, Modify } from '@/types';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { UserSession } from '@tipdapp/server';
 import { useRouter } from 'next/navigation';
@@ -15,7 +15,7 @@ import {
 } from 'react';
 import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
-import { useDisconnect } from 'wagmi';
+import { Address, useDisconnect } from 'wagmi';
 
 export const UserContext = createContext<ReturnType>({} as ReturnType);
 
@@ -25,7 +25,8 @@ type ReturnType = {
   login: () => void;
   logout: () => Promise<void>;
   verify: (message: SiweMessage, signature: string) => Promise<boolean>;
-  user?: UserSession;
+  // user?: UserSession;
+  user?: Modify<UserSession, {address: Address}>;
   setUser: Dispatch<SetStateAction<UserSession | undefined>>;
   status: AuthStatus;
   setStatus: Dispatch<SetStateAction<AuthStatus>>;

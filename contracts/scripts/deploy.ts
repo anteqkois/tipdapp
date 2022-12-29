@@ -43,20 +43,20 @@ const saveAddress = async (address: Record<string, string>) => {
 };
 
 const saveAbi = async (smartContractName: string) => {
-  // Check if abi folder exist
+  // Check if abi dir exists
   const pathToDir = path.join(__dirname, "../", `lib/abi`);
   if (!(await fileExists(pathToDir))) await fs.mkdir(pathToDir);
 
   // Get artifact
   const artifact = await artifacts.readArtifact(smartContractName);
 
-  // Check if abi exist
+  // Check if the abi file with the given name Smart Contract exists
   const pathToFile = path.join(pathToDir, `${artifact.contractName}.ts`);
 
-  // Remove file if exist
+  // Remove file if exists
   if (await fileExists(pathToFile)) await fs.rm(pathToFile);
 
-  // Create new file and save abi
+  // Create new file and save new abi
   await fs.writeFile(
     pathToFile,
     `export const abi = ${JSON.stringify(artifact.abi)} as const;`
