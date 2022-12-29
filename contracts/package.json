@@ -2,17 +2,14 @@
   "name": "@tipdapp/contracts",
   "author": "Antek Kois",
   "license": "MIT",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "description": "Smart Contracts and their types to my web3 dapp",
   "main": "index.ts",
   "types": "index.ts",
   "files": [
     "index.ts",
-    "artifacts/@openzeppelin",
-    "artifacts/address",
-    "artifacts/contracts",
+    "lib",
     "package.json",
-    "typechain-types",
     "README.md"
   ],
   "repository": {
@@ -47,12 +44,11 @@
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",
-    "hardhat": "^2.12.4"
-  },
-  "dependencies": {
+    "hardhat": "^2.12.4",
     "@openzeppelin/contracts": "^4.8.0",
     "dotenv": "^16.0.3",
     "hardhat-shorthand": "^1.0.0",
     "solidity-coverage": "^0.8.2"
-  }
+  },
+  "dependencies": {}
 }

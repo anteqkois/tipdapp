@@ -1,27 +1,43 @@
 import { useClipboard } from '@/shared/hooks';
 import { useUser } from '@/shared/User/hooks/useUser';
 import { ethereum } from '@/utils/constants';
-import { UserFacetAbi } from '@tipdapp/contracts';
-import {
-  useContractRead, usePrepareContractWrite
-} from 'wagmi';
+import { address, UserFacetAbi } from '@tipdapp/contracts';
+import { useMemo } from 'react';
+import { useContractRead, useNetwork, usePrepareContractWrite } from 'wagmi';
+import { AvaibleChains } from '../types';
 // import { useClipboard, useUser } from '../../hooks';
-console.log(Diamond)
-const contractInstance = {
-  address: Diamond,
-  abi: UserFacetAbi,
-} as any;
+// console.log(Diamond)
+// const contractInstance = {
+//   address: Diamond,
+//   abi: UserFacetAbi,
+// } as any;
+
 
 export const useTipdappSign = () => {
   const { user } = useUser();
 
   const { ClipboardIcon } = useClipboard();
+  const { chain } = useNetwork();
 
-  // READ
+  const contractInstance = useMemo(
+    () => ({
+      address: address[chain?.name as AvaibleChains].Diamond,
+      abi: UserFacetAbi,
+    }),
+    [chain]
+  );
+
+
+
+  // const ABI = UserFacetAbi as Readonly<typeof UserFacetAbi>
+  const ABI = UserFacetAbi as Readonly<typeof UserFacetAbi>;
+
   const userToken = useContractRead({
-    ...contractInstance,
-    functionName: 'userToken',
-    args: user?.address,
+    // ...contractInstance,
+    address: address[chain?.name as AvaibleChains].Diamond,
+    abi: UserFacetAbi,
+    functionName: '',
+    args: [user?.address],
   });
 
   // WRITE

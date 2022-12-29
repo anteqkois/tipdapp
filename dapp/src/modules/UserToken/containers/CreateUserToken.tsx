@@ -1,5 +1,6 @@
 import { useLocalStorage } from '@/shared/hooks';
 import { Button, Card, Details, Input } from '@/shared/ui';
+import { UserFacetAbi } from '@tipdapp/contracts';
 import { UserTokenValidation, userTokenValidation } from '@tipdapp/server';
 import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -8,6 +9,9 @@ const initialUserToken: UserTokenValidation.CreateForm = {
   symbol: '',
   name: '',
 };
+
+console.log(UserFacetAbi);
+
 
 export const CreateUserToken = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
