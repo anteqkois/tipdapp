@@ -1,4 +1,4 @@
-import { errorToast } from '@/lib/toastCustom';
+import { errorToast, waitToast } from '@/lib/toastCustom';
 import { useClipboard } from '@/shared/hooks';
 import { Button } from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
@@ -28,7 +28,7 @@ export const useUserFacet = () => {
     watch: true,
   });
 
-  console.log(userToken);
+  // console.log(userToken);
 
   // WRITE
   const { config } = usePrepareContractWrite({
@@ -102,12 +102,42 @@ export const useUserFacet = () => {
         { duration: Infinity, id: 'registerUserToats' }
       );
     },
-    onError(error: any) {
-      errorToast(error.reason, { duration: Infinity });
+    onMutate({ args, overrides }) {
+      console.log('Mutate', { args, overrides });
+      waitToast('Waiting for transaction confirmation in wallet.', {
+        id: 'registerUser',
+        duration: Infinity,
+      });
+    },
+    onSettled(data, error: any) {
+      waitToast('Transaction was send. Wait for confirmation.', {
+        id: 'registerUser',
+        duration: Infinity,
+      });
+
+      console.log('Settled', { data, error });
+      if (error) {
+        let errorMessage;
+        switch (error.code) {
+          case 4001:
+            errorMessage = error.message;
+            break;
+          case -32603:
+            //TODO you must use regex to get exacly error message
+            errorMessage = error.message;
+            break;
+
+          default:
+            errorMessage = error.reason;
+            break;
+        }
+        errorToast(errorMessage, { id: 'registerUser', duration: Infinity });
+      } else {
+        console.log(data);
+      }
     },
   });
-  console.log(registerUser);
+  // console.log(registerUser);
 
   return { registerUser, userToken };
-  // return { registerUser: { ...registerUser, ready: false}, userToken };
 };

@@ -3,7 +3,6 @@ import { useUserFacet } from '@/shared/TipdappContracts/hooks/useUserFacet';
 import { Button, Card, Details, Input } from '@/shared/ui';
 import { UserTokenValidation, userTokenValidation } from '@tipdapp/server';
 import { FormEvent, useState } from 'react';
-import toast from 'react-hot-toast';
 
 const initialUserToken: UserTokenValidation.CreateForm = {
   symbol: '',
@@ -59,25 +58,31 @@ export const CreateUserToken = () => {
       userTokenValidation.createFormParse(userTokenFormData);
 
       if (registerUser?.writeAsync) {
-        const writePromise = registerUser.writeAsync({
+        await registerUser.writeAsync({
           recklesslySetUnpreparedArgs: [
             userTokenFormData.symbol,
             userTokenFormData.name,
           ],
         });
-        toast.promise(
-          writePromise,
-          {
-            loading: 'Wait for send transaction',
-            success: 'Your token was succesfully create!',
-            error: 'Something went wrong, we can not create your token.',
-          },
-          { id: 'registerUserPromise' }
-        );
+        // const writePromise = registerUser.writeAsync({
+        //   recklesslySetUnpreparedArgs: [
+        //     userTokenFormData.symbol,
+        //     userTokenFormData.name,
+        //   ],
+        // });
+        // toast.promise(
+        //   writePromise,
+        //   {
+        //     loading: 'Wait for send transaction',
+        //     success: 'Your token was succesfully create!',
+        //     error: 'Something went wrong, we can not create your token.',
+        //   },
+        //   { id: 'registerUserPromise' }
+        // );
       } else {
-        toast.error('Something went wrong, we can not create your token.', {
-          id: 'registerUserPromise',
-        });
+        // toast.error('Something went wrong, we can not create your token.', {
+        //   id: 'registerUserPromise',
+        // });
       }
     } catch (error: any) {
       if (error?.type === 'ValidationErrors') {
