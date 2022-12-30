@@ -1,4 +1,5 @@
-import { UserSession, UserValidation } from '@tipdapp/server';
+import { UserSessionDapp } from '@/shared/User/types';
+import { UserValidation } from '@tipdapp/server';
 import { SiweMessage } from 'siwe';
 import { api } from './apiConfig';
 
@@ -16,7 +17,7 @@ export const getNonce = async () =>
 
 // VERIFY
 type PostVerifyMessageResponse = {
-  user: UserSession;
+  user: UserSessionDapp;
 };
 
 type VerifyMessageBody = {
@@ -38,7 +39,7 @@ export const logoutUser = async () =>
 // SIGNUP
 type SignUpResponse = {
   message: string;
-  user: UserSession;
+  user: UserSessionDapp;
 };
 
 type SignUpBody = {

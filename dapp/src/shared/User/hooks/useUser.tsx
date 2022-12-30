@@ -1,9 +1,8 @@
 // 'use client';
 import { logoutUser, refreshToken, verifyMessage } from '@/api/auth';
 import { useCookie, useLocalStorage } from '@/shared/hooks';
-import { AuthStatus, Modify } from '@/types';
+import { AuthStatus } from '@/types';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { UserSession } from '@tipdapp/server';
 import { useRouter } from 'next/navigation';
 import {
   createContext,
@@ -15,19 +14,19 @@ import {
 } from 'react';
 import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
-import { Address, useDisconnect } from 'wagmi';
+import { useDisconnect } from 'wagmi';
+import { UserSessionDapp } from '../types';
 
 export const UserContext = createContext<ReturnType>({} as ReturnType);
 
-const tempUser = {} as UserSession;
+const tempUser = {} as UserSessionDapp;
 
 type ReturnType = {
   login: () => void;
   logout: () => Promise<void>;
   verify: (message: SiweMessage, signature: string) => Promise<boolean>;
-  // user?: UserSession;
-  user?: Modify<UserSession, {address: Address}>;
-  setUser: Dispatch<SetStateAction<UserSession | undefined>>;
+  user?: UserSessionDapp;
+  setUser: Dispatch<SetStateAction<UserSessionDapp | undefined>>;
   status: AuthStatus;
   setStatus: Dispatch<SetStateAction<AuthStatus>>;
 };
@@ -35,7 +34,7 @@ type ReturnType = {
 type Props = { children: ReactNode };
 
 export const UserProvider = ({ children }: Props) => {
-  const [user, setUser] = useLocalStorage<UserSession>('user');
+  const [user, setUser] = useLocalStorage<UserSessionDapp>('user');
   const [status, setStatus] = useCookie<AuthStatus>(
     'authStatus',
     'unauthenticated',
@@ -48,11 +47,11 @@ export const UserProvider = ({ children }: Props) => {
   useEffect(() => {
     let interval: NodeJS.Timer;
     if (status === 'authenticated') {
-      refreshToken();
+      // refreshToken();
       //Refresh in 30s interval
       interval = setInterval(() => {
         refreshToken();
-      }, 3 * 60 * 1000);
+      }, 30 * 60 * 1000);
     }
 
     return () => {

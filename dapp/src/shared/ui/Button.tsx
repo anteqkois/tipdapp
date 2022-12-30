@@ -28,7 +28,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={classnames(
           className,
-          'rounded select-none text-sm font-medium state-focus',
+          'rounded select-none text-sm font-medium state-focus disabled:from-neutral-400 disabled:via-neutral-400 disabled:to-neutral-400 disabled:text-neutral-50 disabled:hover:text-neutral-50 disabled:hover:cursor-not-allowed',
           {
             'px-4 py-2 text-primary-50': [
               'default',

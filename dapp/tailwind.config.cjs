@@ -104,6 +104,7 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx}',
     './src/modules/**/*.{js,ts,jsx,tsx}',
     './src/shared/**/*.{js,ts,jsx,tsx}',
+    './src/lib/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     fontFamily: {

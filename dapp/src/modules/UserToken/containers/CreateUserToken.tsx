@@ -1,17 +1,14 @@
 import { useLocalStorage } from '@/shared/hooks';
+import { useUserFacet } from '@/shared/TipdappContracts/hooks/useUserFacet';
 import { Button, Card, Details, Input } from '@/shared/ui';
-import { UserFacetAbi } from '@tipdapp/contracts';
 import { UserTokenValidation, userTokenValidation } from '@tipdapp/server';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 
 const initialUserToken: UserTokenValidation.CreateForm = {
   symbol: '',
   name: '',
 };
-
-console.log(UserFacetAbi);
-
 
 export const CreateUserToken = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -23,38 +20,36 @@ export const CreateUserToken = () => {
   //TODO Refreshh user data after create user token
   // const { refreshSessionData } = useSession();
 
-  // const { registerUser } = useTipdappSign();
-  //! TODO implement below
-  const registerUser = {} as any;
+  const { registerUser, userToken } = useUserFacet();
 
-  useEffect(() => {
-    (async () => {
-      if (registerUser?.data?.wait) {
-        await registerUser.data?.wait(1);
-        toast.success(`Transaction have 1 confirmation`, {
-          id: 'confirmation',
-          position: 'bottom-right',
-          duration: 6000,
-        });
-        await registerUser.data?.wait(2);
-        toast.success(`Transaction have 2 confirmation`, {
-          id: 'confirmation',
-          position: 'bottom-right',
-          duration: 6000,
-        });
+  // useEffect(() => {
+  //   (async () => {
+  //     if (registerUser?.data?.wait) {
+  //       await registerUser.data?.wait(1);
+  //       toast.success(`Transaction have 1 confirmation`, {
+  //         id: 'confirmation',
+  //         position: 'bottom-right',
+  //         duration: 6000,
+  //       });
+  //       await registerUser.data?.wait(2);
+  //       toast.success(`Transaction have 2 confirmation`, {
+  //         id: 'confirmation',
+  //         position: 'bottom-right',
+  //         duration: 6000,
+  //       });
 
-        setUserTokenFormData(initialUserToken);
-        // await refreshSessionData();
+  //       setUserTokenFormData(initialUserToken);
+  //       // await refreshSessionData();
 
-        await registerUser.data?.wait(3);
-        toast.success(`Transaction have 3 confirmation`, {
-          id: 'confirmation',
-          position: 'bottom-right',
-          duration: 6000,
-        });
-      }
-    })();
-  }, [registerUser?.data]);
+  //       await registerUser.data?.wait(3);
+  //       toast.success(`Transaction have 3 confirmation`, {
+  //         id: 'confirmation',
+  //         position: 'bottom-right',
+  //         duration: 6000,
+  //       });
+  //     }
+  //   })();
+  // }, [registerUser?.data]);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -85,20 +80,16 @@ export const CreateUserToken = () => {
         });
       }
     } catch (error: any) {
-      // const e: ValidationErrors = error as ValidationErrors;
       if (error?.type === 'ValidationErrors') {
         setErrors(error.mapByField());
       }
-      console.log(error);
     }
   };
 
   // TODO useDebounce!!!
-  const handleChange = (e: FormEvent<HTMLInputElement>) => {
-    //@ts-ignore
+  const handleChange = async (e: FormEvent<HTMLInputElement>) => {
     setUserTokenFormData((prev) => ({
       ...prev,
-      // [e.target.id]: e.target.value,
       [e.currentTarget.id]: e.currentTarget.value,
     }));
   };
@@ -131,7 +122,13 @@ export const CreateUserToken = () => {
             error={errors?.symbol}
           />
         </div>
-        <Button type="submit">Save</Button>
+        <Button
+          type="submit"
+          disabled={!registerUser.write}
+          // disabled={!registerUser.write || userToken.data !== ethers.constants.AddressZero}
+        >
+          Create token
+        </Button>
         <Button
           className="ml-3"
           onClick={resetForm}

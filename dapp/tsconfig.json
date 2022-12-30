@@ -47,7 +47,7 @@
     // "src/validation/signUpValidaion.old.js",
     // "src/server/controllers/authController.js"
     ".next/types/**/*.ts"
-, "src/shared/TipdappSmartContracts/types/index.d.ts"  ],
+, "src/shared/TipdappContracts/types/index.d.ts"  ],
   "exclude": [
     "node_modules",
     "**/node_modules/*",

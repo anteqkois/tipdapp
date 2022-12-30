@@ -1,0 +1,3 @@
+export const WEB_3_CONFIG = {
+  SECURE_CONFIRMATIONS_AMOUNT: 2,
+};
