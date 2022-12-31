@@ -1,5 +1,10 @@
 // 'use client';
-import { logoutUser, refreshToken, verifyMessage } from '@/api/auth';
+import {
+  logoutUser,
+  refreshToken,
+  refreshUserSession,
+  verifyMessage,
+} from '@/api/auth';
 import { useCookie, useLocalStorage } from '@/shared/hooks';
 import { AuthStatus } from '@/types';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -24,7 +29,7 @@ const tempUser = {} as UserSessionDapp;
 type ReturnType = {
   login: () => void;
   logout: () => Promise<void>;
-  refreshUserSession: () => Promise<void>;
+  refreshUser: () => Promise<void>;
   verify: (message: SiweMessage, signature: string) => Promise<boolean>;
   user?: UserSessionDapp;
   setUser: Dispatch<SetStateAction<UserSessionDapp | undefined>>;
@@ -109,8 +114,16 @@ export const UserProvider = ({ children }: Props) => {
     }
   };
 
-  const refreshUserSession = async()=>{
-
+  const refreshUser = async () => {
+    try {
+      const data = await refreshUserSession();
+      setUser(data.user);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(
+        error[0].message ?? 'Something went wrong ! You can not logout.'
+      );
+    }
   };
 
   return (
@@ -119,7 +132,7 @@ export const UserProvider = ({ children }: Props) => {
         login,
         logout,
         verify,
-        refreshUserSession,
+        refreshUser,
         user,
         setUser,
         status,

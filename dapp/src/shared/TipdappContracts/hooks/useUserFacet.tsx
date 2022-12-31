@@ -21,7 +21,7 @@ import { AvaibleChains } from '../types';
 import { useConfirmationToast } from './useConfirmationToast';
 
 export const useUserFacet = () => {
-  const { user } = useUser();
+  const { user, refreshUser } = useUser();
 
   const { ClipboardIcon } = useClipboard();
   const { chain } = useNetwork();
@@ -84,7 +84,7 @@ export const useUserFacet = () => {
           data.hash,
           { id: 'registerUser', duration: Infinity }
         );
-        await data.wait(5) && 
+        (await data.wait(5)) && (await refreshUser());
       }
     },
   });

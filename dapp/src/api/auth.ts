@@ -11,7 +11,6 @@ export const validateFormData = async (body: any) =>
 type GetNonceResponse = {
   nonce: string;
 };
-
 export const getNonce = async () =>
   await api.get<any, GetNonceResponse>('/auth/nonce');
 
@@ -19,12 +18,10 @@ export const getNonce = async () =>
 type PostVerifyMessageResponse = {
   user: UserSessionDapp;
 };
-
 type VerifyMessageBody = {
   message: SiweMessage;
   signature: string;
 };
-
 export const verifyMessage = async (body: VerifyMessageBody) =>
   await api.post<any, PostVerifyMessageResponse>('/auth/verify', body);
 
@@ -32,7 +29,6 @@ export const verifyMessage = async (body: VerifyMessageBody) =>
 type LogoutResponse = {
   message: string;
 };
-
 export const logoutUser = async () =>
   await api.get<any, LogoutResponse>('/auth/logout');
 
@@ -41,21 +37,32 @@ type SignUpResponse = {
   message: string;
   user: UserSessionDapp;
 };
-
 type SignUpBody = {
   message: SiweMessage;
   signature: string;
   formData: UserValidation.CreateUser;
   // formData: any;
 };
-
 export const signUp = async (body: SignUpBody) =>
   await api.post<any, SignUpResponse>('/auth/signup', body);
 
-// REFRESH
+// REFRESH TOKEN
 type RefreshResponse = {
   message: string;
 };
-
 export const refreshToken = async () =>
   await api.get<RefreshResponse>('/auth/refresh');
+
+//REFRESH USER SESSION
+type RefreshUserSessionResponse = {
+  message: string;
+  user: UserSessionDapp;
+};
+// type RefreshSessionBody = {
+//   message: SiweMessage;
+//   signature: string;
+//   formData: UserValidation.CreateUser;
+//   // formData: any;
+// };
+export const refreshUserSession = async () =>
+  await api.get<any, RefreshUserSessionResponse>('/auth/signup');
