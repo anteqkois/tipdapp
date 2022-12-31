@@ -1,4 +1,6 @@
+import { transactionToast } from '@/lib/toastCustom';
 import { useLocalStorage } from '@/shared/hooks';
+import { RegisterUserDetails } from '@/shared/TipdappContracts/components/RegisterUserDetails';
 import { useUserFacet } from '@/shared/TipdappContracts/hooks/useUserFacet';
 import { Button, Card, Details, Input } from '@/shared/ui';
 import { UserTokenValidation, userTokenValidation } from '@tipdapp/server';
@@ -50,6 +52,25 @@ export const CreateUserToken = () => {
   //   })();
   // }, [registerUser?.data]);
 
+  // toast.custom(
+  //   <RegisterUserDetails
+  //     hash={'0x123457893459178wefjkl'}
+  //     toastId="registerUser"
+  //     tokenAddress={'0x12345789345917812e892d3bhjk23rwefjkl'}
+  //   />,
+  //   { duration: Infinity }
+  // );
+
+  transactionToast(
+    <RegisterUserDetails
+      hash={
+        '0xac0189a3cd5c3644cbf7a15311082399e8f15eb479ab4050accd911f889c9414'
+      }
+      tokenAddress={'0x12345789345917812e892d3bhjk23rwefjkl'}
+    />,
+    '0xac0189a3cd5c3644cbf7a15311082399e8f15eb479ab4050accd911f889c9414',
+    { duration: Infinity }
+  );
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {

@@ -22,6 +22,10 @@ const config: HardhatUserConfig = {
   },
   networks: {
     hardhat: {
+      mining: {
+        auto: false,
+        interval: [3000, 6000],
+      },
       accounts: [
         {
           privateKey: process.env.DEPLOYER_WALLET_PRIVATE_KEY,
