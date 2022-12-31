@@ -61,7 +61,7 @@ const createRefreshToken = (
   const refreshToken = jwt.sign(
     {
       role: userSessionData.roles,
-      activeRole:userSessionData.activeRole,
+      activeRole: userSessionData.activeRole,
       address: userSessionData.address,
       nick: userSessionData.nick,
     },
@@ -271,6 +271,25 @@ const verifyMessageAndLogin = async (req: Request, res: Response) => {
   // }
 };
 
+const refreshUserSession = async (req: Request, res: Response) => {
+  const userSessionData = await userService.find({
+    where: {
+      address: req.user.address,
+    },
+  });
+
+  if (userSessionData) {
+    res
+      .status(StatusCodes.OK)
+      .json({ message: 'New user session data', user: userSessionData });
+  } else {
+    createApiError(
+      'Something wrong when you try refetch session data. Please relogin.',
+      StatusCodes.NOT_FOUND
+    );
+  }
+};
+
 const logout = async (req: Request, res: Response) => {
   const { refreshToken } = req.cookies;
 
@@ -371,6 +390,7 @@ export {
   validate,
   createNonce,
   verifyMessageAndLogin,
+  refreshUserSession,
   logout,
   signUp,
   refreshToken,

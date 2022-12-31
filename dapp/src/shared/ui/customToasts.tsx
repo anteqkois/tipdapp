@@ -1,6 +1,9 @@
 import { Close, Spinner } from '@/shared/ui';
 import { ViewOnExplorer } from '@/shared/ui/ViewOnExplorer';
-import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
+import {
+  CheckBadgeIcon,
+  ExclamationCircleIcon,
+} from '@heroicons/react/24/solid';
 import { Hash } from '@wagmi/core';
 import { toast, Toast } from 'react-hot-toast';
 
@@ -90,22 +93,24 @@ const transactionToast = (
   );
 
 const confirmationToast = (
-  message: string | ((...arg: any[]) => string),
+  // tx: Hash,
+  confirmation: number,
   options?: ToastOptions
-) =>
+) => {
   toast.custom(
     (t: Toast) => (
       <div
         className={`${
           t.visible ? 'animate-enter ' : 'animate-leave'
-        } grid grid-cols-[24px_auto_24px] items-start gap-2 max-w-sm md:max-w-md p-3 bg-neutral-50 shadow-lg rounded-lg pointer-events-auto ring-1 ring-neutral-600 ring-opacity-5`}
+        } flex items-center gap-2 max-w-sm md:max-w-md p-3 bg-neutral-50 shadow-lg rounded-lg pointer-events-auto ring-1 ring-neutral-600 ring-opacity-5`}
       >
-        <Spinner className="!w-5 !h-6" />
-        {typeof message === 'function' ? message() : message}
+        <CheckBadgeIcon className="h-6 fill-success-600" />
+        Transaction have {confirmation} confirmation!
         <Close onClick={() => toast.dismiss(t.id)} />
       </div>
     ),
-    options
+    {id:'confirmation', ...options}
   );
+};
 
 export { confirmationToast, transactionToast, waitToast, errorToast };

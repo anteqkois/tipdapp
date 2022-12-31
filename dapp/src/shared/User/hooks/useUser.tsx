@@ -24,6 +24,7 @@ const tempUser = {} as UserSessionDapp;
 type ReturnType = {
   login: () => void;
   logout: () => Promise<void>;
+  refreshUserSession: () => Promise<void>;
   verify: (message: SiweMessage, signature: string) => Promise<boolean>;
   user?: UserSessionDapp;
   setUser: Dispatch<SetStateAction<UserSessionDapp | undefined>>;
@@ -108,12 +109,17 @@ export const UserProvider = ({ children }: Props) => {
     }
   };
 
+  const refreshUserSession = async()=>{
+
+  };
+
   return (
     <UserContext.Provider
       value={{
         login,
         logout,
         verify,
+        refreshUserSession,
         user,
         setUser,
         status,

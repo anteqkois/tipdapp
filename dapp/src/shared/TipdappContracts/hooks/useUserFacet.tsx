@@ -1,21 +1,24 @@
-import { errorToast, waitToast } from '@/lib/toastCustom';
 import { useClipboard } from '@/shared/hooks';
+import {
+  errorToast,
+  transactionToast,
+  waitToast,
+} from '@/shared/ui/customToasts';
 import { useUser } from '@/shared/User/hooks/useUser';
 import { ethereum } from '@/utils/constants';
 import { selectWeb3Error } from '@/utils/selectWeb3Error';
 import { Hash } from '@wagmi/core';
 import { useState } from 'react';
-import { toast } from 'react-hot-toast';
 import {
   useContractRead,
   useContractWrite,
   useNetwork,
   usePrepareContractWrite,
 } from 'wagmi';
-import { RegisterUserDetails } from '../components/RegisterUserDetails';
+import { RegisterUserTransaction } from '../components/RegisterUserTransaction';
 import { userFacetInstance } from '../contractInstances';
 import { AvaibleChains } from '../types';
-import { useConfirmation } from './useConfirmation';
+import { useConfirmationToast } from './useConfirmationToast';
 
 export const useUserFacet = () => {
   const { user } = useUser();
@@ -24,9 +27,13 @@ export const useUserFacet = () => {
   const { chain } = useNetwork();
 
   const [hashToObserve, setHashToObserve] = useState<Hash | undefined>(
-    undefined
+    '0x32a4a88776a805a34914591d77df16b4d060d7f1d33917ace6358f79ec139f96'
   );
-  useConfirmation(hashToObserve);
+  // useConfirmation(hashToObserve);
+  // setHashToObserve(
+  //   '0xe3c75b437c68ed0af0387426fa924209195a1cc2fd60265c6b717a62e3fc0394'
+  // );
+  useConfirmationToast(hashToObserve, 5);
 
   const userToken = useContractRead({
     ...userFacetInstance[chain?.name as AvaibleChains],
@@ -64,17 +71,20 @@ export const useUserFacet = () => {
           id: 'registerUser',
           duration: Infinity,
         });
-      } else {
-        setHashToObserve(data?.hash);
+      } else if (data?.hash) {
+        setHashToObserve(data.hash);
         const newTokenAddress = await userToken.refetch();
         // TODO refresh userSession when token was created
-        toast.custom(
-          <RegisterUserDetails
-            hash={data?.hash!}
-            toastId="registerUser"
+
+        transactionToast(
+          <RegisterUserTransaction
+            hash={data.hash}
             tokenAddress={newTokenAddress.data!}
-          />
+          />,
+          data.hash,
+          { id: 'registerUser', duration: Infinity }
         );
+        await data.wait(5) && 
       }
     },
   });

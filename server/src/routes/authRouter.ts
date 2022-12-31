@@ -4,6 +4,7 @@ import {
   createNonce,
   logout,
   refreshToken,
+  refreshUserSession,
   signUp,
   validate,
   verifyMessageAndLogin,
@@ -16,6 +17,11 @@ const router = Router();
 router.get('/nonce', catchAsyncErrors(createNonce));
 router.get('/logout', verifyJWT, catchAsyncErrors(logout));
 router.get('/refresh', catchAsyncErrors(refreshToken));
+router.get(
+  '/refreshUserSession',
+  verifyJWT,
+  catchAsyncErrors(refreshUserSession)
+);
 //POST
 router.post('/verify', catchAsyncErrors(verifyMessageAndLogin));
 router.post('/validate', catchAsyncErrors(validate));

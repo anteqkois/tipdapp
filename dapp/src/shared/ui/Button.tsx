@@ -9,7 +9,6 @@ type ButtonVariant =
   | 'info'
   | 'clear'
   | 'overlay'
-  | 'link'
   | 'ghost'
   | 'special'
   | 'minimalist';
@@ -60,7 +59,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         )}
       >
         {children}
-        {variant === 'link' && <ArrowTopRightOnSquareIcon className="w-5" />}
       </button>
     );
   }

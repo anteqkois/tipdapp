@@ -1,6 +1,6 @@
 import { Address, Hash } from '@wagmi/core';
 import { useNetwork } from 'wagmi';
-import Button from './Button';
+import { Link } from './Link';
 
 type Props = {
   subject: 'token' | 'tx' | 'address';
@@ -33,12 +33,12 @@ export const ViewOnExplorer = ({ subject, value, classNames }: Props) => {
       target="_blank"
       rel="noreferrer"
     >
-      <Button
-        variant="link"
+      <Link
+        icon={true}
         className="mr-1 font-medium text-neutral-700"
       >
         View {subject === 'tx' ? 'transaction' : subject} on Explorer
-      </Button>
+      </Link>
     </a>
   );
 };

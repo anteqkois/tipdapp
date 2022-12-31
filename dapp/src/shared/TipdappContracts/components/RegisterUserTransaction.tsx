@@ -5,13 +5,13 @@ import { Address, Hash } from '@wagmi/core';
 
 type Props = { hash: Hash; tokenAddress: Address };
 
-export const RegisterUserDetails = ({ hash, tokenAddress }: Props) => {
+export const RegisterUserTransaction = ({ hash, tokenAddress }: Props) => {
   const { ClipboardIcon } = useClipboard();
   return (
     <div className="flex flex-col gap-3">
       <h6 className="flex items-center gap-1">
-        <CheckCircleIcon className="h-6 fill-primary-700" /> Token
-        was successfully created !
+        <CheckCircleIcon className="h-6 fill-primary-700" /> Token was
+        successfully created !
       </h6>
       <div className="pl-1">
         <p className="flex items-center gap-1">
@@ -32,7 +32,7 @@ export const RegisterUserDetails = ({ hash, tokenAddress }: Props) => {
         </p>
       </div>
       <p className="pl-1">
-        After confirming with 2 blocks, you will be automatically redirected to
+        After confirming with 5 blocks, you will be automatically redirected to
         the token panel.
       </p>
     </div>
