@@ -77,9 +77,8 @@ const transactionToast = (
           <div className="p-3">
             {typeof message === 'function' ? message() : message}
           </div>
-          <div className="flex border-t text-center border-primary-600 border-opacity-20 [&>*]:flex-auto [&>*]:p-3">
+          <div className="flex border-t text-center border-primary-600 border-opacity-20 [&>*]:flex-auto [&>*]:p-3 [&>*]:justify-center">
             <ViewOnExplorer
-              classNames="flex justify-center"
               subject="tx"
               value={hash}
             />
@@ -109,7 +108,7 @@ const confirmationToast = (
         <Close onClick={() => toast.dismiss(t.id)} />
       </div>
     ),
-    {id:'confirmation', ...options}
+    { id: 'confirmation', ...options }
   );
 };
 

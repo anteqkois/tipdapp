@@ -11,15 +11,15 @@ export const useConfirmationToast = (hash?: Hash, confirmations = 4) => {
 
   const transaction = useTransaction({
     hash,
-    enabled: !waitTx.data,
+    enabled: !!waitTx.data,
   });
-
+  
   const blockNumber = useBlockNumber({
     onBlock(blockNumber) {
       console.log('New block: ', blockNumber);
       transaction.refetch();
     },
-    enabled: !waitTx.data,
+    enabled: !!waitTx.data,
   });
 
   //TODO give user information that UUI stop watching confirmations amount

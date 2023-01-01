@@ -28,7 +28,7 @@ export function stringifyOptions(options: Options) {
 
 const getCookie = <S,>(key: string): S | undefined => {
   return (
-    (document.cookie.split('; ').reduce((r, v) => {
+    (document?.cookie.split('; ').reduce((r, v) => {
       const parts = v.split('=');
       return parts[0] === key ? decodeURIComponent(parts[1]) : r;
     }, '') as S) || undefined

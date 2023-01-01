@@ -26,19 +26,26 @@ export const ViewOnExplorer = ({ subject, value, classNames }: Props) => {
   }
 
   return (
-    <a
-      tabIndex={-1}
-      className={classNames}
-      href={link}
-      target="_blank"
-      rel="noreferrer"
-    >
       <Link
+        href={link}
         icon={true}
-        className="mr-1 font-medium text-neutral-700"
       >
         View {subject === 'tx' ? 'transaction' : subject} on Explorer
       </Link>
-    </a>
+  
+    // <a
+    //   tabIndex={-1}
+    //   className={classNames}
+    //   href={link}
+    //   target="_blank"
+    //   rel="noreferrer"
+    // >
+    //   <Link
+    //     icon={true}
+    //     className="mr-1 font-medium text-neutral-700"
+    //   >
+    //     View {subject === 'tx' ? 'transaction' : subject} on Explorer
+    //   </Link>
+    // </a>
   );
 };

@@ -65,4 +65,4 @@ type RefreshUserSessionResponse = {
 //   // formData: any;
 // };
 export const refreshUserSession = async () =>
-  await api.get<any, RefreshUserSessionResponse>('/auth/signup');
+  await api.get<any, RefreshUserSessionResponse>('/auth/refreshUserSession');

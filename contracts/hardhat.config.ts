@@ -26,6 +26,7 @@ const config: HardhatUserConfig = {
         auto: false,
         interval: [2000, 5000],
       },
+      // gas: "auto",
       accounts: [
         {
           privateKey: process.env.DEPLOYER_WALLET_PRIVATE_KEY,
@@ -47,10 +48,10 @@ const config: HardhatUserConfig = {
     },
   },
   gasReporter: {
-    enabled: false,
+    enabled: true,
     currency: "USD",
     maxMethodDiff: 20,
-    coinmarketcap: process.env.COINMARKETCAP_API_KEY,
+    // coinmarketcap: process.env.COINMARKETCAP_API_KEY,
     token: "ETH",
     // gasPriceApi: 'https://api.etherscan.io/api?module=proxy&action=eth_gasPrice',
     // token: 'MATIC',

@@ -55,9 +55,10 @@ describe("UserFacet", async function () {
     diamondAddress = await deployDiamond();
     diamondAsSigner = await ethers.getImpersonatedSigner(diamondAddress);
 
+    // Sends exactly 1.0 ether
     await contractOwner.sendTransaction({
       to: diamondAsSigner.address,
-      value: ethers.utils.parseEther("1.0"), // Sends exactly 1.0 ether
+      value: ethers.utils.parseEther("1.0"),
     });
 
     diamondLoupeFacet = await ethers.getContractAt(
@@ -180,10 +181,10 @@ describe("UserFacet", async function () {
         userToken.connect(userOne).changeOwner(userOne.address)
       ).to.be.revertedWith("Only owner");
 
-      userToken.connect(diamondAsSigner).changeOwner(userOne.address);
+      await userToken.connect(diamondAsSigner).changeOwner(userOne.address);
       expect(await userToken.owner()).to.be.equal(userOne.address);
 
-      userToken.connect(userOne).changeOwner(diamondAddress);
+      await userToken.connect(userOne).changeOwner(diamondAddress);
       expect(await userToken.owner()).to.be.equal(diamondAddress);
     });
   });
@@ -787,21 +788,19 @@ describe("UserFacet", async function () {
         userTokenAddress: userToken.address,
       });
 
-      await expect(
-        userFacet
-          .connect(sandHodler)
-          .tipERC20(
-            signature,
-            signatureData.tokenAmountBN,
-            signatureData.amountToMint,
-            signatureData.tokenToUser,
-            signatureData.fee,
-            signatureData.timestamp,
-            userOne.address,
-            signatureData.tokenAddress,
-            signatureData.userTokenAddress
-          )
-      );
+      await userFacet
+        .connect(sandHodler)
+        .tipERC20(
+          signature,
+          signatureData.tokenAmountBN,
+          signatureData.amountToMint,
+          signatureData.tokenToUser,
+          signatureData.fee,
+          signatureData.timestamp,
+          userOne.address,
+          signatureData.tokenAddress,
+          signatureData.userTokenAddress
+        );
 
       const balanceSand = await userFacet.balanceERC20(
         userOne.address,

@@ -1,8 +1,6 @@
 import { useLocalStorage } from '@/shared/hooks';
-import { RegisterUserTransaction } from '@/shared/TipdappContracts/components/RegisterUserTransaction';
 import { useUserFacet } from '@/shared/TipdappContracts/hooks/useUserFacet';
 import { Button, Card, Details, Input } from '@/shared/ui';
-import { transactionToast } from '@/shared/ui/customToasts';
 import { UserTokenValidation, userTokenValidation } from '@tipdapp/server';
 import { FormEvent, useState } from 'react';
 
@@ -21,7 +19,7 @@ export const CreateUserToken = () => {
   //TODO Refreshh user data after create user token
   // const { refreshSessionData } = useSession();
 
-  const { registerUser, userToken } = useUserFacet();
+  const { contract, registerUser, userToken } = useUserFacet();
 
   // useEffect(() => {
   //   (async () => {
@@ -74,6 +72,19 @@ export const CreateUserToken = () => {
             userTokenFormData.symbol,
             userTokenFormData.name,
           ],
+          recklesslySetUnpreparedOverrides: {
+            // gasLimit: ethers.utils.formatUnits(
+            //   await contract?.estimateGas.registerUser(
+            //     'ANQsdasd',
+            //     'Anteqkasdasdois'
+            //   )!,
+            //   'wei'
+            // ),
+            gasLimit: await contract?.estimateGas.registerUser(
+              'ANQsdasd',
+              'Anteqkasdasdois'
+            )!,
+          },
         });
         // const writePromise = registerUser.writeAsync({
         //   recklesslySetUnpreparedArgs: [
