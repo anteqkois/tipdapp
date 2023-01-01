@@ -65,47 +65,48 @@ export const CreateUserToken = () => {
       setErrors({});
 
       userTokenValidation.createFormParse(userTokenFormData);
+      await registerUser.call(userTokenFormData.symbol, userTokenFormData.name);
 
-      if (registerUser?.writeAsync) {
-        await registerUser.writeAsync({
-          recklesslySetUnpreparedArgs: [
-            userTokenFormData.symbol,
-            userTokenFormData.name,
-          ],
-          recklesslySetUnpreparedOverrides: {
-            // gasLimit: ethers.utils.formatUnits(
-            //   await contract?.estimateGas.registerUser(
-            //     'ANQsdasd',
-            //     'Anteqkasdasdois'
-            //   )!,
-            //   'wei'
-            // ),
-            gasLimit: await contract?.estimateGas.registerUser(
-              'ANQsdasd',
-              'Anteqkasdasdois'
-            )!,
-          },
-        });
-        // const writePromise = registerUser.writeAsync({
-        //   recklesslySetUnpreparedArgs: [
-        //     userTokenFormData.symbol,
-        //     userTokenFormData.name,
-        //   ],
-        // });
-        // toast.promise(
-        //   writePromise,
-        //   {
-        //     loading: 'Wait for send transaction',
-        //     success: 'Your token was succesfully create!',
-        //     error: 'Something went wrong, we can not create your token.',
-        //   },
-        //   { id: 'registerUserPromise' }
-        // );
-      } else {
-        // toast.error('Something went wrong, we can not create your token.', {
-        //   id: 'registerUserPromise',
-        // });
-      }
+      // if (registerUser?.writeAsync) {
+      //   await registerUser.writeAsync({
+      //     recklesslySetUnpreparedArgs: [
+      //       userTokenFormData.symbol,
+      //       userTokenFormData.name,
+      //     ],
+      //     recklesslySetUnpreparedOverrides: {
+      //       // gasLimit: ethers.utils.formatUnits(
+      //       //   await contract?.estimateGas.registerUser(
+      //       //     'ANQsdasd',
+      //       //     'Anteqkasdasdois'
+      //       //   )!,
+      //       //   'wei'
+      //       // ),
+      //       gasLimit: await contract?.estimateGas.registerUser(
+      //         'ANQsdasd',
+      //         'Anteqkasdasdois'
+      //       )!,
+      //     },
+      //   });
+      //   // const writePromise = registerUser.writeAsync({
+      //   //   recklesslySetUnpreparedArgs: [
+      //   //     userTokenFormData.symbol,
+      //   //     userTokenFormData.name,
+      //   //   ],
+      //   // });
+      //   // toast.promise(
+      //   //   writePromise,
+      //   //   {
+      //   //     loading: 'Wait for send transaction',
+      //   //     success: 'Your token was succesfully create!',
+      //   //     error: 'Something went wrong, we can not create your token.',
+      //   //   },
+      //   //   { id: 'registerUserPromise' }
+      //   // );
+      // } else {
+      //   // toast.error('Something went wrong, we can not create your token.', {
+      //   //   id: 'registerUserPromise',
+      //   // });
+      // }
     } catch (error: any) {
       if (error?.type === 'ValidationErrors') {
         setErrors(error.mapByField());

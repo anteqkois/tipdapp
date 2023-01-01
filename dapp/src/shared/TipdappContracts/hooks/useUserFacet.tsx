@@ -24,14 +24,12 @@ import { AvaibleChains } from '../types';
 import { useConfirmationToast } from './useConfirmationToast';
 
 export const useUserFacet = () => {
-  const { user, refreshUser } = useUser();
   const provider = useProvider();
-
+  const [hashToObserve, setHashToObserve] = useState<Hash>();
+  
+  const { user, refreshUser } = useUser();
   const { ClipboardIcon } = useClipboard();
   const { chain } = useNetwork();
-
-  const [hashToObserve, setHashToObserve] = useState<Hash>();
-
   useConfirmationToast(hashToObserve, 5);
 
   // USER TOKEN
@@ -42,17 +40,11 @@ export const useUserFacet = () => {
     // watch: true,
   });
 
-  // console.log(userToken.data);
-
   // REGISTER USER
   const { config } = usePrepareContractWrite({
     ...userFacetInstance[chain?.name as AvaibleChains],
     functionName: 'registerUser',
     args: ['', ''],
-    overrides: {
-      // gasLimit: ethers.utils.parseUnits('169326', 'wei'),
-      // value: ethers.utils.parseEther('0.01'),
-    },
     enabled: userToken.data === ethereum.AddressZero,
   });
 
@@ -60,38 +52,6 @@ export const useUserFacet = () => {
     ...userFacetInstance[chain?.name as AvaibleChains],
     signerOrProvider: provider,
   });
-
-  useEffect(() => {
-    (async () => {
-      //0.000000000000171959
-      // const res = await contract?.estimateGas.registerUser(
-      //   'ANQsdasd',
-      //   'Anteqkasdasdois'
-      // );
-      console.log(
-        ethers.utils.formatUnits(
-          await contract?.estimateGas.registerUser(
-            'ANQsdasd',
-            'Anteqkasdasdois'
-          )!,
-          'wei'
-        )
-      );
-    })();
-  }, []);
-
-  // console.log(
-  //   provider.estimateGas({
-  //     // Wrapped ETH address
-  //     to: userFacetInstance[chain?.name as AvaibleChains].address,
-
-  //     // `function deposit() payable`
-  //     data: '0xd0e30db0',
-
-  //     // 1 ether
-  //     // value: parseEther('1.0'),
-  //   })
-  // );
 
   const registerUser = useContractWrite({
     ...config,
@@ -114,8 +74,10 @@ export const useUserFacet = () => {
           duration: Infinity,
         });
       } else if (data?.hash) {
-        console.log(data);
+        // console.log(data);
         setHashToObserve(data.hash);
+        await data.wait(1);
+
         const newTokenAddress = await userToken.refetch();
         console.log(newTokenAddress);
 
@@ -131,6 +93,22 @@ export const useUserFacet = () => {
       }
     },
   });
+
+  const registerUserCall = async (symbol: string, name: string) => {
+    if (registerUser?.writeAsync) {
+      await registerUser.writeAsync({
+        recklesslySetUnpreparedArgs: [symbol, name],
+        recklesslySetUnpreparedOverrides: {
+          gasLimit: await contract?.estimateGas.registerUser(symbol, name)!,
+        },
+      });
+    } else {
+    }
+  };
   // console.log('registerUser', registerUser);
-  return { contract, registerUser, userToken };
+  return {
+    contract,
+    registerUser: { ...registerUser, call: registerUserCall },
+    userToken,
+  };
 };
