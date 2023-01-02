@@ -1,5 +1,5 @@
 const main = async () => {
-  await import('./src/listeners/registerUserListener.js');
+  await import('./src/eventListeners/registerUserListener');
   console.log('> Microservice listening smart contract events... ');
 };
 

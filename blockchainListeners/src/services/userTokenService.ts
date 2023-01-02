@@ -1,6 +1,5 @@
-import UserTokenJSON from '../../artifacts/localhost/UserToken.json' assert { type: 'json' };
-import { create } from '../api/userToken.js';
-import ethers, { provider } from '../lib/ethersProvider.js';
+// import UserTokenJSON from '../../artifacts/localhost/UserToken.json' assert { type: 'json' };
+import { provider, ethers } from '../lib/ethersProvider.js';
 
 const getUserTokenData = async ({ userToken, userAddress, txHash }) => {
   const UserToken = new ethers.Contract(userToken, UserTokenJSON.abi, provider);
