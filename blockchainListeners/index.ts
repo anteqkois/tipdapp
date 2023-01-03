@@ -1,8 +1,2 @@
-const main = async () => {
-  await import('./src/eventListeners/registerUserListener');
-  console.log('> Microservice listening smart contract events... ');
-};
-
-main().catch((error) => {
-  console.log('ERROR', error);
-});
+import './src/config/dotenv.js';
+import './src/eventListeners/index.js';

@@ -2,8 +2,9 @@
   "name": "@tipdapp/blockchainlisteners",
   "version": "0.0.1",
   "engineStrict": true,
+  "type": "module",
   "engines ": {
-    "node": "18.10.0"
+    "node": "18.12.0"
   },
   "description": "Microservice to listen blockchain events",
   "main": "index.ts",
@@ -18,8 +19,10 @@
   },
   "homepage": "https://github.com/anteqkois/tipdapp#readme",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon --require dotenv/config dotenv_config_path=.env.development",
-    "start": "NODE_ENV=production node --require dotenv/config index.js dotenv_config_path=.env.development"
+    "dev:test": "dotenv_config_path=.env.development nodemon -x node --loader ts-node/esm index.ts",
+    "dev": "NODE_ENV=development dotenv_config_path=.env.development nodemon",
+    "build": "tsc",
+    "start": "NODE_ENV=production dotenv_config_path=.env.development index.js"
   },
   "dependencies": {
     "@tipdapp/contracts": "^0.0.9",

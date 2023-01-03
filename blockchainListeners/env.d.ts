@@ -1,4 +1,4 @@
-import { Network } from './src/types';
+import { Network } from './src/types/index.js';
 
 export {};
 

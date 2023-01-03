@@ -1,8 +1,12 @@
 import ethers from 'ethers';
-import { Network } from '../types';
+import { Network } from '../types/index.js';
 
-const providersList: Record<Network, ethers.ethers.providers.AlchemyProvider | ethers.ethers.providers.JsonRpcProvider> = {
-  rinkeby: new ethers.providers.AlchemyProvider('rinkeby'),
+const providersList: Record<
+  Network,
+  ethers.ethers.providers.AlchemyProvider | ethers.ethers.providers.JsonRpcProvider | ethers.ethers.providers.BaseProvider
+> = {
+  // rinkeby: new ethers.providers.AlchemyProvider('rinkeby'),
+  mainnet: ethers.getDefaultProvider(),
   localhost: new ethers.providers.JsonRpcProvider(),
   hardhat: new ethers.providers.JsonRpcProvider(),
 };
