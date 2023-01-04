@@ -1,3 +1,4 @@
+import { hardhat } from '@wagmi/chains';
 import ethers from 'ethers';
 import { Network } from '../types/index.js';
 
@@ -6,9 +7,9 @@ const providersList: Record<
   ethers.ethers.providers.AlchemyProvider | ethers.ethers.providers.JsonRpcProvider | ethers.ethers.providers.BaseProvider
 > = {
   // rinkeby: new ethers.providers.AlchemyProvider('rinkeby'),
-  mainnet: ethers.getDefaultProvider(),
-  localhost: new ethers.providers.JsonRpcProvider(),
-  hardhat: new ethers.providers.JsonRpcProvider(),
+  // mainnet: ethers.getDefaultProvider(),
+  // localhost: new ethers.providers.JsonRpcProvider(),
+  hardhat: new ethers.providers.JsonRpcProvider(hardhat.rpcUrls.default.http[0], { name: hardhat.network, chainId: hardhat.id }),
 };
 
 const provider = providersList[process.env.NETWORK];

@@ -25,11 +25,14 @@
     "start": "NODE_ENV=production dotenv_config_path=.env.development index.js"
   },
   "dependencies": {
-    "@tipdapp/contracts": "^0.0.9",
+    "@tipdapp/contracts": "^0.0.12",
+    "@tipdapp/server": "^0.0.1",
+    "@wagmi/chains": "^0.1.8",
     "amqplib": "^0.10.3",
     "dotenv": "^16.0.3"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.1",
     "ethers": "^5.7.2",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",

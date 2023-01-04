@@ -1,26 +1,31 @@
 // import UserTokenJSON from '../../artifacts/localhost/UserToken.json' assert { type: 'json' };
-import { provider, ethers } from '../lib/ethersProvider.js';
+import { UserToken__factory } from '@tipdapp/contracts';
+import { NewUserEventObject } from '@tipdapp/contracts/typechain-types/contracts/Tipdapp/facets/UserFacet.js';
+import { UserToken } from '@tipdapp/server';
+import { netowrkInfo } from '../config/network.js';
+import { provider } from '../lib/ethersProvider.js';
 
-// const getUserTokenData = async ({ userToken, userAddress, txHash }) => {
-//   const UserToken = new ethers.Contract(userToken, UserTokenJSON.abi, provider);
-//   const symbol = await UserToken.symbol();
-//   const name = await UserToken.name();
-//   const { chainId } = await provider.getNetwork();
+type EventData = NewUserEventObject & { txHash: string };
 
-//   const data = {
-//     address: userToken,
-//     symbol,
-//     name,
-//     chainId,
-//     txHash,
-//     userAddress,
-//   };
+export const saveUserTokenData = async (eventData: EventData) => {
+  const userToken = UserToken__factory.connect(eventData.userTokenAddress, provider);
 
-//   return data;
-// };
+  const symbol = await userToken.symbol();
+  const name = await userToken.name();
 
-// export const createToken = async (eventData) => {
-//   const userTokenData = await getUserTokenData(eventData);
-//   console.log('Create new token: ', userTokenData);
-//   create(userTokenData);
-// };
+  const data: UserToken = {
+    address: eventData.userTokenAddress,
+    chainId: netowrkInfo.id,
+    name,
+    symbol,
+    txHash: eventData.txHash,
+    userAddress: eventData.userAddress,
+  };
+
+  console.log('Create new token: ', data);
+  await channel.assertQueue('userToken');
+  await channel.sendToQueue('userToken', Buffer.from(JSON.stringify(data)));
+
+  //  await channel.assertQueue('jobs');
+  //     await channel.sendToQueue('jobs', Buffer.from(JSON.stringify(msg)));
+};

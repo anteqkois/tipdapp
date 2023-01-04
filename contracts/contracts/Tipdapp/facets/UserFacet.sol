@@ -11,7 +11,7 @@ import "hardhat/console.sol";
 contract UserFacet is Modifier {
     event Tip(address indexed donator, address indexed addressToTip, address tokenAddress, uint256 tokenAmount);
     event Withdraw(address indexed user, address tokenAddress, uint256 tokenAmount);
-    event NewUser(address indexed userAddress, address userToken);
+    event NewUser(address indexed userAddress, address userTokenAddress);
 
     function userToken(address _userAddress) external view returns (address) {
         return s.tokenToUser[_userAddress];

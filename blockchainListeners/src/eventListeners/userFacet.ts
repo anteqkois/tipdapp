@@ -1,6 +1,8 @@
-import { provider } from '../lib/ethersProvider.js';
+import { UserFacet } from '../contracts/userFacet.js';
+import { saveUserTokenData } from '../services/userTokenService.js';
 
-setInterval(async () => {
-  console.log(await provider.getBlockNumber());
-  // console.log('Im work');
-}, 100000000);
+
+UserFacet.on('NewUser', async (userAddress,  userTokenAddress, event) => {
+  console.log(event);
+  saveUserTokenData({ userAddress, userTokenAddress, txHash: event.transactionHash });
+});
