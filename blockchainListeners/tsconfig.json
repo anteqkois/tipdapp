@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    // "module": "Node16",
+    "module": "CommonJS",
+    // "moduleResolution": "NodeNext",
+    // "moduleResolution": "Node16",
+    // "moduleResolution": "Node16",
+    "allowSyntheticDefaultImports": true,
     "target": "ES2020",
     "lib": ["es2020"],
     "isolatedModules": false,
@@ -15,6 +19,7 @@
   },
   "include": ["index.ts", "**/*.ts", "**/*.d.ts"],
   "ts-node": {
+    "skipIgnore": true,
     "files": true
   }
 }

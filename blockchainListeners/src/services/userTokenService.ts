@@ -1,9 +1,13 @@
 // import UserTokenJSON from '../../artifacts/localhost/UserToken.json' assert { type: 'json' };
-import { UserToken__factory } from '@tipdapp/contracts';
-import { NewUserEventObject } from '@tipdapp/contracts/typechain-types/contracts/Tipdapp/facets/UserFacet.js';
+// import { UserToken__factory } from '@tipdapp/contracts';
+import * as contract from '@tipdapp/contracts';
+const { UserToken__factory } = contract;
+// import { NewUserEventObject } from '@tipdapp/contracts/typechain-types/contracts/Tipdapp/facets/UserFacet';
+import { NewUserEventObject } from '@tipdapp/contracts/typechain-types/contracts/Tipdapp/facets/UserFacet';
 import { UserToken } from '@tipdapp/server';
-import { netowrkInfo } from '../config/network.js';
-import { provider } from '../lib/ethersProvider.js';
+import { netowrkInfo } from '../config/network';
+import { provider } from '../lib/ethersProvider';
+import { publishMessage } from '../lib/rabbitmq';
 
 type EventData = NewUserEventObject & { txHash: string };
 
@@ -23,9 +27,5 @@ export const saveUserTokenData = async (eventData: EventData) => {
   };
 
   console.log('Create new token: ', data);
-  await channel.assertQueue('userToken');
-  await channel.sendToQueue('userToken', Buffer.from(JSON.stringify(data)));
-
-  //  await channel.assertQueue('jobs');
-  //     await channel.sendToQueue('jobs', Buffer.from(JSON.stringify(msg)));
+  publishMessage('userToken', data);
 };

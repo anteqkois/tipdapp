@@ -13,7 +13,10 @@
       // "@types": ["src/types"]
     },
     "typeRoots": ["./src/types", "./node_modules/@types"],
-    "module": "commonjs",
+    // "module": "NodeNext",
+    // "moduleResolution": "NodeNext",
+    "module": "Node16",
+    "moduleResolution": "Node",
     "outDir": "./dist",
     "lib": ["es2019"],
     "target": "es2019",
@@ -25,7 +28,6 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "esModuleInterop": true,
-    "moduleResolution": "Node",
     "resolveJsonModule": true
     // importsNotUsedAsValues
     // "strictNullChecks": true,

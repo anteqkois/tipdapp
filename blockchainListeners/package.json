@@ -2,7 +2,6 @@
   "name": "@tipdapp/blockchainlisteners",
   "version": "0.0.1",
   "engineStrict": true,
-  "type": "module",
   "engines ": {
     "node": "18.12.0"
   },
@@ -25,7 +24,7 @@
     "start": "NODE_ENV=production dotenv_config_path=.env.development index.js"
   },
   "dependencies": {
-    "@tipdapp/contracts": "^0.0.12",
+    "@tipdapp/contracts": "^0.0.15",
     "@tipdapp/server": "^0.0.1",
     "@wagmi/chains": "^0.1.8",
     "amqplib": "^0.10.3",

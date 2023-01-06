@@ -1,6 +1,6 @@
 import { hardhat } from '@wagmi/chains';
 import ethers from 'ethers';
-import { Network } from '../types/index.js';
+import { Network } from '../types';
 
 const providersList: Record<
   Network,

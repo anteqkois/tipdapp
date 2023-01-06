@@ -2,9 +2,14 @@
   "name": "@tipdapp/contracts",
   "author": "Antek Kois",
   "license": "MIT",
-  "version": "0.0.12",
+  "version": "0.0.15",
   "description": "Smart Contracts and their types to my web3 dapp",
   "main": "index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./lib/*": "./lib/*",
+    "./typechain-types/*": "./typechain-types/*"
+  },
   "types": "index.ts",
   "files": [
     "index.ts",
@@ -44,6 +49,7 @@
     "deploy:dev": "dotenv_config_path=.env.development npx hardhat run scripts/deploy.ts --network localhost",
     "dev": "npx hardhat node",
     "port": "sudo lsof -iTCP -sTCP:LISTEN -n -P",
+    "build:ts": "tsc --build tsconfig.json",
     "clean:node": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}')",
     "slither": "slither --solc-remaps @openzeppelin/=/home/anteqkois/project/tipdapp/contracts/node_modules/@openzeppelin/ .",
     "publishPackage": "npm version patch && npm publish"
@@ -52,7 +58,7 @@
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",
     "@openzeppelin/contracts": "^4.8.0",
     "dotenv": "^16.0.3",
-    "hardhat": "^2.12.4",
+    "hardhat": "^2.12.0-esm.1",
     "hardhat-shorthand": "^1.0.0",
     "prettier": "^2.8.1",
     "solidity-coverage": "^0.8.2"

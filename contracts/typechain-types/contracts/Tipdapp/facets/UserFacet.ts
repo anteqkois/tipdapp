@@ -139,7 +139,7 @@ export interface UserFacetInterface extends utils.Interface {
 
 export interface NewUserEventObject {
   userAddress: string;
-  userToken: string;
+  userTokenAddress: string;
 }
 export type NewUserEvent = TypedEvent<[string, string], NewUserEventObject>;
 
@@ -363,11 +363,11 @@ export interface UserFacet extends BaseContract {
   filters: {
     "NewUser(address,address)"(
       userAddress?: PromiseOrValue<string> | null,
-      userToken?: null
+      userTokenAddress?: null
     ): NewUserEventFilter;
     NewUser(
       userAddress?: PromiseOrValue<string> | null,
-      userToken?: null
+      userTokenAddress?: null
     ): NewUserEventFilter;
 
     "Tip(address,address,address,uint256)"(

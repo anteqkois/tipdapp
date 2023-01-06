@@ -1,31 +1,37 @@
 import amqp from 'amqplib';
+import '../config/dotenv';
+
+const EXCHANGE_NAME = 'blockchain';
+type RoutingKeys = 'userToken' | 'tipERC20' | 'tipETH' | 'withdrawERC20' | 'withdrawETH';
 
 declare global {
-  // eslint-disable-next-line no-var
-  // var rabbitmq: amqp.Connection | undefined;
-  // var channel: amqp.Channel | undefined;
-  var rabbitmq: amqp.Connection;
   var channel: amqp.Channel;
+  var rabbitmq: amqp.Connection;
 }
-// const connect = await amqp.connect(process.env.AMQP_URL);
 
-export const connection = global.rabbitmq || (await amqp.connect(process.env.AMQP_URL));
-if (process.env.NODE_ENV !== 'production') global.rabbitmq = connection;
+let channel: amqp.Channel;
 
-export const channel = global.channel || (await rabbitmq?.createChannel());
+// const connect = async () => {
+// };
+
+(async () => {
+  const connection = global.rabbitmq || (await amqp.connect(process.env.AMQP_URL!));
+  if (process.env.NODE_ENV !== 'production') global.rabbitmq = connection;
+
+  channel = global.channel || (await connection.createChannel());
+  // const channel = global.channel || (await rabbitmq.createChannel());
+})();
+
+export const publishMessage = async (routingKey: RoutingKeys, data: any) => {
+  await channel.assertExchange(EXCHANGE_NAME, 'direct');
+
+  const logDetails = {
+    data,
+    dateTime: new Date(),
+  };
+  await channel.publish(EXCHANGE_NAME, routingKey, Buffer.from(JSON.stringify(logDetails)));
+
+  console.log(`The new ${routingKey} log is sent to exchange ${EXCHANGE_NAME}`);
+};
 
 // connect();
-// async function connect() {
-//   try {
-//     const amqpServer = 'amqp://localhost:5672';
-//     const connection = await amqp.connect(amqpServer);
-//     const channel = await connection.createChannel();
-//     await channel.assertQueue('jobs');
-//     await channel.sendToQueue('jobs', Buffer.from(JSON.stringify(msg)));
-//     console.log(`Job sent successfully ${msg.number}`);
-//     await channel.close();
-//     await connection.close();
-//   } catch (ex) {
-//     console.error(ex);
-//   }
-// }

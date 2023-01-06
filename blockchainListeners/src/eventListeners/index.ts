@@ -1,1 +1,1 @@
-import './userFacet.js';
+import './userFacet';

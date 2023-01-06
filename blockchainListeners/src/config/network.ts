@@ -1,6 +1,6 @@
 import { Chain, hardhat } from '@wagmi/chains';
-import { Network } from '../types/index.js';
-import './dotenv.js';
+import { Network } from '../types';
+import './dotenv';
 
 const networks: Record<Network, Chain> = {
   hardhat: hardhat,
