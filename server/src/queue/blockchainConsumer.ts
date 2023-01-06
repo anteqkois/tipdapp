@@ -1,26 +1,21 @@
 import { consumeMessages } from '@config/rabbitmq';
+import { userTokenService } from '@services/userTokenService';
 
 export const userTokenCreate = async () => {
-  const consumer = await consumeMessages('blockchain', 'userTokenCreate', [
-    'userToken',
-  ]);
+  const { consume, ack, parseMessageContent } = await consumeMessages(
+    'blockchain',
+    'userTokenCreate',
+    ['userToken']
+  );
 
-  consumer((msg) => {
-    // console.log(msg)
-    console.log(JSON.parse(msg?.content as unknown as string));
-    // console.log(JSON.parse(msg as unknown as string));
-    return msg;
+  consume(async (msg) => {
+    const data = parseMessageContent(msg?.content);
+    //TODO dave to db and if success ack, other create logic to retry
+    try {
+      await userTokenService.create(data.data);
+      ack(msg);
+    } catch (error) {
+      //TODO create queueu error logger
+    }
   });
-
-  // // await channel.assertExchange('logExchange', 'direct');
-  // const q = await channel.assertQueue('userToken');
-
-  // await channel.bindQueue(q.queue, 'logExchange', 'Warning');
-  // await channel.bindQueue(q.queue, 'logExchange', 'Error');
-
-  // channel.consume(q.queue, (msg) => {
-  //   const data = JSON.parse(msg.content);
-  //   console.log(data);
-  //   channel.ack(msg);
-  // });
 };

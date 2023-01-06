@@ -1,13 +1,13 @@
 import amqp from 'amqplib';
 import '../config/dotenv';
 
-const EXCHANGE_NAME = 'blockchain';
-type RoutingKeys = 'userToken' | 'tipERC20' | 'tipETH' | 'withdrawERC20' | 'withdrawETH';
-
 declare global {
   var channel: amqp.Channel;
   var rabbitmq: amqp.Connection;
 }
+
+const EXCHANGE_NAME = 'blockchain';
+type RoutingKeys = 'userToken' | 'tipERC20' | 'tipETH' | 'withdrawERC20' | 'withdrawETH';
 
 let channel: amqp.Channel;
 
@@ -16,7 +16,6 @@ const connect = async () => {
   if (process.env.NODE_ENV !== 'production') global.rabbitmq = connection;
   
   channel = global.channel || (await connection.createChannel());
-  // const channel = global.channel || (await rabbitmq.createChannel());
 };
 
 export const publishMessage = async (routingKey: RoutingKeys, data: any) => {
@@ -27,9 +26,9 @@ export const publishMessage = async (routingKey: RoutingKeys, data: any) => {
     data,
     dateTime: new Date(),
   };
+
+  //TODO implememt logic to retry publish if from some reason no success
   await channel.publish(EXCHANGE_NAME, routingKey, Buffer.from(JSON.stringify(logDetails)));
 
   console.log(`The new ${routingKey} log is sent to exchange ${EXCHANGE_NAME}`);
 };
-
-// connect();

@@ -1,24 +1,10 @@
 import amqp from 'amqplib';
 
-// declare global {
-//   var channel: amqp.Channel;
-//   var rabbitmq: amqp.Connection;
-// }
-// const EXCHANGE_NAME = 'blockchain';
-// type ExchangeName = typeof EXCHANGE_NAME;
+declare global {
+  var channel: amqp.Channel;
+  var rabbitmq: amqp.Connection;
+}
 
-// export const connection =
-//   global.rabbitmq || (await amqp.connect(process.env.AMQP_URL));
-// if (process.env.NODE_ENV !== 'production') global.rabbitmq = connection;
-
-// export const channel = global.channel || (await rabbitmq.createChannel());
-
-// type RoutingKeys =
-//   | 'userToken'
-//   | 'tipERC20'
-//   | 'tipETH'
-//   | 'withdrawERC20'
-//   | 'withdrawETH';
 const EXCHANGE_NAME = 'blockchain';
 type ExchangeName = typeof EXCHANGE_NAME;
 type RoutingKeys =
@@ -28,10 +14,7 @@ type RoutingKeys =
   | 'withdrawERC20'
   | 'withdrawETH';
 
-declare global {
-  var channel: amqp.Channel;
-  var rabbitmq: amqp.Connection;
-}
+type ParsedMessage = { data: any; dateTime: Date };
 
 let channel: amqp.Channel;
 
@@ -41,11 +24,10 @@ const connect = async () => {
   if (process.env.NODE_ENV !== 'production') global.rabbitmq = connection;
 
   channel = global.channel || (await connection.createChannel());
-  // const channel = global.channel || (await rabbitmq.createChannel());
 };
 
 export const publishMessage = async (routingKey: RoutingKeys, data: any) => {
-  !channel && await connect()
+  !channel && (await connect());
   await channel.assertExchange(EXCHANGE_NAME, 'direct');
 
   const logDetails = {
@@ -62,6 +44,10 @@ export const publishMessage = async (routingKey: RoutingKeys, data: any) => {
   console.log(`The new ${routingKey} log is sent to exchange ${EXCHANGE_NAME}`);
 };
 
+export const parseMessageContent = (
+  content: amqp.ConsumeMessage['content'] | undefined
+) => JSON.parse(content as unknown as string) as ParsedMessage;
+
 export async function consumeMessages(
   exchange: ExchangeName,
   queue: string,
@@ -75,25 +61,13 @@ export async function consumeMessages(
   routingKey.forEach(async (key) => {
     await channel.bindQueue(q.queue, exchange, key);
   });
-  // await channel.bindQueue(q.queue, exchange, 'Warning');
-  // await channel.bindQueue(q.queue, exchange, 'Error');
 
-  // return (listener: (msg: amqp.ConsumeMessage | null )=> void) => channel.consume(q.queue, listener);
-
-  // If dev return message in consumer, it indicate to delete msg from queue
-  return (
-    listener: (msg: amqp.ConsumeMessage | null) => void,
-    options?: amqp.Options.Consume | undefined
-  ) => {
-    channel.consume(q.queue, listener, options);
-    return (msg: amqp.ConsumeMessage | null) => {
-      msg && channel.ack(msg);
-    };
+  return {
+    consume: (
+      listener: (msg: amqp.ConsumeMessage | null) => void,
+      options?: amqp.Options.Consume | undefined
+    ) => channel.consume(q.queue, listener, options),
+    ack: (msg: amqp.ConsumeMessage | null) => msg && channel.ack(msg),
+    parseMessageContent,
   };
-
-  // channel.consume(q.queue, (msg) => {
-  //   const data = JSON.parse(msg.content);
-  //   console.log(data);
-  //   channel.ack(msg);
-  // });
 }
