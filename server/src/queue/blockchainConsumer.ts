@@ -1,13 +1,14 @@
 import { consumeMessages } from '@config/rabbitmq';
 
-const userTokenCreate = async () => {
+export const userTokenCreate = async () => {
   const consumer = await consumeMessages('blockchain', 'userTokenCreate', [
     'userToken',
   ]);
 
   consumer((msg) => {
-    console.log(JSON.parse(msg as unknown as string));
-    console.log(JSON.parse(msg as unknown as string));
+    // console.log(msg)
+    console.log(JSON.parse(msg?.content as unknown as string));
+    // console.log(JSON.parse(msg as unknown as string));
     return msg;
   });
 

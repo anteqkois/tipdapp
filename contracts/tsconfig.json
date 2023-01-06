@@ -5,7 +5,6 @@
     "module": "CommonJS",
     // "moduleResolution": "NodeNext",
     "declaration": true,
-
     "outDir": "./esm",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

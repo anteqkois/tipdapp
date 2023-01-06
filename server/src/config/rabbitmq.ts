@@ -1,18 +1,26 @@
 import amqp from 'amqplib';
 
-declare global {
-  var channel: amqp.Channel;
-  var rabbitmq: amqp.Connection;
-}
+// declare global {
+//   var channel: amqp.Channel;
+//   var rabbitmq: amqp.Connection;
+// }
+// const EXCHANGE_NAME = 'blockchain';
+// type ExchangeName = typeof EXCHANGE_NAME;
+
+// export const connection =
+//   global.rabbitmq || (await amqp.connect(process.env.AMQP_URL));
+// if (process.env.NODE_ENV !== 'production') global.rabbitmq = connection;
+
+// export const channel = global.channel || (await rabbitmq.createChannel());
+
+// type RoutingKeys =
+//   | 'userToken'
+//   | 'tipERC20'
+//   | 'tipETH'
+//   | 'withdrawERC20'
+//   | 'withdrawETH';
 const EXCHANGE_NAME = 'blockchain';
 type ExchangeName = typeof EXCHANGE_NAME;
-
-export const connection =
-  global.rabbitmq || (await amqp.connect(process.env.AMQP_URL));
-if (process.env.NODE_ENV !== 'production') global.rabbitmq = connection;
-
-export const channel = global.channel || (await rabbitmq.createChannel());
-
 type RoutingKeys =
   | 'userToken'
   | 'tipERC20'
@@ -20,7 +28,24 @@ type RoutingKeys =
   | 'withdrawERC20'
   | 'withdrawETH';
 
+declare global {
+  var channel: amqp.Channel;
+  var rabbitmq: amqp.Connection;
+}
+
+let channel: amqp.Channel;
+
+const connect = async () => {
+  const connection =
+    global.rabbitmq || (await amqp.connect(process.env.AMQP_URL!));
+  if (process.env.NODE_ENV !== 'production') global.rabbitmq = connection;
+
+  channel = global.channel || (await connection.createChannel());
+  // const channel = global.channel || (await rabbitmq.createChannel());
+};
+
 export const publishMessage = async (routingKey: RoutingKeys, data: any) => {
+  !channel && await connect()
   await channel.assertExchange(EXCHANGE_NAME, 'direct');
 
   const logDetails = {
@@ -42,6 +67,7 @@ export async function consumeMessages(
   queue: string,
   routingKey: RoutingKeys[]
 ) {
+  !channel && (await connect());
   await channel.assertExchange(exchange, 'direct');
 
   const q = await channel.assertQueue(queue);

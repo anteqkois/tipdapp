@@ -8,6 +8,7 @@ import express from 'express';
 import { corsConfig } from './src/config/cors';
 import { logRequest } from './src/middlewares/logRequest';
 import apiRouter from './src/routes';
+import { startQueueConsumers } from './src/queue';
 
 const port = process.env.PORT || 3001;
 const dev = process.env.NODE_ENV !== 'production';
@@ -30,6 +31,7 @@ server.use(handleErrors);
 
 server.listen(port, () => {
   // if (err) throw err;
+  startQueueConsumers();
   console.log(`> Ready on http://localhost:${port}`);
 });
 // server.listen(port, (err: any) => {

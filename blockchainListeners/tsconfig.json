@@ -20,6 +20,7 @@
   "include": ["index.ts", "**/*.ts", "**/*.d.ts"],
   "ts-node": {
     "skipIgnore": true,
-    "files": true
+    "files": true,
+    "require": []
   }
 }

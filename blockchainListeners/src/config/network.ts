@@ -1,5 +1,5 @@
-import { Chain, hardhat } from '@wagmi/chains';
 import { Network } from '../types';
+import { Chain, hardhat } from './chains';
 import './dotenv';
 
 const networks: Record<Network, Chain> = {

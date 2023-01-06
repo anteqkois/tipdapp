@@ -1,8 +1,9 @@
 // import UserTokenJSON from '../../artifacts/localhost/UserToken.json' assert { type: 'json' };
 // import { UserToken__factory } from '@tipdapp/contracts';
-import * as contract from '@tipdapp/contracts';
-const { UserToken__factory } = contract;
+// import * as contract from '@tipdapp/contracts';
+// const { UserToken__factory } = contract;
 // import { NewUserEventObject } from '@tipdapp/contracts/typechain-types/contracts/Tipdapp/facets/UserFacet';
+import { UserToken__factory } from '@tipdapp/contracts';
 import { NewUserEventObject } from '@tipdapp/contracts/typechain-types/contracts/Tipdapp/facets/UserFacet';
 import { UserToken } from '@tipdapp/server';
 import { netowrkInfo } from '../config/network';

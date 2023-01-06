@@ -11,18 +11,16 @@ declare global {
 
 let channel: amqp.Channel;
 
-// const connect = async () => {
-// };
-
-(async () => {
+const connect = async () => {
   const connection = global.rabbitmq || (await amqp.connect(process.env.AMQP_URL!));
   if (process.env.NODE_ENV !== 'production') global.rabbitmq = connection;
-
+  
   channel = global.channel || (await connection.createChannel());
   // const channel = global.channel || (await rabbitmq.createChannel());
-})();
+};
 
 export const publishMessage = async (routingKey: RoutingKeys, data: any) => {
+  !channel && await connect()
   await channel.assertExchange(EXCHANGE_NAME, 'direct');
 
   const logDetails = {
