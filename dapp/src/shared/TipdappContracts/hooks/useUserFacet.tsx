@@ -1,4 +1,4 @@
-import { useClipboard } from '@/shared/hooks';
+import { useClipboard, useConfirmationToast } from '@/shared/hooks';
 import {
   errorToast,
   transactionToast,
@@ -8,8 +8,7 @@ import { useUser } from '@/shared/User/hooks/useUser';
 import { ethereum } from '@/utils/constants';
 import { selectWeb3Error } from '@/utils/selectWeb3Error';
 import { Hash } from '@wagmi/core';
-import { ethers } from 'ethers';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   useContract,
   useContractRead,
@@ -21,12 +20,11 @@ import {
 import { RegisterUserTransaction } from '../components/RegisterUserTransaction';
 import { userFacetInstance } from '../contractInstances';
 import { AvaibleChains } from '../types';
-import { useConfirmationToast } from './useConfirmationToast';
 
 export const useUserFacet = () => {
   const provider = useProvider();
   const [hashToObserve, setHashToObserve] = useState<Hash>();
-  
+
   const { user, refreshUser } = useUser();
   const { ClipboardIcon } = useClipboard();
   const { chain } = useNetwork();
@@ -74,7 +72,6 @@ export const useUserFacet = () => {
           duration: Infinity,
         });
       } else if (data?.hash) {
-        // console.log(data);
         setHashToObserve(data.hash);
         await data.wait(1);
 
@@ -105,7 +102,7 @@ export const useUserFacet = () => {
     } else {
     }
   };
-  // console.log('registerUser', registerUser);
+  
   return {
     contract,
     registerUser: { ...registerUser, call: registerUserCall },

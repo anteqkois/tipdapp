@@ -18,10 +18,11 @@ export const Link = ({
       href={href}
       target={target}
       rel="noreferrer"
-      className="flex gap-1 underline underline-offset-1 decoration-2 decoration-primary cursor-pointer"
+      // className="flex gap-1 underline underline-offset-1 decoration-2 decoration-primary cursor-pointer"
+      className="inline-block underline underline-offset-1 decoration-2 decoration-primary cursor-pointer"
     >
       {children}
-      {icon && <ArrowTopRightOnSquareIcon className="w-4" />}
+      {icon && <ArrowTopRightOnSquareIcon className="inline-block ml-1 w-4 stroke-2" />}
     </a>
   );
 };

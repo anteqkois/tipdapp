@@ -1,7 +1,7 @@
 'use client';
 
-import { CreateUserToken } from '@/modules/UserToken/containers/CreateUserToken';
-import { TokenPanel } from '@/modules/UserToken/containers/TokenPanel';
+import { CreateUserToken } from '@/shared/UserToken/containers/CreateUserToken';
+import { TokenPanel } from '@/shared/UserToken/containers/TokenPanel';
 import { useUser } from '@/shared/User/hooks/useUser';
 
 const Token = () => {
