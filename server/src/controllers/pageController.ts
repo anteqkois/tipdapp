@@ -2,7 +2,6 @@ import { createApiError } from '@middlewares/error';
 import { pageService } from '@services/pageService';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { mockDecodedUser } from '../types/models';
 import { pageValidation } from '../validation';
 
 const findByNick = async (
@@ -11,12 +10,16 @@ const findByNick = async (
 ) => {
   const { nick } = req.query;
 
-  const page = await pageService.find({
-    streamer: { some: { user: { nick } } },
+  const pages = await pageService.find({
+    OR: [
+      {
+        streamer: { some: { user: { nick } } },
+      },
+    ],
   });
 
-  if (page) {
-    return res.status(StatusCodes.OK).send({ page });
+  if (pages) {
+    return res.status(StatusCodes.OK).send({ pages });
   } else {
     createApiError('Page not found for this user.');
   }
@@ -25,7 +28,7 @@ const findByNick = async (
 const update = async (req: Request, res: Response) => {
   // const
   const parsedData = pageValidation.updateParse(req.body);
-  
+
   //! TODO implement role based auth
   switch (req.user.activeRole) {
     case 'streamer':

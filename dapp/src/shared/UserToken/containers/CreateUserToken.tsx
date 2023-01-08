@@ -1,5 +1,5 @@
 import { useLocalStorage } from '@/shared/hooks';
-import { useUserFacet } from '@/shared/TipdappContracts/hooks/useUserFacet';
+import { useUserFacet } from '@/shared/TipdappContracts/hooks/useUserFacetContract';
 import { Button, Card, Details, Input } from '@/shared/ui';
 import { UserTokenValidation, userTokenValidation } from '@tipdapp/server';
 import { FormEvent, useState } from 'react';

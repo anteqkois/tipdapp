@@ -6,7 +6,7 @@ export type FindParams = {
 };
 
 type FindResponse = {
-  page: Page;
+  pages: Page[];
 };
 
 export const find = async (queryParams: FindParams) => {

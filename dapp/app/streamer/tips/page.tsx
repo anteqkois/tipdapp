@@ -1,6 +1,6 @@
 'use client';
 import { TipsList } from '@/modules/Tip/containers/TipsList';
-import { useTipsPaginated } from '@/modules/Tip/hooks/useTips';
+import { useTipsFindPaginated } from '@/modules/Tip/hooks/useTipsQuery';
 import Pagination from '@/shared/Pagination';
 import { Card } from '@/shared/ui';
 import { useState } from 'react';
@@ -11,7 +11,7 @@ const Tips = () => {
   //TODO create global settings store to store information about default tips view for user
   const [pageSize, setPageSize] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
-  const { data } = useTipsPaginated({ page, pageSize });
+  const { data } = useTipsFindPaginated({ page, pageSize });
 
   return (
     <section>

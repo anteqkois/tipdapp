@@ -56,7 +56,9 @@ const createAuthToken = (
 };
 
 const createRefreshToken = (
-  userSessionData: Pick<User, 'roles' | 'address' | 'nick' | 'activeRole'>
+  userSessionData: Pick<User, 'roles' | 'address' | 'nick' | 'activeRole'>,
+  ip: string,
+  newSession = false
 ) => {
   const refreshToken = jwt.sign(
     {
@@ -64,6 +66,7 @@ const createRefreshToken = (
       activeRole: userSessionData.activeRole,
       address: userSessionData.address,
       nick: userSessionData.nick,
+      ip,
     },
     process.env.JWT_TOKEN_REFRESH,
     {
@@ -71,10 +74,17 @@ const createRefreshToken = (
     }
   );
 
-  userService.addRefreshToken({
-    address: userSessionData.address,
-    refreshToken,
-  });
+  newSession
+    ? userService.createSession({
+        address: userSessionData.address,
+        ip,
+        refreshToken,
+      })
+    : userService.addRefreshToken({
+        address: userSessionData.address,
+        ip,
+        refreshToken,
+      });
 
   return refreshToken;
 };
@@ -205,7 +215,7 @@ const signUp = async (req: Request, res: Response) => {
       break;
   }
   const authToken = createAuthToken(userSessionData);
-  const refreshToken = createRefreshToken(userSessionData);
+  const refreshToken = createRefreshToken(userSessionData, req.ip, true);
 
   res.cookie('authToken', authToken, {
     secure: true,
@@ -241,7 +251,7 @@ const verifyMessageAndLogin = async (req: Request, res: Response) => {
 
   if (userSessionData) {
     const authToken = createAuthToken(userSessionData);
-    const refreshToken = createRefreshToken(userSessionData);
+    const refreshToken = createRefreshToken(userSessionData, req.ip, true);
 
     res.cookie('authToken', authToken, {
       secure: true,
@@ -276,6 +286,7 @@ const refreshUserSession = async (req: Request, res: Response) => {
     where: {
       address: req.user.address,
     },
+    include: { avatar: true, userToken: true },
   });
 
   if (userSessionData) {
@@ -304,10 +315,7 @@ const logout = async (req: Request, res: Response) => {
     httpOnly: true,
   });
 
-  await userService.removeRefreshToken({
-    address: req.user.address,
-    refreshToken: refreshToken,
-  });
+  await userService.removeSession({ ip: req.ip });
   res.cookie('authStatus', 'unauthenticated');
 
   res.status(StatusCodes.OK).send({ message: 'You are succesfully logout.' });
@@ -336,10 +344,8 @@ const refreshToken = async (req: Request, res: Response) => {
         refreshToken,
         process.env.JWT_TOKEN_SECRET
       ) as DecodedUser;
-      await userService.updateRefreshTokens({
-        address: decoded.address,
-        refreshTokens: [],
-      });
+
+      await userService.removeSession({ refreshTokens: { has: refreshToken } });
       createApiError(`Token has been already used.`, StatusCodes.BAD_REQUEST);
     } catch (error) {
       res.cookie('authStatus', 'unauthenticated');
@@ -348,7 +354,7 @@ const refreshToken = async (req: Request, res: Response) => {
   } else {
     // Remove token from database
     await userService.removeRefreshToken({
-      address: user.address,
+      ip: req.ip,
       refreshToken,
     });
 
@@ -362,7 +368,7 @@ const refreshToken = async (req: Request, res: Response) => {
         createApiError('Invalid refresh token', StatusCodes.BAD_REQUEST);
 
       const newAuthToken = createAuthToken(user);
-      const newRefreshToken = createRefreshToken(user);
+      const newRefreshToken = createRefreshToken(user, req.ip);
 
       res.cookie('authToken', newAuthToken, {
         secure: true,

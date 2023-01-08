@@ -4,7 +4,7 @@ import { useClipboard, useMediaQuery } from '@/shared/hooks';
 import { Card, ViewOnExplorer } from '@/shared/ui';
 import { cutAddress } from '@/utils';
 import { useNetwork } from 'wagmi';
-import { useUserToken } from '../hooks/useUserToken';
+import { useUserToken } from '../hooks/useUserTokenContract';
 import { UserTokenDapp } from '../types';
 
 type Props = {
@@ -64,12 +64,12 @@ export const TokenPanel = ({ token }: Props) => {
             <span>{chain?.name}</span>
           </p>
           <p>
-            <span className="font-medium">Burnt token: </span>
-            <span>{0} (To implement)</span>
+            <span className="font-medium">Minted tokens: </span>
+            <span>{0} (Get from db minted amount)</span>
           </p>
           <p>
-            <span className="font-medium">Minted USD Value: </span>
-            <span>{0} (Get from db minted amount)</span>
+            <span className="font-medium">Burnt tokens: </span>
+            <span>{0} (To implement)</span>
           </p>
           <p>
             <span className="font-medium">Holders: </span>

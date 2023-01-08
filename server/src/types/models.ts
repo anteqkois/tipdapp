@@ -50,11 +50,12 @@ export type UserSession = PartialExcept<
 export type DecodedUser = Pick<
   User,
   'address' | 'nick' | 'roles' | 'activeRole'
->;
+> & { ip: string };
 
 export const mockDecodedUser: DecodedUser = {
   address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
   nick: 'anteqkois',
+  ip:'120.00.00.01',
   // roles: ['tipper'],
   roles: ['tipper', 'streamer'],
   activeRole: 'streamer',

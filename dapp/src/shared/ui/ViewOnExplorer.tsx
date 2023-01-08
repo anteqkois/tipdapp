@@ -13,6 +13,7 @@ export const ViewOnExplorer = ({ subject, value, classNames }: Props) => {
 
   let link: string;
 
+  //TODO use data from chains from wagmi ?
   switch (chain?.name) {
     case 'Hardhat':
       link = `https://etherscan.io/${subject}/${value}`;
@@ -32,20 +33,5 @@ export const ViewOnExplorer = ({ subject, value, classNames }: Props) => {
       >
         View {subject === 'tx' ? 'transaction' : subject} on Explorer
       </Link>
-  
-    // <a
-    //   tabIndex={-1}
-    //   className={classNames}
-    //   href={link}
-    //   target="_blank"
-    //   rel="noreferrer"
-    // >
-    //   <Link
-    //     icon={true}
-    //     className="mr-1 font-medium text-neutral-700"
-    //   >
-    //     View {subject === 'tx' ? 'transaction' : subject} on Explorer
-    //   </Link>
-    // </a>
   );
 };

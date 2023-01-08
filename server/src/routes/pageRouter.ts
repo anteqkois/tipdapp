@@ -9,13 +9,17 @@ const router = Router();
 //GET
 router.get(
   '/',
-  verifyJWT,
-  verifyRoles('streamer'),
+  // verifyJWT,
   catchAsyncErrors(pageController.findByNick)
 );
 
 //PUT
-router.put('/', verifyJWT, catchAsyncErrors(pageController.update));
+router.put(
+  '/',
+  verifyJWT,
+  verifyRoles('streamer'),
+  catchAsyncErrors(pageController.update)
+);
 
 //POST
 

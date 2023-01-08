@@ -1,7 +1,9 @@
+import { catchAsyncErrors } from '@middlewares/handleError';
 import { Router } from 'express';
+import { userController } from '../controllers/userController';
 // import { verifyJWT } from '../middlewares/verifyJWT.js';
 
 const router = Router();
 //GET
-// router.get('/', verifyJWT, catchAsyncErrors(find));
+router.get('/', catchAsyncErrors(userController.find));
 export default router;

@@ -1,10 +1,10 @@
 'use client';
 import { TipsList } from '@/modules/Tip/containers/TipsList';
-import { useTips } from '@/modules/Tip/hooks/useTips';
+import { useTipsFind } from '@/modules/Tip/hooks/useTipsQuery';
 
 //TODO? use page to be ability in future to change this element by user(for example can change to show default top tiper)
 const Dashboard = () => {
-  const { data } = useTips({ page: 1, pageSize: 8 });
+  const { data } = useTipsFind({ page: 1, pageSize: 8 });
 
   return (
     <TipsList

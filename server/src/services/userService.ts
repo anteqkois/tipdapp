@@ -38,9 +38,10 @@ const find = async (data: Prisma.UserFindFirstArgs) => {
     where: data.where,
     include: {
       avatar: true,
-      streamer: { include: { page: true } },
-      tipper: true,
-      userToken: true,
+      // streamer: { include: { page: true } },
+      // tipper: true,
+      // userToken: true,
+      ...data.include,
       // token: {
       //   select: {
       //     address: true,
@@ -53,55 +54,79 @@ const find = async (data: Prisma.UserFindFirstArgs) => {
       // page: true,
     },
   });
+
+  // address: true,
+  //     nick: true,
+  //     email: true,
+  //     // emailVerified: true,
+  //     firstName: true,
+  //     lastName: true,
+  //     verified: true,
+  //     createdAt: true,
+  //     updateAt: true,
+  //     allTipsCount: true,
+  //     allTipsValue: true,
+  //     // allWithdrawsValue: true,
+  //     apperanceMode: true,
+  //     roles: true,
+  //     activeRole: true,
+  //     refreshTokens: true,
+  //     // avatar: true, | FileArgs
+  //     avatarId: true,
 };
+
 const checkIfExist = async (where: Prisma.UserWhereInput) => {
   return await prisma.user.findFirst({
     where,
-    // select: {
-    //   email: true,
-    //   nick: true,
-    // },
   });
 };
 
-const updateRefreshTokens = async ({
+const createSession = async ({
   address,
-  refreshTokens,
-}: {
-  address: string;
-  refreshTokens: string[];
-}) => {
-  await prisma.user.update({
-    where: {
-      address: address,
-    },
-    data: {
-      refreshTokens: {
-        set: refreshTokens,
-      },
-    },
-  });
-};
-
-const removeRefreshToken = async ({
-  address,
+  ip,
   refreshToken,
 }: {
   address: string;
+  ip: string;
   refreshToken: string;
 }) => {
-  const user = await findByRefreshToken({ refreshToken });
-  const refreshTokens =
-    user?.refreshTokens.filter((rt) => rt !== refreshToken) ?? [];
+  return prisma.user.update({
+    where: { address },
+    data: {
+      sessions: { create: { ip, refreshTokens: { set: refreshToken } } },
+    },
+  });
+};
 
-  await updateRefreshTokens({ address, refreshTokens });
+const removeSession = async (where: Prisma.SessionWhereInput) => {
+  await prisma.session.deleteMany({where})
+  // await prisma.session.delete({ where });
+};
+
+const removeRefreshToken = async ({
+  ip,
+  refreshToken,
+}: {
+  ip: string;
+  refreshToken: string;
+}) => {
+  const session = await prisma.session.findFirst({ where: { ip } });
+  const refreshTokens =
+    session?.refreshTokens.filter((rt) => rt !== refreshToken) ?? [];
+
+  await prisma.session.update({
+    where: { ip },
+    data: { refreshTokens: { set: refreshTokens } },
+  });
 };
 
 const addRefreshToken = async ({
   address,
+  ip,
   refreshToken,
 }: {
   address: string;
+  ip: string;
   refreshToken: string;
 }) => {
   return await prisma.user.update({
@@ -109,8 +134,11 @@ const addRefreshToken = async ({
       address: address,
     },
     data: {
-      refreshTokens: {
-        push: refreshToken,
+      sessions: {
+        update: {
+          where: { ip },
+          data: { refreshTokens: { push: refreshToken } },
+        },
       },
     },
   });
@@ -123,12 +151,9 @@ const findByRefreshToken = async ({
 }) => {
   return await prisma.user.findFirst({
     where: {
-      refreshTokens: {
-        has: refreshToken,
-      },
+      sessions: { some: { refreshTokens: { has: refreshToken } } },
     },
     select: {
-      refreshTokens: true,
       address: true,
       roles: true,
       activeRole: true,
@@ -138,11 +163,12 @@ const findByRefreshToken = async ({
 };
 
 const userService = {
+  createSession,
+  removeSession,
   createStreamer,
   createTipper,
   find,
   checkIfExist,
-  updateRefreshTokens,
   findByRefreshToken,
   addRefreshToken,
   removeRefreshToken,

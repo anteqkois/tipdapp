@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import prisma from '../config/db';
 
 const find = async (where: Prisma.PageWhereInput) => {
-  return await prisma.page.findFirst({ where });
+  return await prisma.page.findMany({ where });
 };
 
 const update = async (updateArgs: Prisma.PageUpdateManyArgs) => {

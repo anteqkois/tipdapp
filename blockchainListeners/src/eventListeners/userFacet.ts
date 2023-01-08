@@ -13,3 +13,5 @@ export const newUserListener = () =>
       saveUserTokenData({ userAddress, userTokenAddress, txHash: event.transactionHash });
     },
   );
+
+  //TODO Tip event, save tip to DB and increase mint amount of given user token

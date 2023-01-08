@@ -9,6 +9,7 @@ import { corsConfig } from './src/config/cors';
 import { logRequest } from './src/middlewares/logRequest';
 import apiRouter from './src/routes';
 import { startQueueConsumers } from './src/queue';
+import { queryParser } from 'express-query-parser';
 
 const port = process.env.PORT || 3001;
 const dev = process.env.NODE_ENV !== 'production';
@@ -16,6 +17,14 @@ const dev = process.env.NODE_ENV !== 'production';
 const server = express();
 
 server.use(cors(corsConfig));
+server.use(
+  queryParser({
+    parseNull: true,
+    parseUndefined: true,
+    parseBoolean: true,
+    parseNumber: true
+  })
+)
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
