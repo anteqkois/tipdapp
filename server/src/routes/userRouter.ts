@@ -6,5 +6,5 @@ import { userController } from '../controllers/userController';
 const router = Router();
 //GET
 router.get('/:nick', catchAsyncErrors(userController.findByNick));
-// router.get('/', catchAsyncErrors(userController.find));
+router.get('/', catchAsyncErrors(userController.find));
 export default router;

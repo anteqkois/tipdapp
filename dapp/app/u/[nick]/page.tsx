@@ -1,7 +1,6 @@
 'use client';
 
-import api from '@/api/apiConfig';
-import { useEffect } from 'react';
+import { useUserFind } from '@/shared/User/hooks/useTipsQuery';
 
 type Props = {
   params: {
@@ -14,14 +13,22 @@ export default function Page({ params }: Props) {
 
   //TODO fetch all data about given user ?
   // const { data } = usePageFind({ nick: params.nick });
-  useEffect(() => {
-    (async () => {
-      const res = await api.get('/user', {
-        // params: { include: { tipper: 'true', streamer: 'true' } },
-        params: { include: ['tipper', 'streamer'] },
-      });
-    })();
-  }, []);
+  const { data } = useUserFind({
+    queryParams: {
+      nick: 'anteqkois',
+      include: ['avatar', 'streamer', 'tipper', 'tips', 'userToken'],
+    },
+  });
+  console.log(data);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const res = await api.get('/user', {
+  //       // params: { include: { tipper: 'true', streamer: 'true' } },
+  //       params: { include: ['tipper', 'streamer'] },
+  //     });
+  //   })();
+  // }, []);
 
   // data?.pages
   // console.log(JSON.stringify(data));

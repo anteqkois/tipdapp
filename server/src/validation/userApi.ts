@@ -37,11 +37,11 @@ const find = {
 
 export namespace UserApi {
   export namespace FindByNick {
-    export type Query = z.infer<typeof findByNick.query>;
-    export type Params = z.infer<typeof findByNick.params>;
+    export type Query = z.input<typeof findByNick.query>;
+    export type Params = z.input<typeof findByNick.params>;
   }
   export namespace Find {
-    export type Query = z.infer<typeof find.query>;
+    export type Query = z.input<typeof find.query>;
   }
 }
 

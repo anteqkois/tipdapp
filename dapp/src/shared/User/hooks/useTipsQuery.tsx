@@ -1,15 +1,15 @@
 import { find } from '@/api/user';
 import { useQuery } from '@tanstack/react-query';
-import { Address } from 'wagmi';
+import { UserApi } from '@tipdapp/server';
 
 type UseTipsProps = {
-  address: Address
+  queryParams: UserApi.Find.Query;
 };
 
-export function useUserFind({ address }: UseTipsProps) {
+export function useUserFind({ queryParams }: UseTipsProps) {
   return useQuery({
-    queryKey: ['user', address],
-    queryFn: () => find({ page, pageSize }),
+    queryKey: ['user'],
+    queryFn: () => find(queryParams),
     suspense: true,
     retry: false,
   });
