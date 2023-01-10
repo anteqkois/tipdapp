@@ -1,6 +1,7 @@
 'use client';
 
-import { usePageFind } from '@/modules/Page/hooks/usePageQuery';
+import api from '@/api/apiConfig';
+import { useEffect } from 'react';
 
 type Props = {
   params: {
@@ -13,9 +14,36 @@ export default function Page({ params }: Props) {
 
   //TODO fetch all data about given user ?
   // const { data } = usePageFind({ nick: params.nick });
+  useEffect(() => {
+    (async () => {
+      const res = await api.get('/user', {
+        // params: { include: { tipper: 'true', streamer: 'true' } },
+        params: { include: ['tipper', 'streamer'] },
+      });
+    })();
+  }, []);
+
   // data?.pages
-  console.log(JSON.stringify(data));
+  // console.log(JSON.stringify(data));
 
   // if streamer => show streamer page
-  return <p>{JSON.stringify(data)}</p>;
+  // return <p>{JSON.stringify(data)}</p>;
+  return (
+    <p>
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
+      officiis dignissimos! Sunt aperiam ad explicabo facere, minus ducimus
+      quasi iure fugit cupiditate alias officiis cum assumenda inventore nobis
+      voluptas!
+    </p>
+  );
 }

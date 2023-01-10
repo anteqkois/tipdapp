@@ -1,7 +1,7 @@
-import { confirmationToast } from '@/shared/ui/customToasts';
 import { Hash } from '@wagmi/core';
 import { useEffect, useMemo } from 'react';
 import { useBlockNumber, useTransaction, useWaitForTransaction } from 'wagmi';
+import { confirmationToast } from '../ui';
 
 export const useConfirmationToast = (hash?: Hash, confirmations = 4) => {
   const waitTx = useWaitForTransaction({

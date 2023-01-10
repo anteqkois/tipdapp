@@ -1,11 +1,33 @@
 import { z } from '../config/zod';
+import { transformApiInclude } from './utils';
 
-const find = z.object({
-  nick: z.string(),
-  streamer: z.boolean().default(false),
-  tipper: z.boolean().default(false),
-  userToken: z.boolean().default(false),
-});
+const userInclude = z
+  .array(
+    z.union([
+      z.literal('avatar'),
+      z.literal('streamer'),
+      z.literal('tipper'),
+      z.literal('tips'),
+      z.literal('userToken'),
+    ])
+  )
+  .transform((include) => transformApiInclude(include));
+
+const findByNick = {
+  query: z.object({
+    include: userInclude,
+  }),
+  params: z.object({
+    nick: z.string(),
+  }),
+};
+
+const find = {
+  query: z.object({
+    nick: z.string(),
+    include: userInclude,
+  }),
+};
 
 // const createFormParse = (data: UserTokenValidation.CreateForm) =>
 //   validationHelper<UserTokenValidation.CreateForm>(data, createForm);
@@ -14,9 +36,16 @@ const find = z.object({
 //   validationHelper<UserTokenValidation.Create>(data, create);
 
 export namespace UserApi {
-  export type Find = z.infer<typeof find>;
+  export namespace FindByNick {
+    export type Query = z.infer<typeof findByNick.query>;
+    export type Params = z.infer<typeof findByNick.params>;
+  }
+  export namespace Find {
+    export type Query = z.infer<typeof find.query>;
+  }
 }
 
 export const userApi = {
+  findByNick,
   find,
 };

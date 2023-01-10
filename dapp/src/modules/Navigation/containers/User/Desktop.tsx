@@ -1,6 +1,6 @@
 'use client';
-import { Tooltip } from '@/shared/ui';
-import { CustomConnectButton, Navlink } from '../../components';
+import { CustomConnectButton, Tooltip } from '@/shared/ui';
+import {  Navlink } from '../../components';
 import { NavigationOption } from '../../types';
 
 const defaultOptionStyle =

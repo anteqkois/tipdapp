@@ -8,7 +8,7 @@ import { pageController } from '../controllers/pageController';
 const router = Router();
 //GET
 router.get(
-  '/',
+  '/:nick',
   // verifyJWT,
   catchAsyncErrors(pageController.findByNick)
 );

@@ -29,41 +29,60 @@ enum ApperanceMode {
 
 //change AvatarPath to url
 model User {
-  address           String        @id @unique @db.VarChar(42)
-  nick              String        @unique
-  email             String        @unique
-  emailVerified     DateTime?
-  firstName         String?
-  lastName          String?
-  verified          Boolean       @default(false)
-  createdAt         DateTime      @default(now())
-  updateAt          DateTime      @updatedAt
-  allTipsCount      Int           @default(0)
-  allTipsValue      Decimal       @default(0) @db.Decimal(78, 0)
-  allWithdrawsValue Decimal       @default(0) @db.Decimal(78, 0)
-  apperanceMode     ApperanceMode @default(light)
-  roles             Role[]        @default([streamer, tipper])
-  activeRole       Role          @default(tipper)
-  refreshTokens     String[]
-  avatar            File?         @relation(fields: [avatarId], references: [id])
-  avatarId          String?
-  witdraws          Withdraw[]
-  userToken         UserToken?
-  tips              Tip[]
-  streamer          Streamer?
-  tipper            Tipper?
+  address                String                  @id @unique @db.VarChar(42)
+  nick                   String                  @unique
+  email                  String                  @unique
+  emailVerified          DateTime?
+  firstName              String?
+  lastName               String?
+  verified               Boolean                 @default(false)
+  createdAt              DateTime                @default(now())
+  updateAt               DateTime                @updatedAt
+  allTipsCount           Int                     @default(0)
+  allTipsValue           Decimal                 @default(0) @db.Decimal(78, 0)
+  allWithdrawsValue      Decimal                 @default(0) @db.Decimal(78, 0)
+  roles                  Role[]                  @default([streamer, tipper])
+  activeRole             Role                    @default(tipper)
+  avatar                 File?                   @relation(fields: [avatarId], references: [id])
+  avatarId               String?
+  witdraws               Withdraw[]
+  userToken              UserToken?
+  tips                   Tip[]
+  streamer               Streamer?
+  tipper                 Tipper?
+  sessions               Session[]
+  verificationEmailToken VerificationEmailToken?
+  settings               Settings?
+}
+
+model Session {
+  ip            String   @id
+  user          User     @relation(fields: [address], references: [address], onDelete: Cascade)
+  address       String   @db.VarChar(42)
+  refreshTokens String[]
+  expires       DateTime?
+}
+
+model Settings {
+  address       String        @id @unique @db.VarChar(42)
+  user          User          @relation(fields: [address], references: [address], onDelete: Cascade)
+  apperanceMode ApperanceMode @default(light)
+}
+
+model VerificationEmailToken {
+  address String   @id @unique @db.VarChar(42)
+  user    User     @relation(fields: [address], references: [address], onDelete: Cascade)
+  token   String   @unique
+  expires DateTime
 }
 
 model Streamer {
   user         User     @relation(fields: [address], references: [address])
   address      String   @id @db.VarChar(42)
-  // address         String   @id @unique @db.VarChar(42)
   tipsCount    Int      @default(0)
   tipsValue    Decimal  @default(0) @db.Decimal(78, 0)
   page         Page     @relation(fields: [pageId], references: [id])
   pageId       String
-  // affixUrl        String   @db.VarChar(60)
-  // pageDescription String?  @default("") @db.VarChar(200)
   activeTokens Token[]
   widgets      Widget[]
 }
@@ -71,7 +90,6 @@ model Streamer {
 model Tipper {
   user      User   @relation(fields: [address], references: [address])
   address   String @id @db.VarChar(42)
-  // address   String @id @unique @db.VarChar(42)
   nick      String @unique
   tipsValue Int    @default(0)
   tips      Tip[]

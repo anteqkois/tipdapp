@@ -18,7 +18,6 @@ export const Link = ({
       href={href}
       target={target}
       rel="noreferrer"
-      // className="flex gap-1 underline cursor-pointer underline-offset-1 decoration-2 decoration-primary"
       className="inline-block underline cursor-pointer underline-offset-1 decoration-2 decoration-primary"
     >
       {children}

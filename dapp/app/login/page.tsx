@@ -1,5 +1,5 @@
 'use client';
-import { CustomConnectButton } from '@/modules/Navigation/components';
+import { CustomConnectButton } from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
