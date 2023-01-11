@@ -1,6 +1,4 @@
 import { catchAsyncErrors } from '@middlewares/handleError';
-import { verifyJWT } from '@middlewares/verifyJWT';
-import { verifyRoles } from '@middlewares/verifyRoles';
 import { Router } from 'express';
 import { pageController } from '../controllers/pageController';
 // import { findPage, updatePage } from '../controllers/userController';
@@ -8,18 +6,18 @@ import { pageController } from '../controllers/pageController';
 const router = Router();
 //GET
 router.get(
-  '/:nick',
+  '/:role/:affixUrl',
   // verifyJWT,
-  catchAsyncErrors(pageController.findByNick)
+  catchAsyncErrors(pageController.findByAffixUrl)
 );
 
 //PUT
-router.put(
-  '/',
-  verifyJWT,
-  verifyRoles('streamer'),
-  catchAsyncErrors(pageController.update)
-);
+// router.put(
+//   '/',
+//   verifyJWT,
+//   verifyRoles('streamer'),
+//   catchAsyncErrors(pageController.update)
+// );
 
 //POST
 

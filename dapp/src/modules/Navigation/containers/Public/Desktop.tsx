@@ -1,4 +1,6 @@
 import { Button } from '@/shared/ui';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+import Link from 'next/link';
 import { NavigationOption } from '../../types';
 
 type Props = {
@@ -6,6 +8,7 @@ type Props = {
 };
 
 export const Desktop = ({ navigationOption }: Props) => {
+  const { openConnectModal } = useConnectModal();
   return (
     <div className="fixed top-0 left-0 z-30 w-full px-2 shadow-md bg-neutral-50 ">
       <div className="flex items-center justify-between w-full h-16 gap-5 mx-auto max-w-7xl">
@@ -25,8 +28,15 @@ export const Desktop = ({ navigationOption }: Props) => {
           </ul>
         </nav>
         <div className="flex gap-2 w-[170px]">
-          <Button variant="ghost">Login</Button>
-          <Button variant="special">Sign Up</Button>
+          <Button
+            variant="ghost"
+            onClick={openConnectModal}
+          >
+            Login
+          </Button>
+          <Link href={'signup'}>
+            <Button variant="special">Sign Up</Button>
+          </Link>
         </div>
       </div>
     </div>

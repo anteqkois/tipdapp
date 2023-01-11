@@ -199,6 +199,7 @@ const signUp = async (req: Request, res: Response) => {
           create: {
             page: {
               create: {
+                role: 'streamer',
                 affixUrl: validatedFormData.nick,
               },
             },

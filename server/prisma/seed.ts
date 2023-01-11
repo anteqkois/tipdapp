@@ -25,6 +25,7 @@ async function main() {
         create: {
           page: {
             create: {
+              role: 'streamer',
               affixUrl: 'anteqkois',
             },
           },
@@ -45,6 +46,7 @@ async function main() {
         create: {
           page: {
             create: {
+              role: 'streamer',
               affixUrl: 'whitex',
             },
           },

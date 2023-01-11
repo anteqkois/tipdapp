@@ -19,6 +19,7 @@ export default function Page({ params }: Props) {
       include: ['avatar', 'streamer', 'tipper', 'tips', 'userToken'],
     },
   });
+  
   console.log(data);
 
   // useEffect(() => {
@@ -36,7 +37,7 @@ export default function Page({ params }: Props) {
   // if streamer => show streamer page
   // return <p>{JSON.stringify(data)}</p>;
   return (
-    <p>
+    <main>
       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora quod
@@ -51,6 +52,6 @@ export default function Page({ params }: Props) {
       officiis dignissimos! Sunt aperiam ad explicabo facere, minus ducimus
       quasi iure fugit cupiditate alias officiis cum assumenda inventore nobis
       voluptas!
-    </p>
+    </main>
   );
 }

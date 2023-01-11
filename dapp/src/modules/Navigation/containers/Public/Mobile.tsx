@@ -38,13 +38,17 @@ export const Mobile = ({ navigationOption }: Props) => {
               <li
                 className={`${defaultOptionStyle} hover:bg-transparent flex flex-col`}
               >
-                <Button
-                  onClick={openConnectModal}
-                  variant="special"
+                <Navlink
                   className="w-full"
+                  href="/signup"
                 >
-                  <Navlink href="/signup">SignUp</Navlink>
-                </Button>
+                  <Button
+                    variant="special"
+                    className="w-full"
+                  >
+                    SignUp
+                  </Button>
+                </Navlink>
                 <Button
                   onClick={openConnectModal}
                   variant="ghost"

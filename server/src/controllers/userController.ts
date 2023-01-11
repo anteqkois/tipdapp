@@ -7,7 +7,6 @@ const findByNick = async (
   req: Request<{}, {}, {}, UserApi.FindByNick.Query>,
   res: Response
 ) => {
-  console.log(req.query);
   const parsedParams = userApi.findByNick.params.parse(req.params);
   const parsedQuery = userApi.findByNick.query.parse(req.query);
 

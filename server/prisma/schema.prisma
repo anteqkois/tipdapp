@@ -56,9 +56,9 @@ model User {
 }
 
 model Session {
-  ip            String   @id
-  user          User     @relation(fields: [address], references: [address], onDelete: Cascade)
-  address       String   @db.VarChar(42)
+  ip            String    @id
+  user          User      @relation(fields: [address], references: [address], onDelete: Cascade)
+  address       String    @db.VarChar(42)
   refreshTokens String[]
   expires       DateTime?
 }
@@ -81,8 +81,8 @@ model Streamer {
   address      String   @id @db.VarChar(42)
   tipsCount    Int      @default(0)
   tipsValue    Decimal  @default(0) @db.Decimal(78, 0)
-  page         Page     @relation(fields: [pageId], references: [id])
-  pageId       String
+  page         Page     @relation(fields: [pageAffixUrl], references: [affixUrl])
+  pageAffixUrl String   @unique
   activeTokens Token[]
   widgets      Widget[]
 }
@@ -96,12 +96,15 @@ model Tipper {
 }
 
 model Page {
-  id          String     @id @default(cuid())
-  affixUrl    String     @db.VarChar(60)
-  description String?    @default("") @db.VarChar(200)
-  baner       File?      @relation(fields: [banerId], references: [id])
+  //role/nick
+  role        Role
+  affixUrl    String    @unique @db.VarChar(60)
+  description String?   @default("") @db.VarChar(200)
+  baner       File?     @relation(fields: [banerId], references: [id])
   banerId     String?
-  streamer    Streamer[]
+  streamer    Streamer?
+
+  @@id([role, affixUrl])
 }
 
 model Tip {
@@ -169,7 +172,7 @@ model Token {
   priceUpdateAt   DateTime?
   streamer        Streamer? @relation(fields: [streamerAddress], references: [address])
   streamerAddress String?   @db.VarChar(42)
-  Tip             Tip[]
+  tip             Tip[]
 }
 
 model Withdraw {
