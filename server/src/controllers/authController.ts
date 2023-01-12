@@ -5,7 +5,7 @@ import {
   createValidationErrors,
   ValidationError,
 } from '@middlewares/error';
-import { isOperational } from '@middlewares/handleError';
+import { throwIfOperational } from '@middlewares/handleError';
 import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -132,7 +132,10 @@ const validate = async (
       createValidationErrors(errors, StatusCodes.UNPROCESSABLE_ENTITY);
     }
   } catch (errors) {
-    isOperational(errors, "Something went wrong, data didn't pass validation.");
+    throwIfOperational(
+      errors,
+      "Something went wrong, data didn't pass validation."
+    );
   }
 
   res.status(StatusCodes.OK).json({ message: 'Validation passed' });

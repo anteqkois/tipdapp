@@ -13,7 +13,7 @@ const findByAffixUrl = {
   }),
   query: z.object({
     include: pageInclude.optional(),
-  }),
+  }).optional(),
 };
 
 const find = {

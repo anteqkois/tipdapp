@@ -2,7 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { errorLogger, requestLogger } from '../config/logger';
 import { ZodError } from '../config/zod';
-import { ApiError, createApiError, ValidationErrors } from './error';
+import {
+  ApiError,
+  createApiError,
+  ValidationError,
+  ValidationErrors,
+} from './error';
 
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
   requestLogger.error('not found', {
@@ -42,8 +47,15 @@ export const catchErrors = (
   };
 };
 
+export const isOperationalErrorArray = (
+  arr: Error[]
+): arr is (ApiError | ValidationError)[] => {
+  if ('isOperational' in arr[0] && arr[0].isOperational === true) return true;
+  return false;
+};
+
 //If  error is operational throw away and handle in handelErrors middleware, other way create ApiError with given message
-export const isOperational = (
+export const throwIfOperational = (
   err: any,
   helpMessage: string
   // errorTypeToThrow: 'ApiError' | 'ValidationError'

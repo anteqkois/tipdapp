@@ -1,35 +1,31 @@
 'use client';
 
-import { ErrorMessage } from '@/shared/ui';
-import { ApiError } from '@tipdapp/server';
+import ErrorPage from '@/shared/ui/ErrorPage';
+import { ApiError, ValidationError } from '@tipdapp/server';
 
 type Props = {
-  error: ApiError[];
+  error: unknown[];
   reset: () => void;
+};
+export const isOperationalErrorArray = (
+  arr: unknown[]
+): arr is (ApiError | ValidationError)[] => {
+  if (
+    arr[0] !== null &&
+    typeof arr[0] === 'object' &&
+    'isOperational' in arr[0] &&
+    arr[0].isOperational === true
+  )
+    return true;
+  return false;
 };
 
 export default function Error({ error, reset }: Props) {
-  // const router = useRouter();
-
-  // if (error[0].message === 'You are not authorized.') {
-  // router?.push('/login');
-  // return <PageSpinner />;
-  // }
-
-  return (
-    <ErrorMessage className="flex-row flex-center">
+  return isOperationalErrorArray(error) ? (
+    <ErrorPage className="flex-row flex-center">{error[0].message}</ErrorPage>
+  ) : (
+    <ErrorPage className="flex-row flex-center">
       Something went wrong...
-    </ErrorMessage>
+    </ErrorPage>
   );
-  // return (
-  //   <div>
-  //     {error[0].type === 'ApiError' ? (
-  //       <ErrorMessage className="flex-row flex-center">
-  //        Something went wrong...
-  //       </ErrorMessage>
-  //     ) : (
-  //       <ErrorMessage>{error[0].message}</ErrorMessage>
-  //     )}
-  //   </div>
-  // );
 }

@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import prisma from '../config/db';
 
 const find = async (data: Prisma.PageFindFirstArgs) => {
-  return await prisma.page.findMany({
+  return await prisma.page.findFirst({
     where: data.where,
     include: {
       baner: true,
