@@ -2,12 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { errorLogger, requestLogger } from '../config/logger';
 import { ZodError } from '../config/zod';
-import {
-  ApiError,
-  createApiError,
-  ValidationError,
-  ValidationErrors,
-} from './error';
+import { ApiError, createApiError, isOperationalErrorArray, ValidationError } from './error';
 
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
   requestLogger.error('not found', {
@@ -47,18 +42,10 @@ export const catchErrors = (
   };
 };
 
-export const isOperationalErrorArray = (
-  arr: Error[]
-): arr is (ApiError | ValidationError)[] => {
-  if ('isOperational' in arr[0] && arr[0].isOperational === true) return true;
-  return false;
-};
-
 //If  error is operational throw away and handle in handelErrors middleware, other way create ApiError with given message
 export const throwIfOperational = (
   err: any,
   helpMessage: string
-  // errorTypeToThrow: 'ApiError' | 'ValidationError'
 ) => {
   //! TODO handle Siwe Error
   //   {
@@ -79,27 +66,21 @@ export const throwIfOperational = (
   //      received: 'Resolved address to be 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
   //    }
   //  }
-  if (err?.isOperational || err instanceof ZodError) {
+  if (
+    err?.isOperational ||
+    err instanceof ZodError ||
+    isOperationalErrorArray(err)
+  ) {
     throw err;
   } else if (helpMessage) {
     console.log(err);
     createApiError(helpMessage);
-    // switch (errorTypeToThrow) {
-    //   case 'ValidationError':
-    //     createValidationError(helpMessage);
-    //     break;
-
-    //   default:
-    //     createApiError(helpMessage);
-    //     break;
-    // }
   }
   errorLogger.error('no operational', err);
   throw err;
   // return false;
 };
 
-//! TODO handle message statusMessage method from res object
 export const handleErrors = (
   err: any,
   req: Request,
@@ -112,27 +93,24 @@ export const handleErrors = (
       .status(err.status || StatusCodes.INTERNAL_SERVER_ERROR)
       .send({ error: [err] });
   }
-  // if(err instanceof ValidationErrors){}
-  if (err.type === 'ValidationErrors') {
-    errorLogger.error('ValidationErrors', err.errors);
+  if (isOperationalErrorArray(err)) {
+    errorLogger.error('Error array', err);
     return res
-      .status(err.status || StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: err.errors });
+      .status(err[0].status || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: err });
   }
   if (err instanceof ZodError) {
-    errorLogger.error(
-      'ZodError',
-      ValidationErrors.fromZodErrorArray(err.issues).errors
-    );
+    const error = ValidationError.fromZodErrorArray(err.issues);
+    errorLogger.error('ZodError', error);
     return res.status(422).json({
-      error: ValidationErrors.fromZodErrorArray(err.issues).errors,
+      error,
     });
   }
+
   errorLogger.error('no operational', err);
   return res.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
-    error: new ApiError(err.message || 'Something went wrong, try later.'),
+    error: [
+      new ApiError(err.message || 'Something went wrong on server, try later.'),
+    ],
   });
-  // return res
-  //   .status(err.status || StatusCodes.INTERNAL_SERVER_ERROR)
-  //   .json(err.message || 'Something went wrong, try later.');
 };

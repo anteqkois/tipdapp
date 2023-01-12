@@ -19,8 +19,10 @@ export {
 export { validationHelper } from './src/config/zod';
 export {
   ApiError,
+  isApiError,
+  isOperationalErrorArray,
+  isValidationError,
   ValidationError,
-  ValidationErrors,
 } from './src/middlewares/error';
 export type {
   NestedPage,

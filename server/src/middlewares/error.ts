@@ -1,4 +1,4 @@
-import { number, ZodIssue } from '../config/zod';
+import { ZodIssue } from '../config/zod';
 
 export class ApiError extends Error {
   type: string = 'ApiError';
@@ -13,6 +13,10 @@ export class ApiError extends Error {
     // Error.captureStackTrace(this, this.constructor);
   }
 }
+
+export const isApiError = (object: unknown): object is ApiError => {
+  return object instanceof ApiError;
+};
 
 export class ValidationError extends Error {
   type: string = 'ValidationError';
@@ -37,37 +41,7 @@ export class ValidationError extends Error {
     this.code = code;
     this.status = status ?? 422;
   }
-}
 
-export class ValidationErrors extends Error {
-  type: string = 'ValidationErrors';
-  errors: ValidationError[];
-  status: number;
-  isOperational: boolean = true;
-  constructor(errors: ValidationError[], status?: number) {
-    super();
-    // pass array of ValidationError
-    this.errors = errors;
-    this.status = status ?? 422;
-    // this.detail = detail;
-    // this.isOperational = true;
-  }
-
-  // constructor(zodErrorArray: ZodIssue[], status?: number) {
-  //   zodErrorArray.forEach((zodError) => {
-  //     const error = new ValidationError(
-  //       zodError.path[0] as string,
-  //       zodError.path[0] as string,
-  //       zodError.message,
-  //       `${zodError.path[0]}.${zodError.code}`
-  //     );
-  //     this.errors.push(error);
-  //     this.status = status ?? 500;
-  //   });
-  //   return this;
-  // }
-
-  //TODO! refactor to overload contructor
   static fromZodErrorArray(zodErrorArray: ZodIssue[], status?: number) {
     const errors: ValidationError[] = [];
     zodErrorArray.forEach((zodError) => {
@@ -80,23 +54,22 @@ export class ValidationErrors extends Error {
       errors.push(error);
     });
 
-    return new this(errors, status);
+    return errors;
   }
 
-  mapByField() {
+  static mapArrayByField(errorArray: ValidationError[]) {
     const mapedError: Record<string, string> = {};
-    this.errors.forEach((err) => {
+    errorArray.forEach((err) => {
       mapedError[err.field] = err.message;
     });
     return mapedError;
   }
 }
 
-export const createValidationErrors = (
-  errors: ValidationError[],
-  status?: number
-) => {
-  throw new ValidationErrors(errors, status);
+export const isValidationError = (
+  object: unknown
+): object is ValidationError => {
+  return object instanceof ValidationError;
 };
 
 export const createValidationError = (
@@ -104,7 +77,7 @@ export const createValidationError = (
   title: string,
   field: string,
   code: string,
-  status?: number,
+  status?: number
 ) => {
   throw new ValidationError(field, title, message, code, status);
 };
@@ -113,9 +86,15 @@ export const createApiError = (message: string, status?: number) => {
   throw new ApiError(message, status);
 };
 
-// export default {
-//   createApiError,
-//   createValidationErrors,
-//   ApiError,
-//   ValidationError,
-// };
+export const isOperationalErrorArray = (
+  arr: unknown[]
+): arr is (ApiError | ValidationError)[] => {
+  if (
+    arr[0] !== null &&
+    typeof arr[0] === 'object' &&
+    'isOperational' in arr[0] &&
+    arr[0].isOperational
+  )
+    return true;
+  return false;
+};

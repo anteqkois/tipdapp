@@ -4,9 +4,13 @@ import { useLocalStorage } from '@/shared/hooks';
 import { Close } from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
 import { AsyncStatus } from '@/types';
-import { mapValidationErrors } from '@/utils/error';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { UserValidation } from '@tipdapp/server';
+import {
+  isApiError,
+  isValidationError,
+  UserValidation,
+  ValidationError,
+} from '@tipdapp/server';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -57,10 +61,11 @@ export const useSignUpForm = () => {
               setFormData(values);
               setStep((prev) => ++prev);
             } catch (error: any) {
-              if (error[0].type === 'ValidationError') {
-                formik.setErrors(mapValidationErrors(error));
+              if (isValidationError(error[0])) {
+                formik.setErrors(ValidationError.mapArrayByField(error));
+              } else if (isApiError(error[0])) {
+                toast.error(error[0].message);
               } else {
-                console.log(error);
                 toast.error('Something went wrong, can not register you now.');
               }
             }
@@ -119,9 +124,8 @@ export const useSignUpForm = () => {
         { duration: Infinity, id: 'validationError' }
       );
 
-      if (error[0].type === 'ValidationError') {
-        console.log(mapValidationErrors(error));
-        formik.setErrors(mapValidationErrors(error));
+      if (isValidationError(error[0])) {
+        formik.setErrors(ValidationError.mapArrayByField(error));
       } else {
         console.log(error);
       }

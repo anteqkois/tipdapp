@@ -2,7 +2,6 @@ import { JWT_SETTINGS } from '@config/jwt';
 import {
   createApiError,
   createValidationError,
-  createValidationErrors,
   ValidationError,
 } from '@middlewares/error';
 import { throwIfOperational } from '@middlewares/handleError';
@@ -129,7 +128,7 @@ const validate = async (
         );
         errors.push(validationError);
       }
-      createValidationErrors(errors, StatusCodes.UNPROCESSABLE_ENTITY);
+      throw errors;
     }
   } catch (errors) {
     throwIfOperational(
@@ -189,7 +188,7 @@ const signUp = async (req: Request, res: Response) => {
       );
       errors.push(validationError);
     }
-    createValidationErrors(errors);
+    throw errors;
   }
 
   let userSessionData: UserSession;

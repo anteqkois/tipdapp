@@ -1,8 +1,15 @@
 import { useLocalStorage } from '@/shared/hooks';
 import { useUserFacet } from '@/shared/TipdappContracts/hooks/useUserFacetContract';
 import { Button, Card, Details, Input } from '@/shared/ui';
-import { UserTokenValidation, userTokenValidation } from '@tipdapp/server';
+import {
+  isOperationalErrorArray,
+  isValidationError,
+  UserTokenValidation,
+  userTokenValidation,
+  ValidationError,
+} from '@tipdapp/server';
 import { FormEvent, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 const initialUserToken: UserTokenValidation.CreateForm = {
   symbol: '',
@@ -29,8 +36,14 @@ export const CreateUserToken = () => {
       userTokenValidation.createFormParse(userTokenFormData);
       await registerUser.call(userTokenFormData.symbol, userTokenFormData.name);
     } catch (error: any) {
-      if (error?.type === 'ValidationErrors') {
-        setErrors(error.mapByField());
+      if (isOperationalErrorArray(error)) {
+        if (isValidationError(error[0]))
+          setErrors(
+            ValidationError.mapArrayByField(error as ValidationError[])
+          );
+        toast.error(error[0].message);
+      } else {
+        toast.error('Something went wrong');
       }
     }
   };
