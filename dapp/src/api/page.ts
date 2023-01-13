@@ -1,10 +1,10 @@
-import { NestedPage, PageApi, PageValidation, User } from '@tipdapp/server';
+import { NestedPage, NestedUser, PageApi, PageValidation, User } from '@tipdapp/server';
 import { api } from './apiConfig';
 
 
 type FindResponse = {
   page: NestedPage;
-  user: User;
+  user: NestedUser;
 };
 
 export const findByAffixUrl = async ({

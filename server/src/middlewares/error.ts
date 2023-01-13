@@ -15,7 +15,14 @@ export class ApiError extends Error {
 }
 
 export const isApiError = (object: unknown): object is ApiError => {
-  return object instanceof ApiError;
+  if (
+    object !== null &&
+    typeof object === 'object' &&
+    'type' in object &&
+    object.type === 'ApiError'
+  )
+    return true;
+  return false;
 };
 
 export class ValidationError extends Error {
@@ -69,7 +76,14 @@ export class ValidationError extends Error {
 export const isValidationError = (
   object: unknown
 ): object is ValidationError => {
-  return object instanceof ValidationError;
+  if (
+    object !== null &&
+    typeof object === 'object' &&
+    'type' in object &&
+    object.type === 'ValidationError'
+  )
+    return true;
+  return false;
 };
 
 export const createValidationError = (

@@ -8,9 +8,11 @@
  * file that was distributed with this source code.
  */
 // import { File } from '@prisma/client';
+import { Spinner } from '@/shared/ui';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { File } from '@tipdapp/server';
 import Image, { ImageProps } from 'next/image';
+import { useState } from 'react';
 
 type AvatarProps = {
   avatar?: File | null;
@@ -23,20 +25,29 @@ export const Avatar = ({
   className,
   ...rest
 }: AvatarProps) => {
+  const [loading, setloading] = useState(true);
   return (
     <AvatarPrimitive.Root
-      className={`relative shadow-inner-avatar rounded-md w-7 aspect-square overflow-hidden ${className}`}
+      className={`absolute block bg-neutral-150 shadow-inner-avatar rounded-md w-7 aspect-square overflow-hidden ${className}`}
     >
-      <AvatarPrimitive.Image
-        {...rest}
-        // create utils function to build url to image
-        //TODO change avatarPath to url
-        src={`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${avatar?.filename}`}
-        alt="Avatar"
-      />
+      {loading ? (
+        <Spinner className='w-10'/>
+      ) : (
+        <AvatarPrimitive.Image
+          {...rest}
+          // create utils function to build url to image
+          //TODO change avatarPath to url
+          onLoadingStatusChange={(status) => {
+            status !== 'loading' && setloading(false);
+            console.log(status);
+          }}
+          src={`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${avatar?.filename}`}
+          alt="Avatar"
+        />
+      )}
       <AvatarPrimitive.Fallback
-        delayMs={100}
-        className={className}
+        // delayMs={100}
+        // className={` ${className}`}
       >
         <Image
           fill={true}

@@ -62,6 +62,7 @@ export const useSignUpForm = () => {
               setStep((prev) => ++prev);
             } catch (error: any) {
               if (isValidationError(error[0])) {
+                const t = error[0];
                 formik.setErrors(ValidationError.mapArrayByField(error));
               } else if (isApiError(error[0])) {
                 toast.error(error[0].message);

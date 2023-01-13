@@ -1,12 +1,15 @@
 'use client';
 import { update } from '@/api/page';
-import { Button, Card, Input, Tooltip } from '@/shared/ui';
+import { Button, Card, Input, Link, Tooltip } from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
-import { mapValidationErrors } from '@/utils/error';
-import { PageValidation, pageValidation } from '@tipdapp/server';
+import {
+  isValidationError,
+  PageValidation,
+  pageValidation,
+  ValidationError,
+} from '@tipdapp/server';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
-import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 //TODO? use page to be ability in future to change this element by user(for example can change to show default top tiper)
@@ -25,8 +28,8 @@ const Page = () => {
           pageValidation.updateParse(values);
           await update(values);
         } catch (error: any) {
-          if (error[0].type === 'ValidationError') {
-            formik.setErrors(mapValidationErrors(error));
+          if (isValidationError(error[0])) {
+            formik.setErrors(ValidationError.mapArrayByField(error));
           } else {
             console.log(error);
             toast.error(
@@ -43,7 +46,7 @@ const Page = () => {
       <Card className="grid">
         <form onSubmit={formik.handleSubmit}>
           <Link href={`streamer/${user?.streamer?.page?.affixUrl}`}>
-            <Button variant="link">See your page</Button>
+            <link>See your page</link>
           </Link>
           <Tooltip content="Disabled option now">
             <div className="relative">
