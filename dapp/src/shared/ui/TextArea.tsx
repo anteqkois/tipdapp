@@ -6,6 +6,7 @@ type Props = {
   rows?: number;
   name: string;
   id: string;
+  label: string;
   error?: string;
 } & TextareaHTMLAttributes<HTMLTextAreaElement>;
 
@@ -14,6 +15,7 @@ export const TextArea = ({
   rows = 10,
   error,
   id,
+  label,
   name,
   ...rest
 }: Props) => {
@@ -23,7 +25,7 @@ export const TextArea = ({
         htmlFor={id}
         className="block mb-2 text-sm font-medium text-neutral-800 first-letter:uppercase"
       >
-        Description
+        {label}
       </label>
       <textarea
         name={name}

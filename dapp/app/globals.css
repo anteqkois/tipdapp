@@ -10,6 +10,17 @@
       sans-serif;
     @apply p-0 m-0 bg-neutral-150 text-neutral-800 w-full min-h-screen relative;
   }
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
 
   footer {
     @apply absolute bottom-0;

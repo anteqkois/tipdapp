@@ -11,6 +11,7 @@ export { ErrorPage } from './ErrorPage';
 export { Flag } from './Flag';
 export { InfoMessage } from './InfoMessage';
 export { Input } from './Input';
+export { InputCurrency } from './InputCurrency';
 export { Link } from './Link';
 export { MainContainer } from './MainContainer';
 export { PageSpinner } from './PageSpinner';

@@ -2,7 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { errorLogger, requestLogger } from '../config/logger';
 import { ZodError } from '../config/zod';
-import { ApiError, createApiError, isOperationalErrorArray, ValidationError } from './error';
+import {
+  ApiError,
+  createApiError,
+  isOperationalErrorArray,
+  ValidationError,
+} from './error';
 
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
   requestLogger.error('not found', {
@@ -43,10 +48,7 @@ export const catchErrors = (
 };
 
 //If  error is operational throw away and handle in handelErrors middleware, other way create ApiError with given message
-export const throwIfOperational = (
-  err: any,
-  helpMessage: string
-) => {
+export const throwIfOperational = (err: any, helpMessage: string) => {
   //! TODO handle Siwe Error
   //   {
   //    success: false,
@@ -109,8 +111,6 @@ export const handleErrors = (
 
   errorLogger.error('no operational', err);
   return res.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
-    error: [
-      new ApiError(err.message || 'Something went wrong on server, try later.'),
-    ],
+    error: [new ApiError('Something went wrong on server, try later.')],
   });
 };

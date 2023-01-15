@@ -1,13 +1,16 @@
-import { Button, Input, Link, TextArea } from '@/shared/ui';
+import { Button, Input, InputCurrency, Link, TextArea } from '@/shared/ui';
 import { ValidationError } from '@tipdapp/server';
 import { useFormik } from 'formik';
 import { z } from 'zod';
 
-const initialValues = { nick: '', message: '', token: null, amount: 0 };
+const initialValues = { nick: '', message: '', token: null, amount: '' };
 
 const fieldValidation = z.object({
   nick: z.string().min(3, 'Nick to short'),
   message: z.string().min(3, 'Message to short').max(220, 'Message to long'),
+  amount: z
+    .string()
+    .regex(new RegExp('(?!0)\\d+', 'g'), { message: 'Wrong tip amount' }),
 });
 
 export const TipForm = () => {
@@ -16,9 +19,6 @@ export const TipForm = () => {
   const formik = useFormik({
     initialValues,
     onSubmit: async (values) => {
-      // console.log(values);
-
-      // if (!Object.keys(formik.errors).length) {
       try {
         fieldValidation.parse(values);
       } catch (error: any) {
@@ -46,10 +46,19 @@ export const TipForm = () => {
             onChange={formik.handleChange}
           />
           <TextArea
+            label="Message"
             id="message"
             name="message"
             error={formik.errors.message}
             value={formik.values.message}
+            onChange={formik.handleChange}
+          />
+          <InputCurrency
+            label="Amount"
+            id="amount"
+            name="amount"
+            error={formik.errors.amount}
+            value={formik.values.amount}
             onChange={formik.handleChange}
           />
           chose token type amouint
