@@ -2,7 +2,7 @@
   "name": "@tipdapp/server",
   "author": "Antek Kois",
   "license": "MIT",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Types from Prisma for models and other shared code to my web3 app",
   "main": "lib/cjs/package.js",
   "module": "lib/esm/package.js",

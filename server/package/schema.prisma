@@ -43,8 +43,8 @@ model User {
   allWithdrawsValue      Decimal                 @default(0) @db.Decimal(78, 0)
   roles                  Role[]                  @default([streamer, tipper])
   activeRole             Role                    @default(tipper)
-  avatar                 File?                   @relation(fields: [avatarId], references: [id])
-  avatarId               String?
+  avatar                 File?                   @relation(fields: [avatarUrl], references: [url])
+  avatarUrl              String?
   witdraws               Withdraw[]
   userToken              UserToken?
   tips                   Tip[]
@@ -100,8 +100,8 @@ model Page {
   role        Role
   affixUrl    String    @unique @db.VarChar(60)
   description String?   @default("") @db.VarChar(200)
-  baner       File?     @relation(fields: [banerId], references: [id])
-  banerId     String?
+  baner       File?     @relation(fields: [banerUrl], references: [url])
+  banerUrl    String?
   streamer    Streamer?
 
   @@id([role, affixUrl])
@@ -166,8 +166,8 @@ model Token {
   symbol          String    @unique
   name            String    @unique
   chainId         Int
-  image           File?     @relation(fields: [imageId], references: [id])
-  imageId         String?
+  image           File     @relation(fields: [imageUrl], references: [url])
+  imageUrl        String
   latestPrice     Decimal?  @db.Decimal(78, 0)
   priceUpdateAt   DateTime?
   streamer        Streamer? @relation(fields: [streamerAddress], references: [address])
@@ -184,10 +184,17 @@ model Withdraw {
   userAddress String?  @db.VarChar(42)
 }
 
+enum Extension {
+  png
+  jpeg
+  jpg
+}
+
 model File {
-  id        String  @id @default(cuid())
+  // id        String  @id @default(cuid())
+  url       String    @id
   filename  String
-  extension String
+  extension Extension
   user      User[]
   token     Token[]
   page      Page[]
