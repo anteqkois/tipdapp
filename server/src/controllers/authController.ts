@@ -390,6 +390,7 @@ const refreshToken = async (req: Request, res: Response) => {
         .json({ message: 'Token was successfully refreshed.' });
     } catch (error) {
       res.cookie('authStatus', 'unauthenticated');
+      userService.removeSession({ ip: req.ip });
       createApiError('Refresh token is stale', StatusCodes.BAD_REQUEST);
     }
   }

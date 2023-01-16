@@ -32,10 +32,12 @@ export default function Page({ params }: Props) {
               alt="user baner"
               fill={true}
             />
+          </div>
+          <div className="flex items-center justify-center -mt-20">
             <Avatar
               avatar={user.avatar}
               address={user.address}
-              className="!w-20 !h-20 border-[6px] border-neutral-50 bottom-0 right-1/2 translate-x-1/2 translate-y-1/2"
+              className="!w-20 !h-20 outline outline-8 outline-neutral-50"
             />
           </div>
           <h2 className="text-center p-2">{user.nick}</h2>

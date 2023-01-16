@@ -184,11 +184,17 @@ model Withdraw {
   userAddress String?  @db.VarChar(42)
 }
 
+enum Extension {
+  png
+  jpeg
+  jpg
+}
+
 model File {
   // id        String  @id @default(cuid())
-  url       String  @id @default(cuid())
+  url       String    @id
   filename  String
-  extension String
+  extension Extension
   user      User[]
   token     Token[]
   page      Page[]

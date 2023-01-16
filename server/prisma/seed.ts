@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
 import client from '@prisma/client';
+import coins from './tokens.json';
 // import * as runtime from '@prisma/client/runtime/index.js';
 const { PrismaClient } = client;
-// const { Decimal } = runtime;
 
 const prisma = new PrismaClient();
 
@@ -57,15 +57,26 @@ async function main() {
   console.log('Create user:', user);
 
   //create cryptocurenncy
-  const sand = await prisma.token.create({
-    data: {
-      address: ADDRESS_SAND,
-      chainId: 1,
-      name: 'SAND',
-      symbol: 'SAND',
-    },
-  });
-  console.log('Create SAND:', sand);
+  coins.forEach(
+    async ({ address, chainId, imageUrl, latestPrice, name, symbol }) => {
+      await prisma.token.create({
+        data: {
+          address: address,
+          chainId: chainId,
+          name: name,
+          symbol: symbol,
+          latestPrice: latestPrice,
+          image: {
+            create: {
+              url: imageUrl,
+              extension: 'png',
+              filename: symbol,
+            },
+          },
+        },
+      });
+    }
+  );
 
   await prisma.user.create({
     data: {
@@ -176,16 +187,6 @@ async function main() {
             address: userToken.address,
           },
         },
-
-        // token:
-        // txHash: '0xd12ac901ac86f1856839019bd4d031c9929bafd4',
-        // displayed: false,
-        // amount: '900000000000000000000',
-        // value: '562000000000000000000',
-        // message: 'New wallet !',
-        // userAddress: '0x3665b77813a64c48b700bd45dcb9998ddf7b6d63',
-        // tokenAddress: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
-        // tipperAddress: '0xfdacb27dc605f21255108d4895bb91701a2c26cd',
       },
     });
   }

@@ -1,6 +1,7 @@
 import { Button, Input, InputCurrency, Link, TextArea } from '@/shared/ui';
 import { ValidationError } from '@tipdapp/server';
 import { useFormik } from 'formik';
+import Image from 'next/image';
 import { z } from 'zod';
 
 const initialValues = { nick: '', message: '', token: null, amount: '' };
@@ -53,6 +54,7 @@ export const TipForm = () => {
             value={formik.values.message}
             onChange={formik.handleChange}
           />
+          chose token
           <InputCurrency
             label="Amount"
             id="amount"
@@ -61,7 +63,12 @@ export const TipForm = () => {
             value={formik.values.amount}
             onChange={formik.handleChange}
           />
-          chose token type amouint
+          <Image
+            alt="btc"
+            src={`/token/btc.png`}
+            width={100}
+            height={100}
+          />
         </div>
         <Button
           type="submit"

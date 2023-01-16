@@ -1,4 +1,4 @@
-import { DecodedUser, mockDecodedUser } from '@types';
+import { DecodedUser } from '@types';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
@@ -24,6 +24,7 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
     req.user = decoded;
     next();
   } catch (error) {
+    // TODO! logot user
     createApiError(`Invalid authentication token.`, StatusCodes.BAD_REQUEST);
   }
 

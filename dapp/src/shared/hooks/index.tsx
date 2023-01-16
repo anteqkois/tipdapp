@@ -8,3 +8,4 @@ export { useMediaQuery } from './useMediaQuery';
 export { ModalProvider, useModal } from './useModal';
 export { useTimeout } from './useTimeout';
 export { useConfirmationToast} from './useConfirmationToast';
+export { useSelect } from './useSelectDEPRECATED';

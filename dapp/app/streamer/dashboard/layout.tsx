@@ -19,7 +19,8 @@ export default function RootLayout({ children }: Props) {
         <Avatar
           avatar={user?.avatar}
           address={user?.address}
-          className="!w-14"
+          // className="!w-14"
+          className="w-14"
         />
         <div>
           <h5 className="mb-1">
