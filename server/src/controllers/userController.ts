@@ -56,6 +56,4 @@ const find = async (
   }
 };
 
-const userController = { findByNick, find };
-
-export { userController };
+export const userController = { findByNick, find };

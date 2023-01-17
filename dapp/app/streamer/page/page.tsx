@@ -1,6 +1,7 @@
 'use client';
 import { update } from '@/api/page';
 import { SelectTokens } from '@/modules/Token/components/SelectTokens';
+import { useTokenFind } from '@/modules/Token/hooks/useTokenQuery';
 import { Button, Card, Input, Link, Tooltip } from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
 import {
@@ -16,16 +17,18 @@ import toast from 'react-hot-toast';
 //TODO? use page to be ability in future to change this element by user(for example can change to show default top tiper)
 const Page = () => {
   const { user } = useUser();
-  // const [SelectRoot, SelectTrigger, SelectItem] = useSelect();
-  // const [Select] = useSelect();
+  const { data } = useTokenFind();
 
   const formik = useFormik({
     initialValues: {
       // baner/themecolor/link to yt.../display total supply of token/link to etherscan token
       affixUrl: user?.streamer?.page?.affixUrl ?? '',
       description: user?.streamer?.page?.description ?? '',
+      tokens: null,
     },
-    onSubmit: async (values: PageValidation.Update) => {
+    // onSubmit: async (values: PageValidation.Update) => {
+    onSubmit: async (values:any) => {
+      console.log(values);
       if (!Object.keys(formik.errors).length) {
         try {
           pageValidation.updateParse(values);
@@ -47,7 +50,6 @@ const Page = () => {
   return (
     <section>
       <Card className="grid">
-        <SelectTokens/>
         <form onSubmit={formik.handleSubmit}>
           <Link href={`streamer/${user?.streamer?.page?.affixUrl}`}>
             <h6 className="p-1"> See your page</h6>
@@ -57,7 +59,7 @@ const Page = () => {
               <Input
                 id="affixUrl"
                 name="affixUrl"
-                label="URL of your side"
+                label="URL of your side (Url editing isn't avaible now.)"
                 type="text"
                 className="pl-52"
                 disabled={true}
@@ -100,15 +102,18 @@ const Page = () => {
               {formik.errors.description && `* ${formik.errors.description}`}
             </p>
           </div>
-          {/* <Checkbox.Root
-            className="CheckboxRoot"
-            defaultChecked
-            id="c1"
-          >
-            <Checkbox.Indicator className="CheckboxIndicator">
-              <CheckIcon />
-            </Checkbox.Indicator>
-          </Checkbox.Root> */}
+          {data?.tokens && (
+            <SelectTokens
+              label="Select the ERC20 tokens that will be available for tipping:"
+              id="tokens"
+              tokens={data?.tokens}
+              isMulti
+              name="tokens"
+              onChange={formik.handleChange}
+              value={formik.values.tokens}
+              error={formik.errors.tokens}
+            />
+          )}
           <label
             className="Label"
             htmlFor="c1"

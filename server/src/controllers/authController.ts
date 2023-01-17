@@ -396,7 +396,7 @@ const refreshToken = async (req: Request, res: Response) => {
   }
 };
 
-export {
+export const authController = {
   validate,
   createNonce,
   verifyMessageAndLogin,

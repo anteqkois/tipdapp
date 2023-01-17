@@ -166,8 +166,8 @@ model Token {
   symbol          String    @unique
   name            String    @unique
   chainId         Int
-  image           File     @relation(fields: [imageUrl], references: [url])
-  imageUrl        String
+  image           File?     @relation(fields: [imageUrl], references: [url])
+  imageUrl        String?
   latestPrice     Decimal?  @db.Decimal(78, 0)
   priceUpdateAt   DateTime?
   streamer        Streamer? @relation(fields: [streamerAddress], references: [address])

@@ -1,11 +1,10 @@
 import { catchAsyncErrors } from '@middlewares/handleError';
 import { Router } from 'express';
-import { tipController } from '../controllers/tipController';
+import { tokenController } from '../controllers/tokenController';
 
 const router = Router();
 //GET
-// router.get('/', verifyJWT, catchAsyncErrors(findByUseraddress));
 
 //TODO change to use find with queryParams
-router.get('/', catchAsyncErrors(tipController.findByAddress));
+router.get('/', catchAsyncErrors(tokenController.find));
 export default router;

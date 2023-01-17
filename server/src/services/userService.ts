@@ -162,7 +162,7 @@ const findByRefreshToken = async ({
   });
 };
 
-const userService = {
+export const userService = {
   createSession,
   removeSession,
   createStreamer,
@@ -173,4 +173,3 @@ const userService = {
   addRefreshToken,
   removeRefreshToken,
 };
-export { userService };

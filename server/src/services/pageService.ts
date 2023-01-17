@@ -25,5 +25,4 @@ const update = async (updateArgs: Prisma.PageUpdateManyArgs) => {
 //   });
 // };
 
-const pageService = { find, update };
-export { pageService };
+export const pageService = { find, update };

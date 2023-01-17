@@ -40,8 +40,4 @@ const create = async (req: Request, res: Response) => {
   return res.status(200).send({ token });
 };
 
-export { find, create };
-export default {
-  find,
-  create,
-};
+export const userTokenController =  { find, create };

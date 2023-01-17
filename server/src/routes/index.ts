@@ -3,6 +3,7 @@ import { verifyJWT } from '../middlewares/verifyJWT';
 import authorizationRoutes from './authRouter';
 import pageRoutes from './pageRouter';
 import tipRoutes from './tipRouter';
+import tokenRoutes from './tokenRouter';
 import userRoutes from './userRouter';
 import userTokenRoutes from './userTokenRouter';
 
@@ -17,6 +18,8 @@ router.use('/page', pageRoutes);
 router.use('/user', userRoutes);
 
 router.use('/tip', verifyJWT, tipRoutes);
+
+router.use('/token', tokenRoutes);
 
 router.use('/userToken', verifyJWT, userTokenRoutes);
 

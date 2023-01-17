@@ -27,7 +27,7 @@ export const Input = ({
   return (
     <div className="my-3">
       <label
-        htmlFor={label}
+        htmlFor={id}
         className="block mb-2 ml-1 text-sm font-medium text-neutral-800 first-letter:uppercase"
       >
         {label}

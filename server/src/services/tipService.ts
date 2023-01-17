@@ -32,5 +32,4 @@ const count = async (data: Prisma.TipWhereInput) => {
   });
 };
 
-const tipService = { findMany, count };
-export { tipService };
+export const tipService = { findMany, count };

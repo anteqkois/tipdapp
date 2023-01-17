@@ -32,7 +32,4 @@ const findByAddress = async (
   }
 };
 
-export { findByAddress };
-export default {
-  findByAddress,
-};
+export const tipController = { findByAddress };
