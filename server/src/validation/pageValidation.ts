@@ -1,17 +1,18 @@
 import { validationHelper, z } from '../config/zod';
 
-const update = z.object({
-  affixUrl: z
-    .string()
-    .min(3, { message: 'Url page must have 3 or more characters.' })
-    .max(30, { message: 'Url can be up to 20 characters long.' }),
-    // .optional(),
+export const update = z.object({
+  // affixUrl: z
+  //   .string()
+  //   .min(3, 'Url page must have 3 or more characters.')
+  //   .max(30, 'Url can be up to 20 characters long.'),
+  // .optional(),
   description: z
     .string()
-    .min(20, { message: 'Description page must have 20 or more characters.' })
-    .max(200, { message: 'Url can be up to 200 characters long.' }),
-    // .optional(),
-  banerId: z.string().min(1, { message: 'Wrong file.' }).optional(),
+    .min(20, 'Description page must have 20 or more characters.')
+    .max(200, 'Url can be up to 200 characters long.'),
+  // .optional(),
+  tokens: z.array(z.string()).min(1, 'At least one token must be selected.'),
+  // banerId: z.string().min(1, { message: 'Wrong file.' }).optional(),
 });
 
 const updateParse = (data: PageValidation.Update) =>

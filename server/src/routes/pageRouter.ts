@@ -1,4 +1,6 @@
 import { catchAsyncErrors } from '@middlewares/handleError';
+import { verifyJWT } from '@middlewares/verifyJWT';
+import { verifyRoles } from '@middlewares/verifyRoles';
 import { Router } from 'express';
 import { pageController } from '../controllers/pageController';
 // import { findPage, updatePage } from '../controllers/userController';
@@ -12,12 +14,12 @@ router.get(
 );
 
 //PUT
-// router.put(
-//   '/',
-//   verifyJWT,
-//   verifyRoles('streamer'),
-//   catchAsyncErrors(pageController.update)
-// );
+router.put(
+  '/',
+  verifyJWT,
+  verifyRoles('streamer'),
+  catchAsyncErrors(pageController.update)
+);
 
 //POST
 

@@ -15,8 +15,9 @@ const find = async (data: Prisma.PageFindFirstArgs) => {
 //   return await prisma.page.findMany({ where });
 // };
 
-const update = async (updateArgs: Prisma.PageUpdateManyArgs) => {
-  return prisma.page.updateMany(updateArgs);
+const update = async (updateArgs: Prisma.PageUpdateArgs) => {
+  return await prisma.page.update(updateArgs);
+  // return prisma.page.updateMany(updateArgs);
 };
 
 // const create = async (data: Prisma.UserTokenCreateInput) => {

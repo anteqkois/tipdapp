@@ -38,9 +38,9 @@ const find = async (data: Prisma.UserFindFirstArgs) => {
     where: data.where,
     include: {
       avatar: true,
-      // streamer: { include: { page: true } },
+      streamer: { include: { page: true } },
+      userToken: true,
       // tipper: true,
-      // userToken: true,
       ...data.include,
       // token: {
       //   select: {
@@ -99,7 +99,7 @@ const createSession = async ({
 };
 
 const removeSession = async (where: Prisma.SessionWhereInput) => {
-  await prisma.session.deleteMany({where})
+  await prisma.session.deleteMany({ where });
   // await prisma.session.delete({ where });
 };
 

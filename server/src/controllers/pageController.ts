@@ -3,6 +3,7 @@ import { pageService } from '@services/pageService';
 import { userService } from '@services/userService';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { Prisma } from '../../package/lib/esm/package';
 import { PageApi, pageApi } from '../validation/pageApi';
 
 const findByAffixUrl = async (
@@ -43,27 +44,48 @@ const findByAffixUrl = async (
   }
 };
 
-// const update = async (req: Request, res: Response) => {
-//   // const
-//   const parsedData = pageValidation.updateParse(req.body);
+const update = async (req: Request<PageApi.Update.Params>, res: Response) => {
+  // const
+  // const parsedData = pageValidation.updateParse(req.body);
+  const parsedParams = pageApi.update.params.parse(req.params);
 
-//   //! TODO implement role based auth
-//   switch (req.user.activeRole) {
-//     case 'streamer':
-//       await pageService.update({
-//         where: { streamer: { some: { address: req.user.address } } },
-//         data: parsedData,
-//       });
-//       break;
-//     default:
-//       createApiError(
-//         "Change active role. The currently selected can't have a page",
-//         StatusCodes.FORBIDDEN
-//       );
-//       break;
-//   }
+  const arrayOfObjectWithTokenNames = parsedParams.tokens.map((token) => ({
+    name: token,
+  })) as Prisma.TokenWhereUniqueInput;
 
-//   res.status(StatusCodes.CREATED).send({ message: 'Page was updated' });
-// };
+  await pageService.update({
+    where: {
+      role_affixUrl: { affixUrl: req.user.nick, role: req.user.activeRole },
+    },
+    data: {
+      description: parsedParams.description,
+      streamer: {
+        update: {
+          activeTokens: {
+            connect: [arrayOfObjectWithTokenNames],
+          },
+        },
+      },
+    },
+  });
 
-export const pageController = { findByAffixUrl };
+  // //! TODO implement role based auth
+  // switch (req.user.activeRole) {
+  //   case 'streamer':
+  //     await pageService.update({
+  //       where: { streamer: { some: { address: req.user.address } } },
+  //       data: parsedData,
+  //     });
+  //     break;
+  //   default:
+  //     createApiError(
+  //       "Change active role. The currently selected can't have a page",
+  //       StatusCodes.FORBIDDEN
+  //     );
+  //     break;
+  // }
+
+  res.status(StatusCodes.CREATED).send({ message: 'Page was updated' });
+};
+
+export const pageController = { findByAffixUrl, update };

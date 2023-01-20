@@ -1,40 +1,133 @@
-import { Token } from '@tipdapp/server';
+import { FormikErrors } from 'formik';
 import Image from 'next/image';
-import { InputHTMLAttributes, useMemo } from 'react';
 import ReactSelect, {
   components,
   InputProps,
+  MultiValue,
   MultiValueGenericProps,
   OptionProps,
+  SingleValue,
   SingleValueProps,
 } from 'react-select';
+import { StateManagerProps } from 'react-select/dist/declarations/src/useStateManager';
 
-type Props = InputHTMLAttributes<HTMLInputElement> & {
-  tokens: Token[];
+// type Props = InputHTMLAttributes<HTMLInputElement> & {
+//   tokens: Token[];
+//   label: string;
+//   maxMenuHeight?: number;
+//   // id: string;
+//   name: string;
+//   isMulti?: boolean;
+// };
+
+type MyOption = {
+  name: string;
+  imageUrl: string | null;
+  symbol: string;
+  value: string;
+};
+
+type GroupedOption = {
+  label: string; // group label
+  options: MyOption[];
+};
+// component props
+type Props = {
+  name: string;
+  error?: string;
+  setFieldValue: (
+    field: string,
+    value: any,
+    shouldValidate?: boolean | undefined
+  ) =>
+    | Promise<void>
+    | Promise<
+        FormikErrors<{
+          affixUrl: string;
+          description: string;
+          tokens: null;
+        }>
+      >;
   label: string;
-  // id: string;
-  // name:
-  isMulti?: boolean;
-} 
+} & Omit<
+  StateManagerProps<MyOption, false | true, GroupedOption>,
+  'value' | 'onChange'
+>;
 
-export const SelectTokens = ({ tokens, label, id,name, onChange, value, isMulti = false }: Props) => {
-  type Option = typeof options[0];
-  const options = useMemo(
-    () =>
-      tokens.map((token) => ({
-        name: token.name,
-        imageUrl: token.imageUrl,
-        symbol: token.symbol,
-        value: token.symbol,
-      })),
-    [tokens]
-  );
+export const SelectTokens = ({
+  label,
+  error,
+  setFieldValue,
+  id,
+  name,
+  options,
+  maxMenuHeight = 220,
+  isMulti = false,
+}: Props) => {
+  type Option = MyOption;
+
+  // const [field, meta, helpers] = useField(name);
+  // const { setValue } = helpers;
+
+  // const options = useMemo(
+  //   () =>
+  //     tokens.map((token) => ({
+  //       name: token.name,
+  //       imageUrl: token.imageUrl,
+  //       symbol: token.symbol,
+  //       value: token.symbol,
+  //     })),
+  //   [tokens]
+  // );
+  //flatten the options so that it will be easier to find the value
+  const flattenedOptions = options?.flatMap((o) => {
+    const isNotGrouped = 'value' in o;
+    if (isNotGrouped) {
+      return o;
+    } else {
+      return o.options;
+    }
+  });
+
+  //get the value using flattenedOptions and field.value
+  // const value = flattenedOptions?.filter((o) => {
+  //   const isArrayValue = Array.isArray(field.value);
+  //   if (isArrayValue) {
+  //     const values = field.value as Array<any>;
+  //     return values.includes(o.value);
+  //   } else {
+  //     return field.value === o.value;
+  //   }
+  // });
+
+  const onChangeSelect = (
+    newValue: SingleValue<MyOption> | MultiValue<MyOption>
+  ) => {
+    //here I used explicit typing but there maybe a better way to type the value.
+    if (newValue) {
+      //is single value
+      if ('value' in newValue) {
+        setFieldValue(name, newValue.value);
+      } else {
+        const values = newValue.map((o) => o.value);
+        setFieldValue(name, values);
+      }
+      // const isArray = Array.isArray(val);
+      // if (isArray) {
+      //   const values = val.map((o) => o.value);
+      //   setFieldValue(name, values);
+      // } else {
+      //   setFieldValue(name, val.value);
+      // }
+    }
+  };
+
   const CustomOption = ({
     innerProps,
     isDisabled,
     children,
     data,
-  }: OptionProps<Option>) => {
+  }: OptionProps<Option, true | false, GroupedOption>) => {
     return !isDisabled ? (
       <div
         {...innerProps}
@@ -55,7 +148,9 @@ export const SelectTokens = ({ tokens, label, id,name, onChange, value, isMulti 
     ) : null;
   };
 
-  const CustomMultiValueLabel = (props: MultiValueGenericProps<Option>) => {
+  const CustomMultiValueLabel = (
+    props: MultiValueGenericProps<Option, true | false, GroupedOption>
+  ) => {
     return (
       <span className="flex items-center gap-1 pl-1">
         <Image
@@ -74,7 +169,7 @@ export const SelectTokens = ({ tokens, label, id,name, onChange, value, isMulti 
     children,
     data,
     ...props
-  }: SingleValueProps<Option>) => {
+  }: SingleValueProps<Option, true | false, GroupedOption>) => {
     // console.log(data);
     return (
       <components.SingleValue
@@ -97,7 +192,9 @@ export const SelectTokens = ({ tokens, label, id,name, onChange, value, isMulti 
     );
   };
 
-  const CustomInput = (props: InputProps<Option>) => {
+  const CustomInput = (
+    props: InputProps<Option, true | false, GroupedOption>
+  ) => {
     if (props.isHidden) {
       return <components.Input {...props} />;
     }
@@ -122,8 +219,6 @@ export const SelectTokens = ({ tokens, label, id,name, onChange, value, isMulti 
       <ReactSelect
         inputId={id}
         name={name}
-        // value={value}
-
         placeholder=""
         components={{
           Option: CustomOption,
@@ -131,7 +226,11 @@ export const SelectTokens = ({ tokens, label, id,name, onChange, value, isMulti 
           SingleValue: CustomSingleValue,
           MultiValueLabel: CustomMultiValueLabel,
         }}
-        maxMenuHeight={220}
+        onChange={onChangeSelect}
+        // onChange={(selectedOption) =>
+        //   selectedOption?.value && setFieldValue('fieldName', selectedOption.value)
+        // }
+        maxMenuHeight={maxMenuHeight}
         options={options}
         isMulti={isMulti}
         styles={{
@@ -154,6 +253,7 @@ export const SelectTokens = ({ tokens, label, id,name, onChange, value, isMulti 
         }}
         closeMenuOnSelect={false}
       />
+      <p className="text-danger-600 min-h-[24px]">{error && `* ${error}`}</p>
     </>
   );
 };

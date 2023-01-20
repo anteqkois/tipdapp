@@ -6,18 +6,30 @@ import { Button, Card, Input, Link, Tooltip } from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
 import {
   isValidationError,
-  PageValidation,
   pageValidation,
   ValidationError,
 } from '@tipdapp/server';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
+import { useMemo } from 'react';
 import toast from 'react-hot-toast';
 
 //TODO? use page to be ability in future to change this element by user(for example can change to show default top tiper)
 const Page = () => {
   const { user } = useUser();
   const { data } = useTokenFind();
+
+  const tokensToSelect = useMemo(
+    () =>
+      data?.tokens &&
+      data.tokens.map((token) => ({
+        name: token.name,
+        imageUrl: token.imageUrl,
+        symbol: token.symbol,
+        value: token.symbol,
+      })),
+    [data?.tokens]
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -27,7 +39,7 @@ const Page = () => {
       tokens: null,
     },
     // onSubmit: async (values: PageValidation.Update) => {
-    onSubmit: async (values:any) => {
+    onSubmit: async (values: any) => {
       console.log(values);
       if (!Object.keys(formik.errors).length) {
         try {
@@ -47,6 +59,7 @@ const Page = () => {
     },
   });
 
+  formik.setFieldValue;
   return (
     <section>
       <Card className="grid">
@@ -102,15 +115,18 @@ const Page = () => {
               {formik.errors.description && `* ${formik.errors.description}`}
             </p>
           </div>
-          {data?.tokens && (
+          {tokensToSelect && (
             <SelectTokens
               label="Select the ERC20 tokens that will be available for tipping:"
               id="tokens"
-              tokens={data?.tokens}
+              // tokens={data?.tokens}
+              // options={tokensToSelect}
+              options={tokensToSelect}
               isMulti
               name="tokens"
-              onChange={formik.handleChange}
-              value={formik.values.tokens}
+              setFieldValue={formik.setFieldValue}
+              // onChange={formik.handleChange}
+              // value={formik.values.tokens}
               error={formik.errors.tokens}
             />
           )}

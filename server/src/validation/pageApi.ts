@@ -1,5 +1,6 @@
 import { Role } from '@prisma/client';
 import { z } from '../config/zod';
+import { update as _update } from './pageValidation';
 import { transformApiInclude } from './utils';
 
 const pageInclude = z
@@ -11,9 +12,11 @@ const findByAffixUrl = {
     affixUrl: z.string(),
     role: z.nativeEnum(Role),
   }),
-  query: z.object({
-    include: pageInclude.optional(),
-  }).optional(),
+  query: z
+    .object({
+      include: pageInclude.optional(),
+    })
+    .optional(),
 };
 
 const find = {
@@ -21,6 +24,10 @@ const find = {
     nick: z.string(),
     include: pageInclude,
   }),
+};
+
+const update = {
+  params: _update,
 };
 
 export namespace PageApi {
@@ -31,9 +38,13 @@ export namespace PageApi {
   export namespace Find {
     export type Query = z.input<typeof find.query>;
   }
+  export namespace Update {
+    export type Params = z.input<typeof update.params>;
+  }
 }
 
 export const pageApi = {
   findByAffixUrl,
   find,
+  update
 };

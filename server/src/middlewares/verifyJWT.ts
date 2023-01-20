@@ -1,3 +1,4 @@
+import { userService } from '@services/userService';
 import { DecodedUser } from '@types';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -25,6 +26,7 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
     next();
   } catch (error) {
     // TODO! logot user
+    userService.removeSession({ ip: req.ip });
     createApiError(`Invalid authentication token.`, StatusCodes.BAD_REQUEST);
   }
 
