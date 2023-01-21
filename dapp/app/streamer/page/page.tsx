@@ -7,7 +7,7 @@ import { useUser } from '@/shared/User/hooks/useUser';
 import {
   isValidationError,
   pageValidation,
-  ValidationError,
+  ValidationError
 } from '@tipdapp/server';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
@@ -36,6 +36,7 @@ const Page = () => {
       // baner/themecolor/link to yt.../display total supply of token/link to etherscan token
       affixUrl: user?.streamer?.page?.affixUrl ?? '',
       description: user?.streamer?.page?.description ?? '',
+      // tokens: [],
       tokens: null,
     },
     // onSubmit: async (values: PageValidation.Update) => {

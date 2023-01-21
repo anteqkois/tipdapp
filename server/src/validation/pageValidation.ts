@@ -11,7 +11,11 @@ export const update = z.object({
     .min(20, 'Description page must have 20 or more characters.')
     .max(200, 'Url can be up to 200 characters long.'),
   // .optional(),
-  tokens: z.array(z.string()).min(1, 'At least one token must be selected.'),
+  tokens: z
+    .array(z.string(), {
+      required_error: 'At least one token must be selected.',
+    })
+    .min(1, 'At least one token must be selected.'),
   // banerId: z.string().min(1, { message: 'Wrong file.' }).optional(),
 });
 

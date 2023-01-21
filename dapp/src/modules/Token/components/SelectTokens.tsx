@@ -1,5 +1,6 @@
 import { FormikErrors } from 'formik';
 import Image from 'next/image';
+import { useState } from 'react';
 import ReactSelect, {
   components,
   InputProps,
@@ -11,16 +12,7 @@ import ReactSelect, {
 } from 'react-select';
 import { StateManagerProps } from 'react-select/dist/declarations/src/useStateManager';
 
-// type Props = InputHTMLAttributes<HTMLInputElement> & {
-//   tokens: Token[];
-//   label: string;
-//   maxMenuHeight?: number;
-//   // id: string;
-//   name: string;
-//   isMulti?: boolean;
-// };
-
-type MyOption = {
+type TokenOption = {
   name: string;
   imageUrl: string | null;
   symbol: string;
@@ -28,10 +20,10 @@ type MyOption = {
 };
 
 type GroupedOption = {
-  label: string; // group label
-  options: MyOption[];
+  label: string;
+  options: TokenOption[];
 };
-// component props
+
 type Props = {
   name: string;
   error?: string;
@@ -50,7 +42,7 @@ type Props = {
       >;
   label: string;
 } & Omit<
-  StateManagerProps<MyOption, false | true, GroupedOption>,
+  StateManagerProps<TokenOption, false | true, GroupedOption>,
   'value' | 'onChange'
 >;
 
@@ -64,46 +56,12 @@ export const SelectTokens = ({
   maxMenuHeight = 220,
   isMulti = false,
 }: Props) => {
-  type Option = MyOption;
-
-  // const [field, meta, helpers] = useField(name);
-  // const { setValue } = helpers;
-
-  // const options = useMemo(
-  //   () =>
-  //     tokens.map((token) => ({
-  //       name: token.name,
-  //       imageUrl: token.imageUrl,
-  //       symbol: token.symbol,
-  //       value: token.symbol,
-  //     })),
-  //   [tokens]
-  // );
-  //flatten the options so that it will be easier to find the value
-  const flattenedOptions = options?.flatMap((o) => {
-    const isNotGrouped = 'value' in o;
-    if (isNotGrouped) {
-      return o;
-    } else {
-      return o.options;
-    }
-  });
-
-  //get the value using flattenedOptions and field.value
-  // const value = flattenedOptions?.filter((o) => {
-  //   const isArrayValue = Array.isArray(field.value);
-  //   if (isArrayValue) {
-  //     const values = field.value as Array<any>;
-  //     return values.includes(o.value);
-  //   } else {
-  //     return field.value === o.value;
-  //   }
-  // });
+  type Option = TokenOption;
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
 
   const onChangeSelect = (
-    newValue: SingleValue<MyOption> | MultiValue<MyOption>
+    newValue: SingleValue<TokenOption> | MultiValue<TokenOption>
   ) => {
-    //here I used explicit typing but there maybe a better way to type the value.
     if (newValue) {
       //is single value
       if ('value' in newValue) {
@@ -112,24 +70,19 @@ export const SelectTokens = ({
         const values = newValue.map((o) => o.value);
         setFieldValue(name, values);
       }
-      // const isArray = Array.isArray(val);
-      // if (isArray) {
-      //   const values = val.map((o) => o.value);
-      //   setFieldValue(name, values);
-      // } else {
-      //   setFieldValue(name, val.value);
-      // }
     }
   };
 
   const CustomOption = ({
     innerProps,
+    innerRef,
     isDisabled,
     children,
     data,
   }: OptionProps<Option, true | false, GroupedOption>) => {
     return !isDisabled ? (
       <div
+        ref={innerRef}
         {...innerProps}
         className="flex items-center gap-2 p-2 hover:bg-neutral-150 rounded cursor-pointer"
       >
@@ -148,20 +101,25 @@ export const SelectTokens = ({
     ) : null;
   };
 
-  const CustomMultiValueLabel = (
-    props: MultiValueGenericProps<Option, true | false, GroupedOption>
-  ) => {
+  const CustomMultiValueLabel = ({
+    data,
+    selectProps,
+  }: MultiValueGenericProps<Option, true | false, GroupedOption>) => {
     return (
-      <span className="flex items-center gap-1 pl-1">
+      <components.MultiValueLabel
+        data={data}
+        selectProps={selectProps}
+        innerProps={{ className: 'flex items-center gap-1 pl-1' }}
+      >
         <Image
           height={16}
           width={16}
           className="rounded-full"
-          alt={props.data.name}
-          src={props.data.imageUrl}
+          alt={data.name}
+          src={data.imageUrl}
         />
-        {props.data.symbol.toUpperCase()}
-      </span>
+        {data.symbol.toUpperCase()}
+      </components.MultiValueLabel>
     );
   };
 
@@ -170,7 +128,6 @@ export const SelectTokens = ({
     data,
     ...props
   }: SingleValueProps<Option, true | false, GroupedOption>) => {
-    // console.log(data);
     return (
       <components.SingleValue
         {...props}
@@ -199,12 +156,10 @@ export const SelectTokens = ({
       return <components.Input {...props} />;
     }
     return (
-      <div>
-        <components.Input
-          {...props}
-          inputClassName="focus-visible:ring-0"
-        />
-      </div>
+      <components.Input
+        {...props}
+        inputClassName="focus-visible:ring-0"
+      />
     );
   };
 
@@ -227,9 +182,6 @@ export const SelectTokens = ({
           MultiValueLabel: CustomMultiValueLabel,
         }}
         onChange={onChangeSelect}
-        // onChange={(selectedOption) =>
-        //   selectedOption?.value && setFieldValue('fieldName', selectedOption.value)
-        // }
         maxMenuHeight={maxMenuHeight}
         options={options}
         isMulti={isMulti}
@@ -249,8 +201,13 @@ export const SelectTokens = ({
               boxShadow: '0 0 0 3px rgb(168 85 247 / 0.75)',
             },
             boxShadow: 'none',
+            border: error && '1px solid #DC2626',
           }),
         }}
+        // openMenuOnFocus={true}
+        onFocus={() => setIsOpenMenu(true)}
+        onBlur={() => setIsOpenMenu(false)}
+        menuIsOpen={isOpenMenu}
         closeMenuOnSelect={false}
       />
       <p className="text-danger-600 min-h-[24px]">{error && `* ${error}`}</p>
