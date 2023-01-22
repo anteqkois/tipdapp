@@ -13,6 +13,7 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
       res.cookie('authStatus', 'unauthenticated', {
         maxAge: 60 * 60 * 1000,
       });
+    userService.removeSession({ ip: req.ip });
     createApiError(`You are not authorized.`, StatusCodes.UNAUTHORIZED);
   }
 
@@ -25,13 +26,13 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
     req.user = decoded;
     next();
   } catch (error) {
-    // TODO! logot user
     userService.removeSession({ ip: req.ip });
+    res.cookie('authStatus', 'unauthenticated', {
+      maxAge: 60 * 60 * 1000,
+    });
+    // res.redirect(process.env.FRONTEND_URL + '/login');
     createApiError(`Invalid authentication token.`, StatusCodes.BAD_REQUEST);
   }
-
-  // req.user = mockDecodedUser;
-  // next();
 };
 
 export { verifyJWT };

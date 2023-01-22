@@ -27,7 +27,7 @@ const find = {
 };
 
 const update = {
-  params: _update,
+  body: _update,
 };
 
 export namespace PageApi {
@@ -39,7 +39,7 @@ export namespace PageApi {
     export type Query = z.input<typeof find.query>;
   }
   export namespace Update {
-    export type Params = z.input<typeof update.params>;
+    export type Body = z.input<typeof update.body>;
   }
 }
 

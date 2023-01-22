@@ -38,7 +38,7 @@ const find = async (data: Prisma.UserFindFirstArgs) => {
     where: data.where,
     include: {
       avatar: true,
-      streamer: { include: { page: true } },
+      streamer: { include: { page: true, activeTokens: true } },
       userToken: true,
       // tipper: true,
       ...data.include,

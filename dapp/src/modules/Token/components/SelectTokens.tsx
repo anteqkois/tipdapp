@@ -1,6 +1,5 @@
 import { FormikErrors } from 'formik';
 import Image from 'next/image';
-import { useState } from 'react';
 import ReactSelect, {
   components,
   InputProps,
@@ -37,7 +36,7 @@ type Props = {
         FormikErrors<{
           affixUrl: string;
           description: string;
-          tokens: null;
+          tokens: [];
         }>
       >;
   label: string;
@@ -55,9 +54,10 @@ export const SelectTokens = ({
   options,
   maxMenuHeight = 220,
   isMulti = false,
+  ...rest
 }: Props) => {
   type Option = TokenOption;
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  // const [isOpenMenu, setIsOpenMenu] = useState(false);
 
   const onChangeSelect = (
     newValue: SingleValue<TokenOption> | MultiValue<TokenOption>
@@ -172,6 +172,7 @@ export const SelectTokens = ({
         {label}
       </label>
       <ReactSelect
+        {...rest}
         inputId={id}
         name={name}
         placeholder=""
@@ -205,9 +206,9 @@ export const SelectTokens = ({
           }),
         }}
         // openMenuOnFocus={true}
-        onFocus={() => setIsOpenMenu(true)}
-        onBlur={() => setIsOpenMenu(false)}
-        menuIsOpen={isOpenMenu}
+        // onFocus={() => setIsOpenMenu(true)}
+        // onBlur={() => setIsOpenMenu(false)}
+        // menuIsOpen={isOpenMenu}
         closeMenuOnSelect={false}
       />
       <p className="text-danger-600 min-h-[24px]">{error && `* ${error}`}</p>

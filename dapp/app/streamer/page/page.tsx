@@ -2,33 +2,42 @@
 import { update } from '@/api/page';
 import { SelectTokens } from '@/modules/Token/components/SelectTokens';
 import { useTokenFind } from '@/modules/Token/hooks/useTokenQuery';
-import { Button, Card, Input, Link, Tooltip } from '@/shared/ui';
+import { Button, Card, Input, Link, TextArea, Tooltip } from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
 import {
   isValidationError,
+  PageApi,
   pageValidation,
-  ValidationError
+  Token,
+  ValidationError,
 } from '@tipdapp/server';
-import classNames from 'classnames';
 import { useFormik } from 'formik';
 import { useMemo } from 'react';
 import toast from 'react-hot-toast';
 
+const formTokenOptions = (tokens: Token[]) =>
+  tokens.map((token) => ({
+    name: token.name,
+    imageUrl: token.imageUrl,
+    symbol: token.symbol,
+    value: token.symbol,
+  }));
+
 //TODO? use page to be ability in future to change this element by user(for example can change to show default top tiper)
 const Page = () => {
-  const { user } = useUser();
+  const { user, refreshUser } = useUser();
   const { data } = useTokenFind();
 
   const tokensToSelect = useMemo(
-    () =>
-      data?.tokens &&
-      data.tokens.map((token) => ({
-        name: token.name,
-        imageUrl: token.imageUrl,
-        symbol: token.symbol,
-        value: token.symbol,
-      })),
+    () => data?.tokens && formTokenOptions(data.tokens),
     [data?.tokens]
+  );
+
+  const initialTokens = useMemo(
+    () =>
+      user?.streamer.activeTokens &&
+      formTokenOptions(user.streamer.activeTokens),
+    [user?.streamer.activeTokens]
   );
 
   const formik = useFormik({
@@ -36,16 +45,15 @@ const Page = () => {
       // baner/themecolor/link to yt.../display total supply of token/link to etherscan token
       affixUrl: user?.streamer?.page?.affixUrl ?? '',
       description: user?.streamer?.page?.description ?? '',
-      // tokens: [],
-      tokens: null,
+      tokens: user?.streamer?.activeTokens.map((token) => token.symbol) || [],
     },
-    // onSubmit: async (values: PageValidation.Update) => {
-    onSubmit: async (values: any) => {
-      console.log(values);
+    onSubmit: async (values: PageApi.Update.Body) => {
       if (!Object.keys(formik.errors).length) {
         try {
           pageValidation.updateParse(values);
-          await update(values);
+          const { message } = await update(values);
+          refreshUser();
+          toast.success(message);
         } catch (error: any) {
           if (isValidationError(error[0])) {
             formik.setErrors(ValidationError.mapArrayByField(error));
@@ -60,7 +68,6 @@ const Page = () => {
     },
   });
 
-  formik.setFieldValue;
   return (
     <section>
       <Card className="grid">
@@ -89,46 +96,26 @@ const Page = () => {
               </span>
             </div>
           </Tooltip>
-          <div className="my-3">
-            <label
-              htmlFor="description"
-              className="block mb-2 text-sm font-medium text-neutral-800 first-letter:uppercase"
-            >
-              Description
-            </label>
-            <textarea
-              name="description"
-              id="description"
-              cols={30}
-              rows={10}
-              onChange={formik.handleChange}
-              className={classNames(
-                'block p-2 w-full resize-none bg-gray-50 rounded border',
-                [
-                  formik.errors.description
-                    ? 'border-danger-600'
-                    : 'border-neutral-300',
-                ],
-                'shadow-sm focus:outline-none focus:border-primary focus:ring focus:ring-primary-light focus:ring-opacity-50'
-              )}
-            ></textarea>
-            <p className="text-danger-600 min-h-[24px]">
-              {formik.errors.description && `* ${formik.errors.description}`}
-            </p>
-          </div>
+          <TextArea
+            label="Description:"
+            name="description"
+            id="description"
+            error={formik.errors.description}
+            value={formik.values.description}
+            cols={30}
+            rows={10}
+            onChange={formik.handleChange}
+          />
           {tokensToSelect && (
             <SelectTokens
               label="Select the ERC20 tokens that will be available for tipping:"
               id="tokens"
-              // tokens={data?.tokens}
-              // options={tokensToSelect}
               options={tokensToSelect}
               isMulti
               name="tokens"
+              defaultValue={initialTokens}
               setFieldValue={formik.setFieldValue}
-              // onChange={formik.handleChange}
-              // value={formik.values.tokens}
-              error={formik.errors.tokens}
+              error={formik.errors.tokens as string | undefined}
             />
           )}
           <label

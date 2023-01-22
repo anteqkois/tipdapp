@@ -44,7 +44,7 @@ export default function RootLayout({ children }: Props) {
       </Card>
       <Card className="text-center">
         <p className="text-4xl font-semibold text-secondary-600">92</p>
-        <h6>Tips tuday</h6>
+        <h6>Tips today</h6>
       </Card>
       <Card className="text-center">
         <p className="text-4xl font-semibold">13 078</p>

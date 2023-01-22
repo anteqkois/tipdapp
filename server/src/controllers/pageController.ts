@@ -1,4 +1,5 @@
 import { createApiError } from '@middlewares/error';
+import { Role } from '@prisma/client';
 import { pageService } from '@services/pageService';
 import { userService } from '@services/userService';
 import { Request, Response } from 'express';
@@ -22,13 +23,7 @@ const findByAffixUrl = async (
     where: {
       AND: [{ affixUrl: parsedParams.affixUrl }, { role: parsedParams.role }],
     },
-    // include:{'Streamer': true}
-    // include: { [t]: true },
-    // include: { [parsedParams.role]:  },
-    // include: { streamer: { include: { user: true, activeTokens: true } } },
     include: {
-      // [parsedParams.role]: { include: { user: true, activeTokens: true } },
-      // [parsedParams.role]: { include: { activeTokens: true } },
       [parsedParams.role]: true,
     },
   });
@@ -44,14 +39,18 @@ const findByAffixUrl = async (
   }
 };
 
-const update = async (req: Request<PageApi.Update.Params>, res: Response) => {
-  // const
-  // const parsedData = pageValidation.updateParse(req.body);
-  const parsedParams = pageApi.update.params.parse(req.params);
+const update = async (
+  req: Request<{}, {}, PageApi.Update.Body>,
+  res: Response
+) => {
+  const parsedParams = pageApi.update.body.parse(req.body);
 
-  const arrayOfObjectWithTokenNames = parsedParams.tokens.map((token) => ({
-    name: token,
-  })) as Prisma.TokenWhereUniqueInput;
+  const arrayOfObjectWithTokenNames = parsedParams.tokens.map(
+    (token) =>
+      ({
+        symbol: token,
+      } as Prisma.TokenWhereUniqueInput)
+  );
 
   await pageService.update({
     where: {
@@ -59,33 +58,21 @@ const update = async (req: Request<PageApi.Update.Params>, res: Response) => {
     },
     data: {
       description: parsedParams.description,
+      //TODO in future make it dynamic to update streamer, charity and other type users active tokens
       streamer: {
         update: {
           activeTokens: {
-            connect: [arrayOfObjectWithTokenNames],
+            set: arrayOfObjectWithTokenNames,
+            // connect: arrayOfObjectWithTokenNames,
           },
         },
       },
     },
   });
 
-  // //! TODO implement role based auth
-  // switch (req.user.activeRole) {
-  //   case 'streamer':
-  //     await pageService.update({
-  //       where: { streamer: { some: { address: req.user.address } } },
-  //       data: parsedData,
-  //     });
-  //     break;
-  //   default:
-  //     createApiError(
-  //       "Change active role. The currently selected can't have a page",
-  //       StatusCodes.FORBIDDEN
-  //     );
-  //     break;
-  // }
-
-  res.status(StatusCodes.CREATED).send({ message: 'Page was updated' });
+  res
+    .status(StatusCodes.CREATED)
+    .send({ message: 'Your page was successfully updated.' });
 };
 
 export const pageController = { findByAffixUrl, update };
