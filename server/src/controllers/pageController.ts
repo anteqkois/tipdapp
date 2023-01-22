@@ -72,7 +72,7 @@ const update = async (
 
   res
     .status(StatusCodes.CREATED)
-    .send({ message: 'Your page was successfully updated.' });
+    .send({ message: 'Your page was successfully updated' });
 };
 
 export const pageController = { findByAffixUrl, update };

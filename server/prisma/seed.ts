@@ -27,6 +27,8 @@ async function main() {
             create: {
               role: 'streamer',
               affixUrl: 'anteqkois',
+              description:
+                '(ZAYEBANE NA TESTY)\nSIEMANO TU DAMIANO!Darowizny stanowią dla mnie ogromne wsparcie. Świadczą o tym, że doceniasz moją pracę. Poza tym pomagają mi w opłacaniu rachunków. Dzięki Tobie mogę rozwijać swój kanał!Jeśli chcesz mi pomóc, dobrowolnie wpłacając kwotę w jakikolwiek z poniższych sposobów, to bądź świadomy, że jestem Ci mocno wdzięczny.Donejty nie podlegają zwrotom.',
             },
           },
         },

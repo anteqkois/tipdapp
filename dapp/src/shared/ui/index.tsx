@@ -2,6 +2,7 @@
 
 export { Button } from './Button';
 export { Card } from './Card';
+export { CheckBox } from './CheckBox';
 export { Close } from './Close';
 export { CustomConnectButton } from './CustomConnectButton';
 export * from './customToasts';
@@ -18,7 +19,7 @@ export { PageSpinner } from './PageSpinner';
 export { Spinner } from './Spinner';
 export { StateUI } from './StateUI';
 export { Stepper } from './Stepper';
-export { Tooltip } from './Tooltip';
 export { TextArea } from './TextArea';
+export { Tooltip } from './Tooltip';
 export { Verified } from './Verified';
 export { ViewOnExplorer } from './ViewOnExplorer';

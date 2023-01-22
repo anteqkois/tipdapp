@@ -9,7 +9,7 @@ export const update = z.object({
   description: z
     .string()
     .min(20, 'Description page must have 20 or more characters.')
-    .max(200, 'Url can be up to 200 characters long.'),
+    .max(500, 'Description can be up to 200 characters long.'),
   // .optional(),
   tokens: z
     .array(z.string(), {

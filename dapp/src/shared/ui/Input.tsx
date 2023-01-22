@@ -4,7 +4,7 @@ import { InputHTMLAttributes } from 'react';
 type Props = InputHTMLAttributes<HTMLInputElement> & {
   error?: string;
   label: string;
-  type: 'checkbox' | 'email' | 'number' | 'password' | 'range' | 'tel' | 'text';
+  type: 'email' | 'password' | 'range' | 'tel' | 'text';
   // type: Pick<
   //   HTMLInputTypeAttribute,
   //   'checkbox' | 'email' | 'number' | 'password' | 'range' | 'tel' | 'text'
@@ -28,7 +28,7 @@ export const Input = ({
     <div className="my-3">
       <label
         htmlFor={id}
-        className="block mb-2 ml-1 text-sm font-medium text-neutral-800 first-letter:uppercase"
+        className="block mb-2 ml-1 text-sm font-medium text-neutral-800 first-letter:uppercase cursor-pointer"
       >
         {label}
       </label>
@@ -53,5 +53,3 @@ export const Input = ({
     </div>
   );
 };
-
-export default Input;

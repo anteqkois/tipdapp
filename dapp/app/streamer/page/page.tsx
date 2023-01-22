@@ -2,7 +2,15 @@
 import { update } from '@/api/page';
 import { SelectTokens } from '@/modules/Token/components/SelectTokens';
 import { useTokenFind } from '@/modules/Token/hooks/useTokenQuery';
-import { Button, Card, Input, Link, TextArea, Tooltip } from '@/shared/ui';
+import {
+  Button,
+  Card,
+  CheckBox,
+  Input,
+  Link,
+  TextArea,
+  Tooltip,
+} from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
 import {
   isValidationError,
@@ -46,6 +54,7 @@ const Page = () => {
       affixUrl: user?.streamer?.page?.affixUrl ?? '',
       description: user?.streamer?.page?.description ?? '',
       tokens: user?.streamer?.activeTokens.map((token) => token.symbol) || [],
+      termsAndConditions: false,
     },
     onSubmit: async (values: PageApi.Update.Body) => {
       if (!Object.keys(formik.errors).length) {
@@ -118,15 +127,17 @@ const Page = () => {
               error={formik.errors.tokens as string | undefined}
             />
           )}
-          <label
-            className="Label"
-            htmlFor="c1"
-          >
-            Accept terms and conditions.
-          </label>
+          <CheckBox
+            label="Accept terms and conditions."
+            name="termsAndConditions"
+            id="termsAndConditions"
+            onChange={formik.handleChange}
+            checked={formik.values.termsAndConditions}
+          />
           <Button
-            className="mt-3"
             type="submit"
+            variant="success"
+            className='w-full'
           >
             Save
           </Button>
