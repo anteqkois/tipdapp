@@ -17,7 +17,6 @@ const findByNick = async (
       streamer: parsedQuery.include.streamer
         ? { include: { activeTokens: true, page: true } }
         : false,
-      tipper: parsedQuery.include.tipper,
       userToken: parsedQuery.include.userToken,
       tips: parsedQuery.include.tips,
     },
@@ -43,7 +42,6 @@ const find = async (
       streamer: parsedQuery.include.streamer
         ? { include: { activeTokens: true, page: true } }
         : false,
-      tipper: parsedQuery.include.tipper,
       userToken: parsedQuery.include.userToken,
       tips: parsedQuery.include.tips,
     },

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 type Props = {
   children: ReactNode;
-  className: string;
+  className?: string;
 };
 export const MainContainer = ({ children, className }: Props) => {
   return (

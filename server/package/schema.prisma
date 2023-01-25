@@ -88,10 +88,10 @@ model Streamer {
 }
 
 model Tipper {
-  user      User   @relation(fields: [address], references: [address])
-  address   String @id @db.VarChar(42)
-  nick      String @unique
-  tipsValue Int    @default(0)
+  user      User?   @relation(fields: [address], references: [address])
+  address   String  @id @db.VarChar(42)
+  nick      String? @unique
+  tipsValue Decimal @default(0) @db.Decimal(78, 0)
   tips      Tip[]
 }
 
@@ -99,7 +99,7 @@ model Page {
   //role/nick
   role        Role
   affixUrl    String    @unique @db.VarChar(60)
-  description String?   @default("") @db.VarChar(200)
+  description String?   @default("") @db.VarChar(500)
   baner       File?     @relation(fields: [banerUrl], references: [url])
   banerUrl    String?
   streamer    Streamer?

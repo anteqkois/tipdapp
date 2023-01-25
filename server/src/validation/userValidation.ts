@@ -1,3 +1,4 @@
+import { createApiError } from '@middlewares/error';
 import { Role, User } from '@prisma/client';
 import { validationHelper, z } from '../config/zod';
 // import { Role } from '../types';
@@ -16,40 +17,22 @@ const createStreamer = createUser.merge(
     lastName: z
       .string()
       .min(3, { message: 'Last name must have 3 or more characters.' }),
-    roles: z.tuple([z.literal(Role.tipper), z.literal(Role.streamer)]),
+    roles: z.tuple([z.literal(Role.streamer)]),
     // role: z.literal(Role.streamer),
     // role: z.array(Role.streamer),
     // address: z.string().length(42, { message: 'Wrong user address' }),
   })
 );
 
-const createTipper = createUser.merge(
-  z.object({
-    firstName: z
-      .string()
-      .min(3, { message: 'First name must have 3 or more characters.' })
-      .optional(),
-    lastName: z
-      .string()
-      .min(3, { message: 'Last name must have 3 or more characters.' })
-      .optional(),
-    roles: z.tuple([z.literal(Role.tipper)]),
-    // role: z.literal(Role.tipper),
-  })
-);
-
 const createStreamerParse = (data: UserValidation.CreateStreamer) =>
   validationHelper(data, createStreamer);
-
-const createTipperParse = (data: UserValidation.CreateTipper) =>
-  validationHelper(data, createTipper);
 
 const createParse = (body: UserValidation.CreateUser) => {
   switch (type(body)) {
     case 'streamer':
       return createStreamerParse(body as UserValidation.CreateStreamer);
-    case 'tipper':
-      return createTipperParse(body as UserValidation.CreateTipper);
+    default:
+      return createApiError('No avaible role');
   }
 };
 
@@ -64,15 +47,12 @@ const createParse = (body: UserValidation.CreateUser) => {
 const type = (body: Pick<User, 'roles'>) => {
   if (body.roles.includes(Role.streamer)) {
     return Role.streamer;
-  } else {
-    return Role.tipper;
   }
 };
 
 export namespace UserValidation {
   export type CreateStreamer = z.infer<typeof createStreamer>;
-  export type CreateTipper = z.infer<typeof createTipper>;
-  export type CreateUser = Omit<CreateStreamer | CreateTipper, 'roles'> & {
+  export type CreateUser = Omit<CreateStreamer, 'roles'> & {
     roles: Role[];
   };
 }

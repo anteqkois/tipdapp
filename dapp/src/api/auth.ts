@@ -1,5 +1,5 @@
 import { UserSessionDapp } from '@/shared/User/types';
-import { UserValidation } from '@tipdapp/server';
+import { Tipper, UserValidation } from '@tipdapp/server';
 import { SiweMessage } from 'siwe';
 import { api } from './apiConfig';
 
@@ -15,15 +15,36 @@ export const getNonce = async () =>
   await api.get<any, GetNonceResponse>('/auth/nonce');
 
 // VERIFY
-type PostVerifyMessageResponse = {
-  user: UserSessionDapp;
-};
+// type PostVerifyMessageResponse<T extends 'user'|'tipper'> = {
+//   user: UserSessionDapp;
+// };
+type PostVerifyMessageResponse<T extends 'user' | 'tipper'> = T extends 'user'
+  ? { user: UserSessionDapp }
+  : { tipper: Tipper };
+
 type VerifyMessageBody = {
   message: SiweMessage;
   signature: string;
+  type: 'user' | 'tipper';
 };
-export const verifyMessage = async (body: VerifyMessageBody) =>
-  await api.post<any, PostVerifyMessageResponse>('/auth/verify', body);
+
+// export const verifyMessage = async <T extends 'user' | 'tipper'>(body: VerifyMessageBody) => {
+export const verifyMessage = async <T extends VerifyMessageBody['type']>(body: VerifyMessageBody) => {
+    return await api.post<any, PostVerifyMessageResponse<T>>(
+      '/auth/verify',
+      body
+    );
+  // if (body.type === 'user')
+  //   return await api.post<any, PostVerifyMessageResponse<T>>(
+  //     '/auth/verify',
+  //     body
+  //   );
+  // if (body.type === 'tipper')
+  //   return await api.post<any, PostVerifyMessageResponse<T>>(
+  //     '/auth/verify',
+  //     body
+  //   );
+};
 
 // LOGOUT
 type LogoutResponse = {

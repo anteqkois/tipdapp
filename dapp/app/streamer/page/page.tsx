@@ -1,6 +1,6 @@
 'use client';
 import { update } from '@/api/page';
-import { SelectTokens } from '@/modules/Token/components/SelectTokens';
+import { formTokenOptions, SelectTokens } from '@/modules/Token/components/SelectTokens';
 import { useTokenFind } from '@/modules/Token/hooks/useTokenQuery';
 import {
   Button,
@@ -23,15 +23,6 @@ import { useFormik } from 'formik';
 import { useMemo } from 'react';
 import toast from 'react-hot-toast';
 
-const formTokenOptions = (tokens: Token[]) =>
-  tokens.map((token) => ({
-    name: token.name,
-    imageUrl: token.imageUrl,
-    symbol: token.symbol,
-    value: token.symbol,
-  }));
-
-//TODO? use page to be ability in future to change this element by user(for example can change to show default top tiper)
 const Page = () => {
   const { user, refreshUser } = useUser();
   const { data } = useTokenFind();

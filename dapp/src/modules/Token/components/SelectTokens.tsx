@@ -1,4 +1,4 @@
-import { FormikErrors } from 'formik';
+import { Token } from '@tipdapp/server';
 import Image from 'next/image';
 import ReactSelect, {
   components,
@@ -30,20 +30,33 @@ type Props = {
     field: string,
     value: any,
     shouldValidate?: boolean | undefined
-  ) =>
-    | Promise<void>
-    | Promise<
-        FormikErrors<{
-          affixUrl: string;
-          description: string;
-          tokens: [];
-        }>
-      >;
+  ) => any;
+  // setFieldValue: (
+  //   field: string,
+  //   value: any,
+  //   shouldValidate?: boolean | undefined
+  // ) =>
+  //   | Promise<void>
+  //   | Promise<
+  //       FormikErrors<{
+  //         affixUrl: string;
+  //         description: string;
+  //         tokens: [];
+  //       }>
+  //     >;
   label: string;
 } & Omit<
   StateManagerProps<TokenOption, false | true, GroupedOption>,
   'value' | 'onChange'
 >;
+
+export const formTokenOptions = (tokens: Token[]) =>
+  tokens.map((token) => ({
+    name: token.name,
+    imageUrl: token.imageUrl,
+    symbol: token.symbol,
+    value: token.symbol,
+  }));
 
 export const SelectTokens = ({
   label,
@@ -172,7 +185,6 @@ export const SelectTokens = ({
         {label}
       </label>
       <ReactSelect
-        {...rest}
         inputId={id}
         name={name}
         placeholder=""
@@ -186,6 +198,7 @@ export const SelectTokens = ({
         maxMenuHeight={maxMenuHeight}
         options={options}
         isMulti={isMulti}
+        closeMenuOnSelect={false}
         styles={{
           control: (base) => ({
             ...base,
@@ -203,13 +216,14 @@ export const SelectTokens = ({
             },
             boxShadow: 'none',
             border: error && '1px solid #DC2626',
+            background: 'transparent',
           }),
         }}
+        {...rest}
         // openMenuOnFocus={true}
         // onFocus={() => setIsOpenMenu(true)}
         // onBlur={() => setIsOpenMenu(false)}
         // menuIsOpen={isOpenMenu}
-        closeMenuOnSelect={false}
       />
       <p className="text-danger-600 min-h-[24px]">{error && `* ${error}`}</p>
     </>

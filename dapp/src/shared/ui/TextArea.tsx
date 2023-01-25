@@ -20,10 +20,10 @@ export const TextArea = ({
   ...rest
 }: Props) => {
   return (
-    <>
+    <div className='my-2'>
       <label
         htmlFor={id}
-        className="block mb-2 text-sm font-medium text-neutral-800 first-letter:uppercase"
+        className="block mb-2 text-sm font-medium text-neutral-800 first-letter:uppercase cursor-pointer"
       >
         {label}
       </label>
@@ -40,6 +40,6 @@ export const TextArea = ({
         {...rest}
       ></textarea>
       <p className="text-danger-600 min-h-[24px]">{error && `* ${error}`}</p>
-    </>
+    </div>
   );
 };

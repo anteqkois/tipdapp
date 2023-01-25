@@ -19,7 +19,7 @@ async function main() {
       lastName: 'Kois',
       nick: 'anteqkois',
       address: ADDRESS_WALLET_DEV,
-      roles: ['tipper', 'streamer'],
+      roles: ['streamer'],
       activeRole: 'streamer',
       streamer: {
         create: {
@@ -42,7 +42,7 @@ async function main() {
       lastName: 'Kois',
       nick: 'whitex123',
       address: ADDRESS_WALLET_DEV_2,
-      roles: ['tipper', 'streamer'],
+      roles: ['streamer'],
       activeRole: 'streamer',
       streamer: {
         create: {
@@ -80,48 +80,14 @@ async function main() {
     }
   );
 
-  await prisma.user.create({
-    data: {
-      address: faker.finance.ethereumAddress(),
-      email: faker.internet.email(),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      nick: faker.name.firstName(),
-      tipper: {
-        create: {
-          nick: faker.name.firstName(),
-        },
+  for (let index = 0; index < 3; index++) {
+    await prisma.tipper.create({
+      data: {
+        address: faker.finance.ethereumAddress(),
+        nick: faker.name.firstName(),
       },
-    },
-  });
-  await prisma.user.create({
-    data: {
-      address: faker.finance.ethereumAddress(),
-      email: faker.internet.email(),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      nick: faker.name.firstName(),
-      tipper: {
-        create: {
-          nick: faker.name.firstName(),
-        },
-      },
-    },
-  });
-  await prisma.user.create({
-    data: {
-      address: faker.finance.ethereumAddress(),
-      email: faker.internet.email(),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      nick: faker.name.firstName(),
-      tipper: {
-        create: {
-          nick: faker.name.firstName(),
-        },
-      },
-    },
-  });
+    });
+  }
 
   const tipers = await prisma.tipper.findMany({
     select: {

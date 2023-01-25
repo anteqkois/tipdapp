@@ -6,7 +6,6 @@ const userInclude = z
     z.union([
       z.literal('avatar'),
       z.literal('streamer'),
-      z.literal('tipper'),
       z.literal('tips'),
       z.literal('userToken'),
     ])

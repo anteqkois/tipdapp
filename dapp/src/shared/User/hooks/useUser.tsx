@@ -22,7 +22,7 @@ import { SiweMessage } from 'siwe';
 import { useDisconnect } from 'wagmi';
 import { UserSessionDapp } from '../types';
 
-export const UserContext = createContext<ReturnType>({} as ReturnType);
+const UserContext = createContext<ReturnType>({} as ReturnType);
 
 const tempUser = {} as UserSessionDapp;
 
@@ -30,7 +30,10 @@ type ReturnType = {
   login: () => void;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
-  verify: (message: SiweMessage, signature: string) => Promise<boolean>;
+  verifyUserMessage: (
+    message: SiweMessage,
+    signature: string
+  ) => Promise<boolean>;
   user?: UserSessionDapp;
   setUser: Dispatch<SetStateAction<UserSessionDapp | undefined>>;
   status: AuthStatus;
@@ -39,7 +42,7 @@ type ReturnType = {
 
 type Props = { children: ReactNode };
 
-export const UserProvider = ({ children }: Props) => {
+const UserProvider = ({ children }: Props) => {
   const [user, setUser] = useLocalStorage<UserSessionDapp>('user');
   const [status, setStatus] = useCookie<AuthStatus>(
     'authStatus',
@@ -67,21 +70,28 @@ export const UserProvider = ({ children }: Props) => {
 
   const login = () => {
     status === 'unauthenticated'
-      ? openConnectModal?.()
+      ? (() => {
+          openConnectModal?.();
+          setStatus('loading');
+        })()
       : toast.error('You are already login.');
   };
 
-  const verify = async (
+  const verifyUserMessage = async (
     message: SiweMessage,
     signature: string
-  ): Promise<boolean> => {
+  ) => {
     try {
-      const data = await verifyMessage({ message, signature });
+      const data = await verifyMessage<'user'>({
+        message,
+        signature,
+        type: 'user',
+      });
       setUser(data.user);
       //! Get from use default role type and redirect there
       //! if use is at page to make a tip, no redirect
       setStatus('authenticated');
-
+      
       router.push(`/${data.user.activeRole}/dashboard`);
       // if (data.user.roles.includes('streamer'))
       //   router.push('/streamer/dashboard');
@@ -90,8 +100,9 @@ export const UserProvider = ({ children }: Props) => {
     } catch (err: any) {
       toast.error(
         err[0].message ?? 'Something went wrong ! You can not login now.'
-      );
-      return false;
+        );
+        setStatus('unauthenticated');
+        return false;
     }
   };
 
@@ -131,7 +142,7 @@ export const UserProvider = ({ children }: Props) => {
       value={{
         login,
         logout,
-        verify,
+        verifyUserMessage,
         refreshUser,
         user,
         setUser,
@@ -146,4 +157,4 @@ export const UserProvider = ({ children }: Props) => {
 
 const useUser = () => useContext<ReturnType>(UserContext);
 
-export { useUser };
+export { UserProvider, useUser };

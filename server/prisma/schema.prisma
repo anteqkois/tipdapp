@@ -49,7 +49,7 @@ model User {
   userToken              UserToken?
   tips                   Tip[]
   streamer               Streamer?
-  tipper                 Tipper?
+  // tipper                 Tipper?
   sessions               Session[]
   verificationEmailToken VerificationEmailToken?
   settings               Settings?
@@ -88,10 +88,10 @@ model Streamer {
 }
 
 model Tipper {
-  user      User   @relation(fields: [address], references: [address])
-  address   String @id @db.VarChar(42)
-  nick      String @unique
-  tipsValue Int    @default(0)
+  // user      User?   @relation(fields: [address], references: [address])
+  address   String  @id @db.VarChar(42)
+  nick      String? @unique
+  tipsValue Decimal @default(0) @db.Decimal(78, 0)
   tips      Tip[]
 }
 

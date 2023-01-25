@@ -6,6 +6,7 @@ import {
 } from '@middlewares/error';
 import { throwIfOperational } from '@middlewares/handleError';
 import { User } from '@prisma/client';
+import { tipperService } from '@services/tipperService';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
@@ -193,7 +194,7 @@ const signUp = async (req: Request, res: Response) => {
 
   let userSessionData: UserSession;
   switch (userValidation.type(validatedFormData)) {
-    case 'streamer':
+    default:
       userSessionData = await userService.createStreamer({
         address: siweMessage.address,
         ...validatedFormData,
@@ -207,13 +208,6 @@ const signUp = async (req: Request, res: Response) => {
             },
           },
         },
-      });
-      userSessionData;
-      break;
-    default:
-      userSessionData = await userService.createTipper({
-        address: siweMessage.address,
-        ...validatedFormData,
       });
       break;
   }
@@ -241,36 +235,60 @@ const signUp = async (req: Request, res: Response) => {
   // }
 };
 
-const verifyMessageAndLogin = async (req: Request, res: Response) => {
-  const { message, signature } = req.body;
-  // try {
+const verifyMessageAndLogin = async (
+  req: Request<
+    {},
+    {},
+    { message: any; signature: any; type: 'tipper' | 'user' }
+  >,
+  res: Response
+) => {
+  console.log(req.body);
+  const { message, signature, type } = req.body;
   const siweMessage = await validateSiweMessage(message, signature);
 
-  const userSessionData = await userService.find({
-    where: {
-      address: siweMessage.address,
-    },
-  });
-
-  if (userSessionData) {
-    const authToken = createAuthToken(userSessionData);
-    const refreshToken = createRefreshToken(userSessionData, req.ip, true);
-
-    res.cookie('authToken', authToken, {
-      secure: true,
-      maxAge: JWT_SETTINGS.AUTH_EXPIRES,
-      httpOnly: true,
+  if (type === 'user') {
+    const userSessionData = await userService.find({
+      where: {
+        address: siweMessage.address,
+      },
     });
 
-    res.cookie('refreshToken', refreshToken, {
-      secure: true,
-      maxAge: JWT_SETTINGS.REFRESH_EXPIRES,
-      httpOnly: true,
+    if (userSessionData) {
+      const authToken = createAuthToken(userSessionData);
+      const refreshToken = createRefreshToken(userSessionData, req.ip, true);
+
+      res.cookie('authToken', authToken, {
+        secure: true,
+        maxAge: JWT_SETTINGS.AUTH_EXPIRES,
+        httpOnly: true,
+      });
+
+      res.cookie('refreshToken', refreshToken, {
+        secure: true,
+        maxAge: JWT_SETTINGS.REFRESH_EXPIRES,
+        httpOnly: true,
+      });
+
+      res
+        .status(StatusCodes.OK)
+        .json({ message: 'You are authorizated', user: userSessionData });
+    }
+  } else if (type === 'tipper') {
+    let tipper = await tipperService.find({
+      where: { address: siweMessage.address },
     });
+
+    if (!tipper) {
+      const tipper = await tipperService.create({
+        address: siweMessage.address,
+      });
+    }
+    console.log(tipper);
 
     res
       .status(StatusCodes.OK)
-      .json({ message: 'You are authorizated', user: userSessionData });
+      .json({ message: 'You are authorizated', tipper });
   } else {
     createValidationError(
       'Account not registered. Sign in first.',
@@ -279,9 +297,6 @@ const verifyMessageAndLogin = async (req: Request, res: Response) => {
       'user'
     );
   }
-  // } catch (err) {
-  //   isOperational(err, "Something went wrong, you didn't login.");
-  // }
 };
 
 const refreshUserSession = async (req: Request, res: Response) => {

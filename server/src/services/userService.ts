@@ -4,32 +4,31 @@ import prisma from '../config/db';
 const createStreamer = async (createData: Prisma.UserCreateInput) => {
   return await prisma.user.create({
     data: {
-      roles: ['streamer', 'tipper'],
+      roles: ['streamer'],
       activeRole: 'streamer',
       ...createData,
     },
     include: {
-      tipper: true,
       streamer: { include: { page: true } },
       userToken: true,
       avatar: true,
     },
   });
 };
-const createTipper = async (createData: Prisma.UserCreateInput) => {
-  return await prisma.user.create({
-    data: {
-      roles: ['tipper'],
-      activeRole: 'tipper',
-      ...createData,
-    },
-    include: {
-      tipper: true,
-      avatar: true,
-      // avatar: true,
-    },
-  });
-};
+// const createTipper = async (createData: Prisma.UserCreateInput) => {
+//   return await prisma.user.create({
+//     data: {
+//       roles: ['tipper'],
+//       activeRole: 'tipper',
+//       ...createData,
+//     },
+//     include: {
+//       tipper: true,
+//       avatar: true,
+//       // avatar: true,
+//     },
+//   });
+// };
 
 const find = async (data: Prisma.UserFindFirstArgs) => {
   //TODO change in future to fetch only default role, to get better performance
@@ -40,18 +39,7 @@ const find = async (data: Prisma.UserFindFirstArgs) => {
       avatar: true,
       streamer: { include: { page: true, activeTokens: true } },
       userToken: true,
-      // tipper: true,
       ...data.include,
-      // token: {
-      //   select: {
-      //     address: true,
-      //     chainId: true,
-      //     name: true,
-      //     symbol: true,
-      //     txHash: true,
-      //   },
-      // },
-      // page: true,
     },
   });
 
@@ -100,7 +88,6 @@ const createSession = async ({
 
 const removeSession = async (where: Prisma.SessionWhereInput) => {
   await prisma.session.deleteMany({ where });
-  // await prisma.session.delete({ where });
 };
 
 const removeRefreshToken = async ({
@@ -166,7 +153,7 @@ export const userService = {
   createSession,
   removeSession,
   createStreamer,
-  createTipper,
+  // createTipper,
   find,
   checkIfExist,
   findByRefreshToken,

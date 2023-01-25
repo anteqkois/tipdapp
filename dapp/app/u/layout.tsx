@@ -1,5 +1,7 @@
 'use client';
-import { PublicNav } from '@/modules/Navigation/containers';
+import { RainbowKitProviders } from '@/lib/Web3Provider';
+import { PublicNav, TipNav } from '@/modules/Navigation/containers';
+import { TipperProvider } from '@/shared/User/hooks/useTipper';
 import { ReactNode } from 'react';
 type Props = {
   children: ReactNode;
@@ -7,9 +9,11 @@ type Props = {
 
 export default function RootLayout({ children }: Props) {
   return (
-    <>
-      <PublicNav />
-      {children}
-    </>
+    <TipperProvider>
+      <RainbowKitProviders>
+        <TipNav />
+        {children}
+      </RainbowKitProviders>
+    </TipperProvider>
   );
 }

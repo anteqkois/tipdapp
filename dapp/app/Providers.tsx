@@ -24,14 +24,14 @@ export const Providers = ({ children }: Props) => {
           {/* TODO move signUpForm slice to react context */}
           <ReduxProvider>
             <UserProvider>
-              <RainbowKitProviders>
+              {/* <RainbowKitProviders> */}
                 <ModalProvider />
                 <Toaster
                   position="top-center"
                   reverseOrder={false}
                 />
                 {children}
-              </RainbowKitProviders>
+              {/* </RainbowKitProviders> */}
             </UserProvider>
           </ReduxProvider>
         </WagmiProvider>

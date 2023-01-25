@@ -2,6 +2,7 @@
 import { getNonce } from '@/api/auth';
 import { useSignUpForm } from '@/modules/SignUpForm/hooks/useSignUpForm';
 import { useMediaQuery } from '@/shared/hooks';
+import { useTipper } from '@/shared/User/hooks/useTipper';
 import { useUser } from '@/shared/User/hooks/useUser';
 import {
   createAuthenticationAdapter,
@@ -11,7 +12,7 @@ import {
 } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { usePathname } from 'next/navigation';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { SiweMessage } from 'siwe';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { hardhat, mainnet, polygon } from 'wagmi/chains';
@@ -45,9 +46,21 @@ const wagmiClient = createClient({
 
 const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
-  const { setUser, setStatus, status, logout, verify } = useUser();
+  const {
+    setUser,
+    status: statusUser,
+    logout: logoutUser,
+    verifyUserMessage,
+  } = useUser();
+  const {
+    verifyTipperMessage,
+    status: statusTipper,
+    logout: logoutTipper,
+  } = useTipper();
   const { register } = useSignUpForm();
   const isMobile = useMediaQuery(['(max-width: 1024px)'], [true], true);
+
+  const isTipperPath = useMemo(() => pathname?.includes('u'), [pathname]);
 
   const authAdapter = createAuthenticationAdapter({
     getNonce: async () => {
@@ -86,21 +99,28 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
         if (pathname?.includes('signup')) {
           const registerRequest = await register(message, signature);
           registerRequest ? resolve(true) : reject(false);
-        } else {
-          (await verify(message, signature)) ? resolve(true) : reject(false);
+        } else if (pathname?.includes('login')) {
+          (await verifyUserMessage(message, signature))
+            ? resolve(true)
+            : reject(false);
+        } else if (isTipperPath) {
+          (await verifyTipperMessage(message, signature))
+            ? resolve(true)
+            : reject(false);
         }
         reject(false);
       });
     },
     signOut: async () => {
-      logout();
+      logoutUser();
+      logoutTipper();
     },
   });
 
   return (
     <RainbowKitAuthenticationProvider
       adapter={authAdapter}
-      status={status}
+      status={isMobile ? statusTipper : statusUser}
     >
       <RainbowKitProvider
         coolMode

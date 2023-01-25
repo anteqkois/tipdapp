@@ -4,6 +4,7 @@ import { usePageFindByAffixUrl } from '@/modules/Page/hooks/usePageQuery';
 import { TipForm } from '@/modules/Tip/containers/TipForm';
 import { Card, MainContainer, Verified } from '@/shared/ui';
 import Avatar from '@/shared/User/components/Avatar';
+import { useTipper } from '@/shared/User/hooks/useTipper';
 import { Role } from '@tipdapp/server';
 import Image from 'next/image';
 
@@ -45,13 +46,7 @@ export default function Page({ params }: Props) {
             <Verified verified={user.verified} />
             {user.verified ? 'Verivied user' : 'Not verivied user'}
           </p>
-          <p>
-            {page.description}Lorem ipsum dolor sit amet consectetur,
-            adipisicing elit. Repudiandae, temporibus! Voluptatum neque
-            reiciendis, ipsam nihil eligendi veniam? Error, debitis corporis
-            veniam officiis odio, sapiente reiciendis assumenda fuga eveniet
-            omnis facere!
-          </p>
+          <p className="p-2">{page.description}</p>
         </Card>
         <Card className="row-start-2 col-span-2">
           <TipForm />
