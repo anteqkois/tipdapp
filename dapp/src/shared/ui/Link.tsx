@@ -10,6 +10,7 @@ export const Link = ({
   href,
   target = '_blank',
   children,
+  className,
   ...rest
 }: Prps) => {
   return (
@@ -18,10 +19,12 @@ export const Link = ({
       href={href}
       target={target}
       rel="noreferrer"
-      className="inline-block underline cursor-pointer underline-offset-1 decoration-2 decoration-primary"
+      className={`inline-block underline cursor-pointer underline-offset-1 decoration-2 decoration-primary ${className}`}
     >
       {children}
-      {icon && <ArrowTopRightOnSquareIcon className="inline-block w-4 ml-1 stroke-2" />}
+      {icon && (
+        <ArrowTopRightOnSquareIcon className="inline-block w-4 ml-1 stroke-2" />
+      )}
     </a>
   );
 };

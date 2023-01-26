@@ -1,3 +1,5 @@
+'use client';
+
 import {
   formTokenOptions,
   SelectTokens,
@@ -32,7 +34,6 @@ const tipFieldValidation = z.object({
 export const TipForm = () => {
   const { data } = useTokenFind();
   const { status, logout, tipper } = useTipper();
-console.log(tipper);
 
   const tokensToSelect = useMemo(
     () => data?.tokens && formTokenOptions(data.tokens),

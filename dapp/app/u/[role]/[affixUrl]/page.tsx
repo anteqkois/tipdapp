@@ -2,9 +2,8 @@
 
 import { usePageFindByAffixUrl } from '@/modules/Page/hooks/usePageQuery';
 import { TipForm } from '@/modules/Tip/containers/TipForm';
-import { Card, MainContainer, Verified } from '@/shared/ui';
+import { Card, MainContainer, SocialLink, Verified } from '@/shared/ui';
 import Avatar from '@/shared/User/components/Avatar';
-import { useTipper } from '@/shared/User/hooks/useTipper';
 import { Role } from '@tipdapp/server';
 import Image from 'next/image';
 
@@ -48,8 +47,31 @@ export default function Page({ params }: Props) {
           </p>
           <p className="p-2">{page.description}</p>
         </Card>
-        <Card className="row-start-2 col-span-2">
+        <Card className="row-start-2 col-span-2 lg:col-span-1">
           <TipForm />
+        </Card>
+        <Card className="row-start-3 col-span-2 flex flex-col gap-2 lg:row-start-2 lg:col-start-2 lg:col-span-1">
+          <h5>User details</h5>
+          <div>
+            <span>Tips amount: {323}</span>
+          </div>
+          <div>
+            <span>Last tip value:</span>
+          </div>
+          <div>
+            <span>Last tip transaction:</span>
+          </div>
+          <div>
+            <span>Last tip transaction:</span>
+          </div>
+          <SocialLink
+            href="https://youtube.com"
+            socialMedium="youtube"
+          />
+          <SocialLink
+            href="https://youtube.com"
+            socialMedium="twitch"
+          />
         </Card>
       </MainContainer>
     </div>
