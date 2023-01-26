@@ -60,13 +60,13 @@ export const CustomConnectButton = () => {
                   <Tooltip content="Switch network">
                     <Button
                       onClick={openChainModal}
-                      className="flex items-center justify-between gap-2"
+                      className="flex items-center justify-between gap-2 max-h-8"
                       type="button"
-                      variant="ghost"
+                      variant="overlay"
                     >
                       {chain.hasIcon && (
                         <div
-                          className="w-6 h-6 rounded-full overflow-hidden"
+                          className="w-5 h-5 rounded-full overflow-hidden"
                           style={{
                             background: chain.iconBackground,
                           }}
@@ -75,8 +75,8 @@ export const CustomConnectButton = () => {
                             <Image
                               alt={chain.name ?? 'Chain icon'}
                               src={chain.iconUrl}
-                              height="24"
-                              width="24"
+                              height="20"
+                              width="20"
                             />
                           )}
                         </div>
@@ -88,9 +88,9 @@ export const CustomConnectButton = () => {
                   <Tooltip content="Disconnect / Copy">
                     <Button
                       onClick={openAccountModal}
-                      className="flex items-center justify-center gap-2"
+                      className="flex items-center justify-center gap-2 max-h-8"
                       type="button"
-                      variant="ghost"
+                      variant="overlay"
                     >
                       {/* <Avatar aaddress=alletAddress} className="w-6 h-6" /> */}
                       {account.displayName}

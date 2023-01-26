@@ -2,7 +2,7 @@ import { Button } from '@/shared/ui';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import classNames from 'classnames';
 import { useState } from 'react';
-import { Hamburger, Navlink } from '../../components';
+import { Hamburger, Navlink, RainbowKitButtonMobile } from '../../components';
 import { NavigationOption } from '../../types';
 
 const defaultOptionStyle =
@@ -20,9 +20,6 @@ export const Mobile = ({ navigationOption }: Props) => {
     <div className="fixed top-0 left-0 z-30 w-full px-2 shadow-md bg-neutral-50 ">
       <div className="flex items-center justify-between w-full h-12 gap-5 mx-auto max-w-7xl">
         <div className="flex-center">LOGO</div>
-        {/* <p className="text-lg underline flex-center decoration-2 decoration-primary italic">
-          Nice to see you !
-        </p> */}
         <Hamburger
           isOpen={isOpen}
           setIsOpen={setIsOpen}
@@ -35,27 +32,8 @@ export const Mobile = ({ navigationOption }: Props) => {
         >
           <ul className="flex flex-col min-h-[calc(100%-3rem)]">
             <ul>
-              <li
-                className={`${defaultOptionStyle} hover:bg-transparent flex flex-col`}
-              >
-                <Navlink
-                  className="w-full"
-                  href="/signup"
-                >
-                  <Button
-                    variant="special"
-                    className="w-full"
-                  >
-                    SignUp
-                  </Button>
-                </Navlink>
-                <Button
-                  onClick={openConnectModal}
-                  variant="ghost"
-                  className="w-full"
-                >
-                  Login
-                </Button>
+              <li>
+                <RainbowKitButtonMobile classNameButton={defaultOptionStyle} />
               </li>
               {navigationOption.map(({ label, href, icon, className }) => (
                 <li
@@ -71,6 +49,21 @@ export const Mobile = ({ navigationOption }: Props) => {
                   </Navlink>
                 </li>
               ))}
+              <li
+                className={`${defaultOptionStyle} hover:bg-transparent flex flex-col`}
+              >
+                <Navlink
+                  className="w-full"
+                  href="/signup"
+                >
+                  <Button
+                    variant="special"
+                    className="w-full"
+                  >
+                    SignUp
+                  </Button>
+                </Navlink>
+              </li>
             </ul>
           </ul>
         </nav>

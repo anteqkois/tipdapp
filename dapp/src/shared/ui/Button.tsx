@@ -36,7 +36,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
               'special',
               'overlay',
             ].includes(variant),
-            'px-3.5 py-1.5': [, 'ghost'].includes(variant),
+            'px-3.5 py-1.5': ['ghost'].includes(variant),
           },
           {
             default:
@@ -48,7 +48,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             info: '',
             clear: 'text-neutral-500 hover:text-neutral-900',
             overlay:
-              'bg-neutral-300 text-neutral-800 shadow-sm hover:bg-neutral-400',
+              'bg-neutral-50 text-neutral-800 shadow-md hover:bg-neutral-200',
             ghost:
               'border-2 border-neutral-200 outline-2 text-neutral-800 hover:bg-neutral-150',
             link: 'flex items-center gap-1 underline decoration-1.5 decoration-primary-light',
