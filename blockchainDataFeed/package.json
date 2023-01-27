@@ -1,0 +1,33 @@
+{
+  "name": "@tipdapp/blockchaindatafeed",
+  "version": "1.0.0",
+  "description": "Microservice to provide cryptocurrency data to frontend and backend of tipdapp dapp",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "NODE_ENV=development dotenv_config_path=.env.development nodemon"
+  },
+  "keywords": [
+    "api",
+    "cryptocurrency",
+    "price"
+  ],
+  "author": "Antek Kois",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anteqkois/tipdapp/issues"
+  },
+  "homepage": "https://github.com/anteqkois/tipdapp#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "http-status-codes": "^2.2.0",
+    "zod": "^3.19.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.16",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "tsc": "^2.0.4",
+    "typescript": "^4.9.4"
+  }
+}
