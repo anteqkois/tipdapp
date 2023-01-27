@@ -1,0 +1,18 @@
+[
+  {
+    "id": "sand",
+    "coingeckoIds": "the-sandbox"
+  },
+  {
+    "id": "tether",
+    "coingeckoIds": "tether"
+  },
+  {
+    "id": "shiba",
+    "coingeckoIds": "shiba-inu"
+  },
+  {
+    "id": "bnb",
+    "coingeckoIds": "binancecoin"
+  }
+]
