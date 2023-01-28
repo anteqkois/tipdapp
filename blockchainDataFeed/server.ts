@@ -2,6 +2,7 @@
 import express from 'express';
 import { handleErrors, notFound } from './src/middlewares/handleError';
 import apiRouter from './src/routes';
+import { tokenFeed } from './src/services/tokenDataFeedService';
 
 const port = process.env.PORT || 3002;
 const dev = process.env.NODE_ENV !== 'production';
@@ -11,6 +12,7 @@ const server = express();
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 // server.use(cookieParser());
+tokenFeed.subscribe();
 
 server.use('/api', apiRouter);
 

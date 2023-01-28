@@ -1,35 +1,17 @@
-import api from "../config/apiConfig";
-import handledTokens from '../config/handledTokens.json'
+import { redis } from '../config/redis';
+import { CONSTANTS } from '../constants';
 
-const tokensIds = handledTokens.map(token => token.coingeckoIds).join();
+const updateTokensDataInterval = async () => {};
 
-const dataFeed = async () => {
- const data = await api.get('/coins/markets', {
-   params: {
-     vs_currency: 'usd',
-     ids: tokensIds,
-     order: 'market_cap_desc',
-     per_page: 100,
-     page: 1,
-     sparkline: false,
-   },
- });
+const tokensFeed = async () => {
+  const tokensData = await redis.hGetAll(CONSTANTS.REDIS.H_TOKEN_KEY);
 
- console.log(data);
- return data;
-// ds=the-sandbox%2Ctether%2Cshiba-inu%2Cbinancecoin&order=market_cap_desc&per_page=100&page=1&sparkline=false
+  const parsedData: TokenCoinGecko[] = [];
+  for (const [key, value] of Object.entries(tokensData)) {
+    parsedData.push(JSON.parse(value));
+  }
+
+  return parsedData;
 };
 
-export const cryptocurrencyService = { dataFeed };
-// vs_currency: 
-// usd
-// ids: 
-// the-sandbox%2Ctether%2Cshiba-inu%2Cbinancecoin
-// order: 
-// market_cap_desc
-// per_page: 
-// 100
-// page: 
-// 1
-// sparkline: 
-// false
+export const cryptocurrencyService = { tokensFeed };

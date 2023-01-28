@@ -3,21 +3,20 @@ import { StatusCodes } from 'http-status-codes';
 import { cryptocurrencyService } from '../services/cryptocurrencyService';
 import { DataApi } from '../validation/dataApi';
 
-const tokensData = async (req: Request<DataApi.Find.Params>, res: Response) => {
-  // console.log(req.params.coin);
-  const data = await cryptocurrencyService.dataFeed();
+const tokens = async (req: Request<DataApi.Find.Params>, res: Response) => {
+  const data = await cryptocurrencyService.tokensFeed();
 
-  res.status(StatusCodes.OK).json({ coins: data });
+  res.status(StatusCodes.OK).json({ tokens: data });
 };
 
-const tokenData = async (req: Request<DataApi.Find.Params>, res: Response) => {
+const token = async (req: Request<DataApi.Find.Params>, res: Response) => {
   // console.log(req.params.coin);
-  const data = await cryptocurrencyService.dataFeed();
+  const data = await cryptocurrencyService.tokensFeed();
 
   res.status(StatusCodes.OK).json({ coins: data });
 };
 
 export const dataController = {
-  tokensData,
-  tokenData,
+  tokens,
+  token,
 };
