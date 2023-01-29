@@ -21,31 +21,31 @@ class TokenFeed {
     });
   }
 
-  async setTokenFeed(token: TokenCoinGecko) {
+  async setTokenData(token: TokenCoinGecko) {
     redis.hSet(CONSTANTS.REDIS.H_TOKEN_KEY, token.id, JSON.stringify(token));
   }
 
-  async subscribe() {
+  async start() {
     if (this.isRunning) return;
 
     const tokens = await this.fetchTokensData();
-    tokens.forEach(this.setTokenFeed);
+    tokens.forEach(this.setTokenData);
 
     this.intervalId = setInterval(async () => {
       const tokens = await this.fetchTokensData();
-      tokens.forEach(this.setTokenFeed);
+      tokens.forEach(this.setTokenData);
     }, 20 * 1000);
     this.isRunning = true;
 
     console.log('> Token data were update');
   }
 
-  unSubscribe(): void {
+  stop(): void {
     clearInterval(this.intervalId);
     this.isRunning = false;
   }
 }
 
-const tokenFeed = new TokenFeed();
+// const tokenFeed = new TokenFeed().;
 
-export { tokenFeed };
+export { TokenFeed };

@@ -3,7 +3,7 @@
 const nextConfig = {
   experimental: { appDir: true },
   images: {
-    domains: ['avatars.dicebear.com'],
+    domains: ['avatars.dicebear.com', 'assets.coingecko.com'],
   },
   transpilePackages: ['@tipdapp/contracts'],
   webpack(config, options) {

@@ -9,8 +9,35 @@ type Props = {
 
 export const Desktop = ({ navigationOption }: Props) => {
   const { openConnectModal } = useConnectModal();
+
+  // const [scrolled, setScrolled] = useState(false);
+
+  // console.log(scrolled);
+  // const scrollEvent = useCallback(
+  //   (event: Event) => {
+  //     if (window.scrollY > 1) {
+  //       !scrolled && setScrolled(true);
+  //     } else {
+  //       scrolled && setScrolled(false);
+  //     }
+  //   },
+  //   [scrolled]
+  // );
+
+  // useEffect(() => {
+  //   window.addEventListener('scroll', scrollEvent);
+  //   return () => {
+  //     window.removeEventListener('scroll', scrollEvent);
+  //   };
+  // }, []);
+
   return (
     <div className="fixed top-0 left-0 z-30 w-full px-2 bg-primary-700 shadow-neutral-900/50 shadow-2xl">
+      {/* <div
+      className={`fixed top-0 left-0 z-30 w-full px-2 ${
+        scrolled && 'bg-primary-700 shadow-neutral-900/50 shadow-2xl'
+      }`}
+    > */}
       <div className="flex items-center justify-between w-full h-24 gap-5 mx-auto max-w-7xl">
         <div className="w-[170px]">LOGO</div>
         <nav>

@@ -91,6 +91,10 @@ export const TipForm = () => {
             error={formik.errors.token as string}
           />
         )}
+        <p className="italic text-xs md:hidden">
+          *Table with token prices is
+          <Link className='pl-0.5' href='#tokenPrices' target={'_self'}>below.</Link>
+        </p>
         <InputCurrency
           label="Amount"
           id="amount"

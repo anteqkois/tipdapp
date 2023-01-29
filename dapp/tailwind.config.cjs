@@ -55,10 +55,10 @@ module.exports = {
           dark: colors.purple[800],
         },
         secondary: {
+          ...colors.teal,
           light: colors.teal[600],
           DEFAULT: colors.teal[700],
           dark: colors.teal[800],
-          ...colors.teal,
         },
         neutral: {
           light: colors.neutral[600],

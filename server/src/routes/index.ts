@@ -19,7 +19,7 @@ router.use('/user', userRoutes);
 
 router.use('/tip', verifyJWT, tipRoutes);
 
-router.use('/token', tokenRoutes);
+router.use('/tokenInfo', tokenRoutes);
 
 router.use('/userToken', verifyJWT, userTokenRoutes);
 

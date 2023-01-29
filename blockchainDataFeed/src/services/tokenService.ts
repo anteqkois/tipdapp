@@ -1,9 +1,9 @@
+import api from '../config/apiConfig';
+import handledTokens from '../config/handledTokens.json';
 import { redis } from '../config/redis';
 import { CONSTANTS } from '../constants';
 
-const updateTokensDataInterval = async () => {};
-
-const tokensFeed = async () => {
+const getTokens = async () => {
   const tokensData = await redis.hGetAll(CONSTANTS.REDIS.H_TOKEN_KEY);
 
   const parsedData: TokenCoinGecko[] = [];
@@ -14,4 +14,4 @@ const tokensFeed = async () => {
   return parsedData;
 };
 
-export const cryptocurrencyService = { tokensFeed };
+export const cryptocurrencyService = { getTokens };
