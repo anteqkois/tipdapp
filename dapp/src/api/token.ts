@@ -7,7 +7,7 @@ export const find = async (queryParams?: TokenApi.Find.Query) =>
     params: queryParams,
   });
 
-export const getDetails = async (queryParams?: { tokenSymbol: string[] }) =>
+export const getDetails = async (queryParams?: { symbol: string[] }) =>
   axios.get<never, TokenApi.Find.Response>('http://localhost:3002/api/token', {
     params: queryParams,
   });

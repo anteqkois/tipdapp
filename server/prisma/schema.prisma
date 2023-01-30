@@ -163,13 +163,14 @@ model Widget {
 
 model Token {
   address         String    @id @unique @db.VarChar(42)
-  symbol          String    @unique
+  symbol          String
   name            String    @unique
+  idCG            String    @unique
   chainId         Int
   image           File?     @relation(fields: [imageUrl], references: [url])
   imageUrl        String?
-  latestPrice     Decimal?  @db.Decimal(78, 0)
-  priceUpdateAt   DateTime?
+  // latestPrice     Decimal?  @db.Decimal(78, 0)
+  // priceUpdateAt   DateTime?
   streamer        Streamer? @relation(fields: [streamerAddress], references: [address])
   streamerAddress String?   @db.VarChar(42)
   tip             Tip[]

@@ -19,10 +19,10 @@ export const TokenPriceList = ({ tokens, className }: Props) => {
     >
       <thead>
         <tr className="">
-          <th className="p-2 text-left rounded-tl bg-primary-600 text-neutral-150">
+          <th className="p-2 text-left rounded-tl bg-primary text-neutral-150">
             Name
           </th>
-          <th className="p-2 text-left rounded-tr bg-primary-600 text-neutral-150">
+          <th className="p-2 text-left rounded-tr bg-primary text-neutral-150">
             Last price
           </th>
         </tr>

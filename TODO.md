@@ -1,0 +1,2 @@
+- create api gateway
+- move all shared server code to api gateway microservice (ApiError class, error handling etc.)

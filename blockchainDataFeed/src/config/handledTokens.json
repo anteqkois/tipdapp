@@ -1,18 +1,38 @@
 [
   {
-    "id": "sand",
-    "coingeckoIds": "the-sandbox"
+    "idCG": "the-sandbox",
+    "symbol": "sand"
   },
   {
-    "id": "tether",
-    "coingeckoIds": "tether"
+    "idCG": "shiba-inu",
+    "symbol": "shib"
   },
   {
-    "id": "shiba",
-    "coingeckoIds": "shiba-inu"
+    "idCG": "tether",
+    "symbol": "usdt"
   },
   {
-    "id": "bnb",
-    "coingeckoIds": "binancecoin"
+    "idCG": "matic-network",
+    "symbol": "matic"
+  },
+  {
+    "idCG": "binancecoin",
+    "symbol": "bnb"
+  },
+  {
+    "idCG": "usd-coin",
+    "symbol": "usdc"
+  },
+  {
+    "idCG": "uniswap",
+    "symbol": "uni"
+  },
+  {
+    "idCG": "chainlink",
+    "symbol": "link"
+  },
+  {
+    "idCG": "dogecoin",
+    "symbol": "doge"
   }
 ]

@@ -59,26 +59,24 @@ async function main() {
   console.log('Create user:', user);
 
   //create cryptocurenncy
-  coins.forEach(
-    async ({ address, chainId, imageUrl, latestPrice, name, symbol }) => {
-      await prisma.token.create({
-        data: {
-          address: address,
-          chainId: chainId,
-          name: name,
-          symbol: symbol,
-          latestPrice: latestPrice,
-          image: {
-            create: {
-              url: imageUrl,
-              extension: 'png',
-              filename: symbol,
-            },
+  coins.forEach(async ({ address, chainId, idCG, imageUrl, name, symbol }) => {
+    await prisma.token.create({
+      data: {
+        address,
+        idCG,
+        chainId,
+        name,
+        symbol,
+        image: {
+          create: {
+            url: imageUrl,
+            extension: 'png',
+            filename: symbol,
           },
         },
-      });
-    }
-  );
+      },
+    });
+  });
 
   for (let index = 0; index < 3; index++) {
     await prisma.tipper.create({

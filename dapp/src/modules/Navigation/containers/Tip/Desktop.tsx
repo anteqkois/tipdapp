@@ -32,7 +32,8 @@ export const Desktop = ({ navigationOption }: Props) => {
   // }, []);
 
   return (
-    <div className="fixed top-0 left-0 z-30 w-full px-2 bg-primary-700 shadow-neutral-900/50 shadow-2xl">
+    // <div className="fixed top-0 left-0 z-30 w-full px-2 bg-primary-700 shadow-neutral-900/50 shadow-2xl">
+    <div className="absolute top-0 left-0 z-30 w-full px-2">
       {/* <div
       className={`fixed top-0 left-0 z-30 w-full px-2 ${
         scrolled && 'bg-primary-700 shadow-neutral-900/50 shadow-2xl'
