@@ -1,3 +1,4 @@
+import { TokenCoinGecko } from '@/modules/Token/types';
 import { TokenApi } from '@tipdapp/server';
 import axios from 'axios';
 import { api } from './apiConfig';
@@ -8,6 +9,9 @@ export const find = async (queryParams?: TokenApi.Find.Query) =>
   });
 
 export const getDetails = async (queryParams?: { symbol: string[] }) =>
-  axios.get<never, TokenApi.Find.Response>('http://localhost:3002/api/token', {
-    params: queryParams,
-  });
+  api.get<never, { tokens: TokenCoinGecko[] }>(
+    'http://localhost:3002/api/token',
+    {
+      params: queryParams,
+    }
+  );

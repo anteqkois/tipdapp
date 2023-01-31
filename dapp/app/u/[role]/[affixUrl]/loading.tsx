@@ -1,5 +1,5 @@
-import { Spinner } from '@/shared/ui';
+import { PageSpinner } from '@/shared/ui';
 
 export default function Loading() {
-  return <Spinner className="h-20" />;
+  return <PageSpinner />;
 }

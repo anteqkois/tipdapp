@@ -10,7 +10,7 @@ export function useTokenFind(query?: TokenApi.Find.Query) {
     retry: false,
   });
 }
-export function useTokenGetDetails(query?: { tokenSymbol: string[] }) {
+export function useTokenGetDetails(query?: { symbol: string[] }) {
   return useQuery({
     queryKey: ['token'],
     queryFn: () => getDetails(query),

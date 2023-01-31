@@ -3,28 +3,27 @@ import './src/config/paths';
 
 import { handleErrors, notFound } from '@middlewares/handleError';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
 import express from 'express';
-import { corsConfig } from './src/config/cors';
-import { logRequest } from './src/middlewares/logRequest';
-import apiRouter from './src/routes';
-import { startQueueConsumers } from './src/queue';
 import { queryParser } from 'express-query-parser';
+import { useCors } from './src/config/cors';
+import { logRequest } from './src/middlewares/logRequest';
+import { startQueueConsumers } from './src/queue';
+import apiRouter from './src/routes';
 
 const port = process.env.PORT || 3001;
 const dev = process.env.NODE_ENV !== 'production';
 
 const server = express();
 
-server.use(cors(corsConfig));
+server.use(useCors);
 server.use(
   queryParser({
     parseNull: true,
     parseUndefined: true,
     parseBoolean: true,
-    parseNumber: true
+    parseNumber: true,
   })
-)
+);
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
