@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 import client from '@prisma/client';
 import coins from './tokens.json';
-// import * as runtime from '@prisma/client/runtime/index.js';
 const { PrismaClient } = client;
 
 const prisma = new PrismaClient();
@@ -58,25 +57,95 @@ async function main() {
   });
   console.log('Create user:', user);
 
-  //create cryptocurenncy
-  coins.forEach(async ({ address, chainId, idCG, imageUrl, name, symbol }) => {
+  for (let i = 0; i < coins.length; i++) {
+    const { address, chainId, coinGeckoId, imageUrl, name, symbol } = coins[i];
+
     await prisma.token.create({
       data: {
         address,
-        idCG,
+        coinGeckoId,
         chainId,
         name,
         symbol,
         image: {
-          create: {
-            url: imageUrl,
-            extension: 'png',
-            filename: symbol,
+          connectOrCreate: {
+            where: { url: imageUrl },
+            create: {
+              url: imageUrl,
+              extension: 'png',
+              filename: symbol,
+            },
           },
+          // create: {
+          //   url: imageUrl,
+          //   extension: 'png',
+          //   filename: symbol,
+          // },
         },
       },
     });
-  });
+  }
+
+  //create cryptocurenncy
+  // await Promise.all(
+  //   coins.map(
+  //     async ({ address, chainId, coinGeckoId, imageUrl, name, symbol }) => {
+  //       await prisma.token.create({
+  //         data: {
+  //           address,
+  //           coinGeckoId,
+  //           chainId,
+  //           name,
+  //           symbol,
+  //           image: {
+  //             connectOrCreate: {
+  //               where: { url: imageUrl },
+  //               create: {
+  //                 url: imageUrl,
+  //                 extension: 'png',
+  //                 filename: symbol,
+  //               },
+  //             },
+  //             // create: {
+  //             //   url: imageUrl,
+  //             //   extension: 'png',
+  //             //   filename: symbol,
+  //             // },
+  //           },
+  //         },
+  //       });
+  //     }
+  //   )
+  // );
+
+  // coins.forEach(
+  //   async ({ address, chainId, coinGeckoId, imageUrl, name, symbol }) => {
+  //     await prisma.token.create({
+  //       data: {
+  //         address,
+  //         coinGeckoId,
+  //         chainId,
+  //         name,
+  //         symbol,
+  //         image: {
+  //           connectOrCreate: {
+  //             where: { url: imageUrl },
+  //             create: {
+  //               url: imageUrl,
+  //               extension: 'png',
+  //               filename: symbol,
+  //             },
+  //           },
+  //           // create: {
+  //           //   url: imageUrl,
+  //           //   extension: 'png',
+  //           //   filename: symbol,
+  //           // },
+  //         },
+  //       },
+  //     });
+  //   }
+  // );
 
   for (let index = 0; index < 3; index++) {
     await prisma.tipper.create({
@@ -166,5 +235,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
-
-// export {};

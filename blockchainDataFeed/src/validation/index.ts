@@ -1,1 +1,1 @@
-export { dataApi } from './tokenApi';
+export { tokenApi, TokenApi } from './tokenApi';

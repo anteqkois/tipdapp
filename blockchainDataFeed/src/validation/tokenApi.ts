@@ -1,26 +1,30 @@
+import { Request } from 'express';
 import { z } from '../config/zod';
 
-const findMany = {
+const findMany = z.object({
   query: z.object({
     symbol: z.array(z.string()).optional(),
   }),
-};
-const find = {
+});
+
+const find = z.object({
   params: z.object({
     symbol: z.string(),
   }),
-};
+});
 
 export namespace TokenApi {
   export namespace FindMany {
-    export type Query = z.input<typeof findMany.query>;
+    const reqShape = findMany.shape;
+    export type Query = z.input<typeof reqShape.query>;
+    export type Req = Request<{}, {}, {}, Query>;
   }
   export namespace Find {
-    export type Params = z.input<typeof find.params>;
+    const reqShape = find.shape;
+    export type Params = z.input<typeof reqShape.params>;
+    export type Req = Request<Params, {}, {}, {}>;
   }
 }
-
-// const parseRequest(requestSchema: any)
 
 export const tokenApi = {
   findMany,

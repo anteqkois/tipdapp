@@ -6,7 +6,7 @@ import { CONSTANTS } from '../constants';
 class TokenFeed {
   isRunning = false;
   intervalId: NodeJS.Timer | undefined;
-  tokensIds = handledTokens.map((token) => token.idCG).join();
+  tokensIds = handledTokens.map((token) => token.coinGeckoId).join();
 
   async fetchTokensData() {
     return api.get<{}, TokenCoinGecko[]>('/coins/markets', {

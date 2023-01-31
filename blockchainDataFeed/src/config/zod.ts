@@ -1,5 +1,5 @@
 import { ApiError, ValidationError } from '@tipdapp/server';
-import { ZodError, ZodTypeAny } from 'zod';
+import { z, ZodError, ZodSchema, ZodTypeAny } from 'zod';
 export * from 'zod';
 
 export const validationHelper = <D>(data: D, validation: ZodTypeAny): D => {
@@ -13,3 +13,10 @@ export const validationHelper = <D>(data: D, validation: ZodTypeAny): D => {
     }
   }
 };
+
+// export const parseRequest = <S extends ZodSchema>(requestSchema: S) => {
+//   return (req: { params: any; body: any; query: any }) => {
+//     const parsedRequest = requestSchema.parse(req);
+//     return parsedRequest as z.input<typeof requestSchema>;
+//   };
+// };

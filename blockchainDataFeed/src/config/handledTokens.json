@@ -1,38 +1,38 @@
 [
   {
-    "idCG": "the-sandbox",
+    "coinGeckoId": "the-sandbox",
     "symbol": "sand"
   },
   {
-    "idCG": "shiba-inu",
+    "coinGeckoId": "shiba-inu",
     "symbol": "shib"
   },
   {
-    "idCG": "tether",
+    "coinGeckoId": "tether",
     "symbol": "usdt"
   },
   {
-    "idCG": "matic-network",
+    "coinGeckoId": "matic-network",
     "symbol": "matic"
   },
   {
-    "idCG": "binancecoin",
+    "coinGeckoId": "binancecoin",
     "symbol": "bnb"
   },
   {
-    "idCG": "usd-coin",
+    "coinGeckoId": "usd-coin",
     "symbol": "usdc"
   },
   {
-    "idCG": "uniswap",
+    "coinGeckoId": "uniswap",
     "symbol": "uni"
   },
   {
-    "idCG": "chainlink",
+    "coinGeckoId": "chainlink",
     "symbol": "link"
   },
   {
-    "idCG": "dogecoin",
+    "coinGeckoId": "dogecoin",
     "symbol": "doge"
   }
 ]
