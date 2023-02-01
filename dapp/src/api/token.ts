@@ -8,7 +8,7 @@ export const find = async (queryParams?: TokenApi.Find.Query) =>
     params: queryParams,
   });
 
-export const getDetails = async (queryParams?: { symbol: string[] }) =>
+export const getDetails = async (queryParams?: { symbol?: string[] }) =>
   api.get<never, { tokens: TokenCoinGecko[] }>(
     'http://localhost:3002/api/token',
     {

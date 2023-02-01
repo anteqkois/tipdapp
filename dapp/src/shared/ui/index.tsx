@@ -24,3 +24,4 @@ export { Tooltip } from './Tooltip';
 export { Verified } from './Verified';
 export { ViewOnExplorer } from './ViewOnExplorer';
 export { SocialLink } from './SocialLink';
+export { InfoParagraph } from './InfoParagraph';

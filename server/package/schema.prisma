@@ -49,7 +49,7 @@ model User {
   userToken              UserToken?
   tips                   Tip[]
   streamer               Streamer?
-  tipper                 Tipper?
+  // tipper                 Tipper?
   sessions               Session[]
   verificationEmailToken VerificationEmailToken?
   settings               Settings?
@@ -88,7 +88,7 @@ model Streamer {
 }
 
 model Tipper {
-  user      User?   @relation(fields: [address], references: [address])
+  // user      User?   @relation(fields: [address], references: [address])
   address   String  @id @db.VarChar(42)
   nick      String? @unique
   tipsValue Decimal @default(0) @db.Decimal(78, 0)
@@ -163,13 +163,12 @@ model Widget {
 
 model Token {
   address         String    @id @unique @db.VarChar(42)
-  symbol          String    @unique
+  symbol          String
   name            String    @unique
+  coinGeckoId     String   
   chainId         Int
-  image           File?     @relation(fields: [imageUrl], references: [url])
-  imageUrl        String?
-  latestPrice     Decimal?  @db.Decimal(78, 0)
-  priceUpdateAt   DateTime?
+  // image           File?     @relation(fields: [imageUrl], references: [url])
+  // imageUrl        String?
   streamer        Streamer? @relation(fields: [streamerAddress], references: [address])
   streamerAddress String?   @db.VarChar(42)
   tip             Tip[]
@@ -196,6 +195,8 @@ model File {
   filename  String
   extension Extension
   user      User[]
-  token     Token[]
+  // token     Token[]
   page      Page[]
+
+  @@unique([filename, extension])
 }

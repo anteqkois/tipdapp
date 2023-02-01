@@ -4,7 +4,13 @@ import { usePageFindByAffixUrl } from '@/modules/Page/hooks/usePageQuery';
 import { TipForm } from '@/modules/Tip/containers/TipForm';
 import { TokenPriceList } from '@/modules/Token/components/TokenPriceList';
 import { useTokenGetDetails } from '@/modules/Token/hooks/useTokenQuery';
-import { Card, MainContainer, SocialLink, Verified } from '@/shared/ui';
+import {
+  Card,
+  InfoParagraph,
+  MainContainer,
+  SocialLink,
+  Verified,
+} from '@/shared/ui';
 import Avatar from '@/shared/User/components/Avatar';
 import { Role } from '@tipdapp/server';
 import Image from 'next/image';
@@ -21,10 +27,10 @@ export default function Page({ params }: Props) {
     params,
   });
 
-  const activeTokensSymbol = ['sand', 'shib', 'bnb'];
+  // const activeTokensSymbol = ['sand', 'shib', 'bnb'];
 
   const { data: tokenRes } = useTokenGetDetails({
-    symbol: activeTokensSymbol,
+    // symbol: activeTokensSymbol,
   });
 
   const { page, user } = pageRes!;
@@ -60,18 +66,15 @@ export default function Page({ params }: Props) {
         </Card>
         <Card className="col-span-2 row-start-3 flex flex-col gap-2 lg:col-span-1 lg:col-start-2 lg:row-start-2">
           <h5>User details</h5>
-          <div>
-            <span>Tips amount: {323}</span>
-          </div>
-          <div>
-            <span>Last tip value:</span>
-          </div>
-          <div>
-            <span>Last tip transaction:</span>
-          </div>
-          <div>
-            <span>Last tip transaction:</span>
-          </div>
+          <InfoParagraph header="Tips amount:">
+            <span>{user.allTipsCount}</span>
+          </InfoParagraph>
+          <InfoParagraph header="Last tip value:">
+            <span>no data</span>
+          </InfoParagraph>
+          <InfoParagraph header="Last tip transaction:">
+            <span>no data</span>
+          </InfoParagraph>
           <SocialLink
             href="https://youtube.com"
             socialMedium="youtube"

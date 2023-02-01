@@ -1,3 +1,5 @@
+import CoinGeckoLogo from '@/assets/coinGeckoLogo.svg';
+import { Link } from '@/shared/ui';
 import Image from 'next/image';
 import { TokenCoinGecko } from '../types';
 
@@ -6,7 +8,7 @@ type Props = {
   className?: string;
 };
 export const TokenPriceList = ({ tokens, className }: Props) => {
-  console.log('tokens', tokens)
+  console.log('tokens', tokens);
   return (
     <table
       className={`table-auto rounded bg-neutral-50 p-4 ring-1 ring-inset ring-neutral-600 ring-opacity-10 ${className}`}
@@ -17,8 +19,9 @@ export const TokenPriceList = ({ tokens, className }: Props) => {
           <th className="rounded-tl bg-primary p-2 text-left text-neutral-150">
             Name
           </th>
-          <th className="rounded-tr bg-primary p-2 text-left text-neutral-150">
+          <th className="flex items-center justify-between rounded-tr bg-primary p-2 text-left text-neutral-150">
             Last price
+            {/* <span className='text-xs'>*Data provided by CoinGecko</span> */}
           </th>
         </tr>
       </thead>
@@ -57,8 +60,13 @@ export const TokenPriceList = ({ tokens, className }: Props) => {
             colSpan={2}
             className="border-t border-t-neutral-600/10"
           >
-            <p className="px-2 py-1 text-xs italic">
-              *Prices are updated every 2 minutes.
+            <p className="inline-flex items-center gap-1 px-2 py-1 text-xs italic">
+              *Data provided by
+              <Link className="inline-flex items-center gap-1">
+                <CoinGeckoLogo className="inline-block h-4" />
+                CoinGecko,
+              </Link>
+              prices are updated every 2 minutes.
             </p>
           </td>
         </tr>

@@ -2,6 +2,7 @@
 import { getNonce } from '@/api/auth';
 import { useSignUpForm } from '@/modules/SignUpForm/hooks/useSignUpForm';
 import { useMediaQuery } from '@/shared/hooks';
+import { errorToast } from '@/shared/ui';
 import { useTipper } from '@/shared/User/hooks/useTipper';
 import { useUser } from '@/shared/User/hooks/useUser';
 import {
@@ -18,6 +19,7 @@ import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { hardhat, mainnet, polygon } from 'wagmi/chains';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
+import { AuthStatus } from '../types';
 
 const { chains, provider } = configureChains(
   [hardhat, mainnet, polygon],
@@ -60,7 +62,34 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
   const { register } = useSignUpForm();
   const isMobile = useMediaQuery(['(max-width: 1024px)'], [true], true);
 
-  const isTipperPath = useMemo(() => pathname?.includes('u'), [pathname]);
+  const isTipperPath = useMemo(
+    () => ['/u'].some((partOfPath) => pathname?.includes(partOfPath)),
+    [pathname]
+  );
+  const isUserPath = useMemo(
+    () =>
+      [
+        '/login',
+        '/signup',
+        '/balance',
+        '/creator',
+        '/dashboard',
+        '/page',
+        '/settings',
+        '/tips',
+        '/token',
+      ].some((partOfPath) => pathname?.includes(partOfPath)),
+    [pathname]
+  );
+
+  const status: AuthStatus = useMemo(() => {
+    if (isUserPath) {
+      return statusUser;
+    } else if (isTipperPath) {
+      return statusTipper;
+    }
+    return 'unauthenticated';
+  }, [isUserPath, isTipperPath]);
 
   const authAdapter = createAuthenticationAdapter({
     getNonce: async () => {
@@ -112,15 +141,25 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
       });
     },
     signOut: async () => {
-      logoutUser();
-      logoutTipper();
+      if (isUserPath) {
+        logoutUser() ??
+          errorToast(
+            "You can't logout as user from this url path, return to one of given pages: ('.../streamer/...')"
+          );
+      }
+      if (isTipperPath) {
+        logoutTipper() ??
+          errorToast(
+            "You can't logout as tipper from this url path, return to one of given pages: ('.../u/streamer')"
+          );
+      }
     },
   });
 
   return (
     <RainbowKitAuthenticationProvider
       adapter={authAdapter}
-      status={isMobile ? statusTipper : statusUser}
+      status={status}
     >
       <RainbowKitProvider
         coolMode

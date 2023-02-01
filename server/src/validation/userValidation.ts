@@ -1,4 +1,4 @@
-import { createApiError } from '@middlewares/error';
+import { createApiError } from '../middlewares/error';
 import { Role, User } from '@prisma/client';
 import { validationHelper, z } from '../config/zod';
 // import { Role } from '../types';

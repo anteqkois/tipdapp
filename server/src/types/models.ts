@@ -14,7 +14,6 @@ import { PartialExcept } from '.';
 const user = Prisma.validator<Prisma.UserArgs>()({
   include: {
     avatar: true,
-    tipper: true,
     userToken: true,
     streamer: {
       include: {

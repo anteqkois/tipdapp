@@ -48,6 +48,7 @@
   "scripts": {
     "prebuild": "rm -rf lib",
     "build": "npx prisma generate && npm run bundle && npm run build:ts && cp ../prisma/schema.prisma .",
+    "postbuild": "npx prisma generate",
     "build:local": "npm run build && cp -r ./lib ../../dapp/node_modules/@tipdapp/server/ && cp ./{schema.prisma,package.json,README.md} ../../dapp/node_modules/@tipdapp/server/",
     "bundle": "node esbuild.config.js",
     "prepack": "npm run build",
