@@ -8,6 +8,7 @@ esbuild
     platform: 'browser',
     outdir: './lib/esm',
     minify: true,
+    external: ['redis', 'dotenv'],
     // outfile: 'out.js',
     tsconfig: './tsconfig.esm.json',
   })
@@ -15,19 +16,20 @@ esbuild
     console.log(err);
     process.exit(1);
   });
-
-esbuild
-  .build({
-    entryPoints: ['index.ts'],
-    bundle: true,
-    format: 'cjs',
-    platform: 'browser',
-    outdir: './lib/cjs',
-    minify: true,
-    // outfile: 'out.js',
-    tsconfig: './tsconfig.cjs.json',
-  })
-  .catch((err) => {
-    console.log(err);
-    process.exit(1);
-  });
+  
+  esbuild
+    .build({
+      entryPoints: ['index.ts'],
+      bundle: true,
+      format: 'cjs',
+      platform: 'browser',
+      outdir: './lib/cjs',
+      minify: true,
+      external: ['redis', 'dotenv'],
+      // outfile: 'out.js',
+      tsconfig: './tsconfig.cjs.json',
+    })
+    .catch((err) => {
+      console.log(err);
+      process.exit(1);
+    });

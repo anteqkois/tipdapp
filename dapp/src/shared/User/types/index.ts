@@ -1,9 +1,9 @@
 import { UserTokenDapp } from '@/shared/UserToken/types';
-import { Modify } from '@/types/index';
-import { UserSession, NestedStreamer } from '@tipdapp/server';
+import { ModifyObjectKey } from '@/types/index';
+import { NestedStreamer, UserSession } from '@tipdapp/server';
 import { Address } from 'wagmi';
 
-export type UserSessionDapp = Modify<
+export type UserSessionDapp = ModifyObjectKey<
   UserSession,
   { address: Address; userToken: UserTokenDapp; streamer: NestedStreamer }
 >;

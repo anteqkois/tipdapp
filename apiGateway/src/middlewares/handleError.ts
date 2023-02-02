@@ -2,12 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { errorLogger, requestLogger } from '../config/logger';
 import { ZodError } from '../config/zod';
-import {
-  ApiError,
-  createApiError,
-  isOperationalErrorArray,
-  ValidationError,
-} from './error';
+import { ApiError, createApiError, isOperationalErrorArray, ValidationError } from '../utils/error';
 
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
   requestLogger.error('not found', {
@@ -19,13 +14,7 @@ export const notFound = (req: Request, res: Response, next: NextFunction) => {
   next(err);
 };
 
-export const catchAsyncErrors = (
-  handler: (
-    req: Request<any, any, any, any>,
-    res: Response,
-    next: NextFunction
-  ) => void
-) => {
+export const catchAsyncErrors = (handler: (req: Request<any, any, any, any>, res: Response, next: NextFunction) => void) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       await handler(req, res, next);
@@ -35,9 +24,7 @@ export const catchAsyncErrors = (
   };
 };
 
-export const catchErrors = (
-  handler: (req: Request, res: Response, next: NextFunction) => void
-) => {
+export const catchErrors = (handler: (req: Request, res: Response, next: NextFunction) => void) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       handler(req, res, next);
@@ -68,11 +55,7 @@ export const throwIfOperational = (err: any, helpMessage: string) => {
   //      received: 'Resolved address to be 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
   //    }
   //  }
-  if (
-    err?.isOperational ||
-    err instanceof ZodError ||
-    isOperationalErrorArray(err)
-  ) {
+  if (err?.isOperational || err instanceof ZodError || isOperationalErrorArray(err)) {
     throw err;
   } else if (helpMessage) {
     console.log(err);
@@ -83,23 +66,14 @@ export const throwIfOperational = (err: any, helpMessage: string) => {
   // return false;
 };
 
-export const handleErrors = (
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const handleErrors = (err: any, req: Request, res: Response, next: NextFunction) => {
   if (err.type === 'ApiError' || err.type === 'ValidationError') {
     errorLogger.error('', err);
-    return res
-      .status(err.status || StatusCodes.INTERNAL_SERVER_ERROR)
-      .send({ error: [err] });
+    return res.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).send({ error: [err] });
   }
   if (isOperationalErrorArray(err)) {
     errorLogger.error('Error array', err);
-    return res
-      .status(err[0].status || StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: err });
+    return res.status(err[0].status || StatusCodes.INTERNAL_SERVER_ERROR).json({ error: err });
   }
   if (err instanceof ZodError) {
     const error = ValidationError.fromZodErrorArray(err.issues);

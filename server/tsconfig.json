@@ -1,20 +1,13 @@
 {
   "compilerOptions": {
-    // "baseUrl": "./",
     "paths": {
       "@middlewares/*": ["./src/middlewares/*"],
       "@config/*": ["./src/config/*"],
       "@services/*": ["./src/services/*"],
       "@types/*": ["./src/types/*"],
       "@types": ["./src/types"]
-      // "@middlewares/*": ["/src/middlewares/*"],
-      // "@config/*": ["src/config/*"],
-      // "@types/*": ["src/types/*"],
-      // "@types": ["src/types"]
     },
     "typeRoots": ["./src/types", "./node_modules/@types"],
-    // "module": "NodeNext",
-    // "moduleResolution": "NodeNext",
     "module": "Node16",
     "moduleResolution": "Node",
     "outDir": "./dist",
@@ -29,11 +22,6 @@
     "incremental": true,
     "esModuleInterop": true,
     "resolveJsonModule": true
-    // importsNotUsedAsValues
-    // "strictNullChecks": true,
-    // "noUncheckedIndexedAccess": true,
-    // "typeRoots": ["./node_modules/*", "./src/types/*"]
-    // "typeRoots": ["./src/types/*", "./node_modules/*"]
   },
   "include": ["server.ts", "**/*.ts", "**/*.d.ts", "**/*.js"],
   "exclude": [

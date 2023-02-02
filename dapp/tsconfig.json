@@ -39,13 +39,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    // "**/*.js",
-    // "src/pages/api/auth/[...nextauth].ts",
-    // "lib/prismaClient.js",
-    // "src/lib/redux/tipSlice.js",
-    // "src/validation/userTokenValidation.old.js",
-    // "src/validation/signUpValidaion.old.js",
-    // "src/server/controllers/authController.js"
     ".next/types/**/*.ts",
     "src/shared/TipdappContracts/types/index.d.ts"
   ],

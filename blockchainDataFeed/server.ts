@@ -5,14 +5,14 @@ import { handleErrors, notFound } from './src/middlewares/handleError';
 import apiRouter from './src/routes';
 import { TokenFeed } from './src/services/tokenFeedService';
 
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3003;
 const dev = process.env.NODE_ENV !== 'production';
 
 const server = express();
 
 server.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:3001',
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     optionsSuccessStatus: 200,

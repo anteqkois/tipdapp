@@ -1,2 +1,7 @@
 - create api gateway
 - move all shared server code to api gateway microservice (ApiError class, error handling etc.)
+- create one main file with tokens data in api gateway, delete others files that contains tokens data
+- migrate authentication to api gateway
+- move rabbitmq config to apigateway
+- move zod config to apigateway
+- delete modify type frpm dapp types, get it from api gateway
