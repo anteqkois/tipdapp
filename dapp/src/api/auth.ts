@@ -1,5 +1,5 @@
 import { UserSessionDapp } from '@/shared/User/types';
-import { Tipper, UserValidation } from '@tipdapp/server';
+import { Tipper, UserValidation } from '@tipdapp/databasese';
 import { SiweMessage } from 'siwe';
 import { api } from './apiConfig';
 
@@ -29,11 +29,13 @@ type VerifyMessageBody = {
 };
 
 // export const verifyMessage = async <T extends 'user' | 'tipper'>(body: VerifyMessageBody) => {
-export const verifyMessage = async <T extends VerifyMessageBody['type']>(body: VerifyMessageBody) => {
-    return await api.post<any, PostVerifyMessageResponse<T>>(
-      '/auth/verify',
-      body
-    );
+export const verifyMessage = async <T extends VerifyMessageBody['type']>(
+  body: VerifyMessageBody
+) => {
+  return await api.post<any, PostVerifyMessageResponse<T>>(
+    '/auth/verify',
+    body
+  );
   // if (body.type === 'user')
   //   return await api.post<any, PostVerifyMessageResponse<T>>(
   //     '/auth/verify',

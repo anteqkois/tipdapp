@@ -1,5 +1,5 @@
-import { ApiError, ValidationError } from '@tipdapp/server';
-import { z, ZodError, ZodSchema, ZodTypeAny } from 'zod';
+import { ApiError, ValidationError } from '@tipdapp/database';
+import { ZodError, ZodTypeAny } from 'zod';
 export * from 'zod';
 
 export const validationHelper = <D>(data: D, validation: ZodTypeAny): D => {

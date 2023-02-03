@@ -1,4 +1,4 @@
-import { TipUI } from '@tipdapp/server';
+import { TipUI } from '@tipdapp/database';
 import { api } from './apiConfig';
 
 type FindParams = {

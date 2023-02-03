@@ -1,4 +1,4 @@
-import { Token } from '@tipdapp/server';
+import { Token } from '@tipdapp/database';
 import Image from 'next/image';
 import ReactSelect, {
   components,
@@ -97,7 +97,7 @@ export const SelectTokens = ({
       <div
         ref={innerRef}
         {...innerProps}
-        className="flex items-center gap-2 p-2 hover:bg-neutral-150 rounded cursor-pointer"
+        className="flex cursor-pointer items-center gap-2 rounded p-2 hover:bg-neutral-150"
       >
         <Image
           height={24}
@@ -145,7 +145,7 @@ export const SelectTokens = ({
       <components.SingleValue
         {...props}
         data={data}
-        className="inline-flex max-w-xs items-center gap-2 p-2 cursor-pointer"
+        className="inline-flex max-w-xs cursor-pointer items-center gap-2 p-2"
       >
         <Image
           height={24}
@@ -180,7 +180,7 @@ export const SelectTokens = ({
     <>
       <label
         htmlFor={id}
-        className="block mb-2 ml-1 text-sm font-medium text-neutral-800 first-letter:uppercase"
+        className="mb-2 ml-1 block text-sm font-medium text-neutral-800 first-letter:uppercase"
       >
         {label}
       </label>
@@ -225,7 +225,7 @@ export const SelectTokens = ({
         // onBlur={() => setIsOpenMenu(false)}
         // menuIsOpen={isOpenMenu}
       />
-      <p className="text-danger-600 min-h-[24px]">{error && `* ${error}`}</p>
+      <p className="min-h-[24px] text-danger-600">{error && `* ${error}`}</p>
     </>
   );
 };

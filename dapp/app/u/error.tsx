@@ -1,7 +1,7 @@
 'use client';
 
 import ErrorPage from '@/shared/ui/ErrorPage';
-import { ApiError, ValidationError } from '@tipdapp/server';
+import { ApiError, ValidationError } from '@tipdapp/database';
 
 type Props = {
   error: unknown[];
@@ -22,9 +22,9 @@ export const isOperationalErrorArray = (
 
 export default function Error({ error, reset }: Props) {
   return isOperationalErrorArray(error) ? (
-    <ErrorPage className="flex-row flex-center">{error[0].message}</ErrorPage>
+    <ErrorPage className="flex-center flex-row">{error[0].message}</ErrorPage>
   ) : (
-    <ErrorPage className="flex-row flex-center">
+    <ErrorPage className="flex-center flex-row">
       Something went wrong...
     </ErrorPage>
   );

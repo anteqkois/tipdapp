@@ -1,5 +1,5 @@
-import { TipUI } from '@tipdapp/server';
 import { InfoMessage } from '@/shared/ui';
+import { TipUI } from '@tipdapp/database';
 import TipCard from '../components/Tip';
 import TipMinimalist from '../components/TipMinimalist';
 

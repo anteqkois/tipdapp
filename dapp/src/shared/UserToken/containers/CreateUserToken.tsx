@@ -7,7 +7,7 @@ import {
   UserTokenValidation,
   userTokenValidation,
   ValidationError,
-} from '@tipdapp/server';
+} from '@tipdapp/database';
 import { FormEvent, useState } from 'react';
 import { toast } from 'react-hot-toast';
 

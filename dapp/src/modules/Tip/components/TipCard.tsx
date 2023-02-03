@@ -2,13 +2,13 @@ import { dateFormat } from '@/lib/dayjs';
 import { useClipboard, useModal } from '@/shared/hooks';
 import { Button, Card, Flag, Tooltip } from '@/shared/ui';
 import Avatar from '@/shared/User/components/Avatar';
-import { parseNotation, cutAddress } from '@/utils';
+import { cutAddress, parseNotation } from '@/utils';
 import {
   ArrowPathIcon,
   ArrowsPointingOutIcon,
   AtSymbolIcon,
 } from '@heroicons/react/24/outline';
-import { TipUI } from '@tipdapp/server';
+import { TipUI } from '@tipdapp/database';
 
 const TipCard = ({
   txHash,
@@ -29,32 +29,32 @@ const TipCard = ({
   return (
     <Card>
       {/* <div className="flex items-center justify-between w-full gap-1"> */}
-      <div className="flex items-top w-full gap-1">
+      <div className="items-top flex w-full gap-1">
         <Avatar
           address={tipperAddress}
-          className="w-6 h-6 mr-0.5"
+          className="mr-0.5 h-6 w-6"
         />
         <h5 className=" mr-3 lg:text-2xl">
-          <AtSymbolIcon className="inline text-primary w-6 lg:w-7 " />
+          <AtSymbolIcon className="inline w-6 text-primary lg:w-7 " />
           <i className="text-primary">{tipper.nick} </i>
           {/* sent {ethers.utils.formatEther(amount)} */}
           sent {parseNotation(amount)}
           <i className="text-secondary "> ${token.symbol}</i>:
         </h5>
-        <div className="flex gap-1.5 ml-auto max-h-7">
+        <div className="ml-auto flex max-h-7 gap-1.5">
           <Tooltip content="Display again">
-            <ArrowPathIcon className="w-7 p-0.5 rounded-full bg-neutral-150 animate-action" />
+            <ArrowPathIcon className="animate-action w-7 rounded-full bg-neutral-150 p-0.5" />
           </Tooltip>
           <Flag
             flag={displayed}
             tooltip="Displayed"
-            className="w-7 h-7"
+            className="h-7 w-7"
           />
         </div>
       </div>
-      <p className="pt-2 pb-3 leading-tight max-w-4xl truncate">{message}</p>
-      <div className="w-full mb-2">
-        <h6 className=" text-primary font-semibold">Tip details:</h6>
+      <p className="max-w-4xl truncate pt-2 pb-3 leading-tight">{message}</p>
+      <div className="mb-2 w-full">
+        <h6 className=" font-semibold text-primary">Tip details:</h6>
         <p>
           <span className="font-medium text-neutral-light">Date: </span>
           {dateFormat(date).format('MMM DD YYYY, HH:MM')} (
@@ -74,7 +74,7 @@ const TipCard = ({
             variant="minimalist"
             className="h-7"
           >
-            <ArrowsPointingOutIcon className="inline w-5 mr-1" />
+            <ArrowsPointingOutIcon className="mr-1 inline w-5" />
             display details
           </Button>
         </DetailsTrigger>
@@ -82,11 +82,11 @@ const TipCard = ({
           title="Tip details"
           className="space-y-2"
         >
-          <Card className="shadow-none text-neutral-800 !p-2">
+          <Card className="!p-2 text-neutral-800 shadow-none">
             <h6 className="text-primary">Tipper&apos;s Message</h6>
-            <p className="p-1 leading-tight max-w-4xl">{message}</p>
+            <p className="max-w-4xl p-1 leading-tight">{message}</p>
           </Card>
-          <Card className="shadow-none text-neutral-800 !p-2">
+          <Card className="!p-2 text-neutral-800 shadow-none">
             <h6 className="text-primary">Value and Token</h6>
             <p>
               <span className="font-medium text-neutral-700">Value: </span>
@@ -116,16 +116,16 @@ const TipCard = ({
             >
               <Button
                 variant="link"
-                className="font-medium text-neutral-700 mr-1"
+                className="mr-1 font-medium text-neutral-700"
               >
                 View token on Explorer
               </Button>
             </a>
           </Card>
-          <Card className="shadow-none text-neutral-800 !p-2">
+          <Card className="!p-2 text-neutral-800 shadow-none">
             <h6 className="text-primary">Tipper</h6>
             <p className="flex items-end ">
-              <span className="font-medium mr-1">Nick: </span>
+              <span className="mr-1 font-medium">Nick: </span>
               <AtSymbolIcon className="w-5" />
               {tipper.nick}
             </p>
@@ -146,14 +146,14 @@ const TipCard = ({
               >
                 <Button
                   variant="link"
-                  className="font-medium text-neutral-700 mr-1"
+                  className="mr-1 font-medium text-neutral-700"
                 >
                   View on Explorer
                 </Button>
               </a>
             </p>
           </Card>
-          <Card className="shadow-none text-neutral-800 !p-2">
+          <Card className="!p-2 text-neutral-800 shadow-none">
             <h6 className="text-primary">Transaction</h6>
             <p>
               <span className="font-medium text-neutral-700">Date: </span>
@@ -177,14 +177,14 @@ const TipCard = ({
               >
                 <Button
                   variant="link"
-                  className="font-medium text-neutral-700 mr-1"
+                  className="mr-1 font-medium text-neutral-700"
                 >
                   View on Explorer
                 </Button>
               </a>
             </p>
           </Card>
-          <div className="flex justify-between !mt-4">
+          <div className="!mt-4 flex justify-between">
             <p className="flex items-center gap-1">
               <span className="ml-2">
                 <Flag
@@ -197,14 +197,14 @@ const TipCard = ({
               </span>
             </p>
             <div className="flex gap-1">
-              <Button className="flex gap-2 items-center">
+              <Button className="flex items-center gap-2">
                 <ArrowPathIcon className="w-6" />
                 Display
               </Button>
               <Button
                 onClick={() => setShowDetails(false)}
                 variant="danger"
-                className="flex gap-2 items-center"
+                className="flex items-center gap-2"
               >
                 Close
               </Button>

@@ -1,4 +1,4 @@
-import { Prisma } from '@tipdapp/server';
+import { Prisma } from '@tipdapp/database';
 import { BigNumber, utils } from 'ethers';
 
 const cutNumber = (amount: string) => {

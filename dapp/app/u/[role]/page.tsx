@@ -1,6 +1,6 @@
 'use client';
 
-import { Role } from '@tipdapp/server';
+import { Role } from '@tipdapp/database';
 
 type Props = {
   params: {

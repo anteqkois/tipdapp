@@ -15,7 +15,7 @@ import {
   TextArea,
 } from '@/shared/ui';
 import { useTipper } from '@/shared/User/hooks/useTipper';
-import { Token, ValidationError } from '@tipdapp/server';
+import { Token, ValidationError } from '@tipdapp/database';
 import { useFormik } from 'formik';
 import { useMemo } from 'react';
 import { z } from 'zod';
@@ -91,9 +91,15 @@ export const TipForm = () => {
             error={formik.errors.token as string}
           />
         )}
-        <p className="italic text-xs md:hidden">
+        <p className="text-xs italic md:hidden">
           *Table with token prices is
-          <Link className='pl-0.5' href='#tokenPrices' target={'_self'}>below.</Link>
+          <Link
+            className="pl-0.5"
+            href="#tokenPrices"
+            target={'_self'}
+          >
+            below.
+          </Link>
         </p>
         <InputCurrency
           label="Amount"
@@ -111,14 +117,14 @@ export const TipForm = () => {
       >
         Send Tip
       </Button>
-      <p className="pt-2 px-2">
+      <p className="px-2 pt-2">
         Making a payment, you accept the{' '}
         <Link>General Terms and Conditions</Link> and the{' '}
         <Link>Privacy Policy</Link>
       </p>
     </form>
   ) : (
-    <div className="flex flex-col items-center gap-2 flex-wrap">
+    <div className="flex flex-col flex-wrap items-center gap-2">
       <CustomConnectButton />
       <InfoMessage>Connect wallet if you want to tip this user.</InfoMessage>
     </div>

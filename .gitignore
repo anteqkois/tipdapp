@@ -25,10 +25,9 @@ dapp/build
 dapp/.vercel
 
 # server
-server/artifacts
-server/node_modules
-server/package/lib
-server/src/types/prisma.js
+database/node_modules
+database/package/lib
+database/src/types/prisma.js
 
 # local env files
 **/.env

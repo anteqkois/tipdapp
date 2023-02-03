@@ -1,2 +1,2 @@
-export { validationHelper } from '@tipdapp/server';
+export { validationHelper } from '@tipdapp/database';
 export * from 'zod';

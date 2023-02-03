@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@tipdapp/contracts": "^0.0.15",
-    "@tipdapp/server": "^0.0.1",
+    "@tipdapp/database": "^0.0.1",
     "@wagmi/chains": "^0.1.8",
     "amqplib": "^0.10.3",
     "dotenv": "^16.0.3"

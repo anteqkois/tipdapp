@@ -5,7 +5,7 @@ import { handleErrors, notFound } from '@middlewares/handleError';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import { queryParser } from 'express-query-parser';
-// import { useCors } from './src/config/cors';
+import { useCors } from './src/config/cors';
 import { logRequest } from './src/middlewares/logRequest';
 import { startQueueConsumers } from './src/queue';
 import apiRouter from './src/routes';
@@ -15,7 +15,7 @@ const dev = process.env.NODE_ENV !== 'production';
 
 const server = express();
 
-// server.use(useCors);
+server.use(useCors);
 server.use(
   queryParser({
     parseNull: true,

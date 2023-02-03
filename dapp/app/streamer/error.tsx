@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, ErrorMessage } from '@/shared/ui';
-import { ApiError } from '@tipdapp/server';
+import { ApiError } from '@tipdapp/database';
 import Link from 'next/link';
 
 type Props = {

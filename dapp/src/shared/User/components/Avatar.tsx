@@ -9,7 +9,7 @@
  */
 // import { File } from '@prisma/client';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
-import { File } from '@tipdapp/server';
+import { File } from '@tipdapp/database';
 import Image, { ImageProps } from 'next/image';
 
 type AvatarProps = {
@@ -27,7 +27,7 @@ export const Avatar = ({
   return (
     <AvatarPrimitive.Root
       // className={`absolute inline-block bg-neutral-150 shadow-inner-avatar rounded-md w-7 aspect-square overflow-hidden ${className}`}
-      className={`relative inline-block bg-neutral-150 shadow-inner-avatar rounded-md aspect-square overflow-hidden ${className}`}
+      className={`relative inline-block aspect-square overflow-hidden rounded-md bg-neutral-150 shadow-inner-avatar ${className}`}
     >
       <AvatarPrimitive.Image
         {...rest}
@@ -78,7 +78,7 @@ export default Avatar;
 // // import { File } from '@prisma/client';
 // import { Spinner } from '@/shared/ui';
 // import * as AvatarPrimitive from '@radix-ui/react-avatar';
-// import { File } from '@tipdapp/server';
+// import { File } from '@tipdapp/database';
 // import Image, { ImageProps } from 'next/image';
 // import { useState } from 'react';
 

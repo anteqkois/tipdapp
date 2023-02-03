@@ -167,8 +167,8 @@ model Token {
   name            String    @unique
   coinGeckoId     String   
   chainId         Int
-  // image           File?     @relation(fields: [imageUrl], references: [url])
-  // imageUrl        String?
+  image           File?     @relation(fields: [imageUrl], references: [url])
+  imageUrl        String?
   streamer        Streamer? @relation(fields: [streamerAddress], references: [address])
   streamerAddress String?   @db.VarChar(42)
   tip             Tip[]
@@ -195,7 +195,7 @@ model File {
   filename  String
   extension Extension
   user      User[]
-  // token     Token[]
+  token     Token[]
   page      Page[]
 
   @@unique([filename, extension])

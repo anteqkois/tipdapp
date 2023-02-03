@@ -1,4 +1,4 @@
-import { ApiError } from '@tipdapp/server';
+import { ApiError } from '@tipdapp/database';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 

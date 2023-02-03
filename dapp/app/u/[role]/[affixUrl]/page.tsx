@@ -12,7 +12,7 @@ import {
   Verified,
 } from '@/shared/ui';
 import Avatar from '@/shared/User/components/Avatar';
-import { Role } from '@tipdapp/server';
+import { Role } from '@tipdapp/database';
 import Image from 'next/image';
 
 type Props = {

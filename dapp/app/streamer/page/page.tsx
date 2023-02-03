@@ -1,6 +1,9 @@
 'use client';
 import { update } from '@/api/page';
-import { formTokenOptions, SelectTokens } from '@/modules/Token/components/SelectTokens';
+import {
+  formTokenOptions,
+  SelectTokens,
+} from '@/modules/Token/components/SelectTokens';
 import { useTokenFind } from '@/modules/Token/hooks/useTokenQuery';
 import {
   Button,
@@ -16,9 +19,8 @@ import {
   isValidationError,
   PageApi,
   pageValidation,
-  Token,
   ValidationError,
-} from '@tipdapp/server';
+} from '@tipdapp/database';
 import { useFormik } from 'formik';
 import { useMemo } from 'react';
 import toast from 'react-hot-toast';
@@ -88,10 +90,10 @@ const Page = () => {
                 value={formik.values.affixUrl}
                 error={formik.errors.affixUrl}
               ></Input>
-              <span className="absolute text-neutral-light top-[29px] left-[1px] p-2 bg-neutral-200 rounded  rounded-tr-none rounded-br-none">
+              <span className="absolute top-[29px] left-[1px] rounded rounded-tr-none rounded-br-none bg-neutral-200  p-2 text-neutral-light">
                 {`https://tipdapp/u/${user?.activeRole}/${user?.nick}`}
               </span>
-              <span className="absolute text-neutral-light top-[29px] right-[1px] p-2 bg-neutral-200 rounded  rounded-tl-none rounded-bl-none">
+              <span className="absolute top-[29px] right-[1px] rounded rounded-tl-none rounded-bl-none bg-neutral-200  p-2 text-neutral-light">
                 {user?.streamer?.page?.affixUrl.length}/20
               </span>
             </div>
@@ -128,7 +130,7 @@ const Page = () => {
           <Button
             type="submit"
             variant="success"
-            className='w-full'
+            className="w-full"
           >
             Save
           </Button>

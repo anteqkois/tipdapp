@@ -1,9 +1,9 @@
 {
-  "name": "@tipdapp/server",
+  "name": "@tipdapp/database",
   "author": "Antek Kois",
   "license": "MIT",
   "version": "0.0.7",
-  "description": "Types from Prisma for models and other shared code to my web3 app",
+  "description": "Types from Prisma for models and related types.",
   "main": "lib/cjs/package.js",
   "module": "lib/esm/package.js",
   "types": "lib/esm/package.d.ts",
@@ -49,7 +49,7 @@
     "prebuild": "rm -rf lib",
     "build": "npx prisma generate && npm run bundle && npm run build:ts && cp ../prisma/schema.prisma .",
     "postbuild": "npx prisma generate",
-    "build:local": "npm run build && cp -r ./lib ../../dapp/node_modules/@tipdapp/server/ && cp ./{schema.prisma,package.json,README.md} ../../dapp/node_modules/@tipdapp/server/",
+    "build:local": "npm run build && cp -r ./lib ../../dapp/node_modules/@tipdapp/dapp/ && cp ./{schema.prisma,package.json,README.md} ../../dapp/node_modules/@tipdapp/database/",
     "bundle": "node esbuild.config.js",
     "prepack": "npm run build",
     "publishPackage": "npm version patch && npm publish",
@@ -63,6 +63,6 @@
     "esbuild": "^0.15.18",
     "prisma": "^4.8.0",
     "tsc": "^2.0.4",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.5"
   }
 }

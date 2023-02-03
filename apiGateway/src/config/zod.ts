@@ -1,4 +1,4 @@
-// import { ApiError, ValidationError } from '@tipdapp/server';
+// import { ApiError, ValidationError } from '@tipdapp/database';
 import { ZodError, ZodTypeAny } from 'zod';
 import { ApiError, ValidationError } from '../utils/error';
 export * from 'zod';

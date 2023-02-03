@@ -3,7 +3,7 @@ import { verifyMessage } from '@/api/auth';
 import { useLocalStorage } from '@/shared/hooks';
 import { AuthStatus } from '@/types/index';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { Tipper } from '@tipdapp/server';
+import { Tipper } from '@tipdapp/database';
 import { useRouter } from 'next/navigation';
 import { createContext, ReactNode, useContext } from 'react';
 import toast from 'react-hot-toast';

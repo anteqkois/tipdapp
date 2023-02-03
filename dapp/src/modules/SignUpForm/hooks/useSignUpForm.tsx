@@ -10,7 +10,7 @@ import {
   isValidationError,
   UserValidation,
   ValidationError,
-} from '@tipdapp/server';
+} from '@tipdapp/database';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -110,7 +110,7 @@ export const useSignUpForm = () => {
               <h6 className="py-2">Validation Error</h6>
               <Close onClick={() => toast.dismiss(t.id)} />
             </span>
-            <ul className="px-4 flex flex-col gap-3 list-['📌']">
+            <ul className="flex list-['📌'] flex-col gap-3 px-4">
               {error.map((error: any) => (
                 <li
                   key={error.code}

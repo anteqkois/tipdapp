@@ -1,4 +1,4 @@
-import { NestedUser, UserApi } from '@tipdapp/server';
+import { NestedUser, UserApi } from '@tipdapp/database';
 import { api } from './apiConfig';
 
 type FindResponse = {
