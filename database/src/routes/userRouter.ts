@@ -7,4 +7,7 @@ const router = Router();
 //GET
 router.get('/:nick', catchAsyncErrors(userController.findByNick));
 router.get('/', catchAsyncErrors(userController.find));
+
+//POST
+router.post('/', catchAsyncErrors(userController.create));
 export default router;

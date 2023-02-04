@@ -1,66 +1,26 @@
 import { Prisma } from '@prisma/client';
 import prisma from '../config/db';
 
-const createStreamer = async (createData: Prisma.UserCreateInput) => {
+const create = async (data: Prisma.UserCreateInput) => {
   return await prisma.user.create({
-    data: {
-      roles: ['streamer'],
-      activeRole: 'streamer',
-      ...createData,
-    },
+    data,
     include: {
       streamer: { include: { page: true } },
       userToken: true,
       avatar: true,
+      settings: true,
     },
   });
 };
-// const createTipper = async (createData: Prisma.UserCreateInput) => {
-//   return await prisma.user.create({
-//     data: {
-//       roles: ['tipper'],
-//       activeRole: 'tipper',
-//       ...createData,
-//     },
-//     include: {
-//       tipper: true,
-//       avatar: true,
-//       // avatar: true,
-//     },
-//   });
-// };
 
 const find = async (data: Prisma.UserFindFirstArgs) => {
   //TODO change in future to fetch only default role, to get better performance
-
   return await prisma.user.findFirst({
     where: data.where,
     include: {
-      // avatar: true,
-      // streamer: { include: { page: true, activeTokens: true } },
-      // userToken: true,
       ...data.include,
     },
   });
-
-  // address: true,
-  //     nick: true,
-  //     email: true,
-  //     // emailVerified: true,
-  //     firstName: true,
-  //     lastName: true,
-  //     verified: true,
-  //     createdAt: true,
-  //     updateAt: true,
-  //     allTipsCount: true,
-  //     allTipsValue: true,
-  //     // allWithdrawsValue: true,
-  //     apperanceMode: true,
-  //     roles: true,
-  //     activeRole: true,
-  //     refreshTokens: true,
-  //     // avatar: true, | FileArgs
-  //     avatarId: true,
 };
 
 const checkIfExist = async (where: Prisma.UserWhereInput) => {
@@ -150,13 +110,14 @@ const findByRefreshToken = async ({
 };
 
 export const userService = {
-  createSession,
-  removeSession,
-  createStreamer,
+  create,
+  // createSession,
+  // removeSession,
+  // createStreamer,
   // createTipper,
   find,
   checkIfExist,
   findByRefreshToken,
-  addRefreshToken,
-  removeRefreshToken,
+  // addRefreshToken,
+  // removeRefreshToken,
 };

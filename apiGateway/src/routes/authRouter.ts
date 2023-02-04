@@ -17,6 +17,6 @@ authRouter.get('/nonce', catchAsyncErrors(authController.createNonce));
 //POST
 authRouter.post('/verify', catchAsyncErrors(authController.login));
 // authRouter.post('/validate', catchAsyncErrors(authController.validate));
-// authRouter.post('/signup', catchAsyncErrors(authController.signUp));
+authRouter.post('/signup', catchAsyncErrors(authController.signUp));
 
 export { authRouter };

@@ -116,100 +116,48 @@ const createNonce = (req: Request, res: Response) => {
 //   res.status(StatusCodes.OK).json({ message: 'Validation passed' });
 // };
 
-// const signUp = async (req: Request, res: Response) => {
-//   const { message, signature, formData } = req.body;
+const signUp = async (req: AuthApi.SignUp.Req, res: AuthApi.SignUp.Res) => {
+  const { message, signature, formData } = req.body;
+  const parsedRequest = authApi.signUp.parse({ ...req });
 
-//   // try {
-//   //Validate schema
+  //TODO check if validation error message still works
 
-//   //TODO check if nonce are right
-//   const siweMessage = await validateSiweMessage(message, signature);
+  //TODO check if nonce are right
+  const siweMessage = await validateSiweMessage(message, signature);
 
-//   //TODO Create endpont on database service to create user
-//   const validatedFormData = userValidation.createParse(formData);
+  const { user } = await userService.create({ ...formData, address: siweMessage.address });
 
-//   //Validate unique
-//   const userExist = await userService.checkIfExist({
-//     OR: [{ address: siweMessage.address }, { email: validatedFormData.email }, { nick: validatedFormData.nick }],
-//   });
+  const authToken = createAuthToken(user);
+  const refreshToken = createRefreshToken(user, req.ip, true);
 
-//   //throw error if exist
-//   if (userExist) {
-//     const errors: ValidationError[] = [];
-//     if (userExist.address === siweMessage.address) {
-//       const validationError = new ValidationError(
-//         'address',
-//         `Already registered.`,
-//         `The wallet has already been registered. Go to login page or disconnect wallet from DAPP and then change wallet.`,
-//         `address.unique`,
-//       );
-//       errors.push(validationError);
-//     }
-//     if (userExist.email === validatedFormData.email) {
-//       const validationError = new ValidationError('email', `Email used.`, `Email already used by someone.`, `email.unique`);
-//       errors.push(validationError);
-//     }
-//     if (userExist.nick === validatedFormData.nick) {
-//       const validationError = new ValidationError('nick', `Nick used.`, `Nick already used by someone.`, `nick.unique`);
-//       errors.push(validationError);
-//     }
-//     throw errors;
-//   }
+  res.cookie('authToken', authToken, {
+    secure: true,
+    maxAge: JWT_SETTINGS.AUTH_EXPIRES,
+    httpOnly: true,
+  });
 
-//   let userSessionData: UserSession;
-//   switch (userValidation.type(validatedFormData)) {
-//     default:
-//       userSessionData = await userService.createStreamer({
-//         address: siweMessage.address,
-//         ...validatedFormData,
-//         streamer: {
-//           create: {
-//             page: {
-//               create: {
-//                 role: 'streamer',
-//                 affixUrl: validatedFormData.nick,
-//               },
-//             },
-//           },
-//         },
-//       });
-//       break;
-//   }
+  res.cookie('refreshToken', refreshToken, {
+    secure: true,
+    maxAge: JWT_SETTINGS.REFRESH_EXPIRES,
+    httpOnly: true,
+  });
 
-//   //TODO get returned data from database serive and create JWT tokens
-//   const authToken = createAuthToken(userSessionData);
-//   const refreshToken = createRefreshToken(userSessionData, req.ip, true);
-
-//   res.cookie('authToken', authToken, {
-//     secure: true,
-//     maxAge: JWT_SETTINGS.AUTH_EXPIRES,
-//     httpOnly: true,
-//   });
-
-//   res.cookie('refreshToken', refreshToken, {
-//     secure: true,
-//     maxAge: JWT_SETTINGS.REFRESH_EXPIRES,
-//     httpOnly: true,
-//   });
-
-//   res.status(StatusCodes.CREATED).json({
-//     message: 'The account has been successfully created.',
-//     user: userSessionData,
-//   });
-//   // } catch (error) {
-//   //   isOperational(error, "Something went wrong, account didn't created.");
-//   // }
-// };
+  res.status(StatusCodes.CREATED).json({
+    message: 'The account has been successfully created.',
+    user
+  });
+};
 
 const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
   const { body } = authApi.login.parse({ ...req });
   const { message, signature, type } = body;
+  //TODO check if nonce are right
   const siweMessage = await validateSiweMessage(message, signature);
 
   if (type === 'user') {
-    const  {user}  = await userService.find<{ user: UserSession }>({
+    const { user } = await userService.find<{ user: UserSession }>({
       address: siweMessage.address,
-      include: ['streamer', 'avatar', 'userToken']
+      include: ['streamer', 'avatar', 'userToken'],
     });
 
     console.log(user);
@@ -217,19 +165,19 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
     if (user) {
       const authToken = createAuthToken(user);
       const refreshToken = createRefreshToken(user, req.ip, true);
-      
+
       res.cookie('authToken', authToken, {
         secure: true,
         maxAge: JWT_SETTINGS.AUTH_EXPIRES,
         httpOnly: true,
       });
-      
+
       res.cookie('refreshToken', refreshToken, {
         secure: true,
         maxAge: JWT_SETTINGS.REFRESH_EXPIRES,
         httpOnly: true,
       });
-      
+
       res.status(StatusCodes.OK).json({ message: 'You are authorizated', user });
     }
   } else if (type === 'tipper') {
@@ -361,6 +309,6 @@ export const authController = {
   login,
   // refreshUserSession,
   // logout,
-  // signUp,
+  signUp,
   // refreshToken,
 };

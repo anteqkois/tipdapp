@@ -1,4 +1,5 @@
-import { createApiError } from '@middlewares/error';
+import { createApiError, ValidationError } from '@middlewares/error';
+import { Prisma } from '@prisma/client';
 import { userService } from '@services/userService';
 import { Request, Response } from 'express';
 import { userApi, UserApi } from '../validation/userApi';
@@ -35,7 +36,7 @@ const find = async (
 ) => {
   const parsedQuery = userApi.find.query.parse(req.query);
 
-  console.log('parsedQuery', parsedQuery)
+  console.log('parsedQuery', parsedQuery);
 
   const user = await userService.find({
     where: { nick: parsedQuery.nick, address: parsedQuery.address },
@@ -58,4 +59,63 @@ const find = async (
   }
 };
 
-export const userController = { findByNick, find };
+const create = async (req: UserApi.Create.Req, res: Response) => {
+  const { body } = userApi.create.parse({ ...req });
+
+  const userExist = await userService.checkIfExist({
+    OR: [{ address: body.address }, { email: body.email }, { nick: body.nick }],
+  });
+
+  //throw error if exist
+  if (userExist) {
+    const errors: ValidationError[] = [];
+    if (userExist.address === body.address) {
+      const validationError = new ValidationError(
+        'address',
+        `Already registered.`,
+        `The wallet has already been registered. Go to login page or disconnect wallet from DAPP and then change wallet.`,
+        `address.unique`
+      );
+      errors.push(validationError);
+    }
+    if (userExist.email === body.email) {
+      const validationError = new ValidationError(
+        'email',
+        `Email used.`,
+        `Email already used by someone.`,
+        `email.unique`
+      );
+      errors.push(validationError);
+    }
+    if (userExist.nick === body.nick) {
+      const validationError = new ValidationError(
+        'nick',
+        `Nick used.`,
+        `Nick already used by someone.`,
+        `nick.unique`
+      );
+      errors.push(validationError);
+    }
+    throw errors;
+  }
+
+  const streamer: Prisma.StreamerCreateNestedOneWithoutUserInput =
+    body.roles.includes('streamer')
+      ? {
+          create: {
+            page: {
+              create: {
+                role: 'streamer',
+                affixUrl: body.nick,
+              },
+            },
+          },
+        }
+      : {};
+
+  const user = await userService.create({ ...body, streamer });
+
+  return res.status(200).send({ user: user });
+};
+
+export const userController = { findByNick, find, create };
