@@ -36,14 +36,14 @@ const find = async (
   const parsedQuery = userApi.find.query.parse(req.query);
 
   const user = await userService.find({
-    where: { nick: parsedQuery.nick },
+    where: { nick: parsedQuery.nick, address:parsedQuery.address },
     include: {
       avatar: true,
-      streamer: parsedQuery.include.streamer
+      streamer: parsedQuery.include?.streamer
         ? { include: { activeTokens: true, page: true } }
         : false,
-      userToken: parsedQuery.include.userToken,
-      tips: parsedQuery.include.tips,
+      userToken: parsedQuery.include?.userToken,
+      tips: parsedQuery.include?.tips,
     },
   });
 

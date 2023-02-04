@@ -23,7 +23,13 @@
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
-  "include": ["server.ts", "**/*.ts", "**/*.d.ts", "**/*.js"],
+  "include": [
+    "server.ts",
+    "**/*.ts",
+    "**/*.d.ts",
+    "**/*.js",
+    "../apiGateway/src/controllers/authController.ts"
+  ],
   "exclude": [
     "node_modules",
     "**/node_modules/*",

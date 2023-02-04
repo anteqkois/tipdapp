@@ -23,16 +23,11 @@ const findByNick = {
 
 const find = {
   query: z.object({
-    nick: z.string(),
-    include: userInclude,
+    nick: z.string().optional(),
+    address: z.string().optional(),
+    include: userInclude.optional(),
   }),
 };
-
-// const createFormParse = (data: UserTokenValidation.CreateForm) =>
-//   validationHelper<UserTokenValidation.CreateForm>(data, createForm);
-
-// const createParse = (data: UserTokenValidation.Create) =>
-//   validationHelper<UserTokenValidation.Create>(data, create);
 
 export namespace UserApi {
   export namespace FindByNick {

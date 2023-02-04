@@ -1,9 +1,10 @@
+import './src/config/dotenv';
+import { useCors } from './src/config/cors';
+import { services } from './src/config/proxy';
+
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import { useCors } from './src/config/cors';
-import './src/config/dotenv';
-import { services } from './src/config/proxy';
 import { handleErrors, notFound } from './src/middlewares/handleError';
 import { logRequest } from './src/middlewares/logRequest';
 

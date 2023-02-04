@@ -146,9 +146,12 @@ const signUp = async (req: Request, res: Response) => {
 
   // try {
   //Validate schema
-  const validatedFormData = userValidation.createParse(formData);
 
+  //TODO check if nonce are right
   const siweMessage = await validateSiweMessage(message, signature);
+
+  //TODO Create endpont on database service to create user
+  const validatedFormData = userValidation.createParse(formData);
 
   //Validate unique
   const userExist = await userService.checkIfExist({
@@ -211,6 +214,8 @@ const signUp = async (req: Request, res: Response) => {
       });
       break;
   }
+
+  //TODO get returned data from database serive and create JWT tokens
   const authToken = createAuthToken(userSessionData);
   const refreshToken = createRefreshToken(userSessionData, req.ip, true);
 
@@ -243,7 +248,8 @@ const verifyMessageAndLogin = async (
   >,
   res: Response
 ) => {
-  console.log(req.body);
+  // console.log(req.body);
+  //TODO check type on database service
   const { message, signature, type } = req.body;
   const siweMessage = await validateSiweMessage(message, signature);
 
@@ -300,7 +306,10 @@ const verifyMessageAndLogin = async (
 };
 
 const refreshUserSession = async (req: Request, res: Response) => {
-  const userSessionData = await userService.find({
+  //TODO get data from database service
+  const userSessionData = await userService.find
+  
+  ({
     where: {
       address: req.user.address,
     },
@@ -333,6 +342,7 @@ const logout = async (req: Request, res: Response) => {
     httpOnly: true,
   });
 
+  //TODO remove session from redis
   await userService.removeSession({ ip: req.ip });
   res.cookie('authStatus', 'unauthenticated');
 
@@ -353,10 +363,13 @@ const refreshToken = async (req: Request, res: Response) => {
     expires: new Date(Date.now()),
     httpOnly: true,
   });
+
+  //TODO change this logic, simple check in redis if session exist
   const user = await userService.findByRefreshToken({ refreshToken });
 
   // Somebody want to reuse refresh token, maybe stolen token ?
   if (!user) {
+    //TODO remove session from redis
     try {
       const decoded = jwt.verify(
         refreshToken,
@@ -371,6 +384,7 @@ const refreshToken = async (req: Request, res: Response) => {
     }
   } else {
     // Remove token from database
+    //TODO remove used refresh token from redis
     await userService.removeRefreshToken({
       ip: req.ip,
       refreshToken,
@@ -385,6 +399,7 @@ const refreshToken = async (req: Request, res: Response) => {
       if (decoded.address !== user.address)
         createApiError('Invalid refresh token', StatusCodes.BAD_REQUEST);
 
+        //TODO get user data from decoded JWT token
       const newAuthToken = createAuthToken(user);
       const newRefreshToken = createRefreshToken(user, req.ip);
 
@@ -405,6 +420,7 @@ const refreshToken = async (req: Request, res: Response) => {
         .json({ message: 'Token was successfully refreshed.' });
     } catch (error) {
       res.cookie('authStatus', 'unauthenticated');
+      //TODO remove session in redis
       userService.removeSession({ ip: req.ip });
       createApiError('Refresh token is stale', StatusCodes.BAD_REQUEST);
     }

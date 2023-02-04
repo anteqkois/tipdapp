@@ -1,7 +1,15 @@
-- create api gateway
-- move all shared server code to api gateway microservice (ApiError class, error handling etc.)
-- create one main file with tokens data in api gateway, delete others files that contains tokens data
-- migrate authentication to api gateway
-- move rabbitmq config to apigateway
-- move zod config to apigateway
-- delete modify type frpm dapp types, get it from api gateway
+- [x] Create api gateway
+- [x] Move all shared server code to api gateway microservice (ApiError class, error handling etc.)
+- [x] Create one main file with tokens data in api gateway, delete others files that contains tokens data
+- [ ] Migrate authentication to api gateway
+- [ ] Move rabbitmq config to apigateway
+- [ ] Move zod config to apigateway
+- [ ] Delete modify type from dapp types, get it from api gateway
+- [ ] Move auth endpoint to apigateway
+- [ ] Store session in redis db
+- [ ] Create new endpoint connected to user model:
+  - Endpont to create user and return new user data
+  - Endpoint to get user data when they login using type from request
+  - Endpoint to refresh user data: /user/:address
+  - 
+- [ ] Upgarde all zod api validation

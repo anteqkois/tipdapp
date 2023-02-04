@@ -10,7 +10,6 @@ const create = async (createData: Prisma.TipperCreateInput) => {
 const find = async (data: Prisma.TipperFindFirstArgs) => {
   return await prisma.tipper.findFirst({
     where: data.where,
-    // include: {},
   });
 };
 

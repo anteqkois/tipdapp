@@ -1,0 +1,1 @@
+import {authController} from './authController'

@@ -5,6 +5,7 @@ import pageRoutes from './pageRouter';
 import tipRoutes from './tipRouter';
 import tokenRoutes from './tokenRouter';
 import userRoutes from './userRouter';
+import tipperRoutes from './tipperRouter';
 import userTokenRoutes from './userTokenRouter';
 
 const router = Router();
@@ -16,6 +17,9 @@ router.use('/page', pageRoutes);
 
 //auth middleware added in pageRouter
 router.use('/user', userRoutes);
+
+//auth middleware added in pageRouter
+router.use('/tipper', tipperRoutes);
 
 router.use('/tip', verifyJWT, tipRoutes);
 
