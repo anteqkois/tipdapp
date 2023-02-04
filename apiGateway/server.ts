@@ -1,5 +1,5 @@
-import './src/config/dotenv';
 import { useCors } from './src/config/cors';
+import './src/config/dotenv';
 import { services } from './src/config/proxy';
 
 import cookieParser from 'cookie-parser';
@@ -7,6 +7,7 @@ import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { handleErrors, notFound } from './src/middlewares/handleError';
 import { logRequest } from './src/middlewares/logRequest';
+import { router } from './src/routes';
 
 const port = process.env.PORT || 3001;
 const dev = process.env.NODE_ENV !== 'production';
@@ -31,6 +32,8 @@ for (const [key, value] of Object.entries(services)) {
     }),
   );
 }
+
+server.use('/api', router);
 
 //handling errors
 server.use(notFound);

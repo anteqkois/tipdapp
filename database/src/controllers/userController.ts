@@ -35,17 +35,21 @@ const find = async (
 ) => {
   const parsedQuery = userApi.find.query.parse(req.query);
 
+  console.log('parsedQuery', parsedQuery)
+
   const user = await userService.find({
-    where: { nick: parsedQuery.nick, address:parsedQuery.address },
+    where: { nick: parsedQuery.nick, address: parsedQuery.address },
     include: {
       avatar: true,
       streamer: parsedQuery.include?.streamer
         ? { include: { activeTokens: true, page: true } }
         : false,
-      userToken: parsedQuery.include?.userToken,
-      tips: parsedQuery.include?.tips,
+      userToken: parsedQuery.include?.userToken ?? false,
+      tips: parsedQuery.include?.tips ?? false,
     },
   });
+
+  console.log(user);
 
   if (user) {
     return res.status(200).send({ user: user });

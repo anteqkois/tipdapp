@@ -33,7 +33,8 @@ export const Avatar = ({
         {...rest}
         // create utils function to build url to image
         //TODO change avatarPath to url
-        src={`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${avatar?.filename}`}
+        // src={`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${avatar?.filename}`}
+        src={`somerandom`}
         alt="Avatar"
       />
       {/* {loading ? (

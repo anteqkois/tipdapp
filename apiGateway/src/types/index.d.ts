@@ -34,3 +34,5 @@ export type PartialExcept<T, U extends string[]> = {
 };
 
 export type ModifyObjectKey<T, R> = Omit<T, keyof R> & R;
+
+export type DecodedUser = Pick<User, 'address' | 'nick' | 'roles' | 'activeRole'> & { ip: string };

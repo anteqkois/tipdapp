@@ -19,7 +19,7 @@ const blockchainDataFeedApi = axios.create({
   withCredentials: true,
 });
 
-databaseApi.interceptors.response.use(
+blockchainDataFeedApi.interceptors.response.use(
   (data) => {
     return Promise.resolve(data.data);
   },

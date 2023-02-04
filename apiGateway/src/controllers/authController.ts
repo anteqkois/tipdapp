@@ -9,16 +9,13 @@ import { generateNonce, SiweMessage } from 'siwe';
 import { tipperService } from '../services/tipperService';
 import { userService } from '../services/userService';
 import { authApi, AuthApi } from '../validation/authApi';
-// import { userService } from '../../../database/src/services/userService';
-// import { DecodedUser, UserSession } from '../../../database/src/types';
-// import { UserValidation, userValidation } from '../../../database/src/validation/userValidation';
 
 const validateSiweMessage = async (message: Partial<SiweMessage>, signature: string) => {
   const siwe = new SiweMessage(message || {});
 
   const { data, success, error } = await siwe.verify({
     signature,
-    domain: process.env.DOMAIN,
+    domain: process.env.FRONTEND_DOMAIN,
   });
 
   return success
@@ -40,7 +37,7 @@ const createAuthToken = (userSessionData: Pick<User, 'roles' | 'address' | 'nick
       address: userSessionData.address,
       nick: userSessionData.nick,
     },
-    process.env.JWT_TOKEN_SECRET!,
+    process.env.JWT_TOKEN_SECRET,
     {
       expiresIn: JWT_SETTINGS.AUTH_EXPIRES,
     },
@@ -61,7 +58,7 @@ const createRefreshToken = (
       nick: userSessionData.nick,
       ip,
     },
-    process.env.JWT_TOKEN_REFRESH!,
+    process.env.JWT_TOKEN_REFRESH,
     {
       expiresIn: JWT_SETTINGS.REFRESH_EXPIRES,
     },
@@ -210,27 +207,30 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
   const siweMessage = await validateSiweMessage(message, signature);
 
   if (type === 'user') {
-    const userSessionData = await userService.find<UserSession>({
+    const  {user}  = await userService.find<{ user: UserSession }>({
       address: siweMessage.address,
+      include: ['streamer', 'avatar', 'userToken']
     });
 
-    if (userSessionData) {
-      const authToken = createAuthToken(userSessionData);
-      const refreshToken = createRefreshToken(userSessionData, req.ip, true);
+    console.log(user);
 
+    if (user) {
+      const authToken = createAuthToken(user);
+      const refreshToken = createRefreshToken(user, req.ip, true);
+      
       res.cookie('authToken', authToken, {
         secure: true,
         maxAge: JWT_SETTINGS.AUTH_EXPIRES,
         httpOnly: true,
       });
-
+      
       res.cookie('refreshToken', refreshToken, {
         secure: true,
         maxAge: JWT_SETTINGS.REFRESH_EXPIRES,
         httpOnly: true,
       });
-
-      res.status(StatusCodes.OK).json({ message: 'You are authorizated', user: userSessionData });
+      
+      res.status(StatusCodes.OK).json({ message: 'You are authorizated', user });
     }
   } else if (type === 'tipper') {
     let tipper = await tipperService.find<Tipper>({

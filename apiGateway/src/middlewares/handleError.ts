@@ -67,6 +67,7 @@ export const throwIfOperational = (err: any, helpMessage: string) => {
 };
 
 export const handleErrors = (err: any, req: Request, res: Response, next: NextFunction) => {
+  console.log(err);
   if (err.type === 'ApiError' || err.type === 'ValidationError') {
     errorLogger.error('', err);
     return res.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).send({ error: [err] });

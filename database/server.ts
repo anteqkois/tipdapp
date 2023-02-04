@@ -21,7 +21,6 @@ server.use(
     parseNull: true,
     parseUndefined: true,
     parseBoolean: true,
-    parseNumber: true,
   })
 );
 

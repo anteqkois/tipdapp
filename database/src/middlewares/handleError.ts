@@ -89,6 +89,7 @@ export const handleErrors = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log('err', err);
   if (err.type === 'ApiError' || err.type === 'ValidationError') {
     errorLogger.error('', err);
     return res

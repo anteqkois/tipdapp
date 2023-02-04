@@ -10,7 +10,7 @@ export const services: Service = {
     port: 3002,
     protocol: 'http',
     url: 'http://localhost:3002/',
-    routes: ['/api/auth', '/api/page', '/api/user', '/api/tip', '/api/tokenInfo', '/api/userToken'],
+    routes: ['/api/page', '/api/user', '/api/tip', '/api/tokenInfo', '/api/userToken'],
   },
   blockchainDataFeed: {
     host: 'localhost',

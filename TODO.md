@@ -13,3 +13,5 @@
   - Endpoint to refresh user data: /user/:address
   - 
 - [ ] Upgarde all zod api validation
+- [ ] Remove DecodedUser type from database service, get it from api
+- [ ] Remove Express types from database service
