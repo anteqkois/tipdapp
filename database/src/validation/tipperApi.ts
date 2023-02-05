@@ -32,8 +32,9 @@ export namespace TipperApi {
   export namespace Create {
     const reqShape = create.shape;
     export type Body = z.input<typeof reqShape.body>;
+    export type ResBody = { tipper: Tipper };
     export type Req = Request<{}, {}, Body, {}>;
-    export type Res = Response<{ tipper: Tipper }>;
+    export type Res = Response<ResBody>;
   }
 }
 

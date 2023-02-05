@@ -29,7 +29,7 @@ const initialState: State = {
     email: '',
     firstName: '',
     lastName: '',
-    roles: ['tipper', 'streamer'],
+    roles: ['streamer'],
     // address: '',
   },
   status: 'idle',

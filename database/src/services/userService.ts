@@ -13,13 +13,11 @@ const create = async (data: Prisma.UserCreateInput) => {
   });
 };
 
-const find = async (data: Prisma.UserFindFirstArgs) => {
+const find = async ({where, include}: Prisma.UserFindFirstArgs) => {
   //TODO change in future to fetch only default role, to get better performance
   return await prisma.user.findFirst({
-    where: data.where,
-    include: {
-      ...data.include,
-    },
+    where,
+    include,
   });
 };
 

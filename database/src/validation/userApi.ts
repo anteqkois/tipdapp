@@ -1,7 +1,7 @@
 import { Role } from '@prisma/client';
-import { UserSession } from '../types';
 import { Request, Response } from 'express';
 import { z } from '../config/zod';
+import { UserSession } from '../types';
 import { transformApiInclude } from './utils';
 
 const userInclude = z
@@ -32,6 +32,24 @@ const find = {
   }),
 };
 
+const validate = z.object({
+  body: z.object({
+    email: z.string().email(),
+    nick: z
+      .string()
+      .min(2, { message: 'Nick must have 2 or more characters.' }),
+    firstName: z
+      .string()
+      .min(3, { message: 'First name must have 3 or more characters.' }),
+    lastName: z
+      .string()
+      .min(3, { message: 'Last name must have 3 or more characters.' }),
+    roles: z.array(
+      z.union([z.literal(Role.charity), z.literal(Role.streamer)])
+    ),
+  }),
+});
+
 const create = z.object({
   body: z.object({
     address: z.string(),
@@ -59,6 +77,12 @@ export namespace UserApi {
   export namespace Find {
     export type Query = z.input<typeof find.query>;
   }
+  export namespace Validate {
+    export type Body = z.input<typeof find.query>;
+    export type ResBody = { message: string };
+    export type Req = Request<{}, {}, Body, {}>;
+    export type Res = Response<ResBody>;
+  }
   export namespace Create {
     const reqShape = create.shape;
     export type Body = z.input<typeof reqShape.body>;
@@ -71,5 +95,6 @@ export namespace UserApi {
 export const userApi = {
   findByNick,
   find,
+  validate,
   create,
 };

@@ -1,13 +1,11 @@
-import { ReactNode } from 'react';
+import { HTMLAttributes } from 'react';
 
-type Props = {
-  children: ReactNode;
-  className?: string;
-};
+type Props = HTMLAttributes<HTMLDivElement>;
+
 export const MainContainer = ({ children, className }: Props) => {
   return (
     <main
-      className={`p-2 mx-auto pt-14 text-neutral-800 max-w-6xl lg:p-8 lg:pt-32 ${className}`}
+      className={`mx-auto max-w-6xl p-2 pt-14 text-neutral-800 lg:p-8 lg:pt-32 ${className}`}
     >
       {children}
     </main>

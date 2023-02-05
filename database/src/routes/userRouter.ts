@@ -9,5 +9,9 @@ router.get('/:nick', catchAsyncErrors(userController.findByNick));
 router.get('/', catchAsyncErrors(userController.find));
 
 //POST
+router.post('/validate', catchAsyncErrors(userController.validate));
+// router.post('/validate', (req, res) => {
+//   console.log('req.body', req.body);
+// });
 router.post('/', catchAsyncErrors(userController.create));
 export default router;

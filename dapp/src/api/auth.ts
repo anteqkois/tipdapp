@@ -1,11 +1,11 @@
 import { UserSessionDapp } from '@/shared/User/types';
-import { Tipper, UserValidation } from '@tipdapp/databasese';
+import { Tipper, UserValidation } from '@tipdapp/database';
 import { SiweMessage } from 'siwe';
 import { api } from './apiConfig';
 
 // VALIDATE
 export const validateFormData = async (body: any) =>
-  await api.post('/auth/validate', body);
+  await api.post('/user/validate', body);
 
 // NONCE
 type GetNonceResponse = {

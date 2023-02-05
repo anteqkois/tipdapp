@@ -52,11 +52,16 @@ export class ValidationError extends Error {
   static fromZodErrorArray(zodErrorArray: ZodIssue[], status?: number) {
     const errors: ValidationError[] = [];
     zodErrorArray.forEach((zodError) => {
+      let field = zodError.path.pop();
+      while (typeof field !== 'string') {
+        field = zodError.path.pop();
+      }
+
       const error = new ValidationError(
-        zodError.path[0] as string,
-        zodError.path[0] as string,
+        field,
+        field,
         zodError.message,
-        `${zodError.path[0]}.${zodError.code}`
+        `${field}.${zodError.code}`
       );
       errors.push(error);
     });

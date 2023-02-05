@@ -1,7 +1,7 @@
 'use client';
-import { Button, Input, Stepper } from '@/shared/ui';
-import { UserIcon, WalletIcon } from '@heroicons/react/24/outline';
 import ConnectWallet from '@/assets/connectWallet.svg';
+import { Button, Card, Input, Stepper } from '@/shared/ui';
+import { UserIcon, WalletIcon } from '@heroicons/react/24/outline';
 import { FormikStep } from '../components/FormikStep';
 import { useSignUpForm } from '../hooks/useSignUpForm';
 
@@ -61,12 +61,12 @@ export const SignUpForm = () => {
     >
       {/* <ConnectWallet /> */}
       {/* <ConnectWallet className="w-5/6 mx-auto my-5 h-52" /> */}
-      <ConnectWallet className=" w-5/6 mx-auto my-5 h-52" />
+      <ConnectWallet className=" mx-auto my-5 h-52 w-5/6" />
       <p className="text-danger-600 ">
         {formik.errors.address && `* ${formik.errors.address}`}
       </p>
       <Button
-        className="w-full mt-4"
+        className="mt-4 w-full"
         variant="success"
         type="submit"
       >
@@ -87,8 +87,8 @@ export const SignUpForm = () => {
   ];
 
   return (
-    <>
-      <h1 className="mb-3 text-2xl flex-center ">
+    <Card className="mx-auto md:max-w-lg">
+      <h1 className="flex-center mb-3 text-2xl ">
         {FormSteps[step - 1].props.label}
       </h1>
       <Stepper
@@ -101,7 +101,7 @@ export const SignUpForm = () => {
         <div className="flex gap-3">
           {step > 1 && (
             <Button
-              className="w-full mt-3"
+              className="mt-3 w-full"
               onClick={() => setStep((prev) => prev - 1)}
               type="button"
             >
@@ -110,7 +110,7 @@ export const SignUpForm = () => {
           )}
           {step < FormSteps.length && (
             <Button
-              className="w-full mt-3"
+              className="mt-3 w-full"
               type="submit"
               variant="success"
             >
@@ -119,6 +119,6 @@ export const SignUpForm = () => {
           )}
         </div>
       </form>
-    </>
+    </Card>
   );
 };

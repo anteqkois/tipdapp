@@ -8,23 +8,23 @@ import userRoutes from './userRouter';
 import tipperRoutes from './tipperRouter';
 import userTokenRoutes from './userTokenRouter';
 
-const router = Router();
+const mainRouter = Router();
 
-// router.use('/auth', authorizationRoutes);
-
-//auth middleware added in pageRouter
-router.use('/page', pageRoutes);
+// mainRouter.use('/auth', authorizationRoutes);
 
 //auth middleware added in pageRouter
-router.use('/user', userRoutes);
+mainRouter.use('/page', pageRoutes);
 
 //auth middleware added in pageRouter
-router.use('/tipper', tipperRoutes);
+mainRouter.use('/user', userRoutes);
 
-router.use('/tip', verifyJWT, tipRoutes);
+//auth middleware added in pageRouter
+mainRouter.use('/tipper', tipperRoutes);
 
-router.use('/tokenInfo', tokenRoutes);
+mainRouter.use('/tip', verifyJWT, tipRoutes);
 
-router.use('/userToken', verifyJWT, userTokenRoutes);
+mainRouter.use('/tokenInfo', tokenRoutes);
 
-export default router;
+mainRouter.use('/userToken', verifyJWT, userTokenRoutes);
+
+export { mainRouter};

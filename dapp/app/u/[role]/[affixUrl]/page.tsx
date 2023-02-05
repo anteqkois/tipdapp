@@ -29,7 +29,7 @@ export default function Page({ params }: Props) {
 
   // const activeTokensSymbol = ['sand', 'shib', 'bnb'];
 
-  const { data: tokenRes } = useTokenGetDetails({
+  const { data: tokenRes, error } = useTokenGetDetails({
     // symbol: activeTokensSymbol,
   });
 

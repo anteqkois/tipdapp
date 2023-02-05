@@ -8,7 +8,6 @@ type Props = {
   className?: string;
 };
 export const TokenPriceList = ({ tokens, className }: Props) => {
-  console.log('tokens', tokens);
   return (
     <table
       className={`table-auto rounded bg-neutral-50 p-4 ring-1 ring-inset ring-neutral-600 ring-opacity-10 ${className}`}

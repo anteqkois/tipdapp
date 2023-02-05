@@ -1,19 +1,19 @@
-// import { JWT_SETTINGS } from '@config/jwt';
-// import {
-//   createApiError,
-//   createValidationError,
-//   ValidationError,
-// } from '@middlewares/error';
-// import { throwIfOperational } from '@middlewares/handleError';
-// import { User } from '@prisma/client';
-// import { tipperService } from '@services/tipperService';
-// import { Request, Response } from 'express';
-// import { StatusCodes } from 'http-status-codes';
-// import jwt from 'jsonwebtoken';
-// import { generateNonce, SiweMessage } from 'siwe';
-// import { userService } from '../services/userService';
-// import { DecodedUser, UserSession } from '../types';
-// import { UserValidation, userValidation } from '../validation/userValidation';
+import { JWT_SETTINGS } from '@config/jwt';
+import {
+  createApiError,
+  createValidationError,
+  ValidationError,
+} from '@middlewares/error';
+import { throwIfOperational } from '@middlewares/handleError';
+import { User } from '@prisma/client';
+import { tipperService } from '@services/tipperService';
+import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import jwt from 'jsonwebtoken';
+import { generateNonce, SiweMessage } from 'siwe';
+import { userService } from '../services/userService';
+import { DecodedUser, UserSession } from '../types';
+import { UserValidation, userValidation } from '../validation/userValidation';
 
 // const validateSiweMessage = async (
 //   message: Partial<SiweMessage>,
@@ -94,52 +94,52 @@
 //   res.status(StatusCodes.OK).json({ nonce: generateNonce() });
 // };
 
-// const validate = async (
-//   req: Request<{}, {}, UserValidation.CreateUser>,
-//   res: Response
-// ) => {
-//   const { email, nick } = req.body;
+const validate = async (
+  req: Request<{}, {}, UserValidation.CreateUser>,
+  res: Response
+) => {
+  const { email, nick } = req.body;
 
-//   try {
-//     //Validate schema
-//     userValidation.createParse(req.body);
+  try {
+    //Validate schema
+    userValidation.createParse(req.body);
 
-//     //Validate unique
-//     const user = await userService.checkIfExist({
-//       OR: [{ email }, { nick }],
-//     });
+    //Validate unique
+    const user = await userService.checkIfExist({
+      OR: [{ email }, { nick }],
+    });
 
-//     if (user) {
-//       const errors: ValidationError[] = [];
-//       if (user.email === email) {
-//         const validationError = new ValidationError(
-//           'email',
-//           `Email used.`,
-//           `Email already used by someone.`,
-//           `email.unique`
-//         );
-//         errors.push(validationError);
-//       }
-//       if (user.nick === nick) {
-//         const validationError = new ValidationError(
-//           'nick',
-//           `Nick used.`,
-//           `Nick already used by someone.`,
-//           `nick.unique`
-//         );
-//         errors.push(validationError);
-//       }
-//       throw errors;
-//     }
-//   } catch (errors) {
-//     throwIfOperational(
-//       errors,
-//       "Something went wrong, data didn't pass validation."
-//     );
-//   }
+    if (user) {
+      const errors: ValidationError[] = [];
+      if (user.email === email) {
+        const validationError = new ValidationError(
+          'email',
+          `Email used.`,
+          `Email already used by someone.`,
+          `email.unique`
+        );
+        errors.push(validationError);
+      }
+      if (user.nick === nick) {
+        const validationError = new ValidationError(
+          'nick',
+          `Nick used.`,
+          `Nick already used by someone.`,
+          `nick.unique`
+        );
+        errors.push(validationError);
+      }
+      throw errors;
+    }
+  } catch (errors) {
+    throwIfOperational(
+      errors,
+      "Something went wrong, data didn't pass validation."
+    );
+  }
 
-//   res.status(StatusCodes.OK).json({ message: 'Validation passed' });
-// };
+  res.status(StatusCodes.OK).json({ message: 'Validation passed' });
+};
 
 // const signUp = async (req: Request, res: Response) => {
 //   const { message, signature, formData } = req.body;
@@ -427,12 +427,12 @@
 //   }
 // };
 
-// export const authController = {
-//   validate,
-//   createNonce,
-//   verifyMessageAndLogin,
-//   refreshUserSession,
-//   logout,
-//   signUp,
-//   refreshToken,
-// };
+export const authController = {
+  validate,
+  // createNonce,
+  // verifyMessageAndLogin,
+  // refreshUserSession,
+  // logout,
+  // signUp,
+  // refreshToken,
+};

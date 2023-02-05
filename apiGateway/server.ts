@@ -15,11 +15,8 @@ const dev = process.env.NODE_ENV !== 'production';
 const server = express();
 
 server.use(useCors);
-
-server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(cookieParser());
-
 server.use(logRequest);
 
 for (const [key, value] of Object.entries(services)) {
@@ -29,10 +26,12 @@ for (const [key, value] of Object.entries(services)) {
     createProxyMiddleware({
       target: value.url,
       changeOrigin: true,
+      timeout: 30 * 1000,
     }),
   );
 }
 
+server.use(express.json());
 server.use('/api', router);
 
 //handling errors
