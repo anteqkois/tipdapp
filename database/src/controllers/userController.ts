@@ -104,8 +104,6 @@ const validate = async (
   //   );
   // }
 
-console.log('req.body', req.body)
-
   const { body } = userApi.validate.parse({ ...req });
 
   const userExist = await userService.checkIfExist({
@@ -140,6 +138,7 @@ console.log('req.body', req.body)
 };
 
 const create = async (req: UserApi.Create.Req, res: Response) => {
+  console.log('req.body', req.body);
   const { body } = userApi.create.parse({ ...req });
 
   const userExist = await userService.checkIfExist({

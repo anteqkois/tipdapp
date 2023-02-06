@@ -34,37 +34,39 @@ const find = {
 
 const validate = z.object({
   body: z.object({
-    email: z.string().email(),
+    email: z.string({ required_error: 'E-mail is required.' }).email(),
     nick: z
-      .string()
+      .string({ required_error: 'Nick is required.' })
       .min(2, { message: 'Nick must have 2 or more characters.' }),
     firstName: z
-      .string()
+      .string({ required_error: 'First name is required.' })
       .min(3, { message: 'First name must have 3 or more characters.' }),
     lastName: z
-      .string()
+      .string({ required_error: 'Last name is required.' })
       .min(3, { message: 'Last name must have 3 or more characters.' }),
     roles: z.array(
-      z.union([z.literal(Role.charity), z.literal(Role.streamer)])
+      z.union([z.literal(Role.charity), z.literal(Role.streamer)]),
+      { required_error: 'You must choose at least one role.' }
     ),
   }),
 });
 
 const create = z.object({
   body: z.object({
-    address: z.string(),
-    email: z.string().email(),
+    address: z.string({required_error: 'Wallet address is missing.'}),
+    email: z.string({ required_error: 'E-mail is required.' }).email(),
     nick: z
-      .string()
+      .string({ required_error: 'Nick is required.' })
       .min(2, { message: 'Nick must have 2 or more characters.' }),
     firstName: z
-      .string()
+      .string({ required_error: 'First name is required.' })
       .min(3, { message: 'First name must have 3 or more characters.' }),
     lastName: z
-      .string()
+      .string({ required_error: 'Last name is required.' })
       .min(3, { message: 'Last name must have 3 or more characters.' }),
     roles: z.array(
-      z.union([z.literal(Role.charity), z.literal(Role.streamer)])
+      z.union([z.literal(Role.charity), z.literal(Role.streamer)]),
+      { required_error: 'You must choose at least one role.' }
     ),
   }),
 });

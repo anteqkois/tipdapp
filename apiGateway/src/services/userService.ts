@@ -6,7 +6,7 @@ const find = async <R = any>(query: UserApi.Find.Query) => {
 };
 
 const create = async (body: UserApi.Create.Body) => {
-  return databaseApi.post<never, UserApi.Create.ResBody>('user', { body });
+  return databaseApi.post<never, UserApi.Create.ResBody>('user', body);
 };
 
 export const userService = { find, create };
