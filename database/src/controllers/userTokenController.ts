@@ -36,7 +36,6 @@ const create = async (req: Request, res: Response) => {
     },
   });
 
-  console.log('create new token', token);
   return res.status(200).send({ token });
 };
 

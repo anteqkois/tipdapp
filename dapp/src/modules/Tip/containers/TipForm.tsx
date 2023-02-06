@@ -44,7 +44,6 @@ export const TipForm = () => {
     initialValues,
     onSubmit: async (values) => {
       try {
-        console.log(values);
         tipFieldValidation.parse(values);
       } catch (error: any) {
         formik.setErrors(

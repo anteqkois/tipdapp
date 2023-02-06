@@ -76,7 +76,6 @@ export const useUserFacet = () => {
         await data.wait(1);
 
         const newTokenAddress = await userToken.refetch();
-        console.log(newTokenAddress);
 
         transactionToast(
           <RegisterUserTransaction

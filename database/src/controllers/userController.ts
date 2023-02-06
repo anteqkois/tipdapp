@@ -37,8 +37,6 @@ const find = async (
 ) => {
   const parsedQuery = userApi.find.query.parse(req.query);
 
-  console.log('parsedQuery', parsedQuery);
-
   const user = await userService.find({
     where: { nick: parsedQuery.nick, address: parsedQuery.address },
     include: {
@@ -50,8 +48,6 @@ const find = async (
       tips: parsedQuery.include?.tips ?? false,
     },
   });
-
-  console.log(user);
 
   if (user) {
     return res.status(200).send({ user: user });
@@ -138,7 +134,6 @@ const validate = async (
 };
 
 const create = async (req: UserApi.Create.Req, res: Response) => {
-  console.log('req.body', req.body);
   const { body } = userApi.create.parse({ ...req });
 
   const userExist = await userService.checkIfExist({
@@ -192,7 +187,11 @@ const create = async (req: UserApi.Create.Req, res: Response) => {
         }
       : {};
 
-  const user = await userService.create({ ...body, streamer });
+  const user = await userService.create({
+    ...body,
+    activeRole: body.roles[0],
+    streamer,
+  });
 
   return res.status(200).send({ user: user });
 };

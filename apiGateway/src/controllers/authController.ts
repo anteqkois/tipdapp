@@ -85,42 +85,9 @@ const createNonce = (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ nonce: generateNonce() });
 };
 
-// const validate = async (req: Request<{}, {}, UserValidation.CreateUser>, res: Response) => {
-//   const { email, nick } = req.body;
-
-//   try {
-//     //Validate schema
-//     userValidation.createParse(req.body);
-
-//     //Validate unique
-//     const user = await userService.checkIfExist({
-//       OR: [{ email }, { nick }],
-//     });
-
-//     if (user) {
-//       const errors: ValidationError[] = [];
-//       if (user.email === email) {
-//         const validationError = new ValidationError('email', `Email used.`, `Email already used by someone.`, `email.unique`);
-//         errors.push(validationError);
-//       }
-//       if (user.nick === nick) {
-//         const validationError = new ValidationError('nick', `Nick used.`, `Nick already used by someone.`, `nick.unique`);
-//         errors.push(validationError);
-//       }
-//       throw errors;
-//     }
-//   } catch (errors) {
-//     throwIfOperational(errors, "Something went wrong, data didn't pass validation.");
-//   }
-
-//   res.status(StatusCodes.OK).json({ message: 'Validation passed' });
-// };
-
 const signUp = async (req: AuthApi.SignUp.Req, res: AuthApi.SignUp.Res) => {
   const { message, signature, formData } = req.body;
   const parsedRequest = authApi.signUp.parse({ ...req });
-
-  //TODO check if validation error message still works
 
   //TODO check if nonce are right
   const siweMessage = await validateSiweMessage(message, signature);
@@ -159,8 +126,6 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
       address: siweMessage.address,
       include: ['streamer', 'avatar', 'userToken'],
     });
-
-    console.log(user);
 
     if (user) {
       const authToken = createAuthToken(user);
@@ -213,26 +178,26 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
 //   }
 // };
 
-// const logout = async (req: Request, res: Response) => {
-//   const { refreshToken } = req.cookies;
+const logout = async (req: Request, res: Response) => {
+  const { refreshToken } = req.cookies;
 
-//   res.cookie('authToken', '', {
-//     maxAge: 0,
-//     expires: new Date(Date.now()),
-//     httpOnly: true,
-//   });
-//   res.cookie('refreshToken', '', {
-//     maxAge: 0,
-//     expires: new Date(Date.now()),
-//     httpOnly: true,
-//   });
+  res.cookie('authToken', '', {
+    maxAge: 0,
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
+  res.cookie('refreshToken', '', {
+    maxAge: 0,
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
 
-//   //TODO remove session from redis
-//   await userService.removeSession({ ip: req.ip });
-//   res.cookie('authStatus', 'unauthenticated');
+  //TODO remove session from redis
+  // await userService.removeSession({ ip: req.ip });
+  res.cookie('authStatus', 'unauthenticated');
 
-//   res.status(StatusCodes.OK).send({ message: 'You are succesfully logout.' });
-// };
+  res.status(StatusCodes.OK).send({ message: 'You are succesfully logout.' });
+};
 
 // const refreshToken = async (req: Request, res: Response) => {
 //   const { refreshToken, authToken } = req.cookies;
@@ -308,7 +273,7 @@ export const authController = {
   createNonce,
   login,
   // refreshUserSession,
-  // logout,
+  logout,
   signUp,
   // refreshToken,
 };
