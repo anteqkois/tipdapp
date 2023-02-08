@@ -1,7 +1,6 @@
 import api from '../config/apiConfig';
 import handledTokens from '../config/handledTokens.json';
-import { redis } from '../config/redis';
-import { CONSTANTS } from '../constants';
+import { CONSTANTS, redis } from '../config/redis';
 
 class TokenFeed {
   isRunning = false;
@@ -32,7 +31,7 @@ class TokenFeed {
       mappedTokens[token.id] = JSON.stringify(token);
     }
 
-    const res = await redis.hSet(CONSTANTS.REDIS.H_TOKEN_KEY, mappedTokens);
+    const res = await redis.hSet(CONSTANTS.KEY_HASH_TOKEN, mappedTokens);
   }
 
   async updateTokenData() {

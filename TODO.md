@@ -16,3 +16,6 @@
 - [ ] Remove DecodedUser type from database service, get it from api
 - [ ] Remove Express types from database service
 - [ ] Improve zod error handling
+- [ ] Create package from redis client and related constants
+- [ ] Check if ip is properly id for session
+- [ ] Add expiration time to session hash in redis
