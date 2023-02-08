@@ -31,19 +31,6 @@ type Props = {
     value: any,
     shouldValidate?: boolean | undefined
   ) => any;
-  // setFieldValue: (
-  //   field: string,
-  //   value: any,
-  //   shouldValidate?: boolean | undefined
-  // ) =>
-  //   | Promise<void>
-  //   | Promise<
-  //       FormikErrors<{
-  //         affixUrl: string;
-  //         description: string;
-  //         tokens: [];
-  //       }>
-  //     >;
   label: string;
 } & Omit<
   StateManagerProps<TokenOption, false | true, GroupedOption>,
@@ -52,10 +39,11 @@ type Props = {
 
 export const formTokenOptions = (tokens: Token[]) =>
   tokens.map((token) => ({
+    address: token.address,
     name: token.name,
     imageUrl: token.imageUrl,
     symbol: token.symbol,
-    value: token.symbol,
+    value: token.address,
   }));
 
 export const SelectTokens = ({
@@ -70,7 +58,6 @@ export const SelectTokens = ({
   ...rest
 }: Props) => {
   type Option = TokenOption;
-  // const [isOpenMenu, setIsOpenMenu] = useState(false);
 
   const onChangeSelect = (
     newValue: SingleValue<TokenOption> | MultiValue<TokenOption>

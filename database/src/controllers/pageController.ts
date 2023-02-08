@@ -1,5 +1,4 @@
 import { createApiError } from '@middlewares/error';
-import { Role } from '@prisma/client';
 import { pageService } from '@services/pageService';
 import { userService } from '@services/userService';
 import { Request, Response } from 'express';
@@ -45,10 +44,10 @@ const update = async (
 ) => {
   const parsedParams = pageApi.update.body.parse(req.body);
 
-  const arrayOfObjectWithTokenNames = parsedParams.tokens.map(
-    (token) =>
+  const arrayOfObjectWithTokenNames = parsedParams.tokenAddresses.map(
+    (address) =>
       ({
-        symbol: token,
+        address,
       } as Prisma.TokenWhereUniqueInput)
   );
 
@@ -63,7 +62,6 @@ const update = async (
         update: {
           activeTokens: {
             set: arrayOfObjectWithTokenNames,
-            // connect: arrayOfObjectWithTokenNames,
           },
         },
       },

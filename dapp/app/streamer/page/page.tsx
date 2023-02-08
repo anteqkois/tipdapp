@@ -46,7 +46,8 @@ const Page = () => {
       // baner/themecolor/link to yt.../display total supply of token/link to etherscan token
       affixUrl: user?.streamer?.page?.affixUrl ?? '',
       description: user?.streamer?.page?.description ?? '',
-      tokens: user?.streamer?.activeTokens.map((token) => token.symbol) || [],
+      tokenAddresses:
+        user?.streamer?.activeTokens.map((token) => token.symbol) || [],
       termsAndConditions: false,
     },
     onSubmit: async (values: PageApi.Update.Body) => {
@@ -111,13 +112,13 @@ const Page = () => {
           {tokensToSelect && (
             <SelectTokens
               label="Select the ERC20 tokens that will be available for tipping:"
-              id="tokens"
+              id="tokenAddresses"
               options={tokensToSelect}
               isMulti
-              name="tokens"
+              name="tokenAddresses"
               defaultValue={initialTokens}
               setFieldValue={formik.setFieldValue}
-              error={formik.errors.tokens as string | undefined}
+              error={formik.errors.tokenAddresses as string | undefined}
             />
           )}
           <CheckBox

@@ -1,21 +1,21 @@
 - [x] Create api gateway
 - [x] Move all shared server code to api gateway microservice (ApiError class, error handling etc.)
 - [x] Create one main file with tokens data in api gateway, delete others files that contains tokens data
-- [ ] Migrate authentication to api gateway
+- [x] Migrate authentication to api gateway
 - [ ] Move rabbitmq config to apigateway
 - [ ] Move zod config to apigateway
 - [ ] Delete modify type from dapp types, get it from api gateway
-- [ ] Move auth endpoint to apigateway
-- [ ] Store session in redis db
-- [ ] Create new endpoint connected to user model:
+- [x] Move auth endpoint to apigateway
+- [x] Store session in redis db
+- [x] Create new endpoint connected to user model:
   - Endpont to create user and return new user data
   - Endpoint to get user data when they login using type from request
   - Endpoint to refresh user data: /user/:address
-  - 
 - [ ] Upgarde all zod api validation
 - [ ] Remove DecodedUser type from database service, get it from api
 - [ ] Remove Express types from database service
 - [ ] Improve zod error handling
 - [ ] Create package from redis client and related constants
-- [ ] Check if ip is properly id for session
+- [x] Check if ip is properly id for session
 - [ ] Add expiration time to session hash in redis
+- [ ] Fix bug with adding active tokens to user page

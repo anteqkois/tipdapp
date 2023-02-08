@@ -2,6 +2,7 @@ import { Tipper, User, UserSession } from '@tipdapp/database';
 import { JWT_SETTINGS } from '../config/jwt';
 import { createApiError, createValidationError } from '../utils/error';
 // import { tipperService } from '@services/tipperService';
+import { HttpStatusCode } from 'axios';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
@@ -11,7 +12,6 @@ import { tipperService } from '../services/tipperService';
 import { userService } from '../services/userService';
 import { DecodedUser } from '../types';
 import { authApi, AuthApi } from '../validation/authApi';
-import { HttpStatusCode } from 'axios';
 
 const validateSiweMessage = async (message: Partial<SiweMessage>, signature: string) => {
   const siwe = new SiweMessage(message || {});
@@ -46,7 +46,7 @@ const createAuthToken = (userSessionData: Pick<User, 'roles' | 'address' | 'nick
     },
   );
 
-  //TODO! Save authToken to redis to have ability to remove session whenever it will be necessary for example from reason of hacking
+  //TODO Save authToken to redis to have ability to remove session whenever it will be necessary for example from reason of hacking
 
   return accessToken;
 };
@@ -67,7 +67,7 @@ const createRefreshToken = async (userSessionData: Pick<User, 'roles' | 'address
   );
 
   await redis.hSet(`session:${ip}`, { address: userSessionData.address, ip: ip, refreshToken: refreshToken });
-  await redis.expire(`session:${ip}`, JWT_SETTINGS.REFRESH_EXPIRES / 1000, 'GT');
+  await redis.expire(`session:${ip}`, JWT_SETTINGS.REFRESH_EXPIRES / 1000);
 
   return refreshToken;
 };
@@ -76,7 +76,7 @@ const deleteSession = async (ip: string) => redis.hDel(`session:${ip}`, ['addres
 
 const createNonce = async (req: Request, res: Response) => {
   const nonce = generateNonce();
-  await redis.setEx(`nonce:${req.ip}`, CONSTANTS.NONCE_EXPIRE_S, nonce );
+  await redis.setEx(`nonce:${req.ip}`, CONSTANTS.NONCE_EXPIRE_S, nonce);
   res.status(StatusCodes.OK).json({ nonce });
 };
 
@@ -87,7 +87,7 @@ const signUp = async (req: AuthApi.SignUp.Req, res: AuthApi.SignUp.Res) => {
   const siweMessage = await validateSiweMessage(message, signature);
 
   const redisNonce = await redis.get(`nonce:${req.ip}`);
-  if(redisNonce !== siweMessage.nonce) createApiError('Invalid message nonce.', HttpStatusCode.UnprocessableEntity);
+  if (redisNonce !== siweMessage.nonce) createApiError('Invalid message nonce.', HttpStatusCode.UnprocessableEntity);
 
   const { user } = await userService.create({ ...formData, address: siweMessage.address });
 
@@ -115,7 +115,7 @@ const signUp = async (req: AuthApi.SignUp.Req, res: AuthApi.SignUp.Res) => {
 const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
   const { body } = authApi.login.parse({ ...req });
   const { message, signature, type } = body;
-  
+
   const siweMessage = await validateSiweMessage(message, signature);
 
   const redisNonce = await redis.get(`nonce:${req.ip}`);
@@ -163,13 +163,13 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
 };
 
 const refreshUserSession = async (req: Request, res: Response) => {
-const { user } = await userService.find<{ user: UserSession }>({
-  address: req.user.address,
-  include: ['streamer', 'avatar', 'userToken'],
-});
+  const { user } = await userService.find<{ user: UserSession }>({
+    address: req.user.address,
+    include: ['streamer', 'avatar', 'userToken'],
+  });
 
   if (user) {
-    res.status(StatusCodes.OK).json({user});
+    res.status(StatusCodes.OK).json({ user });
   } else {
     createApiError('Something wrong when you try refetch session data. Please relogin.', StatusCodes.NOT_FOUND);
   }
