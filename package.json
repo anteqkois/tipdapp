@@ -7,23 +7,26 @@
     "type": "git",
     "url": "git+https://github.com/anteqkois/tipdapp.git"
   },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "author": "Antek Kois",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/anteqkois/tipdapp/issues"
   },
   "scripts": {
-    "dev": "NODE_ENV=development SERVER_COMMAND='npm run dev' docker compose -f docker-compose.minimal.yml up ",
+    "dev": "turbo run dev",
+    "dev:docker": "NODE_ENV=development SERVER_COMMAND='npm run dev' docker compose -f docker-compose.minimal.yml up ",
+    "dev:build": "cd apps/database && npm run build",
     "dev:update": "NODE_ENV=development SERVER_COMMAND='npm run dev:update' docker compose up",
-    "dev:old": "sudo service postgresql start & sleep 5 && NODE_ENV=development cd dapp && npm run dev & cd contractsDeprecated && npx hardhat node & sleep 10 && cd contractsDeprecated && npm run deploy:dev",
     "posttdev": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}') & kill $(lsof -Pi | grep :3000 | awk '{ print $2}')",
     "clean": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}') & kill $(lsof -Pi | grep :3000 | awk '{ print $2}')",
     "commit": "git add . && cz",
     "postcommit": "git push",
     "release": "standard-version",
     "postgres": "[ ! -f .env ] || export $(grep -v '^#' .env | xargs) | sudo service postgresql start | $DATABASE_PASSWORD",
-    "sc:test:i": "cd contractsDeprecated && npm run test:integration",
-    "sc:test:u": "cd contractsDeprecated && npm run test:unit",
     "db": "docker run --name db -p 5432:5432 -e POSTGRES_PASSWORD=password POSTGRES_HOST_AUTH=trust -v db:/var/lib/postgressql/data -d postgres",
     "rabbitmq": "docker run --name rabbitmq -p 5672:5672 -d rabbitmq"
   },

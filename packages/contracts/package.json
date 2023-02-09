@@ -1,0 +1,77 @@
+{
+  "name": "@tipdapp/contracts",
+  "author": "Antek Kois",
+  "license": "MIT",
+  "version": "0.0.15",
+  "description": "Smart Contracts and their types to my web3 dapp",
+  "main": "index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./lib/*": "./lib/*",
+    "./typechain-types/*": "./typechain-types/*"
+  },
+  "types": "index.ts",
+  "files": [
+    "index.ts",
+    "lib",
+    "typechain-types/index.ts",
+    "typechain-types/common.ts",
+    "typechain-types/contracts",
+    "typechain-types/factories",
+    "typechain-types/@openzeppelin/",
+    "package.json",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anteqkois/tipdapp.git",
+    "directory": "server"
+  },
+  "bugs": {
+    "url": "https://github.com/anteqkois/tipdapp/issues"
+  },
+  "homepage": "https://github.com/anteqkois/tipdapp/tree/master/contracts/package",
+  "keywords": [
+    "typescript",
+    "TypeScript",
+    "type",
+    "types",
+    "hardhat",
+    "solidity",
+    "ethers",
+    "diamond",
+    "EIP-2535",
+    "eip-2535",
+    "microservice",
+    "share"
+  ],
+  "scripts": {
+    "deploy:dev": "dotenv_config_path=.env.development npx hardhat run scripts/deploy.ts --network localhost",
+    "dev": "npx hardhat node",
+    "port": "sudo lsof -iTCP -sTCP:LISTEN -n -P",
+    "build:ts": "tsc --build tsconfig.json",
+    "clean:node": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}')",
+    "slither": "slither --solc-remaps @openzeppelin/=/home/anteqkois/project/tipdapp/contracts/node_modules/@openzeppelin/ .",
+    "publishPackage": "npm version patch && npm publish",
+    "postinstall": "typechain"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
+    "@nomiclabs/hardhat-ethers": "^2.2.2",
+    "@nomiclabs/hardhat-etherscan": "^3.1.6",
+    "@nomiclabs/hardhat-waffle": "^2.0.4",
+    "@openzeppelin/contracts": "^4.8.0",
+    "@typechain/ethers-v5": "^10.2.0",
+    "@typechain/hardhat": "^6.1.5",
+    "chai": "^4.3.7",
+    "dotenv": "^16.0.3",
+    "ethereum-waffle": "^4.0.9",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.12.0-esm.1",
+    "hardhat-gas-reporter": "^1.0.9",
+    "hardhat-shorthand": "^1.0.0",
+    "prettier": "^2.8.1",
+    "solidity-coverage": "^0.8.2",
+    "typechain": "^8.1.1"
+  }
+}

@@ -6,28 +6,9 @@
 /.pnp
 .pnp.js
 redis.conf
-
-# blockchianListeners
-blockchainListeners-old
-
-#contracts files
-contracts/typechain
-contracts/cache
-contracts/artifacts
-contracts/node_modules
-contracts/coverage
-
-# dapp
-dapp/.next/
-dapp/out/
-dapp/next-env.d.ts
-dapp/build
-dapp/.vercel
-
-# server
-database/node_modules
-database/package/lib
-database/src/types/prisma.js
+.turbo
+build/**
+dist/**
 
 # local env files
 **/.env
