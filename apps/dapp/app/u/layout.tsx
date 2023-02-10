@@ -1,8 +1,10 @@
 'use client';
+
 import { RainbowKitProviders } from '@/lib/Web3Provider';
 import { TipNav } from '@/modules/Navigation/containers';
 import { TipperProvider } from '@/shared/User/hooks/useTipper';
 import { ReactNode } from 'react';
+
 type Props = {
   children: ReactNode;
 };

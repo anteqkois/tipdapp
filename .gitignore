@@ -10,6 +10,8 @@ redis.conf
 build/**
 dist/**
 
+cache
+
 # local env files
 **/.env
 **/.env.local

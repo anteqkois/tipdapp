@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-typechain-types/**
-cache/**
-artifacts/**
-coverage/**
+typechain-types
+cache
+artifacts
+coverage
 coverage.json

@@ -1,7 +1,7 @@
 'use client';
 
 import ReduxProvider from '@/lib/redux/ReduxProvider';
-import { RainbowKitProviders, WagmiProvider } from '@/lib/Web3Provider';
+import { WagmiProvider } from '@/lib/Web3Provider';
 import { ModalProvider } from '@/shared/hooks';
 import { UserProvider } from '@/shared/User/hooks/useUser';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -16,26 +16,24 @@ type Props = {
   children: ReactNode;
 };
 
-export const Providers = ({ children }: Props) => {
-  return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        <WagmiProvider>
-          {/* TODO move signUpForm slice to react context */}
-          <ReduxProvider>
-            <UserProvider>
-              {/* <RainbowKitProviders> */}
-                <ModalProvider />
-                <Toaster
-                  position="top-center"
-                  reverseOrder={false}
-                />
-                {children}
-              {/* </RainbowKitProviders> */}
-            </UserProvider>
-          </ReduxProvider>
-        </WagmiProvider>
-      </QueryClientProvider>
-    </>
-  );
-};
+const Providers = ({ children }: Props) => (
+  <QueryClientProvider client={queryClient}>
+    <WagmiProvider>
+      {/* TODO move signUpForm slice to react context */}
+      <ReduxProvider>
+        <UserProvider>
+          {/* <RainbowKitProviders> */}
+          <ModalProvider />
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+          />
+          {children}
+          {/* </RainbowKitProviders> */}
+        </UserProvider>
+      </ReduxProvider>
+    </WagmiProvider>
+  </QueryClientProvider>
+);
+
+export default Providers;

@@ -9,12 +9,13 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
   "include": ["server.ts", "**/*.ts", "**/*.d.ts"],
   "ts-node": {
     "skipIgnore": true,
     "files": true,
     "require": []
-  }
+  },
+  "exclude": ["node_modules/**"]
 }

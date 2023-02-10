@@ -6,8 +6,8 @@ type Props = {
   children: ReactNode;
 };
 
-export const ReduxProvider = ({ children }: Props) => {
-  return <Provider store={store}>{children}</Provider>;
-};
+const ReduxProvider = ({ children }: Props) => (
+  <Provider store={store}>{children}</Provider>
+);
 
 export default ReduxProvider;
