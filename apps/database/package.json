@@ -49,7 +49,7 @@
     "publishPackage": "npm version patch && npm publish",
     "postinstall": "npx prisma generate",
     "start": "NODE_ENV=production node dist/server.js",
-    "testtt": "echo 'siemaaa'"
+    "testtt": "echo 'SIEEEEEEEMA'"
   },
   "dependencies": {
     "@prisma/client": "^4.7.1",

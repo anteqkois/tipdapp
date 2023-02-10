@@ -1,5 +1,13 @@
-// import "@nomicfoundation/hardhat-toolbox";
 import "@nomiclabs/hardhat-waffle";
+import "@typechain/hardhat";
+import "@nomiclabs/hardhat-ethers";
+
+    // "@nomiclabs/hardhat-etherscan": "^3.1.6",
+    // "@openzeppelin/contracts": "^4.8.0",
+    // "@typechain/ethers-v5": "^10.2.0",
+
+
+
 import { HardhatUserConfig } from "hardhat/config";
 import "solidity-coverage";
 
@@ -11,7 +19,7 @@ dotenv.config({
     : ".env.development",
 });
 
-const config: HardhatUserConfig = {
+const config: HardhatUserConfig & any = {
   solidity: {
     version: "0.8.17",
     settings: {

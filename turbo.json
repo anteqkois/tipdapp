@@ -4,12 +4,16 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["dev:build", "dev:docker"]
+      "dependsOn": ["@tipdapp/contracts#compile"]
     },
-    "dev:build": {
+    "docker": {
+      "cache": false,
+      "dependsOn": ["//#docker:dev"]
+    },
+    "//#docker:dev": {
       "cache": false
     },
-    "dev:docker": {
+    "@tipdapp/contracts#compile": {
       "cache": false
     }
   }
