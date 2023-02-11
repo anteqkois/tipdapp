@@ -1,6 +1,7 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import React, { HTMLAttributes, ReactNode, useEffect, useState } from 'react';
+
 export const ModalProvider = () => <div id="modal" />;
 
 export const useModal = () => {
@@ -12,20 +13,17 @@ export const useModal = () => {
     return () => setMounted(false);
   }, []);
 
-  const Modal = ({ children }: { children: ReactNode }): JSX.Element => {
-    return (
+  const Modal = ({ children }: { children: ReactNode }): JSX.Element => (
       <DialogPrimitive.Root
         open={showModal}
         onOpenChange={setShowModal}
-        modal={true}
+        modal
       >
         {children}
       </DialogPrimitive.Root>
     );
-  };
 
-  const ModalTrigger = ({ children }: { children: ReactNode }): JSX.Element => {
-    return (
+  const ModalTrigger = ({ children }: { children: ReactNode }): JSX.Element => (
       <DialogPrimitive.Trigger
         asChild
         className="state-focus"
@@ -33,7 +31,6 @@ export const useModal = () => {
         {children}
       </DialogPrimitive.Trigger>
     );
-  };
 
   type ModalProps = {
     title: string;
@@ -43,8 +40,7 @@ export const useModal = () => {
   const ModalContent = React.forwardRef<
     DialogPrimitive.DialogContentProps & HTMLDivElement,
     ModalProps
-  >(({ children, title, description, className, ...props }, ref) => {
-    return mounted ? (
+  >(({ children, title, description, className, ...props }, ref) => mounted ? (
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay
           className="fixed inset-0 z-40 p-2 overflow-scroll bg-neutral-800/40 md:flex-center"
@@ -71,8 +67,7 @@ export const useModal = () => {
           </DialogPrimitive.Content>
         </DialogPrimitive.Overlay>
       </DialogPrimitive.Portal>
-    ) : null;
-  });
+    ) : null);
 
   ModalContent.displayName = 'ModalContent';
 

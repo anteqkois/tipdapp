@@ -1,4 +1,5 @@
 'use client';
+
 import { update } from '@/api/page';
 import {
   formTokenOptions,
@@ -25,7 +26,7 @@ import { useFormik } from 'formik';
 import { useMemo } from 'react';
 import toast from 'react-hot-toast';
 
-const Page = () => {
+function Page() {
   const { user, refreshUser } = useUser();
   const { data } = useTokenFind();
 
@@ -61,7 +62,7 @@ const Page = () => {
           if (isValidationError(error[0])) {
             formik.setErrors(ValidationError.mapArrayByField(error));
           } else {
-            console.log(error);
+            console.error(error);
             toast.error(
               'Something went wrong, can not update your page details.'
             );
@@ -86,11 +87,11 @@ const Page = () => {
                 label="URL of your side (Url editing isn't avaible now.)"
                 type="text"
                 className="pl-52"
-                disabled={true}
+                disabled
                 onChange={formik.handleChange}
                 value={formik.values.affixUrl}
                 error={formik.errors.affixUrl}
-              ></Input>
+              />
               <span className="absolute top-[29px] left-[1px] rounded rounded-tr-none rounded-br-none bg-neutral-200  p-2 text-neutral-light">
                 {`https://tipdapp/u/${user?.activeRole}/${user?.nick}`}
               </span>
@@ -139,6 +140,6 @@ const Page = () => {
       </Card>
     </section>
   );
-};
+}
 
 export default Page;

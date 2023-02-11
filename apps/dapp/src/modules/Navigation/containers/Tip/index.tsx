@@ -1,4 +1,5 @@
 'use client';
+
 import { useMediaQuery } from '@/shared/hooks';
 import { NavigationOption } from '../../types';
 import { Desktop } from './Desktop';

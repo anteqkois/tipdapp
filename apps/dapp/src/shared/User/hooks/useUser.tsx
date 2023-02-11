@@ -1,4 +1,5 @@
 'use client';
+
 import {
   logoutUser,
   refreshToken,
@@ -57,7 +58,7 @@ const UserProvider = ({ children }: Props) => {
     let interval: NodeJS.Timer;
     if (status === 'authenticated') {
       // refreshToken();
-      //Refresh in 30s interval
+      // Refresh in 30s interval
       interval = setInterval(() => {
         refreshToken();
       }, 30 * 60 * 1000);

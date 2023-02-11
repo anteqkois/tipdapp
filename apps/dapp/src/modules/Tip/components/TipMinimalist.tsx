@@ -1,7 +1,7 @@
 import { dateFormat } from '@/lib/dayjs';
 import { useClipboard, useModal } from '@/shared/hooks';
 import { Button, Card, Flag, Tooltip } from '@/shared/ui';
-import Avatar from '@/shared/User/components/Avatar';
+import { Avatar } from '@/shared/User/components/Avatar';
 import { cutAddress, parseNotation } from '@/utils';
 import {
   ArrowPathIcon,
@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { TipUI } from '@tipdapp/database';
 
-const TipMinimalist = ({
+export const TipMinimalist = ({
   txHash,
   amount,
   value,
@@ -111,11 +111,11 @@ const TipMinimalist = ({
             <a
               tabIndex={-1}
               href={`https://etherscan.io/token/${tipperAddress}`}
-              target={'_blank'}
+              target="_blank"
               rel="noreferrer"
             >
               <Button
-                variant="link"
+                // variant="link"
                 className="mr-1 font-medium text-neutral-700"
               >
                 View token on Explorer
@@ -141,11 +141,11 @@ const TipMinimalist = ({
               <a
                 tabIndex={-1}
                 href={`https://etherscan.io/address/${tipperAddress}`}
-                target={'_blank'}
+                target="_blank"
                 rel="noreferrer"
               >
                 <Button
-                  variant="link"
+                  // variant="link"
                   className="mr-1 font-medium text-neutral-700"
                 >
                   View on Explorer
@@ -172,11 +172,11 @@ const TipMinimalist = ({
               <a
                 tabIndex={-1}
                 href={`https://etherscan.io/tx/${tipperAddress}`}
-                target={'_blank'}
+                target="_blank"
                 rel="noreferrer"
               >
                 <Button
-                  variant="link"
+                  // variant="link"
                   className="mr-1 font-medium text-neutral-700"
                 >
                   View on Explorer
@@ -215,5 +215,3 @@ const TipMinimalist = ({
     </Card>
   );
 };
-
-export default TipMinimalist;

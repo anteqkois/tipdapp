@@ -5,8 +5,7 @@ type Props = {
   onClick: MouseEventHandler;
 };
 
-export const Close = ({ onClick }: Props) => {
-  return (
+export const Close = ({ onClick }: Props) => (
     <span
       className="rounded-full bg-neutral-150 state-focus w-6 h-6 animate-action"
       onClick={onClick}
@@ -14,4 +13,3 @@ export const Close = ({ onClick }: Props) => {
       <XMarkIcon className="p-1 ease-in-out w-6 h-6 stroke-neutral-600" />
     </span>
   );
-};

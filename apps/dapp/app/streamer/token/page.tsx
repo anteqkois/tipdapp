@@ -1,10 +1,10 @@
 'use client';
 
+import { useUser } from '@/shared/User/hooks/useUser';
 import { CreateUserToken } from '@/shared/UserToken/containers/CreateUserToken';
 import { TokenPanel } from '@/shared/UserToken/containers/TokenPanel';
-import { useUser } from '@/shared/User/hooks/useUser';
 
-const Token = () => {
+function Token() {
   const { user } = useUser();
 
   return (
@@ -16,6 +16,6 @@ const Token = () => {
       )}
     </section>
   );
-};
+}
 
 export default Token;

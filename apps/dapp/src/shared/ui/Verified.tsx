@@ -6,8 +6,7 @@ type Props = {
   verified: boolean;
 };
 
-export const Verified = ({ verified }: Props) => {
-  return verified ? (
+export const Verified = ({ verified }: Props) => verified ? (
     <Tooltip content="Verified user">
       <VerifiedIcon className="inline-block h-[1em] fill-primary-700" />
     </Tooltip>
@@ -16,4 +15,3 @@ export const Verified = ({ verified }: Props) => {
       <NoVerifiedIcon className="inline-block h-[1em] stroke-2 stroke-neutral-400" />
     </Tooltip>
   );
-};

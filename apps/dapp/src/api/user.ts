@@ -5,6 +5,4 @@ type FindResponse = {
   user: NestedUser;
 };
 
-export const find = async (queryParams: UserApi.Find.Query) => {
-  return await api.get<never, FindResponse>('/user', { params: queryParams });
-};
+export const find = async (queryParams: UserApi.Find.Query) => api.get<never, FindResponse>('/user', { params: queryParams });

@@ -1,6 +1,6 @@
 import { ethers } from '@/lib';
 
-//TODO Add chain, web3 constants
+// TODO Add chain, web3 constants
 export const ethereum = {
   ...ethers.constants,
 };

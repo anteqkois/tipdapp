@@ -6,10 +6,9 @@ import Link from 'next/link';
 
 type Props = {
   error: ApiError[];
-  reset: () => void;
 };
 
-export default function Error({ error, reset }: Props) {
+export default function Error({ error }: Props) {
   // const router = useRouter();
 
   // if (error[0].message === 'You are not authorized.') {

@@ -1,4 +1,5 @@
 'use client'
+
 import { Dispatch, SetStateAction, useState } from 'react';
 
 type Options = {
@@ -17,25 +18,23 @@ export function stringifyOptions(options: Options) {
         default:
           if (options[key] === true) {
             return `${acc} ${key};`;
-          } else {
+          } 
             return `${acc} ${key}=${options[key]};`;
-          }
+          
       }
     },
     ';'
   );
 }
 
-const getCookie = <S,>(key: string): S | undefined => {
-  return (
+const getCookie = <S,>(key: string): S | undefined => (
     (document?.cookie.split('; ').reduce((r, v) => {
       const parts = v.split('=');
       return parts[0] === key ? decodeURIComponent(parts[1]) : r;
     }, '') as S) || undefined
   );
-};
 
-//TODO add remove cookie function
+// TODO add remove cookie function
 const setCookie = <S,>(key: string, value: S, options?: Options) => {
   try {
     const optionsWithDefaults = {
@@ -48,10 +47,10 @@ const setCookie = <S,>(key: string, value: S, options?: Options) => {
       Date.now() + optionsWithDefaults.expireDays * 864e5
     ).toUTCString();
 
-    //from exxpressJS, to be set in teh same way
+    // from exxpressJS, to be set in teh same way
     const val =
       typeof value === 'object'
-        ? String('j:' + JSON.stringify(value))
+        ? String(`j:${  JSON.stringify(value)}`)
         : String(value);
 
     const cookie = (window.document.cookie = `${key}=${encodeURIComponent(
@@ -87,7 +86,7 @@ export function useCookie<S>(key: string, initialValue?: S, options?: Options) {
     }
   });
 
-  //if need to render HMTL, with present soluytions throws error that not match HTML(maybe try useLayoutEffect ?)
+  // if need to render HMTL, with present soluytions throws error that not match HTML(maybe try useLayoutEffect ?)
   // useEffect(() => {
   //   const cookie = getCookie<S>(key);
   //   setStoredValue(cookie ?? initialValue);

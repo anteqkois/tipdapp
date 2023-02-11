@@ -1,7 +1,7 @@
 import { InfoMessage } from '@/shared/ui';
 import { TipUI } from '@tipdapp/database';
-import TipCard from '../components/Tip';
-import TipMinimalist from '../components/TipMinimalist';
+import { Tip } from '../components/Tip';
+import { TipMinimalist } from '../components/TipMinimalist';
 
 type Props = {
   tips: TipUI[];
@@ -10,9 +10,10 @@ type Props = {
 
 type TipView = keyof typeof tipViewComponents;
 
-//TODO! chnage it to accept tipView props as a ReactCompnent which get tips as a props
+// TODO! chnage it to accept tipView props as a ReactCompnent which get tips as a props
+// TODO! or to accept one children as a tip representation and next use ReactCopyElement
 const tipViewComponents = {
-  Card: TipCard,
+  Card: Tip,
   Minimalist: TipMinimalist,
 };
 export const TipsList = ({ tips, tipView }: Props) => {

@@ -111,7 +111,7 @@ const TipCard = ({
             <a
               tabIndex={-1}
               href={`https://etherscan.io/token/${tipperAddress}`}
-              target={'_blank'}
+              target="_blank"
               rel="noreferrer"
             >
               <Button
@@ -141,7 +141,7 @@ const TipCard = ({
               <a
                 tabIndex={-1}
                 href={`https://etherscan.io/address/${tipperAddress}`}
-                target={'_blank'}
+                target="_blank"
                 rel="noreferrer"
               >
                 <Button
@@ -172,7 +172,7 @@ const TipCard = ({
               <a
                 tabIndex={-1}
                 href={`https://etherscan.io/tx/${tipperAddress}`}
-                target={'_blank'}
+                target="_blank"
                 rel="noreferrer"
               >
                 <Button

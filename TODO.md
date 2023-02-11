@@ -19,3 +19,4 @@
 - [x] Check if ip is properly id for session
 - [ ] Add expiration time to session hash in redis
 - [ ] Fix bug with adding active tokens to user page
+- [ ] Create shared Error Component

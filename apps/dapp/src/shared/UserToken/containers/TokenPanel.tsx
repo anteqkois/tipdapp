@@ -103,7 +103,7 @@ export const TokenPanel = ({ token }: Props) => {
           </p>
           <ViewOnExplorer
             subject="tx"
-            value={'0x2'}
+            value="0x2"
           />
         </div>
       </Card>

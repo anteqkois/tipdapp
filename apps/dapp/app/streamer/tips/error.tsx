@@ -4,13 +4,7 @@ import { ErrorMessage } from '@/shared/ui';
 import { ApiError } from '@tipdapp/database';
 import { useEffect } from 'react';
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: ApiError[];
-  reset: () => void;
-}) {
+export default function Error({ error }: { error: ApiError[] }) {
   useEffect(() => {
     console.error(error);
   }, [error]);

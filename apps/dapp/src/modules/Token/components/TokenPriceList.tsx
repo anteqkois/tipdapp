@@ -7,8 +7,7 @@ type Props = {
   tokens: TokenCoinGecko[];
   className?: string;
 };
-export const TokenPriceList = ({ tokens, className }: Props) => {
-  return (
+export const TokenPriceList = ({ tokens, className }: Props) => (
     <table
       className={`table-auto rounded bg-neutral-50 p-4 ring-1 ring-inset ring-neutral-600 ring-opacity-10 ${className}`}
       id="tokenPrices"
@@ -72,4 +71,3 @@ export const TokenPriceList = ({ tokens, className }: Props) => {
       </tfoot>
     </table>
   );
-};

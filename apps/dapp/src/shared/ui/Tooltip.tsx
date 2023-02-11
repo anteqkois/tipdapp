@@ -7,8 +7,7 @@ type Props = {
 } & TooltipPrimitive.TooltipContentProps &
   RefAttributes<HTMLDivElement>;
 
-export const Tooltip = ({ children, content, ...rest }: Props) => {
-  return (
+export const Tooltip = ({ children, content, ...rest }: Props) => (
     <TooltipPrimitive.Provider>
       <TooltipPrimitive.Root>
         <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
@@ -25,6 +24,5 @@ export const Tooltip = ({ children, content, ...rest }: Props) => {
       </TooltipPrimitive.Root>
     </TooltipPrimitive.Provider>
   );
-};
 
 export default Tooltip;

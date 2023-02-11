@@ -18,8 +18,7 @@ type ButtonProps = {
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ children, className, variant = 'default', ...props }, ref) => {
-    return (
+  ({ children, className, variant = 'default', ...props }, ref) => (
       <button
         {...props}
         // onKeyDown={(key) => key.code === 'Enter' && props.onClick()}
@@ -61,8 +60,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {children}
       </button>
-    );
-  }
+    )
 );
 
 Button.displayName = 'Button';

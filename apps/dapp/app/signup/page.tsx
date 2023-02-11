@@ -1,8 +1,9 @@
 'use client';
+
 import { SignUpForm } from '@/modules/SignUpForm/containers/SignUpForm';
 
-const SignUp = () => {
+function SignUp() {
   return <SignUpForm />;
-};
+}
 
 export default SignUp;

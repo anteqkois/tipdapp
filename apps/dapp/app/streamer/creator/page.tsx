@@ -1,7 +1,7 @@
 'use client';
 
-const Creator = () => {
+function Creator() {
   return <div>creator</div>;
-};
+}
 
 export default Creator;

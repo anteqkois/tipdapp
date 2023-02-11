@@ -9,5 +9,5 @@ type Props = {
 };
 
 export default function Page({ params }: Props) {
-  return <main>Show all page connected to given role</main>;
+  return <main>Show all page connected to given role {params.role}</main>;
 }

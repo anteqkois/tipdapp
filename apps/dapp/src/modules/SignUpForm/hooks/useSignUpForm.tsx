@@ -55,7 +55,7 @@ export const useSignUpForm = () => {
       try {
         if (!Object.keys(formik.errors).length) {
           if (step === 1) {
-            //validate userData on backend
+            // validate userData on backend
             try {
               const data = await validateFormData(values);
               setFormData(values);
@@ -92,7 +92,7 @@ export const useSignUpForm = () => {
   const register = async (message: SiweMessage, signature: string) => {
     try {
       const response = await signUp({
-        message: message,
+        message,
         signature,
         formData: JSON.parse(localStorage.getItem('formData') ?? ''),
       });

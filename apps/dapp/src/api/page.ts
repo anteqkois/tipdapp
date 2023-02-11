@@ -12,13 +12,9 @@ export const findByAffixUrl = async ({
 }: {
   params: PageApi.FindByAffixUrl.Params;
   query?: PageApi.FindByAffixUrl.Query;
-}) => {
-  return await api.get<never, FindResponse>(
+}) => api.get<never, FindResponse>(
     `/page/${params.role}/${params.affixUrl}`,
     { params: query }
   );
-};
 
-export const update = async (body: PageApi.Update.Body) => {
-  return await api.put<never, { message: string }>('/page', body);
-};
+export const update = async (body: PageApi.Update.Body) => api.put<never, { message: string }>('/page', body);

@@ -2,8 +2,7 @@ import { SVGAttributes } from 'react';
 
 type Props = SVGAttributes<SVGElement>;
 
-export const Spinner = ({ className }: Props) => {
-  return (
+export const Spinner = ({ className }: Props) => (
     // <div className="w-full h-full flex-center">
     <svg
       role="status"
@@ -24,6 +23,5 @@ export const Spinner = ({ className }: Props) => {
     </svg>
     // </div>
   );
-};
 
 export default Spinner;

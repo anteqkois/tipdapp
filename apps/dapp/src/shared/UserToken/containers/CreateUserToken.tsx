@@ -23,7 +23,7 @@ export const CreateUserToken = () => {
       'userTokenFormData',
       initialUserToken
     );
-  //TODO Refreshh user data after create user token
+  // TODO Refreshh user data after create user token
   // const { refreshSessionData } = useSession();
 
   const { contract, registerUser, userToken } = useUserFacet();
@@ -105,7 +105,7 @@ export const CreateUserToken = () => {
         details="Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati possimus dignissimos sequi voluptatum, omnis magni
           deleniti ducimus voluptatibus. Obcaecati similique ipsum laboriosam libero magnam modi earum voluptatibus. Delectus, in
           veritatis."
-      ></Details>
+       />
     </Card>
   );
 };

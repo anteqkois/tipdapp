@@ -12,7 +12,7 @@ export const useUserToken = (userTokenAddress: Address) => {
     [userTokenAddress]
   );
 
-  //TODO get info from etherscan/transfermarketcap (create hooks to do it)
+  // TODO get info from etherscan/transfermarketcap (create hooks to do it)
 
   // READ
   const symbol = useContractRead({

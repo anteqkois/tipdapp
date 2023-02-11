@@ -25,8 +25,7 @@ const useClipboard = (messageFromHook = 'Data copied') => {
     );
   };
 
-  const ClipboardIcon = ({ copyData, message }: copyArg) => {
-    return (
+  const ClipboardIcon = ({ copyData, message }: copyArg) => (
       <DocumentDuplicateIcon
         tabIndex={0}
         className="inline p-0.5 pb-1 pl-1 bg-neutral-150 stroke-neutral-500 w-6 rounded-full state-focus animate-action hover:stroke-neutral-800"
@@ -34,7 +33,6 @@ const useClipboard = (messageFromHook = 'Data copied') => {
         onKeyDown={(key) => key.code === 'Enter' && copy({ copyData, message })}
       />
     );
-  };
 
   return { ClipboardIcon, copy };
 };

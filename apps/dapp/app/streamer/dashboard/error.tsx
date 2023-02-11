@@ -5,10 +5,8 @@ import { ApiError } from '@tipdapp/database';
 
 export default function Error({
   error,
-  reset,
 }: {
   error: ApiError[];
-  reset: () => void;
 }) {
   return (
     <div>

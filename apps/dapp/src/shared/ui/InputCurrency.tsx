@@ -64,7 +64,7 @@ export const InputCurrency = ({
           [disabled && 'opacity-40'],
           'shadow-sm focus:outline-none focus:border-primary focus:ring focus:ring-primary-light focus:ring-opacity-50'
         )}
-      ></input>
+       />
       <p className="text-danger-600 min-h-[24px]">{error && `* ${error}`}</p>
     </div>
   );

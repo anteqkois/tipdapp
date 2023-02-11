@@ -1,4 +1,5 @@
 'use client';
+
 import { PageSpinner } from '@/shared/ui';
 import { Role } from '@tipdapp/database';
 import { useRouter } from 'next/navigation';
@@ -17,7 +18,7 @@ export const ProtectPageRoleBased = ({ children, allowedRoles }: Props) => {
   if (status === 'loading') {
     return <PageSpinner />;
   }
-  //TODO add callback feature
+  // TODO add callback feature
   if (
     status === 'unauthenticated' ||
     !user?.roles
@@ -28,5 +29,5 @@ export const ProtectPageRoleBased = ({ children, allowedRoles }: Props) => {
     return <PageSpinner />;
   }
 
-  return <>{children}</>;
+  return children;
 };

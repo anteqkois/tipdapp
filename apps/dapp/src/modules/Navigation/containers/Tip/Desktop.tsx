@@ -55,7 +55,7 @@ export const Desktop = ({ navigationOption }: Props) => {
                 </Button>
               </li>
             ))}
-            <Link href={'signup'}>
+            <Link href="signup">
               <Button
                 // variant="clear"
                 variant="overlay"

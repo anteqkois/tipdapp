@@ -1,4 +1,5 @@
 'use client';
+
 import { UserSessionDapp } from '@/shared/User/types';
 import classNames from 'classnames';
 import { useState } from 'react';

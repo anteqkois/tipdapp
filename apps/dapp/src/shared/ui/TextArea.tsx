@@ -18,8 +18,7 @@ export const TextArea = ({
   label,
   name,
   ...rest
-}: Props) => {
-  return (
+}: Props) => (
     <div className='my-2'>
       <label
         htmlFor={id}
@@ -38,8 +37,7 @@ export const TextArea = ({
           'shadow-sm focus:outline-none focus:border-primary focus:ring focus:ring-primary-light focus:ring-opacity-50'
         )}
         {...rest}
-      ></textarea>
+       />
       <p className="text-danger-600 min-h-[24px]">{error && `* ${error}`}</p>
     </div>
   );
-};

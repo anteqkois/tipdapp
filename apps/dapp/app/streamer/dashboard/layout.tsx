@@ -1,8 +1,9 @@
 'use client';
+
 import { Button, Card } from '@/shared/ui';
-import Avatar from '@/shared/User/components/Avatar';
+import {Avatar} from '@/shared/User/components/Avatar';
 import { useUser } from '@/shared/User/hooks/useUser';
-import cutAddress from '@/utils/cutAddress';
+import {cutAddress} from '@/utils/cutAddress';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 

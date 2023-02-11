@@ -2,7 +2,7 @@ import { AsyncStatus } from '@/types';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ApiError, ValidationError } from '@tipdapp/database';
 
-export const getSettingsByUser = createAsyncThunk(
+const getSettingsByUser = createAsyncThunk(
   'settings/get',
   async (queryParams, thunkAPI) => {
     try {
@@ -65,7 +65,7 @@ const settingsSlice = createSlice({
   },
 });
 
-export const { resetError } = settingsSlice.actions;
+const { resetError } = settingsSlice.actions;
 
 // export const tipsSelectors = tipsAdapter.getSelectors((state) => {
 //   return state.tips;
@@ -100,4 +100,9 @@ export const { resetError } = settingsSlice.actions;
 //   (pageSize) => pageSize
 // );
 
-export default settingsSlice.reducer;
+const { reducer } = settingsSlice;
+export {
+  getSettingsByUser,
+  resetError,
+  reducer as settingsReducer,
+};

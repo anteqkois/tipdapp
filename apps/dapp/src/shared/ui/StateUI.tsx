@@ -10,7 +10,7 @@ type StateUIProps = {
   EmptyComponent?: JSX.Element;
   children: ReactNode;
 };
-//TODO add error/fail state
+// TODO add error/fail state
 export const StateUI = ({
   loading,
   empty = false,

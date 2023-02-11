@@ -6,13 +6,11 @@ type Props = {
   className?: string;
 };
 
-export const ErrorMessage = ({ children, className }: Props) => {
-  return (
+export const ErrorMessage = ({ children, className }: Props) => (
     <h6 className={`text-danger text-center flex-center ${className}`}>
       <ExclamationCircleIcon className="icon bg-transparent stroke-danger-600 stroke-2" />
       {children}
     </h6>
   );
-};
 
 export default ErrorMessage;

@@ -41,8 +41,7 @@ const labels: Record<Props['socialMedium'], string> = {
   youtube: 'YouTube',
 };
 
-export const SocialLink = ({ href, socialMedium }: Props) => {
-  return (
+export const SocialLink = ({ href, socialMedium }: Props) => (
     <Link
       href={href}
       className="flex gap-2"
@@ -51,4 +50,3 @@ export const SocialLink = ({ href, socialMedium }: Props) => {
       {labels[socialMedium]}
     </Link>
   );
-};

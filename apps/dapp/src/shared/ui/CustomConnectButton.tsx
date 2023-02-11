@@ -6,8 +6,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Image from 'next/image';
 import { Button, Tooltip } from '@/shared/ui';
 
-export const CustomConnectButton = () => {
-  return (
+export const CustomConnectButton = () => (
     <ConnectButton.Custom>
       {({
         account,
@@ -105,4 +104,3 @@ export const CustomConnectButton = () => {
       }}
     </ConnectButton.Custom>
   );
-};

@@ -12,8 +12,7 @@ export const Link = ({
   children,
   className,
   ...rest
-}: Prps) => {
-  return (
+}: Prps) => (
     <a
       {...rest}
       href={href}
@@ -27,4 +26,3 @@ export const Link = ({
       )}
     </a>
   );
-};

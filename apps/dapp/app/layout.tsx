@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react';
 import './globals.css';
-import Providers from './Providers';
+import { Providers } from './Providers';
 
 type Props = {
   children: ReactNode;

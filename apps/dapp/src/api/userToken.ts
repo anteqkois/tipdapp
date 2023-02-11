@@ -21,8 +21,6 @@ type FindResponse = {
 };
 
 // use get with queryParams
-export const find = async (queryParams: FindParams) => {
-  return await api.get<never, FindResponse>('/userToken', {
+export const find = async (queryParams: FindParams) => api.get<never, FindResponse>('/userToken', {
     params: queryParams,
   });
-};

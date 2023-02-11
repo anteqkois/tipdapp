@@ -63,7 +63,7 @@ export const SelectTokens = ({
     newValue: SingleValue<TokenOption> | MultiValue<TokenOption>
   ) => {
     if (newValue) {
-      //is single value
+      // is single value
       if ('value' in newValue) {
         setFieldValue(name, newValue.value);
       } else {
@@ -79,8 +79,7 @@ export const SelectTokens = ({
     isDisabled,
     children,
     data,
-  }: OptionProps<Option, true | false, GroupedOption>) => {
-    return !isDisabled ? (
+  }: OptionProps<Option, true | false, GroupedOption>) => !isDisabled ? (
       <div
         ref={innerRef}
         {...innerProps}
@@ -91,21 +90,19 @@ export const SelectTokens = ({
           width={24}
           className="rounded-full"
           alt={data.name}
-          //TODO remove when package was updated
-          //@ts-ignore
+          // TODO remove when package was updated
+          // @ts-ignore
           src={data.imageUrl}
         />
         {data.name}
         {children}
       </div>
     ) : null;
-  };
 
   const CustomMultiValueLabel = ({
     data,
     selectProps,
-  }: MultiValueGenericProps<Option, true | false, GroupedOption>) => {
-    return (
+  }: MultiValueGenericProps<Option, true | false, GroupedOption>) => (
       <components.MultiValueLabel
         data={data}
         selectProps={selectProps}
@@ -121,14 +118,12 @@ export const SelectTokens = ({
         {data.symbol.toUpperCase()}
       </components.MultiValueLabel>
     );
-  };
 
   const CustomSingleValue = ({
     children,
     data,
     ...props
-  }: SingleValueProps<Option, true | false, GroupedOption>) => {
-    return (
+  }: SingleValueProps<Option, true | false, GroupedOption>) => (
       <components.SingleValue
         {...props}
         data={data}
@@ -139,7 +134,7 @@ export const SelectTokens = ({
           width={24}
           className="rounded-full"
           alt={data.name}
-          //TODO remove when package was updated
+          // TODO remove when package was updated
           // @ts-ignore
           src={data.imageUrl}
         />
@@ -147,7 +142,6 @@ export const SelectTokens = ({
         {children}
       </components.SingleValue>
     );
-  };
 
   const CustomInput = (
     props: InputProps<Option, true | false, GroupedOption>

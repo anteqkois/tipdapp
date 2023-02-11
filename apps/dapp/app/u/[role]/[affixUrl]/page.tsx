@@ -11,7 +11,7 @@ import {
   SocialLink,
   Verified,
 } from '@/shared/ui';
-import Avatar from '@/shared/User/components/Avatar';
+import { Avatar } from '@/shared/User/components/Avatar';
 import { Role } from '@tipdapp/database';
 import Image from 'next/image';
 
@@ -29,7 +29,7 @@ export default function Page({ params }: Props) {
 
   // const activeTokensSymbol = ['sand', 'shib', 'bnb'];
 
-  const { data: tokenRes, error } = useTokenGetDetails({
+  const { data: tokenRes } = useTokenGetDetails({
     // symbol: activeTokensSymbol,
   });
 
@@ -42,9 +42,9 @@ export default function Page({ params }: Props) {
           <div className="relative mb-7 aspect-video max-h-60 w-full">
             <Image
               className="rounded"
-              src={'/sky.jpeg'}
+              src="/sky.jpeg"
               alt="user baner"
-              fill={true}
+              fill
             />
           </div>
           <div className="-mt-20 flex items-center justify-center">

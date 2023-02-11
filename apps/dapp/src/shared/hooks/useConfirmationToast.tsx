@@ -9,9 +9,7 @@ export const useConfirmationToast = (hash?: Hash, confirmations = 4) => {
     confirmations,
   });
 
-  const run = useMemo(() => {
-    return typeof waitTx.data === 'undefined' && hash ? true : false;
-  }, [waitTx.data, hash]);
+  const run = useMemo(() => !!(typeof waitTx.data === 'undefined' && hash), [waitTx.data, hash]);
 
   const transaction = useTransaction({
     hash,
@@ -25,7 +23,7 @@ export const useConfirmationToast = (hash?: Hash, confirmations = 4) => {
     enabled: run,
   });
 
-  //TODO give user information that UUI stop watching confirmations amount
+  // TODO give user information that UUI stop watching confirmations amount
   useEffect(() => {
     transaction.data?.confirmations &&
       confirmationToast(transaction.data.confirmations, {

@@ -16,8 +16,7 @@ export const CheckBox = ({
   error,
   disabled,
   ...rest
-}: Props) => {
-  return (
+}: Props) => (
     <div className="flex items-start gap-2 my-3 pl-2">
       <input
         {...rest}
@@ -34,7 +33,7 @@ export const CheckBox = ({
           [disabled && 'opacity-40 cursor-not-allowed'],
           'shadow-sm focus:outline-none focus:ring focus:ring-primary-light focus:ring-opacity-50 focus:ring-offset-1'
         )}
-      ></input>
+       />
       <div>
         <label
           htmlFor={id}
@@ -46,4 +45,3 @@ export const CheckBox = ({
       </div>
     </div>
   );
-};

@@ -70,7 +70,7 @@ const Pagination = ({
   const paginationButtons = useMemo(() => {
     const buttonToShow: JSX.Element[] = [];
 
-    //show all buttons ?
+    // show all buttons ?
     if (countPage <= pageRangeDisplayed) {
       buttonToShow.push(...allPaginationButtons);
     } else {

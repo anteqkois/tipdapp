@@ -16,7 +16,7 @@ type Props = {
   children: ReactNode;
 };
 
-const Providers = ({ children }: Props) => (
+export const Providers = ({ children }: Props) => (
   <QueryClientProvider client={queryClient}>
     <WagmiProvider>
       {/* TODO move signUpForm slice to react context */}
@@ -35,5 +35,3 @@ const Providers = ({ children }: Props) => (
     </WagmiProvider>
   </QueryClientProvider>
 );
-
-export default Providers;

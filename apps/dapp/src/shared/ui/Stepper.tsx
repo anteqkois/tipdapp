@@ -5,8 +5,7 @@ type Props = {
 };
 
 export const Stepper = ({ stepCount, icons, activeStep }: Props) => {
-  const steps = Array.from({ length: stepCount }, (_, index) => {
-    return (
+  const steps = Array.from({ length: stepCount }, (_, index) => (
       <span
         key={index}
         className={`relative w-9 h-9 mx-4 before:absolute before:h-2 before:w-[110%] before:-left-[105%] before:top-1/2 before:-translate-y-1/2 first-of-type:before:content-none ${
@@ -27,8 +26,7 @@ export const Stepper = ({ stepCount, icons, activeStep }: Props) => {
           </span>
         </p>
       </span>
-    );
-  });
+    ));
 
   return <div className="flex flex-row justify-center">{steps}</div>;
 };

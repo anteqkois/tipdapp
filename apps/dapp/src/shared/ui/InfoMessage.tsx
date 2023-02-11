@@ -5,11 +5,9 @@ type Props = {
   message?: string;
   children: ReactNode;
 };
-export const InfoMessage = ({ message, children }: Props) => {
-  return (
+export const InfoMessage = ({ message, children }: Props) => (
     <h6 className="text-secondary text-center flex-center">
       <InformationCircleIcon className="icon bg-transparent stroke-secondary-600 stroke-2" />
       {children}
     </h6>
   );
-};

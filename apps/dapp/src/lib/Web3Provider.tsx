@@ -1,4 +1,5 @@
 'use client';
+
 import { getNonce } from '@/api/auth';
 import { useSignUpForm } from '@/modules/SignUpForm/hooks/useSignUpForm';
 import { useMediaQuery } from '@/shared/hooks';
@@ -85,7 +86,7 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
   const status: AuthStatus = useMemo(() => {
     if (isUserPath) {
       return statusUser;
-    } else if (isTipperPath) {
+    } if (isTipperPath) {
       return statusTipper;
     }
     return 'unauthenticated';
@@ -120,11 +121,8 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
         nonce,
       });
     },
-    getMessageBody: ({ message }) => {
-      return message.prepareMessage();
-    },
-    verify: async ({ message, signature }) => {
-      return new Promise(async (resolve, reject) => {
+    getMessageBody: ({ message }) => message.prepareMessage(),
+    verify: async ({ message, signature }) => new Promise(async (resolve, reject) => {
         if (pathname?.includes('signup')) {
           const registerRequest = await register(message, signature);
           registerRequest ? resolve(true) : reject(false);
@@ -138,8 +136,7 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
             : reject(false);
         }
         reject(false);
-      });
-    },
+      }),
     signOut: async () => {
       if (isUserPath) {
         logoutUser() ??
@@ -172,8 +169,6 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
   );
 };
 
-const WagmiProvider = ({ children }: { children: ReactNode }) => {
-  return <WagmiConfig client={wagmiClient}>{children}</WagmiConfig>;
-};
+const WagmiProvider = ({ children }: { children: ReactNode }) => <WagmiConfig client={wagmiClient}>{children}</WagmiConfig>;
 
 export { WagmiProvider, RainbowKitProviders };

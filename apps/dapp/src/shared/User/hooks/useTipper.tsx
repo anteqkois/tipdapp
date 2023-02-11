@@ -1,4 +1,5 @@
 'use client';
+
 import { verifyMessage } from '@/api/auth';
 import { useLocalStorage } from '@/shared/hooks';
 import { AuthStatus } from '@/types/index';

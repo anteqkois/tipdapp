@@ -1,4 +1,5 @@
 'use client';
+
 import { Button } from '@/shared/ui';
 import {
   ArrowRightOnRectangleIcon,
@@ -11,8 +12,7 @@ type Props = {
   classNameButton: string;
 };
 
-export const RainbowKitButtonMobile = ({ classNameButton }: Props) => {
-  return (
+export const RainbowKitButtonMobile = ({ classNameButton }: Props) => (
     <ConnectButton.Custom>
       {({
         account,
@@ -107,4 +107,3 @@ export const RainbowKitButtonMobile = ({ classNameButton }: Props) => {
       }}
     </ConnectButton.Custom>
   );
-};

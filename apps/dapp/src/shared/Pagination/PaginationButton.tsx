@@ -7,8 +7,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean;
 };
 
-const PaginationButton = ({ children, active, ...props }: Props) => {
-  return (
+const PaginationButton = ({ children, active, ...props }: Props) => (
     <button
       {...props}
       className={classNames(
@@ -25,6 +24,5 @@ const PaginationButton = ({ children, active, ...props }: Props) => {
       <p className="relative z-30">{children}</p>
     </button>
   );
-};
 
 export default PaginationButton;

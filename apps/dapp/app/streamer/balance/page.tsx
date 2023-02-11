@@ -5,7 +5,7 @@ import { Card } from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
 import { hardhat, mainnet, polygon } from 'wagmi/chains';
 
-const Balance = () => {
+function Balance() {
   const { user } = useUser();
 
   return (
@@ -24,6 +24,6 @@ const Balance = () => {
       />
     </Card>
   );
-};
+}
 
 export default Balance;

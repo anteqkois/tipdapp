@@ -1,11 +1,12 @@
 'use client';
+
 import ConnectWallet from '@/assets/connectWallet.svg';
 import { Button, Card, Input, Stepper } from '@/shared/ui';
 import { UserIcon, WalletIcon } from '@heroicons/react/24/outline';
 import { FormikStep } from '../components/FormikStep';
 import { useSignUpForm } from '../hooks/useSignUpForm';
 
-//TODO add suport for more roles, in ferst step chose role
+// TODO add suport for more roles, in ferst step chose role
 export const SignUpForm = () => {
   const { formik, setStep, step } = useSignUpForm();
 

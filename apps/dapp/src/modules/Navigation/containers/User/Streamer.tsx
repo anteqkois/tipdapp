@@ -1,4 +1,5 @@
 'use client';
+
 import { useMediaQuery } from '@/shared/hooks';
 import { useUser } from '@/shared/User/hooks/useUser';
 import {
@@ -90,7 +91,7 @@ const desktopNavigationOption: NavigationOption[] = [
   },
 ];
 
-//TODO add tabindex to desktop version
+// TODO add tabindex to desktop version
 
 export const StreamerNav = () => {
   const isMobile = useMediaQuery<boolean>(

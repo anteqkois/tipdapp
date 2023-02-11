@@ -82,7 +82,7 @@ export const TipForm = () => {
             id="token"
             options={tokensToSelect}
             name="token"
-            closeMenuOnSelect={true}
+            closeMenuOnSelect
             defaultValue={tokensToSelect.find(
               (token) => token.symbol === 'sand'
             )}
@@ -95,7 +95,7 @@ export const TipForm = () => {
           <Link
             className="pl-0.5"
             href="#tokenPrices"
-            target={'_self'}
+            target="_self"
           >
             below.
           </Link>

@@ -6,6 +6,4 @@ type Props = {
   children: ReactNode;
 };
 
-export const FormikStep = ({ label, onSubmit, children }: Props) => {
-  return <>{children}</>;
-};
+export const FormikStep = ({ label, onSubmit, children }: Props) => <>{children}</>;

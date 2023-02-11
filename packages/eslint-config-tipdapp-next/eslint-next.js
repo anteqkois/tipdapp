@@ -12,6 +12,13 @@ module.exports = {
     'prettier',
     'plugin:react/jsx-runtime',
   ],
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
   plugins: ['@typescript-eslint', 'import'],
   settings: {
     next: {
@@ -29,11 +36,24 @@ module.exports = {
   },
   rules: {
     'react/function-component-definition': [2, { namedComponents: 'arrow-function' }],
+    'react/jsx-props-no-spreading': [
+      2,
+      {
+        html: 'ignore',
+        custom: 'ignore',
+        explicitSpread: 'enforce',
+        exceptions: [''],
+      },
+    ],
+    'react/require-default-props': 'off',
     '@next/next/no-html-link-for-pages': 'off',
+    'import/prefer-default-export': 'off',
+    'import/group-exports': 'error',
+    'no-console': ['error', { allow: ['log', 'warn', 'error'] }],
   },
   overrides: [
     {
-      files: ['layout.tsx', 'not-found.tsx', 'error.tsx', 'head.tsx', 'page.tsx'],
+      files: ['layout.tsx', 'loading.tsx', 'not-found.tsx', 'error.tsx', 'head.tsx', 'page.tsx'],
       rules: {
         'react/function-component-definition': [2, { namedComponents: 'function-declaration' }],
       },

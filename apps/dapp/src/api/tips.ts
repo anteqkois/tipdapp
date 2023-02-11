@@ -12,6 +12,6 @@ type FindResponse = {
 };
 
 export const find = async (queryParams: FindParams) =>
-  await api.get<never, FindResponse>('tip', {
+  api.get<never, FindResponse>('tip', {
     params: queryParams,
   });

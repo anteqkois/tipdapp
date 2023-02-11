@@ -20,6 +20,7 @@
     "dev": "turbo run dev",
     "dev:build": "cd apps/database && npm run build",
     "dev:update": "NODE_ENV=development SERVER_COMMAND='npm run dev:update' docker compose up",
+    "lint": "turbo run lint",
     "docker:dev": "NODE_ENV=development SERVER_COMMAND='npm run dev' docker compose -f docker-compose.minimal.yml up ",
     "posttdev": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}') & kill $(lsof -Pi | grep :3000 | awk '{ print $2}')",
     "clean": "kill $(lsof -Pi | grep :8545 | awk '{ print $2}') & kill $(lsof -Pi | grep :3000 | awk '{ print $2}')",
