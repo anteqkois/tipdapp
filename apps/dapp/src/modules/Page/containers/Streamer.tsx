@@ -2,4 +2,4 @@ type Props = {
   nick: string;
 };
 
-export const Streamer = ({}: Props) => <div>Streamer</div>;
+export const Streamer = ({ nick }: Props) => <div>Streamer {nick}</div>;

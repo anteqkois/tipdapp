@@ -40,10 +40,10 @@ const settingsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getSettingsByUser.pending, (state, arg) => {
+    builder.addCase(getSettingsByUser.pending, (state) => {
       state.status = 'loading';
     });
-    builder.addCase(getSettingsByUser.fulfilled, (state, action) => {
+    builder.addCase(getSettingsByUser.fulfilled, (state) => {
       state.error = [];
       state.status = 'success';
       // for (const key in action.payload) {
@@ -52,16 +52,16 @@ const settingsSlice = createSlice({
       //   }
       // }
     });
-    builder.addCase(getSettingsByUser.rejected, (state, action) => {
-      // console.log(action);
-      // if (action.payload?.[0]?.name === 'ApiError') {
-      //   state.error = action.payload.userMessage;
-      //   state.status = 'fail';
-      // } else {
-      //   state.error = 'Something went wrong';
-      //   state.status = 'fail';
-      // }
-    });
+    // builder.addCase(getSettingsByUser.rejected, (state, action) => {
+    //   // console.log(action);
+    //   // if (action.payload?.[0]?.name === 'ApiError') {
+    //   //   state.error = action.payload.userMessage;
+    //   //   state.status = 'fail';
+    //   // } else {
+    //   //   state.error = 'Something went wrong';
+    //   //   state.status = 'fail';
+    //   // }
+    // });
   },
 });
 

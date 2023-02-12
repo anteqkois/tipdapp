@@ -15,64 +15,68 @@ export const SignUpForm = () => {
       label="User Details"
       key="User Details"
     >
-      <Input
-        id="email"
-        name="email"
-        label="e-mail"
-        type="email"
-        placeholder="johnWhite122@gmail.com"
-        onChange={formik.handleChange}
-        value={formik.values.email}
-        error={formik.errors.email}
-      />
-      <Input
-        id="firstName"
-        name="firstName"
-        label="first name"
-        type="text"
-        placeholder="John"
-        onChange={formik.handleChange}
-        value={formik.values.firstName}
-        error={formik.errors.firstName}
-      />
-      <Input
-        id="lastName"
-        name="lastName"
-        label="last name"
-        type="text"
-        placeholder="White"
-        onChange={formik.handleChange}
-        value={formik.values.lastName}
-        error={formik.errors.lastName}
-      />
-      <Input
-        id="nick"
-        name="nick"
-        label="nick"
-        type="text"
-        placeholder="Whitex2115"
-        onChange={formik.handleChange}
-        value={formik.values.nick}
-        error={formik.errors.nick}
-      />
+      <>
+        <Input
+          id="email"
+          name="email"
+          label="e-mail"
+          type="email"
+          placeholder="johnWhite122@gmail.com"
+          onChange={formik.handleChange}
+          value={formik.values.email}
+          error={formik.errors.email}
+        />
+        <Input
+          id="firstName"
+          name="firstName"
+          label="first name"
+          type="text"
+          placeholder="John"
+          onChange={formik.handleChange}
+          value={formik.values.firstName}
+          error={formik.errors.firstName}
+        />
+        <Input
+          id="lastName"
+          name="lastName"
+          label="last name"
+          type="text"
+          placeholder="White"
+          onChange={formik.handleChange}
+          value={formik.values.lastName}
+          error={formik.errors.lastName}
+        />
+        <Input
+          id="nick"
+          name="nick"
+          label="nick"
+          type="text"
+          placeholder="Whitex2115"
+          onChange={formik.handleChange}
+          value={formik.values.nick}
+          error={formik.errors.nick}
+        />
+      </>
     </FormikStep>,
     <FormikStep
       label="Connect Wallet"
       key="Connect Wallet"
     >
-      {/* <ConnectWallet /> */}
-      {/* <ConnectWallet className="w-5/6 mx-auto my-5 h-52" /> */}
-      <ConnectWallet className=" mx-auto my-5 h-52 w-5/6" />
-      <p className="text-danger-600 ">
-        {formik.errors.address && `* ${formik.errors.address}`}
-      </p>
-      <Button
-        className="mt-4 w-full"
-        variant="success"
-        type="submit"
-      >
-        Connect wallet
-      </Button>
+      <>
+        {/* <ConnectWallet /> */}
+        {/* <ConnectWallet className="w-5/6 mx-auto my-5 h-52" /> */}
+        <ConnectWallet className=" mx-auto my-5 h-52 w-5/6" />
+        <p className="text-danger-600 ">
+          {formik.errors.address && `* ${formik.errors.address}`}
+        </p>
+        <Button
+          className="mt-4 w-full"
+          variant="success"
+          type="submit"
+        >
+          Connect wallet
+        </Button>
+      </>
     </FormikStep>,
   ];
 

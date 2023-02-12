@@ -28,12 +28,13 @@ const tipFieldValidation = z.object({
   amount: z
     .string()
     .regex(new RegExp('(?!0)\\d+', 'g'), { message: 'Wrong tip amount' }),
+  // .regex(/^(?!0)\d+$/g, { message: 'Wrong tip amount' }),
   token: z.string(),
 });
 
 export const TipForm = () => {
   const { data } = useTokenFind();
-  const { status, logout, tipper } = useTipper();
+  const { status } = useTipper();
 
   const tokensToSelect = useMemo(
     () => data?.tokens && formTokenOptions(data.tokens),
@@ -118,8 +119,8 @@ export const TipForm = () => {
       </Button>
       <p className="px-2 pt-2">
         Making a payment, you accept the{' '}
-        <Link>General Terms and Conditions</Link> and the{' '}
-        <Link>Privacy Policy</Link>
+        <Link href="/conditions">General Terms and Conditions</Link> and the{' '}
+        <Link href="/privacypolice">Privacy Policy</Link>
       </p>
     </form>
   ) : (

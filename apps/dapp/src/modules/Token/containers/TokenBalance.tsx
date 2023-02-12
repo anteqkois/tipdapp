@@ -1,16 +1,17 @@
+import { Address } from '@wagmi/core';
 import { useBalance } from 'wagmi';
 
 type Props = {
-  address: string;
+  address: Address;
   chainId: number;
-  tokenAddress?: string;
+  tokenAddress?: Address;
 };
 
-const TokenBalance = ({ address, chainId = 1, tokenAddress }: Props) => {
+export const TokenBalance = ({ address, chainId = 1, tokenAddress }: Props) => {
   const { data, isError, isLoading } = useBalance({
-    addressOrName: address,
+    address,
     chainId,
-    // token: tokenAddress,
+    token: tokenAddress,
   });
 
   if (isLoading) return <div>Fetching balance…</div>;
@@ -31,5 +32,3 @@ const TokenBalance = ({ address, chainId = 1, tokenAddress }: Props) => {
     </div>
   );
 };
-
-export default TokenBalance;

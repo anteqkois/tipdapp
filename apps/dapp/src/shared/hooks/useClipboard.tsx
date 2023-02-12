@@ -8,13 +8,13 @@ const rejectedDefault = () => {
   toast.success("Something went wrong, data wasn't copy.");
 };
 
-type copyArg = {
+type CopyArg = {
   copyData: string;
   message: string;
 };
 
 const useClipboard = (messageFromHook = 'Data copied') => {
-  const copy = ({ copyData, message }: copyArg) => {
+  const copy = ({ copyData, message }: CopyArg) => {
     navigator.clipboard.writeText(copyData).then(
       () => {
         fulfilledDefault(message || messageFromHook);
@@ -25,7 +25,7 @@ const useClipboard = (messageFromHook = 'Data copied') => {
     );
   };
 
-  const ClipboardIcon = ({ copyData, message }: copyArg) => (
+  const ClipboardIcon = ({ copyData, message }: CopyArg) => (
       <DocumentDuplicateIcon
         tabIndex={0}
         className="inline p-0.5 pb-1 pl-1 bg-neutral-150 stroke-neutral-500 w-6 rounded-full state-focus animate-action hover:stroke-neutral-800"

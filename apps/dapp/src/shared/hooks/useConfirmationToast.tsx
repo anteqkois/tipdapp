@@ -9,18 +9,21 @@ export const useConfirmationToast = (hash?: Hash, confirmations = 4) => {
     confirmations,
   });
 
-  const run = useMemo(() => !!(typeof waitTx.data === 'undefined' && hash), [waitTx.data, hash]);
+  const runHooks = useMemo(
+    () => !!(typeof waitTx.data === 'undefined' && hash),
+    [waitTx.data, hash]
+  );
 
   const transaction = useTransaction({
     hash,
-    enabled: run,
+    enabled: runHooks,
   });
 
-  const blockNumber = useBlockNumber({
-    onBlock(blockNumber) {
+  useBlockNumber({
+    onBlock() {
       transaction.refetch();
     },
-    enabled: run,
+    enabled: runHooks,
   });
 
   // TODO give user information that UUI stop watching confirmations amount

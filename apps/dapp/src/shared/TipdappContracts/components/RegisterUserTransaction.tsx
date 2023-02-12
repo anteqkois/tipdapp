@@ -1,5 +1,5 @@
 import { useClipboard } from '@/shared/hooks';
-import cutAddress from '@/utils/cutAddress';
+import { cutAddress } from '@/utils';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { Address, Hash } from '@wagmi/core';
 

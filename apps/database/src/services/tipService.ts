@@ -14,6 +14,7 @@ const findMany = async ({ skip, take, where }: Prisma.TipAggregateArgs) => {
         select: {
           name: true,
           symbol: true,
+          address: true,
         },
       },
       tipper: {

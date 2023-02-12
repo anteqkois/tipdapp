@@ -1,5 +1,4 @@
 import { Button } from '@/shared/ui';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { Hamburger, Navlink, RainbowKitButtonMobile } from '../../components';
@@ -14,11 +13,10 @@ type Props = {
 
 export const Mobile = ({ navigationOption }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { openConnectModal } = useConnectModal();
 
   return (
-    <div className="fixed top-0 left-0 z-30 w-full px-2 shadow-md bg-neutral-50 ">
-      <div className="flex items-center justify-between w-full h-12 gap-5 mx-auto max-w-7xl">
+    <div className="fixed top-0 left-0 z-30 w-full bg-neutral-50 px-2 shadow-md ">
+      <div className="mx-auto flex h-12 w-full max-w-7xl items-center justify-between gap-5">
         <div className="flex-center">LOGO</div>
         <Hamburger
           isOpen={isOpen}
@@ -26,21 +24,19 @@ export const Mobile = ({ navigationOption }: Props) => {
         />
         <nav
           className={classNames(
-            'fixed top-12 -left-full p-2 w-full h-full bg-neutral-50 duration-300 shadow-md z-30',
+            'fixed top-12 -left-full z-30 h-full w-full bg-neutral-50 p-2 shadow-md duration-300',
             [isOpen ? 'translate-x-full' : 'translate-y-0']
           )}
         >
-          <ul className="flex flex-col min-h-[calc(100%-3rem)]">
+          <ul className="flex min-h-[calc(100%-3rem)] flex-col">
             <ul>
               <li>
                 <RainbowKitButtonMobile classNameButton={defaultOptionStyle} />
               </li>
               {navigationOption.map(({ label, href, icon, className }) => (
-                <li
-                  key={href}
-                  onClick={() => setIsOpen(false)}
-                >
+                <li key={href}>
                   <Navlink
+                    onClick={() => setIsOpen(false)}
                     href={href}
                     className={`${defaultOptionStyle} ${className}`}
                   >
@@ -50,7 +46,7 @@ export const Mobile = ({ navigationOption }: Props) => {
                 </li>
               ))}
               <li
-                className={`${defaultOptionStyle} hover:bg-transparent flex flex-col`}
+                className={`${defaultOptionStyle} flex flex-col hover:bg-transparent`}
               >
                 <Navlink
                   className="w-full"

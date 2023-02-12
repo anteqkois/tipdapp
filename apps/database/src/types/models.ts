@@ -100,6 +100,7 @@ const tipUI = Prisma.validator<Prisma.TipArgs>()({
       select: {
         name: true,
         symbol: true,
+        address: true,
       },
     },
     tipper: {

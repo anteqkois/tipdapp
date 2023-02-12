@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import {ethers} from 'ethers';
 
 // ethers.BigNumber.fromNotation = (number) => {
@@ -12,9 +13,8 @@ import {ethers} from 'ethers';
 
 // const provider = providersList[process.env.NETWORK];
 
-// export { provider };
+// export { provider }
 export { ethers };
-export default ethers;
 // import ethers from 'ethers';
 
 // // ethers.BigNumber.fromNotation = (number) => {

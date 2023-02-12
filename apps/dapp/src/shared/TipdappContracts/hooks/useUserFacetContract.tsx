@@ -1,4 +1,4 @@
-import { useClipboard, useConfirmationToast } from '@/shared/hooks';
+import { useConfirmationToast } from '@/shared/hooks';
 import {
   errorToast,
   transactionToast,
@@ -26,7 +26,7 @@ export const useUserFacet = () => {
   const [hashToObserve, setHashToObserve] = useState<Hash>();
 
   const { user, refreshUser } = useUser();
-  const { ClipboardIcon } = useClipboard();
+  // const { ClipboardIcon } = useClipboard();
   const { chain } = useNetwork();
   useConfirmationToast(hashToObserve, 5);
 
@@ -75,6 +75,7 @@ export const useUserFacet = () => {
         setHashToObserve(data.hash);
         await data.wait(1);
 
+        // const newTokenAddress = await userToken.refetch<{data: Address}>();
         const newTokenAddress = await userToken.refetch();
 
         transactionToast(
@@ -91,17 +92,16 @@ export const useUserFacet = () => {
   });
 
   const registerUserCall = async (symbol: string, name: string) => {
-    if (registerUser?.writeAsync) {
+    if (contract && registerUser?.writeAsync) {
       await registerUser.writeAsync({
         recklesslySetUnpreparedArgs: [symbol, name],
         recklesslySetUnpreparedOverrides: {
-          gasLimit: await contract?.estimateGas.registerUser(symbol, name)!,
+          gasLimit: await contract.estimateGas.registerUser(symbol, name),
         },
       });
-    } else {
     }
   };
-  
+
   return {
     contract,
     registerUser: { ...registerUser, call: registerUserCall },

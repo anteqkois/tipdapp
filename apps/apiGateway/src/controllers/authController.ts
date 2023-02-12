@@ -149,7 +149,7 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
     let tipper = await tipperService.find<Tipper>({
       address: siweMessage.address,
     });
-
+    
     if (!tipper) {
       const tipper = await tipperService.create({
         address: siweMessage.address,

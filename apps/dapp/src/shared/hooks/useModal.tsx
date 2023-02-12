@@ -2,9 +2,9 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import React, { HTMLAttributes, ReactNode, useEffect, useState } from 'react';
 
-export const ModalProvider = () => <div id="modal" />;
+const ModalProvider = () => <div id="modal" />;
 
-export const useModal = () => {
+const useModal = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
 
@@ -74,4 +74,4 @@ export const useModal = () => {
   return [Modal, ModalContent, ModalTrigger, setShowModal, showModal] as const;
 };
 
-export default useModal;
+export { useModal, ModalProvider };

@@ -2,19 +2,19 @@ import { find, getDetails } from '@/api/token';
 import { useQuery } from '@tanstack/react-query';
 import { TokenApi } from '@tipdapp/database';
 
-export function useTokenFind(query?: TokenApi.Find.Query) {
-  return useQuery({
+const useTokenFind = (query?: TokenApi.Find.Query) =>
+  useQuery({
     queryKey: ['tokenInfo'],
     queryFn: () => find(query),
     suspense: true,
     retry: false,
   });
-}
-export function useTokenGetDetails(query?: { symbol?: string[] }) {
-  return useQuery({
+const useTokenGetDetails = (query?: { symbol?: string[] }) =>
+  useQuery({
     queryKey: ['token'],
     queryFn: () => getDetails(query),
     suspense: true,
     retry: false,
   });
-}
+
+export { useTokenFind, useTokenGetDetails };

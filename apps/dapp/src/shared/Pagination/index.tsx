@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@/shared/hooks';
 import { Key, useCallback, useMemo, useRef } from 'react';
-import PaginationButton from './PaginationButton';
+import {PaginationButton} from './PaginationButton';
 
 type Props = {
   count: number;
@@ -27,18 +27,28 @@ const Pagination = ({
 
   const isMobile = useMediaQuery<boolean>(['(max-width: 640px)'], [true], true);
 
-  if (isMobile) {
-    previousLabel = '<';
-    nextLabel = '>';
-    pageRangeDisplayed = 1;
-    buttonsMarginPage = 1;
-  }
+  const settings = useMemo(
+    () =>
+      isMobile
+        ? {
+            previousLabel: '<',
+            nextLabel: '>',
+            pageRangeDisplayed: 1,
+            buttonsMarginPage: 1,
+          }
+        : {
+            previousLabel,
+            nextLabel,
+            pageRangeDisplayed,
+            buttonsMarginPage,
+          },
+    [buttonsMarginPage, isMobile, nextLabel, pageRangeDisplayed, previousLabel]
+  );
 
   const countPage = useMemo(
     () => Math.ceil(count / pageSize),
     [count, pageSize]
   );
-  // const countPage = useMemo(() => Math.ceil(pageAmount), [pageAmount]);
 
   const handlePageChange = useCallback(
     (page: Key) => {
@@ -56,12 +66,16 @@ const Pagination = ({
         .fill(0)
         .map((_, i) => (
           <PaginationButton
+            // eslint-disable-next-line react/no-array-index-key
             key={i}
             onClick={() => {
               handlePageChange(i);
             }}
           >
-            {++i}
+            {
+              // eslint-disable-next-line no-plusplus, no-param-reassign
+              ++i
+            }
           </PaginationButton>
         )),
     [countPage, handlePageChange]
@@ -71,18 +85,21 @@ const Pagination = ({
     const buttonToShow: JSX.Element[] = [];
 
     // show all buttons ?
-    if (countPage <= pageRangeDisplayed) {
+    if (countPage <= settings.pageRangeDisplayed) {
       buttonToShow.push(...allPaginationButtons);
     } else {
       // Generate beginning of buttons
       buttonToShow.push(
-        ...Array(pageRangeDisplayed)
+        ...Array(settings.pageRangeDisplayed)
           .fill(0)
           .map((_, i) => allPaginationButtons[i])
       );
 
       // Generate first ... button
-      if (currentPage.current - 1 - buttonsMarginPage > pageRangeDisplayed)
+      if (
+        currentPage.current - 1 - settings.buttonsMarginPage >
+        settings.pageRangeDisplayed
+      )
         buttonToShow.push(
           <PaginationButton
             key={Math.ceil(currentPage.current / 2)}
@@ -94,19 +111,19 @@ const Pagination = ({
 
       // Generate the central part of buttons
       buttonToShow.push(
-        ...Array(buttonsMarginPage)
+        ...Array(settings.buttonsMarginPage)
           .fill(0)
           .map((_, i) => allPaginationButtons[currentPage.current - 2 - i])
       );
       buttonToShow.push(allPaginationButtons[currentPage.current - 1]);
       buttonToShow.push(
-        ...Array(buttonsMarginPage)
+        ...Array(settings.buttonsMarginPage)
           .fill(0)
           .map((_, i) => allPaginationButtons[currentPage.current + i])
       );
 
       // Generate second ...button
-      if (currentPage.current + buttonsMarginPage < countPage - 1)
+      if (currentPage.current + settings.buttonsMarginPage < countPage - 1)
         buttonToShow.push(
           <PaginationButton
             key={Math.ceil((currentPage.current + countPage) / 2)}
@@ -120,7 +137,7 @@ const Pagination = ({
 
       // Generate ending of buttons
       buttonToShow.push(
-        ...Array(pageRangeDisplayed)
+        ...Array(settings.pageRangeDisplayed)
           .fill(0)
           .map((_, i) => allPaginationButtons[countPage - i - 1])
       );
@@ -134,7 +151,7 @@ const Pagination = ({
         if (button?.key) {
           if (!uniqueIds.includes(button.key)) {
             uniqueIds.push(button.key);
-            if (button.key == currentPage.current) {
+            if (button.key === currentPage.current.toString()) {
               return (
                 <PaginationButton
                   active
@@ -150,15 +167,17 @@ const Pagination = ({
             return button;
           }
         }
+        return null;
       })
       .filter(Boolean)
       .sort((a, b) => Number(a?.key) - Number(b?.key));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     currentPage.current,
     countPage,
-    pageRangeDisplayed,
+    settings.pageRangeDisplayed,
     allPaginationButtons,
-    buttonsMarginPage,
+    settings.buttonsMarginPage,
     handlePageChange,
   ]);
 
@@ -177,12 +196,14 @@ const Pagination = ({
   return countPage > 1 || renderOnZeroPageCount ? (
     <div>
       <PaginationButton onClick={handlePreviousPage}>
-        {previousLabel}
+        {settings.previousLabel}
       </PaginationButton>
       {paginationButtons.map((button) => button)}
-      <PaginationButton onClick={handleNextPage}>{nextLabel}</PaginationButton>
+      <PaginationButton onClick={handleNextPage}>
+        {settings.nextLabel}
+      </PaginationButton>
     </div>
   ) : null;
 };
 
-export default Pagination;
+export { Pagination };

@@ -20,3 +20,5 @@
 - [ ] Add expiration time to session hash in redis
 - [ ] Fix bug with adding active tokens to user page
 - [ ] Create shared Error Component
+- [ ] Move u/.../... page to their defined folder in Page dir (create page for streamer)
+- [ ] Refactor SignUpForm container, move more logic to FormikStep compnent ?

@@ -6,11 +6,10 @@ type UseTipsProps = {
   queryParams: UserApi.Find.Query;
 };
 
-export function useUserFind({ queryParams }: UseTipsProps) {
-  return useQuery({
+export const useUserFind = ({ queryParams }: UseTipsProps) =>
+  useQuery({
     queryKey: ['user'],
     queryFn: () => find(queryParams),
     suspense: true,
     retry: false,
   });
-}

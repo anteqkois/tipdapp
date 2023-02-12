@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Dispatch, SetStateAction, useState } from 'react';
 
@@ -9,30 +9,24 @@ type Options = {
   path?: string;
 };
 
-export function stringifyOptions(options: Options) {
-  return (Object.keys(options) as Array<keyof typeof options>).reduce(
-    (acc, key) => {
-      switch (key) {
-        case 'expireDays':
-          return acc;
-        default:
-          if (options[key] === true) {
-            return `${acc} ${key};`;
-          } 
-            return `${acc} ${key}=${options[key]};`;
-          
-      }
-    },
-    ';'
-  );
-}
+const stringifyOptions = (options: Options) =>
+  (Object.keys(options) as Array<keyof typeof options>).reduce((acc, key) => {
+    switch (key) {
+      case 'expireDays':
+        return acc;
+      default:
+        if (options[key] === true) {
+          return `${acc} ${key};`;
+        }
+        return `${acc} ${key}=${options[key]};`;
+    }
+  }, ';');
 
-const getCookie = <S,>(key: string): S | undefined => (
-    (document?.cookie.split('; ').reduce((r, v) => {
-      const parts = v.split('=');
-      return parts[0] === key ? decodeURIComponent(parts[1]) : r;
-    }, '') as S) || undefined
-  );
+const getCookie = <S,>(key: string): S | undefined =>
+  (document?.cookie.split('; ').reduce((r, v) => {
+    const parts = v.split('=');
+    return parts[0] === key ? decodeURIComponent(parts[1]) : r;
+  }, '') as S) || undefined;
 
 // TODO add remove cookie function
 const setCookie = <S,>(key: string, value: S, options?: Options) => {
@@ -50,12 +44,12 @@ const setCookie = <S,>(key: string, value: S, options?: Options) => {
     // from exxpressJS, to be set in teh same way
     const val =
       typeof value === 'object'
-        ? String(`j:${  JSON.stringify(value)}`)
+        ? String(`j:${JSON.stringify(value)}`)
         : String(value);
 
-    const cookie = (window.document.cookie = `${key}=${encodeURIComponent(
+    const cookie = `${key}=${encodeURIComponent(
       val
-    )}; expires=${expires} ${stringifyOptions(optionsWithDefaults)}`);
+    )}; expires=${expires} ${stringifyOptions(optionsWithDefaults)}`;
 
     document.cookie = cookie;
   } catch (error) {
@@ -63,17 +57,17 @@ const setCookie = <S,>(key: string, value: S, options?: Options) => {
   }
 };
 
-export function useCookie<S>(
+function useCookie<S>(
   key: string,
   initialValue: S | (() => S),
   options?: Options
 ): [S, Dispatch<SetStateAction<S>>];
 
-export function useCookie<S = undefined>(
+function useCookie<S = undefined>(
   key: string
 ): [S | undefined, (value: S, options?: Options) => void];
 
-export function useCookie<S>(key: string, initialValue?: S, options?: Options) {
+function useCookie<S>(key: string, initialValue?: S, options?: Options) {
   const [storedValue, setStoredValue] = useState<S | undefined>(() => {
     try {
       // console.log('coookie', getCookie(key));
@@ -93,12 +87,12 @@ export function useCookie<S>(key: string, initialValue?: S, options?: Options) {
   //   initialValue && setCookie(key, initialValue);
   // }, []);
 
-  const updateCookie = (value: S, options?: Options) => {
+  const updateCookie = (value: S, newOptions?: Options) => {
     setStoredValue(value);
-    setCookie(key, value, options);
+    setCookie(key, value, newOptions);
   };
 
   return [storedValue, updateCookie] as const;
 }
 
-export default useCookie;
+export { stringifyOptions, useCookie };

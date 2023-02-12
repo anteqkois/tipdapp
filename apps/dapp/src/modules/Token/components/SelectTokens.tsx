@@ -37,7 +37,7 @@ type Props = {
   'value' | 'onChange'
 >;
 
-export const formTokenOptions = (tokens: Token[]) =>
+const formTokenOptions = (tokens: Token[]) =>
   tokens.map((token) => ({
     address: token.address,
     name: token.name,
@@ -46,7 +46,93 @@ export const formTokenOptions = (tokens: Token[]) =>
     value: token.address,
   }));
 
-export const SelectTokens = ({
+const CustomOption = ({
+  innerProps,
+  innerRef,
+  isDisabled,
+  children,
+  data,
+}: OptionProps<TokenOption, true | false, GroupedOption>) =>
+  !isDisabled ? (
+    <div
+      ref={innerRef}
+      {...innerProps}
+      className="flex cursor-pointer items-center gap-2 rounded p-2 hover:bg-neutral-150"
+    >
+      <Image
+        height={24}
+        width={24}
+        className="rounded-full"
+        alt={data.name}
+        // TODO remove when package was updated
+        // @ts-ignore
+        src={data.imageUrl}
+      />
+      {data.name}
+      {children}
+    </div>
+  ) : null;
+
+const CustomMultiValueLabel = ({
+  data,
+  selectProps,
+}: MultiValueGenericProps<TokenOption, true | false, GroupedOption>) => (
+  <components.MultiValueLabel
+    data={data}
+    selectProps={selectProps}
+    innerProps={{ className: 'flex items-center gap-1 pl-1' }}
+  >
+    <Image
+      height={16}
+      width={16}
+      className="rounded-full"
+      alt={data.name}
+      src={data.imageUrl}
+    />
+    {data.symbol.toUpperCase()}
+  </components.MultiValueLabel>
+);
+
+const CustomSingleValue = ({
+  children,
+  data,
+  ...props
+}: SingleValueProps<TokenOption, true | false, GroupedOption>) => (
+  <components.SingleValue
+    {...props}
+    data={data}
+    className="inline-flex max-w-xs cursor-pointer items-center gap-2 p-2"
+  >
+    <Image
+      height={24}
+      width={24}
+      className="rounded-full"
+      alt={data.name}
+      // TODO remove when package was updated
+      // @ts-ignore
+      src={data.imageUrl}
+    />
+    {data.name}
+    {children}
+  </components.SingleValue>
+);
+
+const CustomInput = (
+  props: InputProps<TokenOption, true | false, GroupedOption>
+) => {
+  const { isHidden } = props;
+  if (isHidden) {
+    return <components.Input {...props} />;
+  }
+  return (
+    <components.Input
+      {...props}
+      inputClassName="focus-visible:ring-0"
+    />
+  );
+};
+
+const SelectTokens = ({
   label,
   error,
   setFieldValue,
@@ -57,8 +143,6 @@ export const SelectTokens = ({
   isMulti = false,
   ...rest
 }: Props) => {
-  type Option = TokenOption;
-
   const onChangeSelect = (
     newValue: SingleValue<TokenOption> | MultiValue<TokenOption>
   ) => {
@@ -71,90 +155,6 @@ export const SelectTokens = ({
         setFieldValue(name, values);
       }
     }
-  };
-
-  const CustomOption = ({
-    innerProps,
-    innerRef,
-    isDisabled,
-    children,
-    data,
-  }: OptionProps<Option, true | false, GroupedOption>) => !isDisabled ? (
-      <div
-        ref={innerRef}
-        {...innerProps}
-        className="flex cursor-pointer items-center gap-2 rounded p-2 hover:bg-neutral-150"
-      >
-        <Image
-          height={24}
-          width={24}
-          className="rounded-full"
-          alt={data.name}
-          // TODO remove when package was updated
-          // @ts-ignore
-          src={data.imageUrl}
-        />
-        {data.name}
-        {children}
-      </div>
-    ) : null;
-
-  const CustomMultiValueLabel = ({
-    data,
-    selectProps,
-  }: MultiValueGenericProps<Option, true | false, GroupedOption>) => (
-      <components.MultiValueLabel
-        data={data}
-        selectProps={selectProps}
-        innerProps={{ className: 'flex items-center gap-1 pl-1' }}
-      >
-        <Image
-          height={16}
-          width={16}
-          className="rounded-full"
-          alt={data.name}
-          src={data.imageUrl}
-        />
-        {data.symbol.toUpperCase()}
-      </components.MultiValueLabel>
-    );
-
-  const CustomSingleValue = ({
-    children,
-    data,
-    ...props
-  }: SingleValueProps<Option, true | false, GroupedOption>) => (
-      <components.SingleValue
-        {...props}
-        data={data}
-        className="inline-flex max-w-xs cursor-pointer items-center gap-2 p-2"
-      >
-        <Image
-          height={24}
-          width={24}
-          className="rounded-full"
-          alt={data.name}
-          // TODO remove when package was updated
-          // @ts-ignore
-          src={data.imageUrl}
-        />
-        {data.name}
-        {children}
-      </components.SingleValue>
-    );
-
-  const CustomInput = (
-    props: InputProps<Option, true | false, GroupedOption>
-  ) => {
-    if (props.isHidden) {
-      return <components.Input {...props} />;
-    }
-    return (
-      <components.Input
-        {...props}
-        inputClassName="focus-visible:ring-0"
-      />
-    );
   };
 
   return (
@@ -210,3 +210,5 @@ export const SelectTokens = ({
     </>
   );
 };
+
+export { formTokenOptions, SelectTokens };

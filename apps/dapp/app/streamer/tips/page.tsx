@@ -2,7 +2,7 @@
 
 import { TipsList } from '@/modules/Tip/containers/TipsList';
 import { useTipsFindPaginated } from '@/modules/Tip/hooks/useTipsQuery';
-import Pagination from '@/shared/Pagination';
+import { Pagination } from '@/shared/Pagination';
 import { Card } from '@/shared/ui';
 import { useState } from 'react';
 

@@ -28,5 +28,3 @@ export function useTimeout(callback: () => void, delay: number) {
 
   return { reset, clear: clearT };
 }
-
-export default useTimeout;

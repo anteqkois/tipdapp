@@ -1,6 +1,6 @@
 'use client';
 
-import TokenBalance from '@/modules/Token/containers/TokenBalance';
+import {TokenBalance} from '@/modules/Token/containers/TokenBalance';
 import { Card } from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
 import { hardhat, mainnet, polygon } from 'wagmi/chains';

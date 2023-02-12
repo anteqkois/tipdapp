@@ -15,8 +15,10 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  useCallback,
   useContext,
   useEffect,
+  useMemo,
 } from 'react';
 import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
@@ -24,8 +26,6 @@ import { useDisconnect } from 'wagmi';
 import { UserSessionDapp } from '../types';
 
 const UserContext = createContext<ReturnType>({} as ReturnType);
-
-const tempUser = {} as UserSessionDapp;
 
 type ReturnType = {
   login: () => void;
@@ -69,45 +69,45 @@ const UserProvider = ({ children }: Props) => {
     };
   }, [status]);
 
-  const login = () => {
+  const login = useCallback(() => {
     status === 'unauthenticated'
       ? (() => {
           openConnectModal?.();
           setStatus('loading');
         })()
       : toast.error('You are already login.');
-  };
+  }, [openConnectModal, setStatus, status]);
 
-  const verifyUserMessage = async (
-    message: SiweMessage,
-    signature: string
-  ) => {
-    try {
-      const data = await verifyMessage<'user'>({
-        message,
-        signature,
-        type: 'user',
-      });
-      setUser(data.user);
-      //! Get from use default role type and redirect there
-      //! if use is at page to make a tip, no redirect
-      setStatus('authenticated');
-      
-      router.push(`/${data.user.activeRole}/dashboard`);
-      // if (data.user.roles.includes('streamer'))
-      //   router.push('/streamer/dashboard');
-      // else router.push('/tipper/dashboard');
-      return true;
-    } catch (err: any) {
-      toast.error(
-        err[0].message ?? 'Something went wrong ! You can not login now.'
+  const verifyUserMessage = useCallback(
+    async (message: SiweMessage, signature: string) => {
+      try {
+        const data = await verifyMessage<'user'>({
+          message,
+          signature,
+          type: 'user',
+        });
+        setUser(data.user);
+        //! Get from use default role type and redirect there
+        //! if use is at page to make a tip, no redirect
+        setStatus('authenticated');
+
+        router.push(`/${data.user.activeRole}/dashboard`);
+        // if (data.user.roles.includes('streamer'))
+        //   router.push('/streamer/dashboard');
+        // else router.push('/tipper/dashboard');
+        return true;
+      } catch (err: any) {
+        toast.error(
+          err[0].message ?? 'Something went wrong ! You can not login now.'
         );
         setStatus('unauthenticated');
         return false;
-    }
-  };
+      }
+    },
+    [router, setStatus, setUser]
+  );
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       if (status === 'authenticated') {
         await disconnectAsync();
@@ -124,9 +124,9 @@ const UserProvider = ({ children }: Props) => {
         error[0].message ?? 'Something went wrong ! You can not logout.'
       );
     }
-  };
+  }, [disconnectAsync, setStatus, setUser, status]);
 
-  const refreshUser = async () => {
+  const refreshUser = useCallback(async () => {
     try {
       const data = await refreshUserSession();
       setUser(data.user);
@@ -136,24 +136,32 @@ const UserProvider = ({ children }: Props) => {
         error[0].message ?? 'Something went wrong ! You can not logout.'
       );
     }
-  };
+  }, [setUser]);
 
-  return (
-    <UserContext.Provider
-      value={{
-        login,
-        logout,
-        verifyUserMessage,
-        refreshUser,
-        user,
-        setUser,
-        status,
-        setStatus,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
+  const value = useMemo(
+    () => ({
+      login,
+      logout,
+      verifyUserMessage,
+      refreshUser,
+      user,
+      setUser,
+      status,
+      setStatus,
+    }),
+    [
+      login,
+      logout,
+      refreshUser,
+      setStatus,
+      setUser,
+      status,
+      user,
+      verifyUserMessage,
+    ]
   );
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
 const useUser = () => useContext<ReturnType>(UserContext);

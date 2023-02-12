@@ -16,7 +16,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
-import { useDisconnect } from 'wagmi';
 
 type State = {
   data: UserValidation.CreateUser & { address?: string };
@@ -37,7 +36,6 @@ const initialState: State = {
 
 export const useSignUpForm = () => {
   const { openConnectModal } = useConnectModal();
-  const { disconnectAsync } = useDisconnect();
   // store form data in url query ?
   const [formData, setFormData, clearFormData] = useLocalStorage<State['data']>(
     'formData',
@@ -57,12 +55,11 @@ export const useSignUpForm = () => {
           if (step === 1) {
             // validate userData on backend
             try {
-              const data = await validateFormData(values);
+              await validateFormData(values);
               setFormData(values);
-              setStep((prev) => ++prev);
+              setStep((prev) => prev + 1);
             } catch (error: any) {
               if (isValidationError(error[0])) {
-                const t = error[0];
                 formik.setErrors(ValidationError.mapArrayByField(error));
               } else if (isApiError(error[0])) {
                 toast.error(error[0].message);
@@ -87,7 +84,7 @@ export const useSignUpForm = () => {
     return () => {
       window.onbeforeunload = null;
     };
-  }, []);
+  }, [clearFormData]);
 
   const register = async (message: SiweMessage, signature: string) => {
     try {
@@ -102,33 +99,32 @@ export const useSignUpForm = () => {
       clearFormData();
       router.push('/streamer/dashboard');
       return true;
-    } catch (error: any) {
-      toast(
-        (t) => (
-          <span>
-            <span className="flex items-center justify-between">
-              <h6 className="py-2">Validation Error</h6>
-              <Close onClick={() => toast.dismiss(t.id)} />
+    } catch (errors: any) {
+      if (isValidationError(errors[0])) {
+        toast(
+          (t) => (
+            <span>
+              <span className="flex items-center justify-between">
+                <h6 className="py-2">Validation Error</h6>
+                <Close onClick={() => toast.dismiss(t.id)} />
+              </span>
+              <ul className="flex list-['📌'] flex-col gap-3 px-4">
+                {errors.map((error: any) => (
+                  <li
+                    key={error.code}
+                    className="pl-1"
+                  >
+                    {error.message}
+                  </li>
+                ))}
+              </ul>
             </span>
-            <ul className="flex list-['📌'] flex-col gap-3 px-4">
-              {error.map((error: any) => (
-                <li
-                  key={error.code}
-                  className="pl-1"
-                >
-                  {error.message}
-                </li>
-              ))}
-            </ul>
-          </span>
-        ),
-        { duration: Infinity, id: 'validationError' }
-      );
-
-      if (isValidationError(error[0])) {
-        formik.setErrors(ValidationError.mapArrayByField(error));
+          ),
+          { duration: Infinity, id: 'validationError' }
+        );
+        formik.setErrors(ValidationError.mapArrayByField(errors));
       } else {
-        console.log(error);
+        console.log(errors);
       }
       return false;
     }

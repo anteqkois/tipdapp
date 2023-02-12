@@ -10,8 +10,8 @@ type Props = {
 export const Desktop = ({ navigationOption }: Props) => {
   const { openConnectModal } = useConnectModal();
   return (
-    <div className="fixed top-0 left-0 z-30 w-full px-2 shadow-md bg-neutral-50 ">
-      <div className="flex items-center justify-between w-full h-16 gap-5 mx-auto max-w-7xl">
+    <div className="fixed top-0 left-0 z-30 w-full bg-neutral-50 px-2 shadow-md ">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-5">
         <div className="w-[170px]">LOGO</div>
         <nav>
           <ul className="flex gap-1">
@@ -27,7 +27,7 @@ export const Desktop = ({ navigationOption }: Props) => {
             ))}
           </ul>
         </nav>
-        <div className="flex gap-2 w-[170px]">
+        <div className="flex w-[170px] gap-2">
           <Button
             variant="ghost"
             onClick={openConnectModal}

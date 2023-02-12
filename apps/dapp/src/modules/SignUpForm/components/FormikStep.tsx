@@ -1,9 +1,10 @@
-import { FormEvent, ReactNode } from 'react';
+import { FormEvent } from 'react';
 
 type Props = {
   label: string;
   onSubmit?: FormEvent<HTMLFormElement>;
-  children: ReactNode;
+  children: JSX.Element;
 };
 
-export const FormikStep = ({ label, onSubmit, children }: Props) => <>{children}</>;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const FormikStep = ({ label, onSubmit, children }: Props) => children;

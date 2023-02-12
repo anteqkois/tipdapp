@@ -5,8 +5,13 @@ import { useLocalStorage } from '@/shared/hooks';
 import { AuthStatus } from '@/types/index';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Tipper } from '@tipdapp/database';
-import { useRouter } from 'next/navigation';
-import { createContext, ReactNode, useContext } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+} from 'react';
 import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
 import { useDisconnect } from 'wagmi';
@@ -35,40 +40,38 @@ const TipperProvider = ({ children }: Props) => {
   );
   const { openConnectModal } = useConnectModal();
   const { disconnectAsync } = useDisconnect();
-  const router = useRouter();
-
-  const login = () => {
+  const login = useCallback(() => {
     tipper
       ? (() => {
           openConnectModal?.();
           setStatus('loading');
         })()
       : toast.error('You are already login.');
-  };
+  }, [openConnectModal, setStatus, tipper]);
 
-  const verifyTipperMessage = async (
-    message: SiweMessage,
-    signature: string
-  ) => {
-    try {
-      const data = await verifyMessage<'tipper'>({
-        message,
-        signature,
-        type: 'tipper',
-      });
-      setTipper(data.tipper);
-      setStatus('authenticated');
-      return true;
-    } catch (err: any) {
-      toast.error(
-        err[0].message ?? 'Something went wrong ! You can not login now.'
-      );
-      setStatus('unauthenticated');
-      return false;
-    }
-  };
+  const verifyTipperMessage = useCallback(
+    async (message: SiweMessage, signature: string) => {
+      try {
+        const data = await verifyMessage<'tipper'>({
+          message,
+          signature,
+          type: 'tipper',
+        });
+        setTipper(data.tipper);
+        setStatus('authenticated');
+        return true;
+      } catch (err: any) {
+        toast.error(
+          err[0].message ?? 'Something went wrong ! You can not login now.'
+        );
+        setStatus('unauthenticated');
+        return false;
+      }
+    },
+    [setStatus, setTipper]
+  );
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       await disconnectAsync();
       setTipper(undefined);
@@ -79,20 +82,21 @@ const TipperProvider = ({ children }: Props) => {
         error[0].message ?? 'Something went wrong ! You can not logout.'
       );
     }
-  };
+  }, [disconnectAsync, setStatus, setTipper]);
+
+  const value = useMemo(
+    () => ({
+      login,
+      logout,
+      verifyTipperMessage,
+      status,
+      tipper,
+    }),
+    [login, logout, status, tipper, verifyTipperMessage]
+  );
 
   return (
-    <TipperContext.Provider
-      value={{
-        login,
-        logout,
-        verifyTipperMessage,
-        status,
-        tipper,
-      }}
-    >
-      {children}
-    </TipperContext.Provider>
+    <TipperContext.Provider value={value}>{children}</TipperContext.Provider>
   );
 };
 

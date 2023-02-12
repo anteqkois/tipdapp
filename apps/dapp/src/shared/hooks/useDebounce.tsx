@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import useTimeout from './useTimeout';
+import { useTimeout } from './useTimeout';
 
 export function useDebounce<D extends []>(
   callback: () => void,
@@ -9,7 +9,6 @@ export function useDebounce<D extends []>(
   const { reset, clear } = useTimeout(callback, delay);
 
   useEffect(reset, [...dependencies, reset]);
-  useEffect(clear, []);
+  // useEffect(clear, []]);
+  useEffect(clear, [clear]);
 }
-
-export default useDebounce;

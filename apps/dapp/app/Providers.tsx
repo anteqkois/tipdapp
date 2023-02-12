@@ -1,6 +1,6 @@
 'use client';
 
-import ReduxProvider from '@/lib/redux/ReduxProvider';
+import { ReduxProvider } from '@/lib/redux/ReduxProvider';
 import { WagmiProvider } from '@/lib/Web3Provider';
 import { ModalProvider } from '@/shared/hooks';
 import { UserProvider } from '@/shared/User/hooks/useUser';

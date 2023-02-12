@@ -12,8 +12,8 @@ import {
   RectangleGroupIcon,
 } from '@heroicons/react/24/outline';
 import { NavigationOption } from '../../types';
-import Desktop from './Desktop';
-import Mobile from './Mobile';
+import {Desktop} from './Desktop';
+import {Mobile} from './Mobile';
 
 const mobileNavigationOption: NavigationOption[] = [
   {

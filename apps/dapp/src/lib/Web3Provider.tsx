@@ -50,7 +50,6 @@ const wagmiClient = createClient({
 const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const {
-    setUser,
     status: statusUser,
     logout: logoutUser,
     verifyUserMessage,
@@ -86,11 +85,12 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
   const status: AuthStatus = useMemo(() => {
     if (isUserPath) {
       return statusUser;
-    } if (isTipperPath) {
+    }
+    if (isTipperPath) {
       return statusTipper;
     }
     return 'unauthenticated';
-  }, [isUserPath, isTipperPath]);
+  }, [isUserPath, isTipperPath, statusUser, statusTipper]);
 
   const authAdapter = createAuthenticationAdapter({
     getNonce: async () => {
@@ -121,22 +121,29 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
         nonce,
       });
     },
-    getMessageBody: ({ message }) => message.prepareMessage(),
-    verify: async ({ message, signature }) => new Promise(async (resolve, reject) => {
-        if (pathname?.includes('signup')) {
-          const registerRequest = await register(message, signature);
-          registerRequest ? resolve(true) : reject(false);
-        } else if (pathname?.includes('login')) {
-          (await verifyUserMessage(message, signature))
-            ? resolve(true)
-            : reject(false);
-        } else if (isTipperPath) {
-          (await verifyTipperMessage(message, signature))
-            ? resolve(true)
-            : reject(false);
-        }
-        reject(false);
-      }),
+    getMessageBody: ({ message }: { message: SiweMessage }) =>
+      message.prepareMessage(),
+    verify: async ({
+      message,
+      signature,
+    }: {
+      message: SiweMessage;
+      signature: string;
+    }) => {
+      if (pathname?.includes('signup')) {
+        const registerRequest = await register(message, signature);
+        return registerRequest;
+      }
+      if (pathname?.includes('login')) {
+        const verifyResponse = await verifyUserMessage(message, signature);
+        return verifyResponse;
+      }
+      if (isTipperPath) {
+        const verifyResponse = await verifyTipperMessage(message, signature);
+        return verifyResponse;
+      }
+      return false;
+    },
     signOut: async () => {
       if (isUserPath) {
         logoutUser() ??
@@ -169,6 +176,8 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
   );
 };
 
-const WagmiProvider = ({ children }: { children: ReactNode }) => <WagmiConfig client={wagmiClient}>{children}</WagmiConfig>;
+const WagmiProvider = ({ children }: { children: ReactNode }) => (
+  <WagmiConfig client={wagmiClient}>{children}</WagmiConfig>
+);
 
 export { WagmiProvider, RainbowKitProviders };

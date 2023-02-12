@@ -7,7 +7,7 @@ import { Mobile } from './Mobile';
 
 const optionStyle =
   'flex p-3 rounded hover:cursor-pointer hover:bg-neutral-200';
-const optionStyleActive = 'bg-primary hover:bg-primary stroke-neutral-150';
+// const optionStyleActive = 'bg-primary hover:bg-primary stroke-neutral-150';
 
 const navigationOption: NavigationOption[] = [
   {

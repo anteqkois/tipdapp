@@ -27,7 +27,7 @@ export namespace TipperApi {
     const reqShape = find.shape;
     export type Query = z.input<typeof reqShape.query>;
     export type Req = Request<{}, {}, {}, Query>;
-    export type Res = Response<{ tipper: Tipper }>;
+    export type Res = Response<{ tipper: Tipper | null }>;
   }
   export namespace Create {
     const reqShape = create.shape;

@@ -6,24 +6,20 @@ type UseTipsProps = {
   pageSize?: number;
 };
 
-export function useTipsFind({ page = 1, pageSize = 50 }: UseTipsProps) {
-  return useQuery({
+const useTipsFind = ({ page = 1, pageSize = 50 }: UseTipsProps) =>
+  useQuery({
     queryKey: ['tip', page, pageSize],
     queryFn: () => find({ page, pageSize }),
     suspense: true,
     retry: false,
   });
-}
 
 type UseTipsPaginantedProps = {
   page: number;
   pageSize: number;
 };
 
-export const useTipsFindPaginated = ({
-  page,
-  pageSize,
-}: UseTipsPaginantedProps) =>
+const useTipsFindPaginated = ({ page, pageSize }: UseTipsPaginantedProps) =>
   useQuery({
     queryKey: ['tip', page, pageSize],
     queryFn: () => find({ page, pageSize }),
@@ -31,3 +27,5 @@ export const useTipsFindPaginated = ({
     suspense: true,
     retry: false,
   });
+
+export { useTipsFind, useTipsFindPaginated };
