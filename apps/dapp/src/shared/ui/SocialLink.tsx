@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 import { Link } from './Link';
 
 type Props = {
-  // children: ReactNode;
   href: string;
   socialMedium: 'youtube' | 'twitch';
 };
@@ -42,11 +41,11 @@ const labels: Record<Props['socialMedium'], string> = {
 };
 
 export const SocialLink = ({ href, socialMedium }: Props) => (
-    <Link
-      href={href}
-      className="flex gap-2"
-    >
-      {socialMediaIcons[socialMedium]}
-      {labels[socialMedium]}
-    </Link>
-  );
+  <Link
+    href={href}
+    className="flex gap-2"
+  >
+    {socialMediaIcons[socialMedium]}
+    {labels[socialMedium]}
+  </Link>
+);

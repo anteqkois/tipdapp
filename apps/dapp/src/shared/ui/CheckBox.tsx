@@ -17,31 +17,31 @@ export const CheckBox = ({
   disabled,
   ...rest
 }: Props) => (
-    <div className="flex items-start gap-2 my-3 pl-2">
-      <input
-        {...rest}
-        id={id}
-        name={name}
-        type="checkbox"
-        onChange={onChange}
-        checked={checked}
-        disabled={disabled}
-        className={classNames(
-          className,
-          'mt-1 w-4 aspect-square accent-primary rounded cursor-pointer',
-          [error ? 'border-danger-600' : 'border-neutral-300'],
-          [disabled && 'opacity-40 cursor-not-allowed'],
-          'shadow-sm focus:outline-none focus:ring focus:ring-primary-light focus:ring-opacity-50 focus:ring-offset-1'
-        )}
-       />
-      <div>
-        <label
-          htmlFor={id}
-          className="text-sm font-medium text-neutral-800 first-letter:uppercase cursor-pointer"
-        >
-          {label}
-        </label>
-        <p className="text-danger-600 min-h-[24px]">{error && `* ${error}`}</p>
-      </div>
+  <div className="my-3 flex items-start gap-2 pl-2">
+    <input
+      {...rest}
+      id={id}
+      name={name}
+      type="checkbox"
+      onChange={onChange}
+      checked={checked}
+      disabled={disabled}
+      className={classNames(
+        className,
+        'mt-1 aspect-square w-4 cursor-pointer rounded accent-primary',
+        [error ? 'border-danger-600' : 'border-neutral-300'],
+        [disabled && 'cursor-not-allowed opacity-40'],
+        'shadow-sm focus:outline-none focus:ring focus:ring-primary-light focus:ring-opacity-50 focus:ring-offset-1'
+      )}
+    />
+    <div>
+      <label
+        htmlFor={id}
+        className="cursor-pointer text-sm font-medium text-neutral-800 first-letter:uppercase"
+      >
+        {label}
+      </label>
+      <p className="min-h-[24px] text-danger-600">{error && `* ${error}`}</p>
     </div>
-  );
+  </div>
+);

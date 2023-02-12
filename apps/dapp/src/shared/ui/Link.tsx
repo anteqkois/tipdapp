@@ -13,16 +13,16 @@ export const Link = ({
   className,
   ...rest
 }: Prps) => (
-    <a
-      {...rest}
-      href={href}
-      target={target}
-      rel="noreferrer"
-      className={`inline-block underline cursor-pointer underline-offset-1 decoration-2 decoration-primary ${className}`}
-    >
-      {children}
-      {icon && (
-        <ArrowTopRightOnSquareIcon className="inline-block w-4 ml-1 stroke-2" />
-      )}
-    </a>
-  );
+  <a
+    {...rest}
+    href={href}
+    target={target}
+    rel="noreferrer"
+    className={`inline-block cursor-pointer underline decoration-primary decoration-2 underline-offset-1 ${className}`}
+  >
+    {children}
+    {icon && (
+      <ArrowTopRightOnSquareIcon className="ml-1 inline-block w-4 stroke-2" />
+    )}
+  </a>
+);

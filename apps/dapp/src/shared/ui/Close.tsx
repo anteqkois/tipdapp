@@ -6,10 +6,11 @@ type Props = {
 };
 
 export const Close = ({ onClick }: Props) => (
-    <span
-      className="rounded-full bg-neutral-150 state-focus w-6 h-6 animate-action"
-      onClick={onClick}
-    >
-      <XMarkIcon className="p-1 ease-in-out w-6 h-6 stroke-neutral-600" />
-    </span>
-  );
+  <button
+    type="button"
+    className="state-focus animate-action h-6 w-6 rounded-full bg-neutral-150"
+    onClick={onClick}
+  >
+    <XMarkIcon className="h-6 w-6 stroke-neutral-600 p-1 ease-in-out" />
+  </button>
+);
