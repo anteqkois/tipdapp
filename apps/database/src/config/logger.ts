@@ -1,12 +1,14 @@
 import { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 
-const customFormatRequestConsole = format.printf(({ level, message, label, timestamp, url, method, host }) => {
-  return `${level} - [${label}] ${timestamp} ${method} ${host} ${url}`;
-});
-const customFormatRequestFile = format.printf(({ level, message, timestamp, url, method, host }) => {
-  return JSON.stringify({ level, timestamp, message, method, host, url });
-});
+const customFormatRequestConsole = format.printf(
+  ({ level, label, timestamp, url, method, host }) =>
+    `${level} - [${label}] ${timestamp} ${method} ${host} ${url}`
+);
+const customFormatRequestFile = format.printf(
+  ({ level, message, timestamp, url, method, host }) =>
+    JSON.stringify({ level, timestamp, message, method, host, url })
+);
 
 const fileRotateTransportRequest = new transports.DailyRotateFile({
   filename: './.log/request-%DATE%.log',
@@ -48,12 +50,19 @@ const requestLogger = createLogger({
   ],
 });
 
-const customFormatErrorConsole = format.printf(({ level, message, label, timestamp, ...rest }) => {
-  return `${level} - [${rest.type ?? message}] ${message} ${rest.stack}`;
-});
-const customFormatErrorFile = format.printf(({ level, message, timestamp, ...rest }) => {
-  return JSON.stringify({ level, timestamp, message, details: { type: rest.type, message: message, stack: rest.stack } });
-});
+const customFormatErrorConsole = format.printf(
+  ({ level, message, label, timestamp, ...rest }) =>
+    `${level} - [${rest.type ?? message}] ${message} ${rest.stack}`
+);
+const customFormatErrorFile = format.printf(
+  ({ level, message, timestamp, ...rest }) =>
+    JSON.stringify({
+      level,
+      timestamp,
+      message,
+      details: { type: rest.type, message, stack: rest.stack },
+    })
+);
 
 const fileRotateTransportError = new transports.DailyRotateFile({
   filename: './.log/error-%DATE%.log',

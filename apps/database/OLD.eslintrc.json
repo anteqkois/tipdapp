@@ -18,3 +18,4 @@
   "plugins": ["@typescript-eslint"],
   "rules": {}
 }
+

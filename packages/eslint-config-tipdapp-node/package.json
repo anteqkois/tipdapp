@@ -1,0 +1,18 @@
+{
+  "name": "eslint-config-tipdapp-node",
+  "version": "0.0.0",
+  "main": "eslint-node.js",
+  "license": "MIT",
+  "files": [
+    "eslint-node.js"
+  ],
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "@typescript-eslint/parser": "^5.51.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-import-resolver-typescript": "^3.5.3",
+    "eslint-plugin-import": "^2.27.5"
+  }
+}

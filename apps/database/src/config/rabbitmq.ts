@@ -20,13 +20,13 @@ let channel: amqp.Channel;
 
 const connect = async () => {
   const connection =
-    global.rabbitmq || (await amqp.connect(process.env.AMQP_URL!));
+    global.rabbitmq || (await amqp.connect(process.env.AMQP_URL));
   if (process.env.NODE_ENV !== 'production') global.rabbitmq = connection;
 
   channel = global.channel || (await connection.createChannel());
 };
 
-export const publishMessage = async (routingKey: RoutingKeys, data: any) => {
+const publishMessage = async (routingKey: RoutingKeys, data: any) => {
   !channel && (await connect());
   await channel.assertExchange(EXCHANGE_NAME, 'direct');
 
@@ -40,15 +40,15 @@ export const publishMessage = async (routingKey: RoutingKeys, data: any) => {
     Buffer.from(JSON.stringify(logDetails))
   );
 
-  //TODO use Logger
+  // TODO use Logger
   console.log(`The new ${routingKey} log is sent to exchange ${EXCHANGE_NAME}`);
 };
 
-export const parseMessageContent = (
+const parseMessageContent = (
   content: amqp.ConsumeMessage['content'] | undefined
 ) => JSON.parse(content as unknown as string) as ParsedMessage;
 
-export async function consumeMessages(
+async function consumeMessages(
   exchange: ExchangeName,
   queue: string,
   routingKey: RoutingKeys[]
@@ -71,3 +71,5 @@ export async function consumeMessages(
     parseMessageContent,
   };
 }
+
+export { consumeMessages, parseMessageContent, publishMessage };
