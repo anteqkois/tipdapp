@@ -1,4 +1,6 @@
-export type AsyncStatus = 'idle' | 'loading' | 'success' | 'fail';
-export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
+type AsyncStatus = 'idle' | 'loading' | 'success' | 'fail';
+type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
 
-export type ModifyObjectKey<T, R> = Omit<T, keyof R> & R;
+type ModifyObjectKey<T, R> = Omit<T, keyof R> & R;
+
+export type { AsyncStatus, AuthStatus, ModifyObjectKey };

@@ -11,5 +11,3 @@ api.interceptors.response.use(
   (data) => Promise.resolve(data.data),
   (err) => Promise.reject(err.response?.data.error)
 );
-
-export default api;

@@ -11,7 +11,9 @@ type FindResponse = {
   count: number;
 };
 
-export const find = async (queryParams: FindParams) =>
+const find = async (queryParams: FindParams) =>
   api.get<never, FindResponse>('tip', {
     params: queryParams,
   });
+
+export { find };

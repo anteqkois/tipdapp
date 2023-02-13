@@ -4,15 +4,13 @@ import { SiweMessage } from 'siwe';
 import { api } from './apiConfig';
 
 // VALIDATE
-export const validateFormData = async (body: any) =>
-  api.post('/user/validate', body);
+const validateFormData = async (body: any) => api.post('/user/validate', body);
 
 // NONCE
 type GetNonceResponse = {
   nonce: string;
 };
-export const getNonce = async () =>
-  api.get<any, GetNonceResponse>('/auth/nonce');
+const getNonce = async () => api.get<any, GetNonceResponse>('/auth/nonce');
 
 // VERIFY
 // type PostVerifyMessageResponse<T extends 'user'|'tipper'> = {
@@ -28,32 +26,26 @@ type VerifyMessageBody = {
   type: 'user' | 'tipper';
 };
 
-// export const verifyMessage = async <T extends 'user' | 'tipper'>(body: VerifyMessageBody) => {
-export const verifyMessage = async <T extends VerifyMessageBody['type']>(
+// const verifyMessage = async <T extends 'user' | 'tipper'>(body: VerifyMessageBody) => {
+const verifyMessage = async <T extends VerifyMessageBody['type']>(
   body: VerifyMessageBody
-) => 
-   api.post<any, PostVerifyMessageResponse<T>>(
-    '/auth/verify',
-    body
-  )
-  // if (body.type === 'user')
-  //   return await api.post<any, PostVerifyMessageResponse<T>>(
-  //     '/auth/verify',
-  //     body
-  //   );
-  // if (body.type === 'tipper')
-  //   return await api.post<any, PostVerifyMessageResponse<T>>(
-  //     '/auth/verify',
-  //     body
-  //   );
-;
+) => api.post<any, PostVerifyMessageResponse<T>>('/auth/verify', body);
+// if (body.type === 'user')
+//   return await api.post<any, PostVerifyMessageResponse<T>>(
+//     '/auth/verify',
+//     body
+//   );
+// if (body.type === 'tipper')
+//   return await api.post<any, PostVerifyMessageResponse<T>>(
+//     '/auth/verify',
+//     body
+//   );
 
 // LOGOUT
 type LogoutResponse = {
   message: string;
 };
-export const logoutUser = async () =>
-  api.get<any, LogoutResponse>('/auth/logout');
+const logoutUser = async () => api.get<any, LogoutResponse>('/auth/logout');
 
 // SIGNUP
 type SignUpResponse = {
@@ -66,15 +58,14 @@ type SignUpBody = {
   formData: UserValidation.CreateUser;
   // formData: any;
 };
-export const signUp = async (body: SignUpBody) =>
+const signUp = async (body: SignUpBody) =>
   api.post<any, SignUpResponse>('/auth/signup', body);
 
 // REFRESH TOKEN
 type RefreshResponse = {
   message: string;
 };
-export const refreshToken = async () =>
-  api.get<RefreshResponse>('/auth/refresh');
+const refreshToken = async () => api.get<RefreshResponse>('/auth/refresh');
 
 // REFRESH USER SESSION
 type RefreshUserSessionResponse = {
@@ -87,5 +78,15 @@ type RefreshUserSessionResponse = {
 //   formData: UserValidation.CreateUser;
 //   // formData: any;
 // };
-export const refreshUserSession = async () =>
+const refreshUserSession = async () =>
   api.get<any, RefreshUserSessionResponse>('/auth/refreshUserSession');
+
+export {
+  validateFormData,
+  getNonce,
+  verifyMessage,
+  logoutUser,
+  signUp,
+  refreshToken,
+  refreshUserSession,
+};

@@ -6,15 +6,18 @@ type FindResponse = {
   user: NestedUser;
 };
 
-export const findByAffixUrl = async ({
+const findByAffixUrl = async ({
   params,
   query,
 }: {
   params: PageApi.FindByAffixUrl.Params;
   query?: PageApi.FindByAffixUrl.Query;
-}) => api.get<never, FindResponse>(
-    `/page/${params.role}/${params.affixUrl}`,
-    { params: query }
-  );
+}) =>
+  api.get<never, FindResponse>(`/page/${params.role}/${params.affixUrl}`, {
+    params: query,
+  });
 
-export const update = async (body: PageApi.Update.Body) => api.put<never, { message: string }>('/page', body);
+const update = async (body: PageApi.Update.Body) =>
+  api.put<never, { message: string }>('/page', body);
+
+export { findByAffixUrl, update };

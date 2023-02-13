@@ -6,6 +6,10 @@
       "persistent": true,
       "dependsOn": ["@tipdapp/contracts#compile"]
     },
+    "lint": {
+      "cache": false,
+      "dependsOn": ["^lint"]
+    },
     "docker": {
       "cache": false,
       "dependsOn": ["//#docker:dev"]

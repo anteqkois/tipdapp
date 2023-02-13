@@ -13,7 +13,7 @@ import { api } from './apiConfig';
 // };
 
 type FindParams = {
-  userAddress: string
+  userAddress: string;
 };
 
 type FindResponse = {
@@ -21,6 +21,9 @@ type FindResponse = {
 };
 
 // use get with queryParams
-export const find = async (queryParams: FindParams) => api.get<never, FindResponse>('/userToken', {
+const find = async (queryParams: FindParams) =>
+  api.get<never, FindResponse>('/userToken', {
     params: queryParams,
   });
+
+export { find };
