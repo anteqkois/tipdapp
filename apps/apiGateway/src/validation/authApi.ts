@@ -1,7 +1,7 @@
 import { Role, Tipper, UserSession } from '@tipdapp/database';
 import { Request, Response } from 'express';
 import { SiweMessage } from 'siwe';
-import { z } from '../config/zod';
+import { z } from 'zod';
 import { ModifyObjectKey } from '../types';
 
 const login = z.object({

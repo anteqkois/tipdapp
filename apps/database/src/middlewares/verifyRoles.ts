@@ -1,10 +1,11 @@
 import { Role } from '@prisma/client';
+import { createApiError } from '@tipdapp/server';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { createApiError } from './error';
 
-export const verifyRoles = (...allowedRoles: Role[]) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+export const verifyRoles =
+  (...allowedRoles: Role[]) =>
+  (req: Request, res: Response, next: NextFunction) => {
     const allowed = req.user?.roles
       .map((role: Role) => allowedRoles.includes(role))
       .some((val: boolean) => val === true);
@@ -14,7 +15,6 @@ export const verifyRoles = (...allowedRoles: Role[]) => {
 
     next();
   };
-};
 
 // const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
 //   next();

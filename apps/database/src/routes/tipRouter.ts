@@ -1,11 +1,11 @@
-import { catchAsyncErrors } from '@middlewares/handleError';
+import { catchAsyncErrors } from '@tipdapp/server';
 import { Router } from 'express';
 import { tipController } from '../controllers/tipController';
 
-const router = Router();
-//GET
-// router.get('/', verifyJWT, catchAsyncErrors(findByUseraddress));
+const tipRouter = Router();
 
-//TODO change to use find with queryParams
-router.get('/', catchAsyncErrors(tipController.findByAddress));
-export default router;
+// TODO change to use find with queryParams?
+// GET
+tipRouter.get('/', catchAsyncErrors(tipController.findByAddress));
+
+export { tipRouter };

@@ -1,7 +1,7 @@
 import { Role } from '@tipdapp/database';
+import { createApiError } from '@tipdapp/server';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { createApiError } from '../utils/error';
 
 const verifyRoles = (...allowedRoles: Role[]) => {
   return (req: Request, res: Response, next: NextFunction) => {

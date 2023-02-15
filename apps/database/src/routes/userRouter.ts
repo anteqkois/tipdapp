@@ -1,14 +1,17 @@
-import { catchAsyncErrors } from '@middlewares/handleError';
+import { catchAsyncErrors } from '@tipdapp/server';
 import { Router } from 'express';
 import { userController } from '../controllers/userController';
 // import { verifyJWT } from '../middlewares/verifyJWT.js';
 
-const router = Router();
-//GET
-router.get('/:nick', catchAsyncErrors(userController.findByNick));
-router.get('/', catchAsyncErrors(userController.find));
+const userRouter = Router();
 
-//POST
-router.post('/validate', catchAsyncErrors(userController.validate));
-router.post('/', catchAsyncErrors(userController.create));
-export default router;
+// GET
+userRouter.get('/:nick', catchAsyncErrors(userController.findByNick));
+userRouter.get('/', catchAsyncErrors(userController.find));
+
+// POST
+
+userRouter.post('/validate', catchAsyncErrors(userController.validate));
+userRouter.post('/', catchAsyncErrors(userController.create));
+
+export { userRouter };

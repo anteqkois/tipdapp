@@ -1,12 +1,13 @@
-import { catchAsyncErrors } from '@middlewares/handleError';
+import { catchAsyncErrors } from '@tipdapp/server';
 import { Router } from 'express';
 import { tipperController } from '../controllers/tipperController';
 
-const router = Router();
-//GET
-router.get('/', catchAsyncErrors(tipperController.find));
+const tipperRouter = Router();
 
-//POST
-router.post('/', catchAsyncErrors(tipperController.create));
+// GET
+tipperRouter.get('/', catchAsyncErrors(tipperController.find));
 
-export default router;
+// POST
+tipperRouter.post('/', catchAsyncErrors(tipperController.create));
+
+export { tipperRouter };

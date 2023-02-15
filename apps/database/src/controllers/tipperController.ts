@@ -1,4 +1,3 @@
-import { createApiError } from '@middlewares/error';
 import { tipperService } from '@services/tipperService';
 import { tipperApi, TipperApi } from '../validation/tipperApi';
 
@@ -12,7 +11,7 @@ const find = async (req: TipperApi.Find.Req, res: TipperApi.Find.Res) => {
     },
   });
 
-  return res.status(200).send({ tipper: tipper });
+  return res.status(200).send({ tipper });
 };
 
 const create = async (req: TipperApi.Create.Req, res: TipperApi.Create.Res) => {
@@ -23,11 +22,9 @@ const create = async (req: TipperApi.Create.Req, res: TipperApi.Create.Res) => {
     nick: body.nick,
   });
 
-  if (tipper) {
+  // if (tipper) {
     return res.status(200).send({ tipper });
-  } else {
-    createApiError('Something went wrong.');
-  }
+  // }
 };
 
 export const tipperController = { find, create };

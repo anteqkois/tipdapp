@@ -22,3 +22,5 @@
 - [ ] Create shared Error Component
 - [ ] Move u/.../... page to their defined folder in Page dir (create page for streamer)
 - [ ] Refactor SignUpForm container, move more logic to FormikStep compnent ?
+- [ ] Delete validationHelper function on backend
+- [ ] Replace UserTokenValidation module to use UserTokenApi and move validation related to form to dapp

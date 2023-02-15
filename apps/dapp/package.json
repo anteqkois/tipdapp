@@ -56,7 +56,7 @@
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
     "siwe": "^1.1.6",
-    "wagmi": "^0.10.0",
+    "wagmi": "^0.11.5",
     "zod": "^3.20.2"
   },
   "devDependencies": {

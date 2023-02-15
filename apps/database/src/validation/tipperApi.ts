@@ -26,14 +26,15 @@ export namespace TipperApi {
   export namespace Find {
     const reqShape = find.shape;
     export type Query = z.input<typeof reqShape.query>;
-    export type Req = Request<{}, {}, {}, Query>;
-    export type Res = Response<{ tipper: Tipper | null }>;
+    export type ResBody = { tipper: Tipper | null };
+    export type Req = Request<unknown, unknown, unknown, Query>;
+    export type Res = Response<ResBody>;
   }
   export namespace Create {
     const reqShape = create.shape;
     export type Body = z.input<typeof reqShape.body>;
     export type ResBody = { tipper: Tipper };
-    export type Req = Request<{}, {}, Body, {}>;
+    export type Req = Request<unknown, unknown, Body, unknown>;
     export type Res = Response<ResBody>;
   }
 }

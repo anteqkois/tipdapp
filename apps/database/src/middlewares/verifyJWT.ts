@@ -1,9 +1,7 @@
-import { userService } from '@services/userService';
-import { DecodedUser } from '@types';
+import { createApiError, DecodedUser } from '@tipdapp/server';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
-import { createApiError } from './error';
 
 const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
   const { authToken, authStatus } = req.cookies;

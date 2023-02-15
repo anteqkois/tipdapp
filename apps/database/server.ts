@@ -1,17 +1,16 @@
 import './src/config/dotenv';
 import './src/config/paths';
 
-import { handleErrors, notFound } from '@middlewares/handleError';
+import { handleErrors, logRequest, notFound } from '@tipdapp/server';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import { queryParser } from 'express-query-parser';
 import { useCors } from './src/config/cors';
-import { logRequest } from './src/middlewares/logRequest';
 import { startQueueConsumers } from './src/queue';
 import { mainRouter } from './src/routes';
 
 const port = process.env.PORT || 3002;
-const dev = process.env.NODE_ENV !== 'production';
+// const dev = process.env.NODE_ENV !== 'production';
 
 const server = express();
 
@@ -31,7 +30,7 @@ server.use(cookieParser());
 
 server.use('/api', mainRouter);
 
-//handling errors
+// handling errors
 server.use(notFound);
 server.use(handleErrors);
 

@@ -39,6 +39,19 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     '@typescript-eslint/no-unused-expressions': ['error', { allowTernary: true, allowShortCircuit: true }],
     'no-console': ['error', { allow: ['log', 'warn', 'error'] }],
+    'no-underscore-dangle': ['error', { allow: ['_count'] }],
+    'no-throw-literal': 'off',
+    '@typescript-eslint/no-throw-literal': 'off',
   },
+  overrides: [
+    {
+      files: ['src/**/*Api.ts', 'src/**/*Validation.ts'],
+      rules: { 'import/group-exports': 'off', '@typescript-eslint/no-explicit-any': 'off' },
+    },
+    {
+      files: ['src/**/*Controller.ts'],
+      rules: { 'consistent-return': 'off' },
+    },
+  ],
   ignorePatterns: ['**/*.js', '**/*.cjs', 'node_modules', '.turbo', 'dist', 'coverage', 'artefacts'],
 };

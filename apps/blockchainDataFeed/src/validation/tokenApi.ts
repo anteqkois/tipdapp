@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { z } from '../config/zod';
+import { z } from 'zod';
 
 const findMany = z.object({
   query: z.object({

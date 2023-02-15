@@ -1,26 +1,24 @@
-import { catchAsyncErrors } from '@middlewares/handleError';
 import { verifyJWT } from '@middlewares/verifyJWT';
 import { verifyRoles } from '@middlewares/verifyRoles';
+import { catchAsyncErrors } from '@tipdapp/server';
 import { Router } from 'express';
 import { pageController } from '../controllers/pageController';
 // import { findPage, updatePage } from '../controllers/userController';
 
-const router = Router();
-//GET
-router.get(
+const pageRouter = Router();
+// GET
+pageRouter.get(
   '/:role/:affixUrl',
   // verifyJWT,
   catchAsyncErrors(pageController.findByAffixUrl)
 );
 
-//PUT
-router.put(
+// PUT
+pageRouter.put(
   '/',
   verifyJWT,
   verifyRoles('streamer'),
   catchAsyncErrors(pageController.update)
 );
 
-//POST
-
-export default router;
+export { pageRouter };

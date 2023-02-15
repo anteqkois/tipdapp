@@ -5,7 +5,7 @@ import {
   waitToast,
 } from '@/shared/ui/customToasts';
 import { useUser } from '@/shared/User/hooks/useUser';
-import { ethereum } from '@/utils/constants';
+import { constants } from '@/utils/constants';
 import { selectWeb3Error } from '@/utils/selectWeb3Error';
 import { Hash } from '@wagmi/core';
 import { useState } from 'react';
@@ -43,7 +43,7 @@ export const useUserFacet = () => {
     ...userFacetInstance[chain?.name as AvaibleChains],
     functionName: 'registerUser',
     args: ['', ''],
-    enabled: userToken.data === ethereum.AddressZero,
+    enabled: userToken.data === constants.ethereum.AddressZero,
   });
 
   const contract = useContract({
@@ -92,7 +92,9 @@ export const useUserFacet = () => {
   });
 
   const registerUserCall = async (symbol: string, name: string) => {
-    if (contract && registerUser?.writeAsync) {
+    // if (contract && registerUser && registerUser.writeAsync) {
+    if (contract && registerUser.writeAsync) {
+      // @ts-expect-error
       await registerUser.writeAsync({
         recklesslySetUnpreparedArgs: [symbol, name],
         recklesslySetUnpreparedOverrides: {

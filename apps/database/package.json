@@ -5,9 +5,9 @@
     "node": "18.12.0"
   },
   "description": "Main server to handel database layer for tipdapp dapp and types from Prisma for models and related types.",
-  "main": "lib/cjs/package.js",
+  "main": "index.ts",
   "module": "lib/esm/package.js",
-  "types": "lib/esm/package.d.ts",
+  "types": "index.ts",
   "files": [
     "lib",
     "index.json",
@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "@prisma/client": "^4.7.1",
+    "@tipdapp/server": "^0.0.0",
     "amqplib": "^0.10.3",
     "axios": "^1.3.2",
     "body-parser": "^1.20.0",

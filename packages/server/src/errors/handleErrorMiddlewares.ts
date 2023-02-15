@@ -1,10 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { errorLogger, requestLogger } from '../config/logger';
-import { ZodError } from '../config/zod';
-import { ApiError, createApiError, isOperationalErrorArray, ValidationError } from '../utils/error';
+import { ZodError } from 'zod';
+import { errorLogger, requestLogger } from '../logger/config';
+import { ApiError, createApiError } from './ApiError';
+import { ValidationError } from './ValidationError';
 
-export const notFound = (req: Request, res: Response, next: NextFunction) => {
+const isOperationalErrorArray = (arr: unknown[]): arr is (ApiError | ValidationError)[] => {
+  if (arr[0] !== null && typeof arr[0] === 'object' && 'isOperational' in arr[0] && arr[0].isOperational) return true;
+  return false;
+};
+
+const notFound = (req: Request, res: Response, next: NextFunction) => {
   requestLogger.error('not found', {
     url: req.url,
     method: req.method,
@@ -14,28 +20,27 @@ export const notFound = (req: Request, res: Response, next: NextFunction) => {
   next(err);
 };
 
-export const catchAsyncErrors = (handler: (req: Request<any, any, any, any>, res: Response, next: NextFunction) => void) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+const catchAsyncErrors =
+  (handler: (req: Request<any, any, any, any>, res: Response, next: NextFunction) => void) =>
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       await handler(req, res, next);
     } catch (error) {
       next(error);
     }
   };
-};
 
-export const catchErrors = (handler: (req: Request, res: Response, next: NextFunction) => void) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+const catchErrors =
+  (handler: (req: Request, res: Response, next: NextFunction) => void) => (req: Request, res: Response, next: NextFunction) => {
     try {
       handler(req, res, next);
     } catch (error) {
       next(error);
     }
   };
-};
 
-//If  error is operational throw away and handle in handelErrors middleware, other way create ApiError with given message
-export const throwIfOperational = (err: any, helpMessage: string) => {
+// If  error is operational throw away and handle in handelErrors middleware, other way create ApiError with given message
+const throwIfOperational = (err: any, helpMessage: string) => {
   //! TODO handle Siwe Error
   //   {
   //    success: false,
@@ -66,7 +71,8 @@ export const throwIfOperational = (err: any, helpMessage: string) => {
   // return false;
 };
 
-export const handleErrors = (err: any, req: Request, res: Response, next: NextFunction) => {
+const handleErrors = (err: any, req: Request, res: Response) => {
+  // eslint-disable-next-line no-console
   console.dir(err);
   if (err.type === 'ApiError' || err.type === 'ValidationError') {
     errorLogger.error('', err);
@@ -89,3 +95,5 @@ export const handleErrors = (err: any, req: Request, res: Response, next: NextFu
     error: [new ApiError('Something went wrong on server, try later.')],
   });
 };
+
+export { isOperationalErrorArray, notFound, catchAsyncErrors, catchErrors, throwIfOperational, handleErrors };

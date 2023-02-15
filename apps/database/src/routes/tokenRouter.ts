@@ -1,10 +1,10 @@
-import { catchAsyncErrors } from '@middlewares/handleError';
+import { catchAsyncErrors } from '@tipdapp/server';
 import { Router } from 'express';
 import { tokenController } from '../controllers/tokenController';
 
-const router = Router();
-//GET
+const tokenRouter = Router();
 
-//TODO change to use find with queryParams
-router.get('/', catchAsyncErrors(tokenController.find));
-export default router;
+// GET
+tokenRouter.get('/', catchAsyncErrors(tokenController.find));
+
+export { tokenRouter };

@@ -19,7 +19,6 @@ enum Role {
   streamer
   charity
   shop
-  tipper
 }
 
 enum ApperanceMode {
@@ -41,7 +40,7 @@ model User {
   allTipsCount           Int                     @default(0)
   allTipsValue           Decimal                 @default(0) @db.Decimal(78, 0)
   allWithdrawsValue      Decimal                 @default(0) @db.Decimal(78, 0)
-  roles                  Role[]                  @default([streamer, tipper])
+  roles                  Role[]                  @default([streamer])
   activeRole             Role
   avatar                 File?                   @relation(fields: [avatarUrl], references: [url])
   avatarUrl              String?

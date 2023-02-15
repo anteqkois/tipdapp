@@ -1,8 +1,8 @@
 import { Prisma } from '@prisma/client';
-import prisma from '../config/db';
+import { prisma } from '../config/db';
 
-const findMany = async ({ where }: Prisma.TokenAggregateArgs) => {
-  return await prisma.token.findMany({
+const findMany = async ({ where }: Prisma.TokenAggregateArgs) =>
+  prisma.token.findMany({
     where,
     orderBy: {
       name: 'asc',
@@ -10,6 +10,5 @@ const findMany = async ({ where }: Prisma.TokenAggregateArgs) => {
     // include: {
     // },
   });
-};
 
 export const tokenService = { findMany };

@@ -1,11 +1,13 @@
-import { catchAsyncErrors } from '@middlewares/handleError';
+import { catchAsyncErrors } from '@tipdapp/server';
 import { Router } from 'express';
 import { userTokenController } from '../controllers/userTokenController';
 
-const router = Router();
-//GET
-router.get('/', catchAsyncErrors(userTokenController.find));
+const userTokenRouter = Router();
 
-//POST
-router.post('/', catchAsyncErrors(userTokenController.create));
-export default router;
+// GET
+userTokenRouter.get('/', catchAsyncErrors(userTokenController.find));
+
+// POST
+userTokenRouter.post('/', catchAsyncErrors(userTokenController.create));
+
+export { userTokenRouter };

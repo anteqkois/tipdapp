@@ -1,5 +1,5 @@
 {
-  "name": "@tipdapp/api",
+  "name": "@tipdapp/api-gateway",
   "version": "1.0.0",
   "description": "API Gateway for my frontend client to handle all routes from different microservices",
   "main": "index.ts",
@@ -23,6 +23,7 @@
   "license": "ISC",
   "dependencies": {
     "@tipdapp/database": "*",
+    "@tipdapp/server": "^0.0.0",
     "axios": "^1.3.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

@@ -1,17 +1,15 @@
 import { Prisma } from '@prisma/client';
-import prisma from '../config/db';
+import { prisma } from '../config/db';
 
-const create = async (createData: Prisma.TipperCreateInput) => {
-  return await prisma.tipper.create({
+const create = async (createData: Prisma.TipperCreateInput) =>
+  prisma.tipper.create({
     data: { ...createData },
   });
-};
 
-const find = async (data: Prisma.TipperFindFirstArgs) => {
-  return await prisma.tipper.findFirst({
+const find = async (data: Prisma.TipperFindFirstArgs) =>
+  prisma.tipper.findFirst({
     where: data.where,
   });
-};
 
 export const tipperService = {
   create,

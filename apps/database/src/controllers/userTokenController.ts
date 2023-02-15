@@ -1,25 +1,22 @@
-import { Prisma } from '@prisma/client';
-import { Request, Response } from 'express';
-import { createApiError } from '../middlewares/error';
 import { userTokenService } from '../services/userTokenService';
+import { UserTokenApi } from '../validation/userTokenApi';
 import { userTokenValidation } from '../validation/userTokenValidation';
 
-const find = async (
-  req: Request<{}, {}, {}, Prisma.UserTokenWhereInput>,
-  res: Response
-) => {
-  //TODO! make req.query validation ! to prevent hack
+const find = async (req: UserTokenApi.Find.Req, res: UserTokenApi.Find.Res) => {
+  // TODO! make req.query validation ! to prevent hack
 
   const userToken = await userTokenService.find(req.query);
 
   if (userToken) {
     return res.status(200).send({ userToken });
-  } else {
-    createApiError('No token found.', 404);
   }
+  // createApiError('No token found.', 404);
 };
 
-const create = async (req: Request, res: Response) => {
+const create = async (
+  req: UserTokenApi.Create.Req,
+  res: UserTokenApi.Create.Res
+) => {
   const { address, chainId, name, symbol, txHash, userAddress } =
     userTokenValidation.createParse(req.body);
 
@@ -39,4 +36,4 @@ const create = async (req: Request, res: Response) => {
   return res.status(200).send({ token });
 };
 
-export const userTokenController =  { find, create };
+export const userTokenController = { find, create };

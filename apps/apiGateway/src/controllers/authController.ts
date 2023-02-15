@@ -1,12 +1,11 @@
 import { Tipper, User, UserSession } from '@tipdapp/database';
-import { JWT_SETTINGS } from '../config/jwt';
-import { createApiError, createValidationError } from '../utils/error';
-// import { tipperService } from '@services/tipperService';
+import { createApiError, createValidationError } from '@tipdapp/server';
 import { HttpStatusCode } from 'axios';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import { generateNonce, SiweMessage } from 'siwe';
+import { JWT_SETTINGS } from '../config/jwt';
 import { CONSTANTS, redis } from '../config/redis';
 import { tipperService } from '../services/tipperService';
 import { userService } from '../services/userService';

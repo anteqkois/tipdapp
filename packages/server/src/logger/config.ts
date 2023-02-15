@@ -2,12 +2,10 @@ import { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 
 const customFormatRequestConsole = format.printf(
-  ({ level, label, timestamp, url, method, host }) =>
-    `${level} - [${label}] ${timestamp} ${method} ${host} ${url}`
+  ({ level, label, timestamp, url, method, host }) => `${level} - [${label}] ${timestamp} ${method} ${host} ${url}`,
 );
-const customFormatRequestFile = format.printf(
-  ({ level, message, timestamp, url, method, host }) =>
-    JSON.stringify({ level, timestamp, message, method, host, url })
+const customFormatRequestFile = format.printf(({ level, message, timestamp, url, method, host }) =>
+  JSON.stringify({ level, timestamp, message, method, host, url }),
 );
 
 const fileRotateTransportRequest = new transports.DailyRotateFile({
@@ -18,7 +16,7 @@ const fileRotateTransportRequest = new transports.DailyRotateFile({
     format.timestamp({
       format: 'MMM-DD-YYYY HH:mm:ss.SSS',
     }),
-    customFormatRequestFile
+    customFormatRequestFile,
   ),
 });
 
@@ -34,7 +32,7 @@ const requestLogger = createLogger({
         format.timestamp({
           format: 'MMM-DD-YYYY HH:mm:ss.SSS',
         }),
-        customFormatRequestConsole
+        customFormatRequestConsole,
       ),
     }),
     // new transports.File({
@@ -51,17 +49,10 @@ const requestLogger = createLogger({
 });
 
 const customFormatErrorConsole = format.printf(
-  ({ level, message, label, timestamp, ...rest }) =>
-    `${level} - [${rest.type ?? message}] ${message} ${rest.stack}`
+  ({ level, message, label, timestamp, ...rest }) => `${level} - [${rest.type ?? message}] ${message} ${rest.stack}`,
 );
-const customFormatErrorFile = format.printf(
-  ({ level, message, timestamp, ...rest }) =>
-    JSON.stringify({
-      level,
-      timestamp,
-      message,
-      details: { type: rest.type, message, stack: rest.stack },
-    })
+const customFormatErrorFile = format.printf(({ level, message, timestamp, ...rest }) =>
+  JSON.stringify({ level, timestamp, message, details: { type: rest.type, message, stack: rest.stack } }),
 );
 
 const fileRotateTransportError = new transports.DailyRotateFile({
@@ -72,7 +63,7 @@ const fileRotateTransportError = new transports.DailyRotateFile({
     format.timestamp({
       format: 'MMM-DD-YYYY HH:mm:ss.SSS',
     }),
-    customFormatErrorFile
+    customFormatErrorFile,
   ),
 });
 
@@ -88,7 +79,7 @@ const errorLogger = createLogger({
         format.timestamp({
           format: 'MMM-DD-YYYY HH:mm:ss.SSS',
         }),
-        customFormatErrorConsole
+        customFormatErrorConsole,
       ),
     }),
     // new transports.File({

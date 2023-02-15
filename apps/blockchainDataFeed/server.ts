@@ -1,7 +1,7 @@
 // import './src/config/dotenv';
+import { handleErrors, notFound } from '@tipdapp/server';
 import cors from 'cors';
 import express from 'express';
-import { handleErrors, notFound } from './src/middlewares/handleError';
 import apiRouter from './src/routes';
 import { TokenFeed } from './src/services/tokenFeedService';
 

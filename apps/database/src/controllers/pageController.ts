@@ -1,50 +1,41 @@
-import { createApiError } from '@middlewares/error';
 import { Prisma } from '@prisma/client';
 import { pageService } from '@services/pageService';
 import { userService } from '@services/userService';
-import { Request, Response } from 'express';
+import { createApiError } from '@tipdapp/server';
 import { StatusCodes } from 'http-status-codes';
 import { PageApi, pageApi } from '../validation/pageApi';
 
 const findByAffixUrl = async (
-  req: Request<
-    PageApi.FindByAffixUrl.Params,
-    {},
-    {},
-    PageApi.FindByAffixUrl.Query
-  >,
-  res: Response
+  req: PageApi.FindByAffixUrl.Req,
+  res: PageApi.FindByAffixUrl.Res
 ) => {
-  const parsedParams = pageApi.findByAffixUrl.params.parse(req.params);
-  const parsedQuery = pageApi.findByAffixUrl.query.parse(req.query);
+  const { params } = pageApi.findByAffixUrl.parse({ ...req });
 
   const page = await pageService.find({
     where: {
-      AND: [{ affixUrl: parsedParams.affixUrl }, { role: parsedParams.role }],
+      AND: [{ affixUrl: params.affixUrl }, { role: params.role }],
     },
     include: {
-      [parsedParams.role]: true,
+      [params.role]: true,
     },
   });
 
   const user = await userService.find({
-    where: { [parsedParams.role]: { pageAffixUrl: parsedParams.affixUrl } },
+    where: { [params.role]: { pageAffixUrl: params.affixUrl } },
   });
 
   if (page) {
     return res.status(StatusCodes.OK).send({ page, user });
-  } else {
-    createApiError('Page not found for this role and affix.');
   }
+  // createApiError('Page not found for this role and affix.');
+  return createApiError('Page not found for this role and affix.');
 };
 
-const update = async (
-  req: Request<{}, {}, PageApi.Update.Body>,
-  res: Response
-) => {
-  const parsedParams = pageApi.update.body.parse(req.body);
+const update = async (req: PageApi.Update.Req, res: PageApi.Update.Res) => {
+  // const parsedParams = pageApi.update.body.parse(req.body);
+  const { body } = pageApi.update.parse({ ...req });
 
-  const arrayOfObjectWithTokenNames = parsedParams.tokenAddresses.map(
+  const arrayOfObjectWithTokenNames = body.tokenAddresses.map(
     (address) =>
       ({
         address,
@@ -56,8 +47,8 @@ const update = async (
       role_affixUrl: { affixUrl: req.user.nick, role: req.user.activeRole },
     },
     data: {
-      description: parsedParams.description,
-      //TODO in future make it dynamic to update streamer, charity and other type users active tokens
+      description: body.description,
+      // TODO in future make it dynamic to update streamer, charity and other type users active tokens
       streamer: {
         update: {
           activeTokens: {

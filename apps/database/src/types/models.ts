@@ -9,7 +9,7 @@ import {
   User,
   UserToken,
 } from '@prisma/client';
-import { PartialExcept } from '.';
+import { DecodedUser, PartialExcept } from '@tipdapp/server';
 
 const user = Prisma.validator<Prisma.UserArgs>()({
   include: {
@@ -23,23 +23,17 @@ const user = Prisma.validator<Prisma.UserArgs>()({
   },
 });
 
-//TODO! Create helper to cast from UserSessionExpanded to specific User
-export type UserSession = PartialExcept<
+// TODO! Create helper to cast from UserSessionExpanded to specific User
+type UserSession = PartialExcept<
   Prisma.UserGetPayload<typeof user>,
   [Role, 'userToken']
 >;
 
-export type DecodedUser = Pick<
-  User,
-  'address' | 'nick' | 'roles' | 'activeRole'
-> & { ip: string };
-
-export const mockDecodedUser: DecodedUser = {
+const mockDecodedUser: DecodedUser = {
   address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
   nick: 'anteqkois',
   ip: '120.00.00.01',
-  // roles: ['tipper'],
-  roles: ['tipper', 'streamer'],
+  roles: ['streamer'],
   activeRole: 'streamer',
 };
 
@@ -86,13 +80,13 @@ type FullModelType<
   S = Required<PickValueByKey<SelectMap, N>>
 > = PickValueByKey<PayloadMap<keyof S>, N>;
 
-export type NestedUser = FullModelType<User>;
-export type NestedUserToken = FullModelType<UserToken>;
-export type NestedPage = FullModelType<Page>;
-export type NestedStreamer = FullModelType<Streamer>;
-export type NestedTipper = FullModelType<Tipper>;
-export type NestedTip = FullModelType<Tip>;
-export type NestedToken = FullModelType<Token>;
+type NestedUser = FullModelType<User>;
+type NestedUserToken = FullModelType<UserToken>;
+type NestedPage = FullModelType<Page>;
+type NestedStreamer = FullModelType<Streamer>;
+type NestedTipper = FullModelType<Tipper>;
+type NestedTip = FullModelType<Tip>;
+type NestedToken = FullModelType<Token>;
 
 const tipUI = Prisma.validator<Prisma.TipArgs>()({
   include: {
@@ -111,4 +105,17 @@ const tipUI = Prisma.validator<Prisma.TipArgs>()({
   },
 });
 
-export type TipUI = Prisma.TipGetPayload<typeof tipUI>;
+type TipUI = Prisma.TipGetPayload<typeof tipUI>;
+
+export {
+  UserSession,
+  mockDecodedUser,
+  NestedUser,
+  NestedUserToken,
+  NestedPage,
+  NestedStreamer,
+  NestedTipper,
+  NestedTip,
+  NestedToken,
+  TipUI,
+};

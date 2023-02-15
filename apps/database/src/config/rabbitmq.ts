@@ -1,9 +1,9 @@
 import amqp from 'amqplib';
 
-declare global {
-  var channel: amqp.Channel;
-  var rabbitmq: amqp.Connection;
-}
+// declare global {
+// var channel: amqp.Channel;
+// var rabbitmq: amqp.Connection;
+// }
 
 const EXCHANGE_NAME = 'blockchain';
 type ExchangeName = typeof EXCHANGE_NAME;
@@ -17,16 +17,19 @@ type RoutingKeys =
 type ParsedMessage = { data: any; dateTime: Date };
 
 let channel: amqp.Channel;
+let rabbitmq: amqp.Connection;
 
 const connect = async () => {
-  const connection =
-    global.rabbitmq || (await amqp.connect(process.env.AMQP_URL));
-  if (process.env.NODE_ENV !== 'production') global.rabbitmq = connection;
+  const connection = rabbitmq || (await amqp.connect(process.env.AMQP_URL));
+  // global.rabbitmq || (await amqp.connect(process.env.AMQP_URL));
+  if (process.env.NODE_ENV !== 'production') rabbitmq = connection;
+  // if (process.env.NODE_ENV !== 'production') global.rabbitmq = connection;
 
-  channel = global.channel || (await connection.createChannel());
+  channel = channel || (await connection.createChannel());
+  // channel = global.channel || (await connection.createChannel());
 };
 
-const publishMessage = async (routingKey: RoutingKeys, data: any) => {
+const publishMessage = async (routingKey: RoutingKeys, data: unknown) => {
   !channel && (await connect());
   await channel.assertExchange(EXCHANGE_NAME, 'direct');
 
