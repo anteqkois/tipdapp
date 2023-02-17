@@ -1,7 +1,6 @@
 import { Role } from '@prisma/client';
 import { Request, Response } from 'express';
 import { z } from '../config/zod';
-import { update as _update } from './pageValidation';
 import { transformApiInclude } from './utils';
 
 const pageInclude = z
@@ -28,7 +27,24 @@ const find = z.object({
 });
 
 const update = z.object({
-  body: _update,
+  body: z.object({
+    affixUrl: z
+      .string()
+      .min(3, 'Url page must have 3 or more characters.')
+      .max(30, 'Url can be up to 20 characters long.')
+      .optional(),
+    description: z
+      .string()
+      .min(20, 'Description page must have 20 or more characters.')
+      .max(500, 'Description can be up to 200 characters long.')
+      .optional(),
+    tokenAddresses: z
+      .array(z.string(), {
+        required_error: 'At least one token must be selected.',
+      })
+      .min(1, 'At least one token must be selected.'),
+    // banerId: z.string().min(1, { message: 'Wrong file.' }).optional(),
+  }),
 });
 
 export namespace PageApi {

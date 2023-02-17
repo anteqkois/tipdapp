@@ -32,7 +32,7 @@ server.use('/api', mainRouter);
 
 // handling errors
 server.use(notFound);
-server.use(handleErrors);
+server.use('*', handleErrors);
 
 server.listen(port, () => {
   // if (err) throw err;

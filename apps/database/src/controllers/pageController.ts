@@ -32,7 +32,6 @@ const findByAffixUrl = async (
 };
 
 const update = async (req: PageApi.Update.Req, res: PageApi.Update.Res) => {
-  // const parsedParams = pageApi.update.body.parse(req.body);
   const { body } = pageApi.update.parse({ ...req });
 
   const arrayOfObjectWithTokenNames = body.tokenAddresses.map(

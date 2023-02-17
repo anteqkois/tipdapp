@@ -1,11 +1,10 @@
 import { userTokenService } from '../services/userTokenService';
-import { UserTokenApi } from '../validation/userTokenApi';
-import { userTokenValidation } from '../validation/userTokenValidation';
+import { userTokenApi, UserTokenApi } from '../validation/userTokenApi';
+// import { userTokenValidation } from '../validation/userTokenValidation';
 
 const find = async (req: UserTokenApi.Find.Req, res: UserTokenApi.Find.Res) => {
-  // TODO! make req.query validation ! to prevent hack
-
-  const userToken = await userTokenService.find(req.query);
+  const { query } = userTokenApi.find.parse({ ...req });
+  const userToken = await userTokenService.find({ ...query });
 
   if (userToken) {
     return res.status(200).send({ userToken });
@@ -17,8 +16,8 @@ const create = async (
   req: UserTokenApi.Create.Req,
   res: UserTokenApi.Create.Res
 ) => {
-  const { address, chainId, name, symbol, txHash, userAddress } =
-    userTokenValidation.createParse(req.body);
+  const { body } = userTokenApi.create.parse({ ...req });
+  const { address, chainId, name, symbol, txHash, userAddress } = body;
 
   const token = await userTokenService.create({
     address,

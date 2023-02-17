@@ -16,8 +16,8 @@ pageRouter.get(
 // PUT
 pageRouter.put(
   '/',
-  verifyJWT,
-  verifyRoles('streamer'),
+  // verifyJWT,
+  // verifyRoles('streamer'),
   catchAsyncErrors(pageController.update)
 );
 

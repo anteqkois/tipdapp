@@ -45,7 +45,7 @@ export namespace UserTokenApi {
   }
 }
 
-export const userTokenAPI = {
+export const userTokenApi = {
   find,
   create,
 };

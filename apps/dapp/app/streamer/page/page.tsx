@@ -16,12 +16,9 @@ import {
   Tooltip,
 } from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
-import {
-  isValidationError,
-  PageApi,
-  pageValidation,
-  ValidationError,
-} from '@tipdapp/database';
+import { isValidationError, ValidationError } from '@tipdapp/api';
+// import { PageApi, pageValidation } from '@tipdapp/database';
+import { PageApi, pageApi } from '@tipdapp/database';
 import { useFormik } from 'formik';
 import { useMemo } from 'react';
 import toast from 'react-hot-toast';
@@ -54,7 +51,8 @@ function Page() {
     onSubmit: async (values: PageApi.Update.Body) => {
       if (!Object.keys(formik.errors).length) {
         try {
-          pageValidation.updateParse(values);
+          // pageValidation.updateParse(values);
+          // pageApi.update.parse(values);
           const { message } = await update(values);
           refreshUser();
           toast.success(message);

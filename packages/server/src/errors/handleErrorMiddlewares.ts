@@ -1,13 +1,8 @@
-import { ApiError, createApiError, ValidationError } from '@tipdapp/api';
+import { ApiError, createApiError, isOperationalErrorArray, ValidationError } from '@tipdapp/api';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ZodError } from 'zod';
 import { errorLogger, requestLogger } from '../logger/config';
-
-const isOperationalErrorArray = (arr: unknown[]): arr is (ApiError | ValidationError)[] => {
-  if (arr[0] !== null && typeof arr[0] === 'object' && 'isOperational' in arr[0] && arr[0].isOperational) return true;
-  return false;
-};
 
 const notFound = (req: Request, res: Response, next: NextFunction) => {
   requestLogger.error('not found', {
@@ -25,6 +20,7 @@ const catchAsyncErrors =
     try {
       await handler(req, res, next);
     } catch (error) {
+      // console.log('ERRRROR', error);
       next(error);
     }
   };
@@ -69,7 +65,9 @@ const throwIfOperational = (err: any, helpMessage: string) => {
   throw err;
 };
 
-const handleErrors = (err: any, req: Request, res: Response) => {
+const handleErrors = (err: any, req: Request, res: Response, next: NextFunction) => {
+  console.log('ERRRRORRR');
+  console.log('err instanceof ZodError', err instanceof ZodError);
   // eslint-disable-next-line no-console
   console.dir(err);
   if (err.type === 'ApiError' || err.type === 'ValidationError') {
