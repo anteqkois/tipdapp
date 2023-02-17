@@ -1,9 +1,8 @@
+import { ApiError, createApiError, ValidationError } from '@tipdapp/api';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ZodError } from 'zod';
 import { errorLogger, requestLogger } from '../logger/config';
-import { ApiError, createApiError } from './ApiError';
-import { ValidationError } from './ValidationError';
 
 const isOperationalErrorArray = (arr: unknown[]): arr is (ApiError | ValidationError)[] => {
   if (arr[0] !== null && typeof arr[0] === 'object' && 'isOperational' in arr[0] && arr[0].isOperational) return true;
@@ -68,7 +67,6 @@ const throwIfOperational = (err: any, helpMessage: string) => {
   }
   errorLogger.error('no operational', err);
   throw err;
-  // return false;
 };
 
 const handleErrors = (err: any, req: Request, res: Response) => {

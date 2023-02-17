@@ -1,5 +1,5 @@
 import { Role } from '@tipdapp/database';
-import { createApiError } from '@tipdapp/server';
+import { createApiError } from '@tipdapp/api';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 

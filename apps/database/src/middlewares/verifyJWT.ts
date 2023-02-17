@@ -1,4 +1,5 @@
-import { createApiError, DecodedUser } from '@tipdapp/server';
+import { createApiError } from '@tipdapp/api';
+import { DecodedUser } from '@tipdapp/types';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';

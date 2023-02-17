@@ -1,0 +1,27 @@
+{
+  "name": "@tipdapp/types",
+  "author": "Antek Kois",
+  "license": "MIT",
+  "version": "0.0.0",
+  "description": "Node server utils for other node microservices",
+  "main": "index.d.ts",
+  "types": "index.d.ts",
+  "files": [
+    "lib/*",
+    "package.json"
+  ],
+  "keywords": [
+    "typescript",
+    "TypeScript",
+    "type",
+    "types",
+    "microservice",
+    "share"
+  ],
+  "scripts": {
+    "build": "tsc --build tsconfig.json"
+  },
+  "dependencies": {
+    "eslint-config-tipdapp-node": "^0.0.0"
+  }
+}

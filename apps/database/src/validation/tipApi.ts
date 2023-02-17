@@ -6,7 +6,7 @@ const findByAddress = z.object({
   query: z
     .object({
       page: z.string(),
-      pageSize: z.number(),
+      pageSize: z.string(),
     })
     .optional(),
 });

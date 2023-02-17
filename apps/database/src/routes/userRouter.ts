@@ -11,7 +11,9 @@ userRouter.get('/', catchAsyncErrors(userController.find));
 
 // POST
 
+// userRouter.post('/validate', catchAsyncErrors(userController.validate));
 userRouter.post('/validate', catchAsyncErrors(userController.validate));
 userRouter.post('/', catchAsyncErrors(userController.create));
+// userRouter.post('/', userController.create);
 
 export { userRouter };

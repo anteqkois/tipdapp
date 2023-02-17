@@ -17,12 +17,16 @@ type ButtonProps = {
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ children, className, variant = 'default', ...props }, ref) => (
+  (
+    { children, className, variant = 'default', type = 'button', ...props },
+    ref
+  ) => (
     <button
       {...props}
       // onKeyDown={(key) => key.code === 'Enter' && props.onClick()}
       // tabIndex='0'
-      type='button'
+      // eslint-disable-next-line react/button-has-type
+      type={type}
       ref={ref}
       className={classnames(
         className,

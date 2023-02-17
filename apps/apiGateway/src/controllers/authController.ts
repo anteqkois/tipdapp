@@ -1,5 +1,5 @@
 import { Tipper, User, UserSession } from '@tipdapp/database';
-import { createApiError, createValidationError } from '@tipdapp/server';
+import { createApiError, createValidationError } from '@tipdapp/api';
 import { HttpStatusCode } from 'axios';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';

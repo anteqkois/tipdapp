@@ -41,6 +41,8 @@ module.exports = {
     'no-console': ['error', { allow: ['log', 'warn', 'error'] }],
     'no-underscore-dangle': ['error', { allow: ['_count'] }],
     'no-throw-literal': 'off',
+    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+    // 'no-plusplus': 'off',
     '@typescript-eslint/no-throw-literal': 'off',
   },
   overrides: [

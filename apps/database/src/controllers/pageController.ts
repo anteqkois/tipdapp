@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { pageService } from '@services/pageService';
 import { userService } from '@services/userService';
-import { createApiError } from '@tipdapp/server';
+import { createApiError } from '@tipdapp/api';
 import { StatusCodes } from 'http-status-codes';
 import { PageApi, pageApi } from '../validation/pageApi';
 

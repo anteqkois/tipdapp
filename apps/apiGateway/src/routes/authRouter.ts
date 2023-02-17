@@ -1,4 +1,3 @@
-// import { catchAsyncErrors } from '@middlewares/handleError';
 import { catchAsyncErrors } from '@tipdapp/server';
 import { Router } from 'express';
 import { authController } from '../controllers/authController';

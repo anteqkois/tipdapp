@@ -1,4 +1,4 @@
-import { createApiError } from '@tipdapp/server';
+import { createApiError } from '@tipdapp/api';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';

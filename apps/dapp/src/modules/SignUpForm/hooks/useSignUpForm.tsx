@@ -5,12 +5,8 @@ import { Close } from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
 import { AsyncStatus } from '@/types';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import {
-  isApiError,
-  isValidationError,
-  UserValidation,
-  ValidationError,
-} from '@tipdapp/database';
+import { isApiError, isValidationError, ValidationError } from '@tipdapp/api';
+import { UserApi } from '@tipdapp/database';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -18,7 +14,7 @@ import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
 
 type State = {
-  data: UserValidation.CreateUser & { address?: string };
+  data: UserApi.Create.Body & { address?: string };
   status: AsyncStatus;
 };
 
@@ -29,7 +25,7 @@ const initialState: State = {
     firstName: '',
     lastName: '',
     roles: ['streamer'],
-    // address: '',
+    address: '',
   },
   status: 'idle',
 };

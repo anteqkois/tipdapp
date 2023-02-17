@@ -9,7 +9,7 @@ import {
   User,
   UserToken,
 } from '@prisma/client';
-import { DecodedUser, PartialExcept } from '@tipdapp/server';
+import { DecodedUser, PartialExcept } from '@tipdapp/types';
 
 const user = Prisma.validator<Prisma.UserArgs>()({
   include: {
