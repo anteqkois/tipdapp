@@ -41,6 +41,8 @@ const update = async (req: PageApi.Update.Req, res: PageApi.Update.Res) => {
       } as Prisma.TokenWhereUniqueInput)
   );
 
+  console.log('req.user', req.user);
+
   await pageService.update({
     where: {
       role_affixUrl: { affixUrl: req.user.nick, role: req.user.activeRole },

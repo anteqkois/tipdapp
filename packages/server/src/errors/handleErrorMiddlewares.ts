@@ -20,7 +20,6 @@ const catchAsyncErrors =
     try {
       await handler(req, res, next);
     } catch (error) {
-      // console.log('ERRRROR', error);
       next(error);
     }
   };
@@ -66,8 +65,6 @@ const throwIfOperational = (err: any, helpMessage: string) => {
 };
 
 const handleErrors = (err: any, req: Request, res: Response, next: NextFunction) => {
-  console.log('ERRRRORRR');
-  console.log('err instanceof ZodError', err instanceof ZodError);
   // eslint-disable-next-line no-console
   console.dir(err);
   if (err.type === 'ApiError' || err.type === 'ValidationError') {

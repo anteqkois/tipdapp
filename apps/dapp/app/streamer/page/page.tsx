@@ -17,8 +17,7 @@ import {
 } from '@/shared/ui';
 import { useUser } from '@/shared/User/hooks/useUser';
 import { isValidationError, ValidationError } from '@tipdapp/api';
-// import { PageApi, pageValidation } from '@tipdapp/database';
-import { PageApi, pageApi } from '@tipdapp/database';
+import { PageApi } from '@tipdapp/database';
 import { useFormik } from 'formik';
 import { useMemo } from 'react';
 import toast from 'react-hot-toast';
@@ -51,7 +50,6 @@ function Page() {
     onSubmit: async (values: PageApi.Update.Body) => {
       if (!Object.keys(formik.errors).length) {
         try {
-          // pageValidation.updateParse(values);
           // pageApi.update.parse(values);
           const { message } = await update(values);
           refreshUser();
@@ -59,6 +57,9 @@ function Page() {
         } catch (error: any) {
           if (isValidationError(error[0])) {
             formik.setErrors(ValidationError.mapArrayByField(error));
+            // } else if (error instanceof ZodError) {
+            //   const err = ValidationError.fromZodErrorArray(error.issues);
+            //   formik.setErrors(ValidationError.mapArrayByField(err));
           } else {
             console.error(error);
             toast.error(

@@ -17,7 +17,7 @@
     "url": "https://github.com/anteqkois/tipdapp/issues"
   },
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --no-cache --force",
     "dev:build": "cd apps/database && npm run build",
     "dev:update": "NODE_ENV=development SERVER_COMMAND='npm run dev:update' docker compose up",
     "lint": "turbo run lint",
