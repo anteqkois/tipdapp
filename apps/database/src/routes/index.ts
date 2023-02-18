@@ -1,5 +1,5 @@
+import { verifyJWT } from '@tipdapp/server';
 import { Router } from 'express';
-import { verifyJWT } from '../middlewares/verifyJWT';
 import { pageRouter } from './pageRouter';
 import { tipperRouter } from './tipperRouter';
 import { tipRouter } from './tipRouter';

@@ -40,10 +40,15 @@ module.exports = {
     '@typescript-eslint/no-unused-expressions': ['error', { allowTernary: true, allowShortCircuit: true }],
     'no-console': ['error', { allow: ['log', 'warn', 'error'] }],
     'no-underscore-dangle': ['error', { allow: ['_count'] }],
-    'no-throw-literal': 'off',
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
-    // 'no-plusplus': 'off',
+    'no-throw-literal': 'off',
     '@typescript-eslint/no-throw-literal': 'off',
+    '@typescript-eslint/no-empty-interface': [
+      'error',
+      {
+        allowSingleExtends: true,
+      },
+    ],
   },
   overrides: [
     {

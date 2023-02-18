@@ -3,6 +3,11 @@ import { DecodedUser } from '@tipdapp/types';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
+import { dotenvConfig } from '../config';
+
+dotenvConfig();
+
+console.log('process.env.JWT_TOKEN_SECRET', process.env.JWT_TOKEN_SECRET);
 
 const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
   const { authToken, authStatus } = req.cookies;
@@ -12,19 +17,18 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
       res.cookie('authStatus', 'unauthenticated', {
         maxAge: 60 * 60 * 1000,
       });
+    //! TODO remove session
     // userService.removeSession({ ip: req.ip });
     createApiError(`You are not authorized.`, StatusCodes.UNAUTHORIZED);
   }
-
   try {
-    const decoded = jwt.verify(
-      authToken,
-      process.env.JWT_TOKEN_SECRET
-    ) as DecodedUser;
+    const decoded = jwt.verify(authToken, process.env.JWT_TOKEN_SECRET) as unknown as DecodedUser;
 
+    // TODO! Check if it still work
     req.user = decoded;
     next();
   } catch (error) {
+    //! TODO remove session
     // userService.removeSession({ ip: req.ip });
     res.cookie('authStatus', 'unauthenticated', {
       maxAge: 60 * 60 * 1000,

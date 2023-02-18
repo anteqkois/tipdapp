@@ -4,8 +4,8 @@ type PartialExcept<T, U extends string[]> = {
   [K in keyof T as K extends U[number] ? never : K]: T[K];
 };
 
-type Roles = 'streamer' | 'charity' | 'shop';
+type Role = 'streamer' | 'charity' | 'shop';
 
-type DecodedUser = { ip: string; address: string; nick: string; roles: Roles[]; activeRole: Roles };
+type DecodedUser = { ip: string; address: string; nick: string; roles: Role[]; activeRole: Role };
 
-export type { PartialExcept, DecodedUser };
+export type { PartialExcept, DecodedUser, Role };

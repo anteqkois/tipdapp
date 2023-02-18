@@ -1,5 +1,5 @@
-import { Tipper, User, UserSession } from '@tipdapp/database';
 import { createApiError, createValidationError } from '@tipdapp/api';
+import { Tipper, User, UserSession } from '@tipdapp/database';
 import { HttpStatusCode } from 'axios';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -148,7 +148,7 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
     let tipper = await tipperService.find<Tipper>({
       address: siweMessage.address,
     });
-    
+
     if (!tipper) {
       const tipper = await tipperService.create({
         address: siweMessage.address,

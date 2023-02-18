@@ -24,3 +24,4 @@
 - [ ] Refactor SignUpForm container, move more logic to FormikStep compnent ?
 - [ ] Delete validationHelper function on backend
 - [ ] Replace UserTokenValidation module to use UserTokenApi and move validation related to form to dapp
+- [ ] Move JWT midlewarre to server microservice?

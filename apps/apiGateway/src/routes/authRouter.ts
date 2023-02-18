@@ -1,7 +1,6 @@
-import { catchAsyncErrors } from '@tipdapp/server';
+import { catchAsyncErrors, verifyJWT } from '@tipdapp/server';
 import { Router } from 'express';
 import { authController } from '../controllers/authController';
-import { verifyJWT } from '../middlewares/verifyJWT';
 
 const authRouter = Router();
 
