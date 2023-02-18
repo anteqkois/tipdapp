@@ -36,6 +36,11 @@ const nextConfig = {
         },
       ],
     });
+
+    config.resolve.fallback = {
+      'pino-pretty': false,
+      'lokijs': false,
+    };
     return config;
   },
 };

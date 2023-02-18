@@ -14,11 +14,7 @@
   "files": [
     "index.ts",
     "lib",
-    "typechain-types/index.ts",
-    "typechain-types/common.ts",
-    "typechain-types/contracts",
-    "typechain-types/factories",
-    "typechain-types/@openzeppelin/",
+    "typechain-types",
     "package.json",
     "README.md"
   ],

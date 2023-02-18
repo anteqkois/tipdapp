@@ -1,11 +1,11 @@
-import { ethereum } from '@/utils/constants';
+import { constants } from '@/utils/constants';
 import { UserTokenAbi } from '@tipdapp/contracts';
 import { useMemo, useState } from 'react';
 import { Address, useContractRead } from 'wagmi';
 
 export const useUserToken = (userTokenAddress: Address) => {
   const [balanceOfAddress, setBalanceOfAddress] = useState<Address>(
-    ethereum.AddressZero
+    constants.ethereum.AddressZero
   );
   const contractInstance = useMemo(
     () => ({ address: userTokenAddress, abi: UserTokenAbi }),
@@ -39,7 +39,7 @@ export const useUserToken = (userTokenAddress: Address) => {
     ...contractInstance,
     functionName: 'balanceOf',
     args: [balanceOfAddress],
-    enabled: balanceOfAddress !== ethereum.AddressZero,
+    enabled: balanceOfAddress !== constants.ethereum.AddressZero,
   });
   const balanceOfCall = (address: Address) => setBalanceOfAddress(address);
 

@@ -23,10 +23,12 @@ const stringifyOptions = (options: Options) =>
   }, ';');
 
 const getCookie = <S,>(key: string): S | undefined =>
-  (document?.cookie.split('; ').reduce((r, v) => {
-    const parts = v.split('=');
-    return parts[0] === key ? decodeURIComponent(parts[1]) : r;
-  }, '') as S) || undefined;
+  typeof window !== 'undefined'
+    ? (document?.cookie.split('; ').reduce((r, v) => {
+        const parts = v.split('=');
+        return parts[0] === key ? decodeURIComponent(parts[1]) : r;
+      }, '') as S) || undefined
+    : undefined;
 
 // TODO add remove cookie function
 const setCookie = <S,>(key: string, value: S, options?: Options) => {
@@ -51,7 +53,9 @@ const setCookie = <S,>(key: string, value: S, options?: Options) => {
       val
     )}; expires=${expires} ${stringifyOptions(optionsWithDefaults)}`;
 
-    document.cookie = cookie;
+    if (typeof window !== 'undefined') {
+      window.document.cookie = cookie;
+    }
   } catch (error) {
     console.log(error);
   }
