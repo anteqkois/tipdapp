@@ -14,7 +14,7 @@ type RoutingKeys =
   | 'withdrawERC20'
   | 'withdrawETH';
 
-type ParsedMessage = { data: any; dateTime: Date };
+type ParsedMessage = { data: never; dateTime: Date };
 
 let channel: amqp.Channel;
 let rabbitmq: amqp.Connection;

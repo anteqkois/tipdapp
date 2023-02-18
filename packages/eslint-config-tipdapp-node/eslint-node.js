@@ -60,5 +60,5 @@ module.exports = {
       rules: { 'consistent-return': 'off' },
     },
   ],
-  ignorePatterns: ['**/*.js', '**/*.cjs', 'node_modules', '.turbo', 'dist', 'coverage', 'artefacts'],
+  ignorePatterns: ['lib', '**/*.js', '**/*.cjs', 'node_modules', '.turbo', 'dist', 'coverage', 'artefacts'],
 };

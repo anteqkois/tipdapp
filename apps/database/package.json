@@ -45,7 +45,7 @@
     "dev": "NODE_ENV=development dotenv_config_path=.env.development nodemon",
     "dev:update": "npm run db:update && npm run dev",
     "db:update": "npx prisma db push && ts-node prisma/seed.ts",
-    "lint": "eslint lint",
+    "lint": "npx eslint .",
     "prepack": "npm run build",
     "publishPackage": "npm version patch && npm publish",
     "postinstall": "npx prisma generate",
