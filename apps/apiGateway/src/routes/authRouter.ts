@@ -1,16 +1,16 @@
 import { catchAsyncErrors, verifyJWT } from '@tipdapp/server';
 import { Router } from 'express';
-import { authController } from '../controllers/authController';
+import { authController } from '../controllers';
 
 const authRouter = Router();
 
-//GET
+// GET
 authRouter.get('/nonce', catchAsyncErrors(authController.createNonce));
 authRouter.get('/logout', verifyJWT, catchAsyncErrors(authController.logout));
-authRouter.get('/refresh', catchAsyncErrors(authController.refreshToken));
+authRouter.get('/refresh', catchAsyncErrors(authController.refreshAuthToken));
 authRouter.get('/refreshUserSession', verifyJWT, catchAsyncErrors(authController.refreshUserSession));
 
-//POST
+// POST
 authRouter.post('/verify', catchAsyncErrors(authController.login));
 authRouter.post('/signup', catchAsyncErrors(authController.signUp));
 

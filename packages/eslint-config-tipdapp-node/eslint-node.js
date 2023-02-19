@@ -42,6 +42,7 @@ module.exports = {
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'no-throw-literal': 'off',
     '@typescript-eslint/no-throw-literal': 'off',
+    '@typescript-eslint/no-namespace': 'off',
     '@typescript-eslint/no-empty-interface': [
       'error',
       {

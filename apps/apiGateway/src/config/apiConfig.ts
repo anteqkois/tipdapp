@@ -6,12 +6,8 @@ const databaseApi = axios.create({
 });
 
 databaseApi.interceptors.response.use(
-  (data) => {
-    return Promise.resolve(data.data);
-  },
-  (err) => {
-    return Promise.reject(err.response?.data.error);
-  },
+  (data) => Promise.resolve(data.data),
+  (err) => Promise.reject(err.response?.data.error),
 );
 
 const blockchainDataFeedApi = axios.create({
@@ -20,12 +16,8 @@ const blockchainDataFeedApi = axios.create({
 });
 
 blockchainDataFeedApi.interceptors.response.use(
-  (data) => {
-    return Promise.resolve(data.data);
-  },
-  (err) => {
-    return Promise.reject(err.response?.data.error);
-  },
+  (data) => Promise.resolve(data.data),
+  (err) => Promise.reject(err.response?.data.error),
 );
 
 export { databaseApi, blockchainDataFeedApi };

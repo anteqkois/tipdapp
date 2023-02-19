@@ -8,4 +8,6 @@ type Role = 'streamer' | 'charity' | 'shop';
 
 type DecodedUser = { ip: string; address: string; nick: string; roles: Role[]; activeRole: Role };
 
-export type { PartialExcept, DecodedUser, Role };
+type ModifyObjectKey<T, R> = Omit<T, keyof R> & R;
+
+export type { PartialExcept, DecodedUser, Role, ModifyObjectKey };

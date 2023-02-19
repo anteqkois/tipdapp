@@ -1,8 +1,10 @@
+import { dotenvConfig } from '@tipdapp/server';
 import { createClient } from 'redis';
-import './dotenv';
+
+dotenvConfig();
 
 const CONSTANTS = {
-  NONCE_EXPIRE_S: 20 * 60 // 20 minutes 
+  NONCE_EXPIRE_S: 20 * 60, // 20 minutes
 };
 
 const client = createClient({
@@ -17,16 +19,18 @@ client.on('error', (err) => console.log('Redis Client Error', err));
 })();
 
 // const getOrCash = async (key: string, callback: Promise<() => any>) => {
-const getOrCache = async (key: string, callback: () => Promise<any>) => {
-  return new Promise(async (resolve, reject) => {
-    const data = await client.get(key);
-    if (data) return resolve(JSON.parse(data));
-    const freshData = await callback();
-    client.set(key, JSON.stringify(freshData));
-    resolve(freshData);
-  });
+const getOrCache = async (key: string, callback: () => Promise<any>) => async () => {
+  const data = await client.get(key);
+  if (data) return JSON.parse(data);
+  const freshData = await callback();
+  client.set(key, JSON.stringify(freshData));
+  return freshData;
+  // new Promise(async (resolve, reject) => {
+  //   const data = await client.get(key);
+  //   if (data) resolve(JSON.parse(data));
+  //   const freshData = await callback();
+  //   client.set(key, JSON.stringify(freshData));
+  //   resolve(freshData);
 };
-
-
 
 export { client as redis, getOrCache, CONSTANTS };

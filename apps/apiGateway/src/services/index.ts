@@ -1,1 +1,2 @@
-import {userService} from './userService'
+export * from './tipperService';
+export * from './userService';

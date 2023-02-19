@@ -1,15 +1,14 @@
-import { useCors } from './src/config/cors';
-import './src/config/dotenv';
-import { services } from './src/config/proxy';
-
-import { handleErrors, logRequest, notFound } from '@tipdapp/server';
+import { dotenvConfig, handleErrors, logRequest, notFound } from '@tipdapp/server';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import { useCors } from './src/config/cors';
+import { services } from './src/config/proxy';
 import { router } from './src/routes';
 
+dotenvConfig();
+
 const port = process.env.PORT || 3001;
-const dev = process.env.NODE_ENV !== 'production';
 
 const server = express();
 
@@ -33,7 +32,7 @@ for (const [key, value] of Object.entries(services)) {
 server.use(express.json());
 server.use('/api', router);
 
-//handling errors
+// handling errors
 server.use(notFound);
 server.use(handleErrors);
 

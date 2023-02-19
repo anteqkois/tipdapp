@@ -2,7 +2,7 @@ import { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 
 const customFormatErrorConsole = format.printf(
-  ({ level, message, label, timestamp, ...rest }) => `${level} - [${rest.type ?? message}] ${message} ${rest.stack}`,
+  ({ level, message, label, timestamp, ...rest }) => `${level} - [${rest.type ?? label}] ${message} ${rest.stack}`,
 );
 const customFormatErrorFile = format.printf(({ level, message, timestamp, ...rest }) =>
   JSON.stringify({ level, timestamp, message, details: { type: rest.type, message, stack: rest.stack } }),

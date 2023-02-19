@@ -1,8 +1,8 @@
 import { Role, Tipper, UserSession } from '@tipdapp/database';
+import { ModifyObjectKey } from '@tipdapp/types';
 import { Request, Response } from 'express';
 import { SiweMessage } from 'siwe';
 import { z } from 'zod';
-import { ModifyObjectKey } from '../types';
 
 const login = z.object({
   body: z.object({
@@ -32,13 +32,13 @@ export namespace AuthApi {
   export namespace Login {
     const reqShape = login.shape;
     export type Body = ModifyObjectKey<z.input<typeof reqShape.body>, { message: Partial<SiweMessage> }>;
-    export type Req = Request<{}, {}, Body, {}>;
+    export type Req = Request<any, any, Body, any>;
     export type Res = Response<{ message: string; tipper: Tipper } | { message: string; user: UserSession }>;
   }
   export namespace SignUp {
     const reqShape = signUp.shape;
     export type Body = ModifyObjectKey<z.input<typeof reqShape.body>, { message: Partial<SiweMessage> }>;
-    export type Req = Request<{}, {}, Body, {}>;
+    export type Req = Request<any, any, Body, any>;
     export type Res = Response<{ message: string; user: UserSession }>;
   }
 }

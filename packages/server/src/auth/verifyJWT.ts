@@ -19,16 +19,16 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
     createApiError(`You are not authorized.`, StatusCodes.UNAUTHORIZED);
   }
   try {
-    if (process.env.JWT_TOKEN_SECRET) {
-      const decoded = jwt.verify(authToken, process.env.JWT_TOKEN_SECRET) as unknown as DecodedUser;
-
-      req.user = decoded;
-      next();
+    if (!process.env.JWT_TOKEN_SECRET) {
+      errorLogger.error(
+        "Missing env, set JWT_TOKEN_SECRET environment in your .env file. Without it server can't validate JSON Web Token",
+      );
+      process.exit(1);
     }
-    errorLogger.error(
-      "Missing env', 'Set JWT_TOKEN_SECRET environment in your .env file. Without it server can't validate JSON Web Token",
-    );
-    process.exit(1);
+    const decoded = jwt.verify(authToken, process.env.JWT_TOKEN_SECRET) as unknown as DecodedUser;
+
+    req.user = decoded;
+    next();
   } catch (error) {
     // TODO remove session?
     // userService.removeSession({ ip: req.ip });

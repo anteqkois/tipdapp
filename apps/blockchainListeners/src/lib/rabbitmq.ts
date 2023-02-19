@@ -1,5 +1,6 @@
+import { dotenvConfig } from '@tipdapp/server';
 import amqp from 'amqplib';
-import '../config/dotenv';
+dotenvConfig();
 
 declare global {
   var channel: amqp.Channel;

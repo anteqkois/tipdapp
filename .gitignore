@@ -11,6 +11,7 @@ build/**
 dist/**
 
 cache
+lib
 
 # local env files
 **/.env

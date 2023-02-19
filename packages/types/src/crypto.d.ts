@@ -1,4 +1,4 @@
-export type TokenCoinGecko = {
+type TokenCoinGecko = {
   id: string;
   symbol: string;
   name: string;
@@ -23,16 +23,8 @@ export type TokenCoinGecko = {
   atl: number;
   atl_change_percentage: number;
   atl_date: string;
-  roi: any;
+  roi: number;
   last_updated: Date;
 };
 
-export type PartialExcept<T, U extends string[]> = {
-  [K in keyof T as K extends U[number] ? K : never]?: T[K];
-} & {
-  [K in keyof T as K extends U[number] ? never : K]: T[K];
-};
-
-export type ModifyObjectKey<T, R> = Omit<T, keyof R> & R;
-
-export type DecodedUser = Pick<User, 'address' | 'nick' | 'roles' | 'activeRole'> & { ip: string };
+export type { TokenCoinGecko };

@@ -1,6 +1,7 @@
+import { dotenvConfig } from '@tipdapp/server';
 import cors from 'cors';
 // import { CorsOptions } from 'cors';
-import './dotenv';
+dotenvConfig();
 
 const corsConfig: cors.CorsOptions = {
   origin: process.env.FRONTEND_URL,
@@ -9,4 +10,4 @@ const corsConfig: cors.CorsOptions = {
   optionsSuccessStatus: 200,
 };
 
-export const useCors = cors(corsConfig)
+export const useCors = cors(corsConfig);
