@@ -1,14 +1,16 @@
-import api from '../config/apiConfig';
+import { api } from '../config/apiConfig';
 import handledTokens from '../config/handledTokens.json';
 import { CONSTANTS, redis } from '../config/redis';
 
 class TokenFeed {
   isRunning = false;
+
   intervalId: NodeJS.Timer | undefined;
+
   tokensIds = handledTokens.map((token) => token.coinGeckoId).join();
 
   async fetchTokensData() {
-    return api.get<{}, TokenCoinGecko[]>('/coins/markets', {
+    return api.get<unknown, TokenCoinGecko[]>('/coins/markets', {
       params: {
         vs_currency: 'usd',
         ids: this.tokensIds,
@@ -20,23 +22,17 @@ class TokenFeed {
     });
   }
 
-  async setTokenData(tokens: TokenCoinGecko[]) {
-    // const mappedTokens = tokens.reduce<Record<string, string>>(
-    //   (acc, token) => ({ ...acc, [token.id]: JSON.stringify(token) }),
-    //   {},
-    // );
-    // 'for of' was used to get better performance than reduce method
+  async updateTokenData() {
+    const tokens = await this.fetchTokensData();
+
     const mappedTokens: Record<string, string> = {};
+    // 'for of' was used to get better performance than reduce method
     for (const token of tokens) {
       mappedTokens[token.id] = JSON.stringify(token);
     }
 
-    const res = await redis.hSet(CONSTANTS.KEY_HASH_TOKEN, mappedTokens);
-  }
-
-  async updateTokenData() {
-    const tokens = await this.fetchTokensData();
-    this.setTokenData(tokens);
+    await redis.hSet(CONSTANTS.KEY_HASH_TOKEN, mappedTokens);
+    // this.setTokenData(tokens);
     console.log('> Token data were update');
   }
 

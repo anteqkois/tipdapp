@@ -4,5 +4,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: './tsconfig.json',
   },
-  rules: {},
+  rules: {
+    '@typescript-eslint/no-namespace': 'off',
+  },
 };

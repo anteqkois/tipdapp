@@ -9,7 +9,7 @@ const getTokens = async (symbols?: string[]) => {
     (await redis.hmGet(CONSTANTS.KEY_HASH_TOKEN, coingeckoIds)).forEach((rawData) => parsedData.push(JSON.parse(rawData)));
   } else {
     const tokensData = await redis.hGetAll(CONSTANTS.KEY_HASH_TOKEN);
-    for (const [key, value] of Object.entries(tokensData)) {
+    for (const [, value] of Object.entries(tokensData)) {
       parsedData.push(JSON.parse(value));
     }
   }

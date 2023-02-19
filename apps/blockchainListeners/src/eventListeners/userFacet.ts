@@ -14,4 +14,4 @@ export const newUserListener = () =>
     },
   );
 
-  //TODO Tip event, save tip to DB and increase mint amount of given user token
+// TODO Tip event, save tip to DB and increase mint amount of given user token

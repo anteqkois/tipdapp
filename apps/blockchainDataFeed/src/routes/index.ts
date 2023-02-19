@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import tokenRoutes from './tokenRoutes';
+import { tokenRouter } from './tokenRoutes';
 
-const router = Router();
+const mainRouter = Router();
 
-router.use('/token', tokenRoutes);
+mainRouter.use('/token', tokenRouter);
 
-export default router;
+export { mainRouter };

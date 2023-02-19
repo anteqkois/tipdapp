@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import { tokenController } from '../controllers/tokenController';
-const router = Router();
 
-router.get('/', tokenController.tokens);
-router.get('/:symbol', tokenController.token);
+const tokenRouter = Router();
 
-export default router;
+tokenRouter.get('/', tokenController.tokens);
+tokenRouter.get('/:symbol', tokenController.token);
+
+export { tokenRouter };

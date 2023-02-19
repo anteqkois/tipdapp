@@ -1,5 +1,4 @@
-// import ethers, {ethers}from 'ethers';
-import {ethers}from 'ethers';
+import { ethers } from 'ethers';
 import { hardhat } from '../config/chains';
 import { Network } from '../types';
 

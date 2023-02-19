@@ -1,9 +1,11 @@
-import './src/config/dotenv';
-import { startListen } from './src/eventListeners';
+import { dotenvConfig } from '@tipdapp/server';
+import { startToListen } from './src/eventListeners';
+
+dotenvConfig();
 
 const main = async () => {
   console.log('> Start blockchain listeners');
-  startListen();
+  startToListen();
 };
 
 main();

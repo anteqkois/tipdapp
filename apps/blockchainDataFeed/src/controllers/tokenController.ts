@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { cryptocurrencyService } from '../services/tokenService';
 import { TokenApi, tokenApi } from '../validation';
 
-const tokens = async (req:TokenApi.FindMany.Req, res: Response) => {
+const tokens = async (req: TokenApi.FindMany.Req, res: Response) => {
   const parsedReq = tokenApi.findMany.parse({ ...req });
 
   const data = await cryptocurrencyService.getTokens(parsedReq.query.symbol);

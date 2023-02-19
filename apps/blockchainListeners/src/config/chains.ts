@@ -1,9 +1,9 @@
-export type Address = `0x${string}`;
-export type BlockExplorer = {
+type Address = `0x${string}`;
+type BlockExplorer = {
   name: string;
   url: string;
 };
-export type Chain = {
+type Chain = {
   /** ID in number form */
   id: number;
   /** Human-readable name */
@@ -30,17 +30,17 @@ export type Chain = {
   /** Flag for test networks */
   testnet?: boolean;
 };
-export type Contract = {
+type Contract = {
   address: Address;
   blockCreated?: number;
 };
-export type NativeCurrency = {
+type NativeCurrency = {
   name: string;
   /** 2-6 characters long */
   symbol: string;
   decimals: number;
 };
-export type RpcUrls = {
+type RpcUrls = {
   http: string[];
   webSocket?: string[];
 };
@@ -764,6 +764,12 @@ const zkSyncTestnet = {
   testnet: true,
 };
 export {
+  Address,
+  BlockExplorer,
+  Chain,
+  Contract,
+  NativeCurrency,
+  RpcUrls,
   arbitrum,
   arbitrumGoerli,
   avalanche,

@@ -1,12 +1,13 @@
 // import './src/config/dotenv';
-import { handleErrors, notFound } from '@tipdapp/server';
+import { dotenvConfig, handleErrors, notFound } from '@tipdapp/server';
 import cors from 'cors';
 import express from 'express';
-import apiRouter from './src/routes';
+import { mainRouter } from './src/routes';
 import { TokenFeed } from './src/services/tokenFeedService';
 
+dotenvConfig();
+
 const port = process.env.PORT || 3003;
-const dev = process.env.NODE_ENV !== 'production';
 
 const server = express();
 
@@ -24,9 +25,9 @@ server.use(express.urlencoded({ extended: true }));
 // server.use(cookieParser());
 new TokenFeed().start();
 
-server.use('/api', apiRouter);
+server.use('/api', mainRouter);
 
-//handling errors
+// handling errors
 server.use(notFound);
 server.use(handleErrors);
 

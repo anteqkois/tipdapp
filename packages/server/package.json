@@ -23,11 +23,13 @@
   "scripts": {
     "prebuild": "rm -rf lib",
     "build": "npm run bundle && npm run build:ts",
+    "lint": "npx eslint .",
     "build:ts": "tsc --build tsconfig.build.json",
     "bundle": "node esbuild.config.js"
   },
   "dependencies": {
     "@tipdapp/api": "^0.0.0",
+    "@types/express": "^4.17.17",
     "dotenv": "^16.0.3",
     "esbuild": "^0.17.8",
     "eslint-config-tipdapp-node": "^0.0.0",

@@ -4,6 +4,7 @@ module.exports = {
     es2021: true,
   },
   extends: [
+    'plugin:security/recommended',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'airbnb-base',
@@ -14,9 +15,6 @@ module.exports = {
     'prettier',
   ],
   plugins: ['@typescript-eslint', 'import'],
-  // parserOptions: {
-  //   project: ['./tsconfig.json'],
-  // },
   settings: {
     'import/parsers': {
       '@typescript-eslint/parser': ['.js', '.ts'],
@@ -39,6 +37,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     '@typescript-eslint/no-unused-expressions': ['error', { allowTernary: true, allowShortCircuit: true }],
     'no-console': ['error', { allow: ['log', 'warn', 'error'] }],
+    'no-restricted-syntax': 'off',
     'no-underscore-dangle': ['error', { allow: ['_count'] }],
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'no-throw-literal': 'off',

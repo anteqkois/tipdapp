@@ -1,6 +1,7 @@
 import { UserToken__factory } from '@tipdapp/contracts';
 import { NewUserEventObject } from '@tipdapp/contracts/typechain-types/contracts/Tipdapp/facets/UserFacet';
 import { UserToken } from '@tipdapp/database';
+import { infoLogger } from '@tipdapp/server';
 import { netowrkInfo } from '../config/network';
 import { provider } from '../lib/ethersProvider';
 import { publishMessage } from '../lib/rabbitmq';
@@ -22,7 +23,6 @@ export const saveUserTokenData = async (eventData: EventData) => {
     userAddress: eventData.userAddress,
   };
 
-  // TODO use logger
-  console.log('Create new token: ', data);
+  infoLogger.info('New user token', data);
   publishMessage('userToken', data);
 };

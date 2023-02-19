@@ -2,7 +2,7 @@ import { ApiError, createApiError, isOperationalErrorArray, ValidationError } fr
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ZodError } from 'zod';
-import { errorLogger, requestLogger } from '../logger/config';
+import { errorLogger, requestLogger } from '../logger';
 
 const notFound = (req: Request, res: Response, next: NextFunction) => {
   requestLogger.error('not found', {
@@ -64,7 +64,7 @@ const throwIfOperational = (err: any, helpMessage: string) => {
   throw err;
 };
 
-const handleErrors = (err: any, req: Request, res: Response, next: NextFunction) => {
+const handleErrors = (err: any, req: Request, res: Response) => {
   // eslint-disable-next-line no-console
   console.dir(err);
   if (err.type === 'ApiError' || err.type === 'ValidationError') {

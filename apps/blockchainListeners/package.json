@@ -20,15 +20,19 @@
   "scripts": {
     "dev:test": "dotenv_config_path=.env.development nodemon -x node --loader ts-node/esm index.ts",
     "dev": "NODE_ENV=development dotenv_config_path=.env.development nodemon",
+    "lint": "npx eslint .",
     "build": "tsc",
     "start": "NODE_ENV=production dotenv_config_path=.env.development index.js"
   },
   "dependencies": {
     "@tipdapp/contracts": "*",
     "@tipdapp/database": "*",
+    "@tipdapp/server": "^0.0.0",
     "@wagmi/chains": "^0.1.8",
     "amqplib": "^0.10.3",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "eslint": "^8.34.0",
+    "eslint-config-tipdapp-node": "^0.0.0"
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.1",

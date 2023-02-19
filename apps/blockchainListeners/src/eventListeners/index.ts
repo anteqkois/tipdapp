@@ -1,5 +1,5 @@
 import { newUserListener } from './userFacet';
 
-export const startListen = () => {
+export const startToListen = () => {
   newUserListener();
 };
