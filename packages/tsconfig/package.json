@@ -1,0 +1,13 @@
+{
+  "name": "@tipdapp/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.ts",
+  "files": [
+    "tsconfig.base.json",
+    "tsconfig.node.json",
+    "tsconfig.next.json",
+    "tsconfig.esm.json",
+    "tsconfig.cjs.json"
+  ]
+}

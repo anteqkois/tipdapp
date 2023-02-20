@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "commonjs",
+    "target": "ES6",
+    "lib": ["ES2020"],
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./lib/cjs",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["index.ts"]
+}
