@@ -21,11 +21,14 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!process.env.JWT_TOKEN_SECRET) {
       errorLogger.error(
-        "Missing env, set JWT_TOKEN_SECRET environment in your .env file. Without it server can't validate JSON Web Token",
+        "Missing env, set JWT_TOKEN_SECRET environment in your .env file. Without it server can't validate JSON Web Token"
       );
       process.exit(1);
     }
-    const decoded = jwt.verify(authToken, process.env.JWT_TOKEN_SECRET) as unknown as DecodedUser;
+    const decoded = jwt.verify(
+      authToken,
+      process.env.JWT_TOKEN_SECRET
+    ) as unknown as DecodedUser;
 
     req.user = decoded;
     next();
@@ -35,8 +38,9 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
     res.cookie('authStatus', 'unauthenticated', {
       maxAge: 60 * 60 * 1000,
     });
-    // res.redirect(process.env.FRONTEND_URL + '/login');
-    createApiError(`Invalid authentication token.`, StatusCodes.BAD_REQUEST);
+
+    res.redirect(`${process.env.FRONTEND_URL}/login`);
+    // createApiError(`Invalid authentication token.`, StatusCodes.BAD_REQUEST);
   }
 };
 

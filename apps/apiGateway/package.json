@@ -4,7 +4,7 @@
   "description": "API Gateway for my frontend client to handle all routes from different microservices",
   "main": "index.ts",
   "scripts": {
-    "dev": "NODE_ENV=development DEBUG=http-proxy-middleware dotenv_config_path=.env.development nodemon",
+    "dev": "NODE_ENV=development dotenv_config_path=.env.development nodemon",
     "prebuild": "rm -rf lib",
     "build": "npm run bundle && npm run build:ts",
     "bundle": "node esbuild.config.js",
@@ -26,6 +26,7 @@
     "@tipdapp/api": "^0.0.0",
     "@tipdapp/database": "*",
     "@tipdapp/server": "^0.0.0",
+    "@tipdapp/tsconfig": "^0.0.0",
     "axios": "^1.3.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -40,8 +41,6 @@
     "redis": "^4.6.4",
     "siwe": "^2.1.3",
     "typescript": "^4.9.5",
-    "winston": "^3.8.2",
-    "winston-daily-rotate-file": "^4.7.1",
     "zod": "^3.20.2"
   },
   "devDependencies": {

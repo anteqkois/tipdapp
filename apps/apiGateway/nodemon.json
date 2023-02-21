@@ -1,5 +1,5 @@
 {
   "watch": ["server.ts", "src/**/*"],
-  "exec": "node --loader ts-node/esm server.ts --project tsconfig.json --files ",
+  "exec": "ts-node --project tsconfig.json --files server.ts",
   "ext": "js ts"
 }
