@@ -9,7 +9,10 @@ import { publishMessage } from '../lib/rabbitmq';
 type EventData = NewUserEventObject & { txHash: string };
 
 export const saveUserTokenData = async (eventData: EventData) => {
-  const userToken = UserToken__factory.connect(eventData.userTokenAddress, provider);
+  const userToken = UserToken__factory.connect(
+    eventData.userTokenAddress,
+    provider
+  );
 
   const symbol = await userToken.symbol();
   const name = await userToken.name();

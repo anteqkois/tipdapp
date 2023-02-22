@@ -11,6 +11,7 @@ module.exports = {
     'plugin:import/typescript',
     'prettier',
     'plugin:react/jsx-runtime',
+    'next/core-web-vitals',
   ],
   parserOptions: {
     ecmaFeatures: {
@@ -35,7 +36,10 @@ module.exports = {
     },
   },
   rules: {
-    'react/function-component-definition': [2, { namedComponents: 'arrow-function' }],
+    'react/function-component-definition': [
+      2,
+      { namedComponents: 'arrow-function' },
+    ],
     'react/jsx-props-no-spreading': [
       2,
       {
@@ -53,14 +57,27 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'no-unused-expressions': 'off',
     'prefer-regex-literals': 'off',
-    '@typescript-eslint/no-unused-expressions': ['error', { allowTernary: true, allowShortCircuit: true }],
+    '@typescript-eslint/no-unused-expressions': [
+      'error',
+      { allowTernary: true, allowShortCircuit: true },
+    ],
     'no-console': ['error', { allow: ['log', 'warn', 'error'] }],
   },
   overrides: [
     {
-      files: ['layout.tsx', 'loading.tsx', 'not-found.tsx', 'error.tsx', 'head.tsx', 'page.tsx'],
+      files: [
+        'layout.tsx',
+        'loading.tsx',
+        'not-found.tsx',
+        'error.tsx',
+        'head.tsx',
+        'page.tsx',
+      ],
       rules: {
-        'react/function-component-definition': [2, { namedComponents: 'function-declaration' }],
+        'react/function-component-definition': [
+          2,
+          { namedComponents: 'function-declaration' },
+        ],
         'import/prefer-default-export': 'error',
         'import/no-default-export': 'off',
       },
@@ -70,5 +87,16 @@ module.exports = {
       rules: { 'no-param-reassign': ['error', { props: false }] },
     },
   ],
-  ignorePatterns: ['**/*.js', '**/*.json', 'node_modules', 'public', 'styles', '.next', 'coverage', 'dist', '.turbo', '*.cjs'],
+  ignorePatterns: [
+    '**/*.js',
+    '**/*.json',
+    'node_modules',
+    'public',
+    'styles',
+    '.next',
+    'coverage',
+    'dist',
+    '.turbo',
+    '*.cjs',
+  ],
 };

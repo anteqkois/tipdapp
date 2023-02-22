@@ -764,12 +764,6 @@ const zkSyncTestnet = {
   testnet: true,
 };
 export {
-  Address,
-  BlockExplorer,
-  Chain,
-  Contract,
-  NativeCurrency,
-  RpcUrls,
   arbitrum,
   arbitrumGoerli,
   avalanche,
@@ -797,4 +791,12 @@ export {
   taraxaTestnet,
   zkSync,
   zkSyncTestnet,
+};
+export type {
+  Address,
+  BlockExplorer,
+  Chain,
+  Contract,
+  NativeCurrency,
+  RpcUrls,
 };

@@ -25,3 +25,4 @@
 - [ ] Delete validationHelper function on backend
 - [ ] Replace UserTokenValidation module to use UserTokenApi and move validation related to form to dapp
 - [ ] Move JWT midlewarre to server microservice?
+- [ ] Implement request rate limiter

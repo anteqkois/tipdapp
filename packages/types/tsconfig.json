@@ -1,16 +1,8 @@
 {
-  // build esm
+  "extends": "@tipdapp/tsconfig/tsconfig.base.json",
   "compilerOptions": {
-    "strict": true,
-    "module": "ES6",
-    "target": "ES6",
-    "lib": ["ES2020"],
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "./lib",
-    "moduleResolution": "node",
-    "removeComments": true,
-    "allowSyntheticDefaultImports": true
+    "rootDir": ".",
+    "outDir": "dist"
   },
-  "include": ["index.ts"]
+  "include": ["index.ts", "src/**/*.ts", "src/**/*.d.ts"]
 }

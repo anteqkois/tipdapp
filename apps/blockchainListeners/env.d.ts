@@ -1,9 +1,7 @@
-import { Network } from './src/types/index.js';
-
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      NETWORK: Network;
+      NETWORK: string;
       COINMARKETCAP_API_KEY: string;
       ALCHEMY_API_KEY: string;
       DEPLOYER_WALLET_PRIVATE_KEY: string;

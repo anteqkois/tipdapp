@@ -107,9 +107,9 @@ const tipUI = Prisma.validator<Prisma.TipArgs>()({
 
 type TipUI = Prisma.TipGetPayload<typeof tipUI>;
 
-export {
+export { mockDecodedUser };
+export type {
   UserSession,
-  mockDecodedUser,
   NestedUser,
   NestedUserToken,
   NestedPage,

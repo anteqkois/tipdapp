@@ -4,8 +4,8 @@
   "license": "MIT",
   "version": "0.0.0",
   "description": "Node server utils for other node microservices",
-  "main": "index.d.ts",
-  "types": "index.d.ts",
+  "main": "index.ts",
+  "types": "index.ts",
   "files": [
     "lib/*",
     "package.json"
@@ -23,5 +23,8 @@
   },
   "dependencies": {
     "eslint-config-tipdapp-node": "^0.0.0"
+  },
+  "devDependencies": {
+    "@tipdapp/tsconfig": "^0.0.0"
   }
 }

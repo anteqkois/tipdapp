@@ -27,4 +27,8 @@ type TokenCoinGecko = {
   last_updated: Date;
 };
 
-export type { TokenCoinGecko };
+// export type HandledNetworks = 'rinkeby' | 'localhost' | 'hardhat';
+// export type HandledNetworks = 'mainnet' |'localhost' | 'hardhat';
+type HandledNetworks = 'hardhat' 
+
+export type { TokenCoinGecko, HandledNetworks };

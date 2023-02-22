@@ -28,5 +28,8 @@
   "dependencies": {
     "esbuild": "^0.17.8",
     "eslint-config-tipdapp-node": "^0.0.0"
+  },
+  "devDependencies": {
+    "@tipdapp/tsconfig": "^0.0.0"
   }
 }

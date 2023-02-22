@@ -6,14 +6,9 @@
       "@services/*": ["./src/services/*"],
       "@types/*": ["./src/types/*"],
       "@types": ["./src/types"]
-    }
+    },
+    "rootDir": ".",
+    "outDir": "dist"
   },
   "include": ["server.ts", "src/**/*.ts", "src/**/*.d.ts"],
-  "exclude": [
-    "node_modules",
-    "**/node_modules/*",
-    "./.log",
-    "dist",
-    "prisma.d.ts"
-  ]
 }

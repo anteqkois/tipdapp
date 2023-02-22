@@ -1,4 +1,3 @@
-// import './src/env';
 import './src/express';
 
 export * from './src/auth';

@@ -30,11 +30,12 @@
     "@tipdapp/server": "^0.0.0",
     "@wagmi/chains": "^0.1.8",
     "amqplib": "^0.10.3",
-    "dotenv": "^16.0.3",
     "eslint": "^8.34.0",
     "eslint-config-tipdapp-node": "^0.0.0"
   },
   "devDependencies": {
+    "@tipdapp/tsconfig": "^0.0.0",
+    "@tipdapp/types": "^0.0.0",
     "@types/amqplib": "^0.10.1",
     "ethers": "^5.7.2",
     "nodemon": "^2.0.20",
