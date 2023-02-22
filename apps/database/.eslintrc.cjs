@@ -12,6 +12,6 @@ module.exports = {
     '@typescript-eslint/no-namespace': 'off',
   },
   ignorePatterns: [
-    'prisma.*',
+    'prisma/*',
   ],
 };
