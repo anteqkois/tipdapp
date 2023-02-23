@@ -75,7 +75,7 @@
     "@types/module-alias": "^2.0.1",
     "@types/node": "^18.11.18",
     "esbuild": "^0.17.6",
-    "eslint": "^8.28.0",
+    "eslint": "^8.34.0",
     "eslint-config-tipdapp-node": "*",
     "module-alias": "^2.2.2",
     "nodemon": "^2.0.20",
