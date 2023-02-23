@@ -8,7 +8,7 @@ import {
   Token,
   User,
   UserToken,
-} from '@prisma/client';
+} from '@tipdapp/prisma';
 import { DecodedUser, PartialExcept } from '@tipdapp/types';
 
 const user = Prisma.validator<Prisma.UserArgs>()({

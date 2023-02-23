@@ -1,4 +1,4 @@
-import { Token } from '@prisma/client';
+import { Token } from '@tipdapp/prisma';
 import { Request, Response } from 'express';
 import { z } from '../config/zod';
 // import { transformApiInclude } from './utils';

@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@tipdapp/prisma';
 import { prisma } from '../config/db';
 
 const findMany = async ({

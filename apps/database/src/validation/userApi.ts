@@ -1,4 +1,4 @@
-import { Role, User } from '@prisma/client';
+import { Role, User } from '@tipdapp/prisma';
 import { Request, Response } from 'express';
 import { z } from '../config/zod';
 import { UserSession } from '../types';

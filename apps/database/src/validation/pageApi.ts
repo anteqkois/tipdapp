@@ -1,4 +1,4 @@
-import { Role } from '@prisma/client';
+import { Role } from '@tipdapp/prisma';
 import { Request, Response } from 'express';
 import { z } from '../config/zod';
 import { transformApiInclude } from './utils';

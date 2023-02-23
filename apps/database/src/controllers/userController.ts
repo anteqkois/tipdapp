@@ -1,6 +1,6 @@
-import { Prisma } from '@prisma/client';
 import { userService } from '@services/userService';
 import { ValidationError } from '@tipdapp/api';
+import { Prisma } from '@tipdapp/prisma';
 import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { userApi, UserApi } from '../validation/userApi';

@@ -1,6 +1,5 @@
 import { userTokenService } from '../services/userTokenService';
 import { userTokenApi, UserTokenApi } from '../validation/userTokenApi';
-// import { userTokenValidation } from '../validation/userTokenValidation';
 
 const find = async (req: UserTokenApi.Find.Req, res: UserTokenApi.Find.Res) => {
   const { query } = userTokenApi.find.parse({ ...req });
