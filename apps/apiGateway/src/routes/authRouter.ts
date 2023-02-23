@@ -7,8 +7,15 @@ const authRouter = Router();
 // GET
 authRouter.get('/nonce', catchAsyncErrors(authController.createNonce));
 authRouter.get('/logout', verifyJWT, catchAsyncErrors(authController.logout));
-authRouter.get('/refresh', catchAsyncErrors(authController.refreshAuthToken));
-authRouter.get('/refreshUserSession', verifyJWT, catchAsyncErrors(authController.refreshUserSession));
+authRouter.get(
+  '/refreshToken',
+  catchAsyncErrors(authController.refreshAuthToken)
+);
+authRouter.get(
+  '/refreshUserSession',
+  verifyJWT,
+  catchAsyncErrors(authController.refreshUserSession)
+);
 
 // POST
 authRouter.post('/verify', catchAsyncErrors(authController.login));

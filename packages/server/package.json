@@ -27,7 +27,6 @@
     "build:ts": "tsc --build tsconfig.json"
   },
   "dependencies": {
-    "@tipdapp/api": "^0.0.0",
     "dotenv": "^16.0.3",
     "eslint-config-tipdapp-node": "^0.0.0",
     "http-status-codes": "^2.2.0",
