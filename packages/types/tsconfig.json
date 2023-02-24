@@ -2,7 +2,9 @@
   "extends": "@tipdapp/tsconfig/tsconfig.base.json",
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "dist"
+    "outDir": "dist",
+    "declaration": true,
+    "emitDeclarationOnly": true
   },
   "include": ["index.ts", "src/**/*.ts", "src/**/*.d.ts"]
 }

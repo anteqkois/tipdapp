@@ -1,4 +1,3 @@
-import { PartialExcept } from '@tipdapp/types';
 import {
   Page,
   Prisma,
@@ -9,7 +8,8 @@ import {
   Token,
   User,
   UserToken,
-} from './client';
+} from '@tipdapp/prisma/types';
+import { PartialExcept } from './utils';
 
 const user = Prisma.validator<Prisma.UserArgs>()({
   include: {
@@ -23,19 +23,11 @@ const user = Prisma.validator<Prisma.UserArgs>()({
   },
 });
 
-// TODO! Create helper to cast from UserSessionExpanded to specific User
+// TODO Create helper to cast from UserSessionExpanded to specific User
 type UserSession = PartialExcept<
   Prisma.UserGetPayload<typeof user>,
   [Role, 'userToken']
 >;
-
-// const mockDecodedUser: DecodedUser = {
-//   address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
-//   nick: 'anteqkois',
-//   ip: '120.00.00.01',
-//   roles: ['streamer'],
-//   activeRole: 'streamer',
-// };
 
 type ValueOf<T> = T[keyof T];
 type PickByValue<T, V extends T[keyof T]> = {

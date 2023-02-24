@@ -1,4 +1,3 @@
-// 'use client'
 import { signUp, validateFormData } from '@/api/auth';
 import { useLocalStorage } from '@/shared/hooks';
 import { Close } from '@/shared/ui';

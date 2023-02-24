@@ -19,5 +19,4 @@ const prisma = new PrismaClient({
   // log: ['query']
 });
 export * from './client';
-export * from './models';
 export { prisma };

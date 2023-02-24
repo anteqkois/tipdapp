@@ -1,4 +1,4 @@
-import { Tipper } from '@tipdapp/prisma';
+import { Tipper } from '@tipdapp/types';
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { transformApiInclude } from './utils';

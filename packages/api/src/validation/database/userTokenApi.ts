@@ -1,4 +1,4 @@
-import { UserToken } from '@tipdapp/prisma';
+import { UserToken } from '@tipdapp/types';
 import { Request, Response } from 'express';
 import { z } from 'zod';
 

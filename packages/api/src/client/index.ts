@@ -1,4 +1,4 @@
-import { auth } from './auth';
+import { page } from './page';
 
-const apiClient = { auth };
+const apiClient = { page };
 export { apiClient };

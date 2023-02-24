@@ -5,12 +5,11 @@
   "version": "0.0.0",
   "description": "Package to share prisma client and types",
   "main": "index.ts",
-  "types": "index.ts",
   "files": [
-    "package.json",
     "index.ts",
-    "models.ts",
-    "client"
+    "types.ts",
+    "client",
+    "package.json"
   ],
   "keywords": [
     "prisma client",

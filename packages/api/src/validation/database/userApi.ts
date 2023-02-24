@@ -1,7 +1,6 @@
-import { Role, User } from '@tipdapp/prisma';
+import { Role, User, UserSession } from '@tipdapp/types';
 import { Request, Response } from 'express';
 import { z } from 'zod';
-import { UserSession } from '../types';
 import { transformApiInclude } from './utils';
 
 const userInclude = z

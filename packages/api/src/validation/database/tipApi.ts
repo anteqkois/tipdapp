@@ -1,6 +1,6 @@
+import { TipUI } from '@tipdapp/types';
 import { Request, Response } from 'express';
 import { z } from 'zod';
-import { TipUI } from '../types';
 
 const findByAddress = z.object({
   query: z
