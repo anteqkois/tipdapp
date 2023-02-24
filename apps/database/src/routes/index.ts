@@ -20,7 +20,7 @@ mainRouter.use('/tipper', tipperRouter);
 
 mainRouter.use('/tip', verifyJWT, tipRouter);
 
-mainRouter.use('/tokenInfo', tokenRouter);
+mainRouter.use('/tokenBasicInfo', tokenRouter);
 
 mainRouter.use('/userToken', verifyJWT, userTokenRouter);
 

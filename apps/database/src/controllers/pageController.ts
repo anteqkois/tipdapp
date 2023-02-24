@@ -1,9 +1,7 @@
 import { pageService } from '@services/pageService';
 import { userService } from '@services/userService';
-import { createApiError } from '@tipdapp/api';
+import { createApiError, HttpStatusCode, pageApi, PageApi } from '@tipdapp/api';
 import { Prisma } from '@tipdapp/prisma';
-import { StatusCodes } from 'http-status-codes';
-import { PageApi, pageApi } from '../validation/pageApi';
 
 const findByAffixUrl = async (
   req: PageApi.FindByAffixUrl.Req,
@@ -25,7 +23,7 @@ const findByAffixUrl = async (
   });
 
   if (page) {
-    return res.status(StatusCodes.OK).send({ page, user });
+    return res.status(HttpStatusCode.Ok).send({ page, user });
   }
   // createApiError('Page not found for this role and affix.');
   return createApiError('Page not found for this role and affix.');
@@ -59,7 +57,7 @@ const update = async (req: PageApi.Update.Req, res: PageApi.Update.Res) => {
   });
 
   res
-    .status(StatusCodes.CREATED)
+    .status(HttpStatusCode.Continue)
     .send({ message: 'Your page was successfully updated' });
 };
 

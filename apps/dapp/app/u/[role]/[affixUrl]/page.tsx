@@ -3,7 +3,7 @@
 import { usePageFindByAffixUrl } from '@/modules/Page/hooks/usePageQuery';
 import { TipForm } from '@/modules/Tip/containers/TipForm';
 import { TokenPriceList } from '@/modules/Token/components/TokenPriceList';
-import { useTokenGetDetails } from '@/modules/Token/hooks/useTokenQuery';
+import { useTokenfindMany } from '@/modules/Token/hooks/useTokenQuery';
 import {
   Card,
   InfoParagraph,
@@ -29,7 +29,7 @@ export default function Page({ params }: Props) {
 
   // const activeTokensSymbol = ['sand', 'shib', 'bnb'];
 
-  const { data: tokenRes } = useTokenGetDetails({
+  const { data: tokenRes } = useTokenfindMany({
     // symbol: activeTokensSymbol,
   });
 

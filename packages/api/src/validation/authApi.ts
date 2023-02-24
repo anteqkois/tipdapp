@@ -1,5 +1,4 @@
-import { Role, Tipper, UserSession } from '@tipdapp/database';
-import { ModifyObjectKey } from '@tipdapp/types';
+import { ModifyObjectKey, Role, Tipper, UserSession } from '@tipdapp/types';
 import { Request, Response } from 'express';
 import { SiweMessage } from 'siwe';
 import { z } from 'zod';

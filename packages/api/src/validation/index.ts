@@ -4,3 +4,4 @@ export * from './tipperApi';
 export * from './tokenApi';
 export * from './userApi';
 export * from './userTokenApi';
+export * from './authApi';

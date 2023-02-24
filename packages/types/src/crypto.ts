@@ -31,4 +31,8 @@ type TokenCoinGecko = {
 // export type HandledNetworks = 'mainnet' |'localhost' | 'hardhat';
 type HandledNetworks = 'hardhat' 
 
-export type { TokenCoinGecko, HandledNetworks };
+type Address = `0x${string}`;
+
+type Hash = `0x${string}`;
+
+export type { TokenCoinGecko, HandledNetworks, Address, Hash };

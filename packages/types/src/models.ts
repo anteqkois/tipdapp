@@ -7,9 +7,10 @@ import {
   Tipper,
   Token,
   User,
-  UserToken,
+  UserToken as UserTokenDB,
 } from '@tipdapp/prisma/types';
-import { PartialExcept } from './utils';
+import { Address, Hash } from './crypto';
+import { ModifyObjectKey, PartialExcept } from './utils';
 
 const user = Prisma.validator<Prisma.UserArgs>()({
   include: {
@@ -23,10 +24,14 @@ const user = Prisma.validator<Prisma.UserArgs>()({
   },
 });
 
-// TODO Create helper to cast from UserSessionExpanded to specific User
-type UserSession = PartialExcept<
-  Prisma.UserGetPayload<typeof user>,
-  [Role, 'userToken']
+type UserSession = ModifyObjectKey<
+  PartialExcept<Prisma.UserGetPayload<typeof user>, [Role, 'userToken']>,
+  { address: Address; userToken: UserToken; streamer: NestedStreamer }
+>;
+
+type UserToken = ModifyObjectKey<
+  UserTokenDB,
+  { address: Address; txHash: Hash }
 >;
 
 type ValueOf<T> = T[keyof T];
@@ -109,4 +114,5 @@ export type {
   NestedTip,
   NestedToken,
   TipUI,
+  UserToken,
 };

@@ -1,5 +1,5 @@
+import { tipApi, TipApi } from '@tipdapp/api';
 import { tipService } from '../services/tipService';
-import { tipApi, TipApi } from '../validation/tipApi';
 
 const findByAddress = async (
   req: TipApi.FindByAddress.Req,

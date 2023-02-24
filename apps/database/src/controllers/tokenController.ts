@@ -1,8 +1,11 @@
 import { tokenService } from '@services/tokenService';
-import { tokenApi, TokenApi } from '../validation/tokenApi';
+import { tokenApi, TokenApi } from '@tipdapp/api';
 
-const find = async (req: TokenApi.Find.Req, res: TokenApi.Find.Res) => {
-  const { query } = tokenApi.find.parse({ ...req });
+const find = async (
+  req: TokenApi.FindBasicInfo.Req,
+  res: TokenApi.FindBasicInfo.Res
+) => {
+  const { query } = tokenApi.findBasicInfo.parse({ ...req });
 
   const tokens = await tokenService.findMany({
     where: {

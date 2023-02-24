@@ -1,4 +1,4 @@
-import { Role, User, UserSession } from '@tipdapp/types';
+import { NestedUser, Role, User, UserSession } from '@tipdapp/types';
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { transformApiInclude } from './utils';
@@ -82,7 +82,7 @@ export namespace UserApi {
   export namespace Find {
     const requestShape = find.shape;
     export type Query = z.input<typeof requestShape.query>;
-    export type ResBody = { user: User };
+    export type ResBody = { user: Partial<NestedUser> };
     export type Req = Request<any, any, any, Query>;
     export type Res = Response<ResBody>;
   }

@@ -1,5 +1,5 @@
 import { tipperService } from '@services/tipperService';
-import { tipperApi, TipperApi } from '../validation/tipperApi';
+import { tipperApi, TipperApi } from '@tipdapp/api';
 
 const find = async (req: TipperApi.Find.Req, res: TipperApi.Find.Res) => {
   const { query } = tipperApi.find.parse({ ...req });

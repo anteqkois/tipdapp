@@ -1,4 +1,3 @@
-// import './src/config/dotenv';
 import { dotenvConfig, handleErrors, notFound } from '@tipdapp/server';
 import cors from 'cors';
 import express from 'express';
@@ -17,7 +16,7 @@ server.use(
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     optionsSuccessStatus: 200,
-  }),
+  })
 );
 
 server.use(express.json());

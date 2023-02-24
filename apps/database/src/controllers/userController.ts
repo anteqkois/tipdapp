@@ -1,9 +1,7 @@
 import { userService } from '@services/userService';
-import { ValidationError } from '@tipdapp/api';
+import { HttpStatusCode, userApi, UserApi, ValidationError } from '@tipdapp/api';
 import { Prisma } from '@tipdapp/prisma';
 import { Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import { userApi, UserApi } from '../validation/userApi';
 
 const findByNick = async (
   req: UserApi.FindByNick.Req,
@@ -85,7 +83,7 @@ const validate = async (
     throw errors;
   }
 
-  res.status(StatusCodes.OK).json({ message: 'Validation passed.' });
+  res.status(HttpStatusCode.Ok).json({ message: 'Validation passed.' });
 };
 
 const create = async (req: UserApi.Create.Req, res: Response) => {

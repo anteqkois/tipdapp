@@ -1,5 +1,5 @@
+import { userTokenApi, UserTokenApi } from '@tipdapp/api';
 import { userTokenService } from '../services/userTokenService';
-import { userTokenApi, UserTokenApi } from '../validation/userTokenApi';
 
 const find = async (req: UserTokenApi.Find.Req, res: UserTokenApi.Find.Res) => {
   const { query } = userTokenApi.find.parse({ ...req });

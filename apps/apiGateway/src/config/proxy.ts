@@ -1,6 +1,13 @@
 type Service = Record<
   string,
-  { name: string; host: string; port: number; url: string; protocol: 'http' | 'https'; routes: string[] }
+  {
+    name: string;
+    host: string;
+    port: number;
+    url: string;
+    protocol: 'http' | 'https';
+    routes: string[];
+  }
 >;
 
 export const services: Service = {
@@ -10,7 +17,13 @@ export const services: Service = {
     port: 3002,
     protocol: 'http',
     url: 'http://localhost:3002/',
-    routes: ['/api/page', '/api/user', '/api/tip', '/api/tokenInfo', '/api/userToken'],
+    routes: [
+      '/api/page',
+      '/api/user',
+      '/api/tip',
+      '/api/tokenBasicInfo',
+      '/api/userToken',
+    ],
   },
   blockchainDataFeed: {
     host: 'localhost',

@@ -1,14 +1,13 @@
+import { HttpStatusCode, tokenApi, TokenApi } from '@tipdapp/api';
 import { Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
 import { cryptocurrencyService } from '../services/tokenService';
-import { TokenApi, tokenApi } from '../validation';
 
 const tokens = async (req: TokenApi.FindMany.Req, res: Response) => {
   const parsedReq = tokenApi.findMany.parse({ ...req });
 
   const data = await cryptocurrencyService.getTokens(parsedReq.query.symbol);
 
-  res.status(StatusCodes.OK).json({ tokens: data });
+  res.status(HttpStatusCode.Ok).json({ tokens: data });
 };
 
 const token = async (req: TokenApi.Find.Req, res: Response) => {
@@ -16,7 +15,7 @@ const token = async (req: TokenApi.Find.Req, res: Response) => {
 
   const data = await cryptocurrencyService.getToken(parsedReq.params.symbol);
 
-  res.status(StatusCodes.OK).json({ data });
+  res.status(HttpStatusCode.Ok).json({ data });
 };
 
 export const tokenController = {

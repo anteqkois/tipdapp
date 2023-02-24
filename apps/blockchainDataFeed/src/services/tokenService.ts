@@ -1,4 +1,5 @@
-import handledTokens from '../config/handledTokens.json';
+import { handledTokens } from '@tipdapp/server';
+import { TokenCoinGecko } from '@tipdapp/types';
 import { CONSTANTS, redis } from '../config/redis';
 
 const getTokens = async (symbols?: string[]) => {
