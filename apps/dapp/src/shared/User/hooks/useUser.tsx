@@ -1,14 +1,10 @@
 'use client';
 
-import {
-  logoutUser,
-  refreshToken,
-  refreshUserSession,
-  verifyMessage,
-} from '@/api/auth';
 import { useCookie, useLocalStorage } from '@/shared/hooks';
 import { AuthStatus } from '@/types';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { apiClient } from '@tipdapp/api';
+import { UserSession } from '@tipdapp/types';
 import { useRouter } from 'next/navigation';
 import {
   createContext,
@@ -23,7 +19,6 @@ import {
 import toast from 'react-hot-toast';
 import { SiweMessage } from 'siwe';
 import { useDisconnect } from 'wagmi';
-import { UserSessionDapp } from '../types';
 
 const UserContext = createContext<ReturnType>({} as ReturnType);
 
@@ -35,8 +30,8 @@ type ReturnType = {
     message: SiweMessage,
     signature: string
   ) => Promise<boolean>;
-  user?: UserSessionDapp;
-  setUser: Dispatch<SetStateAction<UserSessionDapp | undefined>>;
+  user?: UserSession;
+  setUser: Dispatch<SetStateAction<UserSession | undefined>>;
   status: AuthStatus;
   setStatus: Dispatch<SetStateAction<AuthStatus>>;
 };
@@ -44,7 +39,7 @@ type ReturnType = {
 type Props = { children: ReactNode };
 
 const UserProvider = ({ children }: Props) => {
-  const [user, setUser] = useLocalStorage<UserSessionDapp>('user');
+  const [user, setUser] = useLocalStorage<UserSession>('user');
   const [status, setStatus] = useCookie<AuthStatus>(
     'authStatus',
     'unauthenticated',
@@ -60,7 +55,7 @@ const UserProvider = ({ children }: Props) => {
       // refreshToken();
       // Refresh in 30s interval
       interval = setInterval(() => {
-        refreshToken();
+        apiClient.auth.refreshToken();
       }, 30 * 60 * 1000);
     }
 
@@ -81,7 +76,7 @@ const UserProvider = ({ children }: Props) => {
   const verifyUserMessage = useCallback(
     async (message: SiweMessage, signature: string) => {
       try {
-        const data = await verifyMessage<'user'>({
+        const data = await apiClient.auth.verifyMessage<'user'>({
           message,
           signature,
           type: 'user',
@@ -111,7 +106,7 @@ const UserProvider = ({ children }: Props) => {
     try {
       if (status === 'authenticated') {
         await disconnectAsync();
-        const data = await logoutUser();
+        const data = await apiClient.auth.logoutUser();
         toast.success(data.message);
         setStatus('unauthenticated');
         setUser(undefined);
@@ -128,7 +123,7 @@ const UserProvider = ({ children }: Props) => {
 
   const refreshUser = useCallback(async () => {
     try {
-      const data = await refreshUserSession();
+      const data = await apiClient.auth.refreshUserSession();
       setUser(data.user);
     } catch (error: any) {
       console.log(error);

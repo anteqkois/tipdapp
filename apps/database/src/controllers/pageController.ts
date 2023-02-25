@@ -2,6 +2,7 @@ import { pageService } from '@services/pageService';
 import { userService } from '@services/userService';
 import { createApiError, HttpStatusCode, pageApi, PageApi } from '@tipdapp/api';
 import { Prisma } from '@tipdapp/prisma';
+import { NestedPage, NestedUser } from '@tipdapp/types';
 
 const findByAffixUrl = async (
   req: PageApi.FindByAffixUrl.Req,
@@ -9,18 +10,18 @@ const findByAffixUrl = async (
 ) => {
   const { params } = pageApi.findByAffixUrl.parse({ ...req });
 
-  const page = await pageService.find({
+  const page = (await pageService.find({
     where: {
       AND: [{ affixUrl: params.affixUrl }, { role: params.role }],
     },
     include: {
       [params.role]: true,
     },
-  });
+  })) as NestedPage;
 
-  const user = await userService.find({
+  const user = (await userService.find({
     where: { [params.role]: { pageAffixUrl: params.affixUrl } },
-  });
+  })) as NestedUser;
 
   if (page) {
     return res.status(HttpStatusCode.Ok).send({ page, user });

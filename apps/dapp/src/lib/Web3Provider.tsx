@@ -1,11 +1,9 @@
 'use client';
 
-import { getNonce } from '@/api/auth';
 import { useSignUpForm } from '@/modules/SignUpForm/hooks/useSignUpForm';
 import { useMediaQuery } from '@/shared/hooks';
 import { errorToast } from '@/shared/ui';
-import { useTipper } from '@/shared/User/hooks/useTipper';
-import { useUser } from '@/shared/User/hooks/useUser';
+import { useTipper, useUser } from '@/shared/User/hooks';
 import {
   createAuthenticationAdapter,
   getDefaultWallets,
@@ -13,6 +11,7 @@ import {
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
+import { apiClient } from '@tipdapp/api';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useMemo } from 'react';
 import { SiweMessage } from 'siwe';
@@ -94,7 +93,7 @@ const RainbowKitProviders = ({ children }: { children: ReactNode }) => {
 
   const authAdapter = createAuthenticationAdapter({
     getNonce: async () => {
-      const data = await getNonce();
+      const data = await apiClient.auth.getNonce();
       return data.nonce ?? '';
     },
     createMessage: ({ nonce, address, chainId }) => {

@@ -1,15 +1,10 @@
-import { find } from '@/api/tips';
 import { useQuery } from '@tanstack/react-query';
+import { apiClient, TipApi } from '@tipdapp/api';
 
-type UseTipsProps = {
-  page?: number;
-  pageSize?: number;
-};
-
-const useTipsFind = ({ page = 1, pageSize = 50 }: UseTipsProps) =>
+const useTipsFind = (queryParams: TipApi.FindByAddress.Query) =>
   useQuery({
-    queryKey: ['tip', page, pageSize],
-    queryFn: () => find({ page, pageSize }),
+    queryKey: ['tip', queryParams?.page, queryParams?.pageSize],
+    queryFn: () => apiClient.tips.find(queryParams),
     suspense: true,
     retry: false,
   });
@@ -22,7 +17,7 @@ type UseTipsPaginantedProps = {
 const useTipsFindPaginated = ({ page, pageSize }: UseTipsPaginantedProps) =>
   useQuery({
     queryKey: ['tip', page, pageSize],
-    queryFn: () => find({ page, pageSize }),
+    queryFn: () => apiClient.tips.find({ page, pageSize }),
     keepPreviousData: true,
     suspense: true,
     retry: false,

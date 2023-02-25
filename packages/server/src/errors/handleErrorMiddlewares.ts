@@ -1,4 +1,9 @@
-import { ApiError, createApiError, isOperationalErrorArray, ValidationError } from '@tipdapp/api';
+import {
+  ApiError,
+  createApiError,
+  isOperationalErrorArray,
+  ValidationError,
+} from '@tipdapp/api';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ZodError } from 'zod';
@@ -15,7 +20,7 @@ const notFound = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const catchAsyncErrors =
-  (handler: (req: Request<any, any, any, any>, res: Response, next: NextFunction) => void) =>
+  (handler: (req: Request, res: Response, next: NextFunction) => void) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await handler(req, res, next);
@@ -25,7 +30,8 @@ const catchAsyncErrors =
   };
 
 const catchErrors =
-  (handler: (req: Request, res: Response, next: NextFunction) => void) => (req: Request, res: Response, next: NextFunction) => {
+  (handler: (req: Request, res: Response, next: NextFunction) => void) =>
+  (req: Request, res: Response, next: NextFunction) => {
     try {
       handler(req, res, next);
     } catch (error) {
@@ -34,7 +40,7 @@ const catchErrors =
   };
 
 // If  error is operational throw away and handle in handelErrors middleware, other way create ApiError with given message
-const throwIfOperational = (err: any, helpMessage: string) => {
+const throwIfOperational = (err: unknown, helpMessage: string) => {
   //! TODO handle Siwe Error
   //   {
   //    success: false,
@@ -54,7 +60,11 @@ const throwIfOperational = (err: any, helpMessage: string) => {
   //      received: 'Resolved address to be 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
   //    }
   //  }
-  if (err?.isOperational || err instanceof ZodError || isOperationalErrorArray(err)) {
+  if (
+    (err && typeof err === 'object' && 'isOperational' in err) ||
+    err instanceof ZodError ||
+    (Array.isArray(err) && isOperationalErrorArray(err))
+  ) {
     throw err;
   } else if (helpMessage) {
     console.log(err);
@@ -69,11 +79,15 @@ const handleErrors = (err: any, req: Request, res: Response) => {
   console.dir(err);
   if (err.type === 'ApiError' || err.type === 'ValidationError') {
     errorLogger.error('', err);
-    return res.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).send({ error: [err] });
+    return res
+      .status(err.status || StatusCodes.INTERNAL_SERVER_ERROR)
+      .send({ error: [err] });
   }
   if (isOperationalErrorArray(err)) {
     errorLogger.error('Error array', err);
-    return res.status(err[0].status || StatusCodes.INTERNAL_SERVER_ERROR).json({ error: err });
+    return res
+      .status(err[0].status || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: err });
   }
   if (err instanceof ZodError) {
     const error = ValidationError.fromZodErrorArray(err.issues);
@@ -89,4 +103,11 @@ const handleErrors = (err: any, req: Request, res: Response) => {
   });
 };
 
-export { isOperationalErrorArray, notFound, catchAsyncErrors, catchErrors, throwIfOperational, handleErrors };
+export {
+  isOperationalErrorArray,
+  notFound,
+  catchAsyncErrors,
+  catchErrors,
+  throwIfOperational,
+  handleErrors,
+};

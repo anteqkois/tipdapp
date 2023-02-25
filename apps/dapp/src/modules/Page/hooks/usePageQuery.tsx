@@ -1,12 +1,13 @@
-import { findByAffixUrl } from '@/api/page';
 import { useQuery } from '@tanstack/react-query';
+import { apiClient, PageApi } from '@tipdapp/api';
 
 export const usePageFindByAffixUrl = (
-  body: Pick<Parameters<typeof findByAffixUrl>, '0'>['0']
+  params: PageApi.FindByAffixUrl.Params,
+  queryParams: PageApi.FindByAffixUrl.Query
 ) =>
   useQuery({
-    queryKey: ['page', body.params.role, body.params.affixUrl],
-    queryFn: () => findByAffixUrl(body),
+    queryKey: ['page', params.role, params.affixUrl],
+    queryFn: () => apiClient.page.findByAffixUrl({ params, queryParams }),
     keepPreviousData: true,
     suspense: true,
     retry: false,

@@ -1,15 +1,10 @@
-import { find } from '@/api/user';
 import { useQuery } from '@tanstack/react-query';
-import { UserApi } from '@tipdapp/database';
+import { apiClient, UserApi } from '@tipdapp/api';
 
-type UseTipsProps = {
-  queryParams: UserApi.Find.Query;
-};
-
-export const useUserFind = ({ queryParams }: UseTipsProps) =>
+export const useUserFind = (queryParams: UserApi.Find.Query) =>
   useQuery({
     queryKey: ['user'],
-    queryFn: () => find(queryParams),
+    queryFn: () => apiClient.user.find(queryParams),
     suspense: true,
     retry: false,
   });

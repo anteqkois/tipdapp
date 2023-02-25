@@ -1,11 +1,5 @@
-import { NestedPage, NestedUser } from '@tipdapp/types';
 import { PageApi } from '../validation';
 import { api } from './axiosConfig';
-
-type FindResponse = {
-  page: NestedPage;
-  user: NestedUser;
-};
 
 const findByAffixUrl = async ({
   params,
@@ -14,9 +8,12 @@ const findByAffixUrl = async ({
   params: PageApi.FindByAffixUrl.Params;
   queryParams?: PageApi.FindByAffixUrl.Query;
 }) =>
-  api.get<never, FindResponse>(`/page/${params.role}/${params.affixUrl}`, {
-    params: queryParams,
-  });
+  api.get<never, PageApi.FindByAffixUrl.ResBody>(
+    `/page/${params.role}/${params.affixUrl}`,
+    {
+      params: queryParams,
+    }
+  );
 
 const update = async (body: PageApi.Update.Body) =>
   api.put<never, PageApi.Update.ResBody>('/page', body);

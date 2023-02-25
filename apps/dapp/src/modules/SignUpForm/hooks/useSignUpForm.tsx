@@ -1,11 +1,15 @@
-import { signUp, validateFormData } from '@/api/auth';
 import { useLocalStorage } from '@/shared/hooks';
 import { Close } from '@/shared/ui';
-import { useUser } from '@/shared/User/hooks/useUser';
+import { useUser } from '@/shared/User/hooks';
 import { AsyncStatus } from '@/types';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { isApiError, isValidationError, ValidationError } from '@tipdapp/api';
-import { UserApi } from '@tipdapp/database';
+import {
+  apiClient,
+  isApiError,
+  isValidationError,
+  UserApi,
+  ValidationError,
+} from '@tipdapp/api';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -50,7 +54,7 @@ export const useSignUpForm = () => {
           if (step === 1) {
             // validate userData on backend
             try {
-              await validateFormData(values);
+              await apiClient.auth.validateFormData(values);
               setFormData(values);
               setStep((prev) => prev + 1);
             } catch (error: any) {
@@ -83,7 +87,7 @@ export const useSignUpForm = () => {
 
   const register = async (message: SiweMessage, signature: string) => {
     try {
-      const response = await signUp({
+      const response = await apiClient.auth.signUp({
         message,
         signature,
         formData: JSON.parse(localStorage.getItem('formData') ?? ''),

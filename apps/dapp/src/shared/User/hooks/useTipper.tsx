@@ -1,10 +1,10 @@
 'use client';
 
-import { verifyMessage } from '@/api/auth';
 import { useLocalStorage } from '@/shared/hooks';
-import { AuthStatus } from '@/types/index';
+import { AuthStatus } from '@/types';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { Tipper } from '@tipdapp/database';
+import { apiClient } from '@tipdapp/api';
+import { Tipper } from '@tipdapp/types';
 import {
   createContext,
   ReactNode,
@@ -52,7 +52,7 @@ const TipperProvider = ({ children }: Props) => {
   const verifyTipperMessage = useCallback(
     async (message: SiweMessage, signature: string) => {
       try {
-        const data = await verifyMessage<'tipper'>({
+        const data = await apiClient.auth.verifyMessage<'tipper'>({
           message,
           signature,
           type: 'tipper',

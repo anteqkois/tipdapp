@@ -1,18 +1,18 @@
-import { find, findMany } from '@/api/token';
 import { useQuery } from '@tanstack/react-query';
-import { TokenApi } from '@tipdapp/database';
+import { apiClient, TokenApi } from '@tipdapp/api';
 
-const useTokenFind = (query?: TokenApi.Find.Query) =>
+const useTokenFind = (query?: TokenApi.FindBasicInfo.Query) =>
   useQuery({
     queryKey: ['tokenBasicInfo'],
-    queryFn: () => find(query),
+    queryFn: () => apiClient.token.findBasicInfo(query),
     suspense: true,
     retry: false,
   });
-const useTokenfindMany = (query?: { symbol?: string[] }) =>
+
+const useTokenfindMany = (query?: TokenApi.FindMany.Query) =>
   useQuery({
     queryKey: ['token'],
-    queryFn: () => findMany(query),
+    queryFn: () => apiClient.token.findMany(query),
     suspense: true,
     retry: false,
   });

@@ -5,8 +5,10 @@ import { z } from 'zod';
 const findByAddress = z.object({
   query: z
     .object({
-      page: z.string(),
-      pageSize: z.string(),
+      page: z.union([z.string(), z.number()]),
+      pageSize: z.union([z.string(), z.number()]),
+      // page: z.string(),
+      // pageSize: z.string(),
     })
     .optional(),
 });

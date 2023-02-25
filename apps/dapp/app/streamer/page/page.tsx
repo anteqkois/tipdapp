@@ -1,11 +1,10 @@
 'use client';
 
-import { update } from '@/api/page';
 import {
   formTokenOptions,
   SelectTokens,
 } from '@/modules/Token/components/SelectTokens';
-import { useTokenFind } from '@/modules/Token/hooks/useTokenQuery';
+import { useTokenFind } from '@/modules/Token/hooks';
 import {
   Button,
   Card,
@@ -15,9 +14,13 @@ import {
   TextArea,
   Tooltip,
 } from '@/shared/ui';
-import { useUser } from '@/shared/User/hooks/useUser';
-import { isValidationError, ValidationError } from '@tipdapp/api';
-import { PageApi } from '@tipdapp/database';
+import { useUser } from '@/shared/User/hooks';
+import {
+  apiClient,
+  isValidationError,
+  PageApi,
+  ValidationError,
+} from '@tipdapp/api';
 import { useFormik } from 'formik';
 import { useMemo } from 'react';
 import toast from 'react-hot-toast';
@@ -51,7 +54,7 @@ function Page() {
       if (!Object.keys(formik.errors).length) {
         try {
           // pageApi.update.parse(values);
-          const { message } = await update(values);
+          const { message } = await apiClient.page.update(values);
           refreshUser();
           toast.success(message);
         } catch (error: any) {

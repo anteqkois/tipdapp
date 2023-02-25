@@ -3,13 +3,14 @@
 import { ReduxProvider } from '@/lib/redux/ReduxProvider';
 import { WagmiProvider } from '@/lib/Web3Provider';
 import { ModalProvider } from '@/shared/hooks';
-import { UserProvider } from '@/shared/User/hooks/useUser';
+import { UserProvider } from '@/shared/User/hooks';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 5 * 60 * 1000 } },
+  // defaultOptions: { queries: { staleTime: 5 * 60 * 1000 } },
+  defaultOptions: { queries: { staleTime: 0, cacheTime: 0 } },
 });
 
 type Props = {

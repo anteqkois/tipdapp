@@ -7,8 +7,14 @@ const findByAddress = async (
 ) => {
   const { query } = tipApi.findByAddress.parse({ ...req });
 
-  const page = parseInt(query?.page ?? '1', 10);
-  const pageSize = parseInt(query?.pageSize ?? '20', 10);
+  const page =
+    typeof query?.page === 'number'
+      ? query.page
+      : parseInt(query?.page ?? '1', 10);
+  const pageSize =
+    typeof query?.pageSize === 'number'
+      ? query.pageSize
+      : parseInt(query?.pageSize ?? '20', 10);
 
   const skip = (page - 1) * pageSize;
 

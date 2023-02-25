@@ -1,4 +1,9 @@
-import { dotenvConfig, handleErrors, logRequest, notFound } from '@tipdapp/server';
+import {
+  dotenvConfig,
+  handleErrors,
+  logRequest,
+  notFound,
+} from '@tipdapp/server';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
@@ -25,7 +30,7 @@ for (const [key, value] of Object.entries(services)) {
       target: value.url,
       changeOrigin: true,
       timeout: 30 * 1000,
-    }),
+    })
   );
 }
 
