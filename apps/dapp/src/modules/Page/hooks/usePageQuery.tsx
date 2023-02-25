@@ -3,7 +3,7 @@ import { apiClient, PageApi } from '@tipdapp/api';
 
 export const usePageFindByAffixUrl = (
   params: PageApi.FindByAffixUrl.Params,
-  queryParams: PageApi.FindByAffixUrl.Query
+  queryParams?: PageApi.FindByAffixUrl.Query
 ) =>
   useQuery({
     queryKey: ['page', params.role, params.affixUrl],

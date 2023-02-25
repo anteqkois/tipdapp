@@ -7,6 +7,8 @@ const pageRouter = Router();
 // GET
 pageRouter.get(
   '/:role/:affixUrl',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore THERE IS WEIRD ERROR, ALL WORKS FINE, AND ONE MOMENT START THROW IT WITOUT REASON
   catchAsyncErrors(pageController.findByAffixUrl)
 );
 

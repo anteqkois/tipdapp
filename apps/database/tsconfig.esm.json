@@ -1,3 +1,0 @@
-{
-  "extends": "@tipdapp/tsconfig/tsconfig.esm.json"
-}

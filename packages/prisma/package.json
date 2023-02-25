@@ -12,16 +12,23 @@
     "package.json"
   ],
   "keywords": [
+    "prisma",
+    "Prisma",
     "prisma client",
     "prisma types",
     "type",
     "types",
     "share"
   ],
-  "scripts": {},
+  "scripts": {
+    "db:update": "npx prisma db push && ts-node prisma/seed.ts"
+  },
   "devDependencies": {
     "faker": "^6.6.6",
     "prisma": "^4.10.1",
     "typescript": "^4.9.5"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }

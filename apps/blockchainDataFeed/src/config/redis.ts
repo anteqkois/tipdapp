@@ -18,19 +18,13 @@ client.on('error', (err) => console.log('Redis Client Error', err));
   console.log('> Microservice connect to Redis database.');
 })();
 
-// const getOrCash = async (key: string, callback: Promise<() => any>) => {
-const getOrCache = async (key: string, callback: () => Promise<any>) => async () => {
-  const data = await client.get(key);
-  if (data) return JSON.parse(data);
-  const freshData = await callback();
-  client.set(key, JSON.stringify(freshData));
-  return freshData;
-  // new Promise(async (resolve, reject) => {
-  //   const data = await client.get(key);
-  //   if (data) resolve(JSON.parse(data));
-  //   const freshData = await callback();
-  //   client.set(key, JSON.stringify(freshData));
-  //   resolve(freshData);
-};
+const getOrCache =
+  async (key: string, callback: () => Promise<unknown>) => async () => {
+    const data = await client.get(key);
+    if (data) return JSON.parse(data);
+    const freshData = await callback();
+    client.set(key, JSON.stringify(freshData));
+    return freshData;
+  };
 
 export { client as redis, getOrCache, CONSTANTS };

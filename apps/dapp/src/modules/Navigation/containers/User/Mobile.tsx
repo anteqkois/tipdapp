@@ -1,6 +1,6 @@
 'use client';
 
-import { UserSessionDapp } from '@/shared/User/types';
+import { UserSession } from '@tipdapp/types';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { Hamburger, Navlink, RainbowKitButtonMobile } from '../../components';
@@ -10,7 +10,7 @@ const defaultOptionStyle =
   'flex items-center gap-3 p-4 border-b border-neutral-150 font-semibold uppercase group text-neutral-600 hover:text-neutral-900 hover:cursor-pointer hover:bg-neutral-150';
 
 type Props = {
-  user?: UserSessionDapp;
+  user?: UserSession;
   navigationOption: NavigationOption[];
 };
 

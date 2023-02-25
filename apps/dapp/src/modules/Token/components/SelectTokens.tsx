@@ -1,4 +1,4 @@
-import { Token } from '@tipdapp/database';
+import { Token } from '@tipdapp/types';
 import Image from 'next/image';
 import ReactSelect, {
   components,

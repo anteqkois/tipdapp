@@ -2,7 +2,7 @@ import { TokenApi } from '../validation';
 import { api } from './axiosConfig';
 
 const findBasicInfo = async (queryParams?: TokenApi.FindBasicInfo.Query) =>
-  api.get<never, TokenApi.FindBasicInfo.Res>('tokenBasicInfo', {
+  api.get<never, TokenApi.FindBasicInfo.ResBody>('tokenBasicInfo', {
     params: queryParams,
   });
 

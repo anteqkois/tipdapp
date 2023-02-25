@@ -3,12 +3,12 @@ import { dateFormat } from '@/lib/dayjs';
 import { useClipboard, useMediaQuery } from '@/shared/hooks';
 import { Card, ViewOnExplorer } from '@/shared/ui';
 import { cutAddress } from '@/utils';
+import { UserToken } from '@tipdapp/types';
 import { useNetwork } from 'wagmi';
 import { useUserToken } from '../hooks/useUserTokenContract';
-import { UserTokenDapp } from '../types';
 
 type Props = {
-  token: UserTokenDapp;
+  token: UserToken;
 };
 
 export const TokenPanel = ({ token }: Props) => {

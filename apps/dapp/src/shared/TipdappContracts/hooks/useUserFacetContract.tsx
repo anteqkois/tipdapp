@@ -7,6 +7,7 @@ import {
 import { useUser } from '@/shared/User/hooks/useUser';
 import { constants } from '@/utils/constants';
 import { selectWeb3Error } from '@/utils/selectWeb3Error';
+import { HandledNetworksCapitalize } from '@tipdapp/types';
 import { Hash } from '@wagmi/core';
 import { useState } from 'react';
 import {
@@ -19,20 +20,18 @@ import {
 } from 'wagmi';
 import { RegisterUserTransaction } from '../components/RegisterUserTransaction';
 import { userFacetInstance } from '../contractInstances';
-import { AvaibleChains } from '../types';
 
 export const useUserFacet = () => {
   const provider = useProvider();
   const [hashToObserve, setHashToObserve] = useState<Hash>();
 
   const { user, refreshUser } = useUser();
-  // const { ClipboardIcon } = useClipboard();
   const { chain } = useNetwork();
   useConfirmationToast(hashToObserve, 5);
 
   // USER TOKEN
   const userToken = useContractRead({
-    ...userFacetInstance[chain?.name as AvaibleChains],
+    ...userFacetInstance[chain?.name as HandledNetworksCapitalize],
     functionName: 'userToken',
     args: [user!.address],
     // watch: true,
@@ -40,14 +39,14 @@ export const useUserFacet = () => {
 
   // REGISTER USER
   const { config } = usePrepareContractWrite({
-    ...userFacetInstance[chain?.name as AvaibleChains],
+    ...userFacetInstance[chain?.name as HandledNetworksCapitalize],
     functionName: 'registerUser',
     args: ['', ''],
     enabled: userToken.data === constants.ethereum.AddressZero,
   });
 
   const contract = useContract({
-    ...userFacetInstance[chain?.name as AvaibleChains],
+    ...userFacetInstance[chain?.name as HandledNetworksCapitalize],
     signerOrProvider: provider,
   });
 
@@ -106,6 +105,7 @@ export const useUserFacet = () => {
 
   return {
     contract,
+    // registerUser: { ...registerUser, call: registerUserCall },
     registerUser: { ...registerUser, call: registerUserCall },
     userToken,
   };

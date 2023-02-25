@@ -1,5 +1,5 @@
 import { InfoMessage } from '@/shared/ui';
-import { TipUI } from '@tipdapp/database';
+import { TipUI } from '@tipdapp/types';
 import { Tip } from '../components/Tip';
 import { TipMinimalist } from '../components/TipMinimalist';
 

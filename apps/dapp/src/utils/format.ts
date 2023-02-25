@@ -1,10 +1,10 @@
-import { Prisma } from '@tipdapp/database';
+import { Prisma } from '@tipdapp/prisma';
 import { BigNumber, utils } from 'ethers';
 
 const cutNumber = (amount: string) => {
   // 7 digits exponent, 5 mantissa
   const [exponent, mantissa] = amount.split('.');
-  return `${exponent}${mantissa ? `.${  mantissa.slice(0, 5)}` : ''}`;
+  return `${exponent}${mantissa ? `.${mantissa.slice(0, 5)}` : ''}`;
 };
 
 const parseNotation = (number: Prisma.Decimal) => {

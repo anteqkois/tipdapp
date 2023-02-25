@@ -1,7 +1,7 @@
 'use client';
 
 import { ErrorMessage } from '@/shared/ui';
-import { ApiError } from '@tipdapp/database';
+import { ApiError } from '@tipdapp/api';
 import { useEffect } from 'react';
 
 export default function Error({ error }: { error: ApiError[] }) {

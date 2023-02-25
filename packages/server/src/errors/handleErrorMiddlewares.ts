@@ -1,7 +1,9 @@
 import {
   ApiError,
   createApiError,
+  isApiError,
   isOperationalErrorArray,
+  isValidationError,
   ValidationError,
 } from '@tipdapp/api';
 import { NextFunction, Request, Response } from 'express';
@@ -63,21 +65,22 @@ const throwIfOperational = (err: unknown, helpMessage: string) => {
   if (
     (err && typeof err === 'object' && 'isOperational' in err) ||
     err instanceof ZodError ||
-    (Array.isArray(err) && isOperationalErrorArray(err))
+    isOperationalErrorArray(err)
   ) {
     throw err;
   } else if (helpMessage) {
     console.log(err);
     createApiError(helpMessage);
   }
-  errorLogger.error('no operational', err);
+  errorLogger.error('no operational error', err);
   throw err;
 };
 
-const handleErrors = (err: any, req: Request, res: Response) => {
+const handleErrors = (err: unknown, req: Request, res: Response) => {
   // eslint-disable-next-line no-console
   console.dir(err);
-  if (err.type === 'ApiError' || err.type === 'ValidationError') {
+
+  if (isValidationError(err) || isApiError(err)) {
     errorLogger.error('', err);
     return res
       .status(err.status || StatusCodes.INTERNAL_SERVER_ERROR)
@@ -98,7 +101,19 @@ const handleErrors = (err: any, req: Request, res: Response) => {
   }
 
   errorLogger.error('no operational', err);
-  return res.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
+
+  // Check if err have status code
+  if (
+    err &&
+    typeof err === 'object' &&
+    'status' in err &&
+    typeof err.status === 'number'
+  ) {
+    res.status(err.status);
+  } else {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+  return res.json({
     error: [new ApiError('Something went wrong on server, try later.')],
   });
 };

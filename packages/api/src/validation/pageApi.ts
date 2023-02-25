@@ -9,8 +9,8 @@ const pageInclude = z
 
 const findByAffixUrl = z.object({
   params: z.object({
-    affixUrl: z.string(),
     role: z.nativeEnum(Role),
+    affixUrl: z.string(),
   }),
   query: z
     .object({
@@ -69,7 +69,7 @@ export namespace PageApi {
   export namespace Update {
     const reqShape = update.shape;
     export type Body = z.input<typeof reqShape.body>;
-    export type ResBody = any;
+    export type ResBody = { message: string };
     export type Req = Request<any, any, Body, any>;
     export type Res = Response<ResBody>;
   }

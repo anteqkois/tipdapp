@@ -1,6 +1,6 @@
 import { AsyncStatus } from '@/types';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ApiError, ValidationError } from '@tipdapp/database';
+import { ApiError, ValidationError } from '@tipdapp/api';
 
 const getSettingsByUser = createAsyncThunk(
   'settings/get',

@@ -4,7 +4,7 @@ import {
   formTokenOptions,
   SelectTokens,
 } from '@/modules/Token/components/SelectTokens';
-import { useTokenFind } from '@/modules/Token/hooks/useTokenQuery';
+import { useTokenFind } from '@/modules/Token/hooks';
 import {
   Button,
   CustomConnectButton,
@@ -15,7 +15,8 @@ import {
   TextArea,
 } from '@/shared/ui';
 import { useTipper } from '@/shared/User/hooks/useTipper';
-import { Token, ValidationError } from '@tipdapp/database';
+import { ValidationError } from '@tipdapp/api';
+import { Token } from '@tipdapp/types';
 import { useFormik } from 'formik';
 import { useMemo } from 'react';
 import { z } from 'zod';
@@ -36,6 +37,7 @@ export const TipForm = () => {
   const { data } = useTokenFind();
   const { status } = useTipper();
 
+  
   const tokensToSelect = useMemo(
     () => data?.tokens && formTokenOptions(data.tokens),
     [data?.tokens]

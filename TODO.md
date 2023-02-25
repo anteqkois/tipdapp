@@ -29,3 +29,4 @@
 - [ ] Delete types from modules in dapp
 - [ ] Replace http-status-codes codes to use it them from axios
 - [ ] Delete uneccesery packages from microservices
+- [ ] Check if all package needs ts-node and tsc packages

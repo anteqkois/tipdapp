@@ -9,7 +9,7 @@
  */
 // import { File } from '@prisma/client';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
-import { File } from '@tipdapp/database';
+import { File } from '@tipdapp/types';
 import Image, { ImageProps } from 'next/image';
 
 type AvatarProps = {

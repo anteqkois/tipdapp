@@ -1,12 +1,12 @@
 import { CheckCircleIcon as FalseIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as TrueIcon } from '@heroicons/react/24/solid';
-import { useMemo } from 'react';
+import { HTMLAttributes, useMemo } from 'react';
 import { Tooltip } from './Tooltip';
 
 type Props = {
   flag: boolean;
   tooltip?: string;
-};
+} & HTMLAttributes<HTMLSpanElement>;
 
 const flagIcon: Record<number, JSX.Element> = {
   1: (
@@ -17,8 +17,17 @@ const flagIcon: Record<number, JSX.Element> = {
   ),
 };
 
-export const Flag = ({ flag, tooltip }: Props) => {
+export const Flag = ({ flag, tooltip, className }: Props) => {
   const icon = useMemo(() => flagIcon[Number(flag)], [flag]);
 
-  return tooltip ? <Tooltip content={tooltip}>{icon}</Tooltip> : icon;
+  return tooltip ? (
+    <Tooltip
+      content={tooltip}
+      className={className}
+    >
+      {icon}
+    </Tooltip>
+  ) : (
+    icon
+  );
 };

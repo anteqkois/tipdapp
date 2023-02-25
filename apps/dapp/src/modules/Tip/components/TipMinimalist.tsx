@@ -8,7 +8,7 @@ import {
   ArrowsPointingOutIcon,
   AtSymbolIcon,
 } from '@heroicons/react/24/outline';
-import { TipUI } from '@tipdapp/database';
+import { TipUI } from '@tipdapp/types';
 
 export const TipMinimalist = ({
   txHash,

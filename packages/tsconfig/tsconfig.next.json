@@ -4,7 +4,9 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "noEmit": false,
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
     "outDir": "dist",
     "sourceMap": true,
     "module": "esnext",

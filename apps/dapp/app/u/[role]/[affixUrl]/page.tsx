@@ -12,7 +12,7 @@ import {
   Verified,
 } from '@/shared/ui';
 import { Avatar } from '@/shared/User/components/Avatar';
-import { Role } from '@tipdapp/database';
+import { Role } from '@tipdapp/types';
 import Image from 'next/image';
 
 type Props = {
@@ -23,9 +23,9 @@ type Props = {
 };
 
 export default function Page({ params }: Props) {
-  const { data: pageRes } = usePageFindByAffixUrl({
+  const { data: pageRes } = usePageFindByAffixUrl(
     params,
-  });
+  );
 
   // const activeTokensSymbol = ['sand', 'shib', 'bnb'];
 

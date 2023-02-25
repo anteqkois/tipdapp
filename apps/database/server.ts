@@ -1,13 +1,19 @@
-import './src/config/dotenv';
 import './src/config/paths';
 
-import { handleErrors, logRequest, notFound } from '@tipdapp/server';
+import {
+  dotenvConfig,
+  handleErrors,
+  logRequest,
+  notFound,
+} from '@tipdapp/server';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import { queryParser } from 'express-query-parser';
 import { useCors } from './src/config/cors';
 import { startQueueConsumers } from './src/queue';
 import { mainRouter } from './src/routes';
+
+dotenvConfig();
 
 const port = process.env.PORT || 3002;
 // const dev = process.env.NODE_ENV !== 'production';

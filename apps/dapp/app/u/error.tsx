@@ -1,7 +1,7 @@
 'use client';
 
 import { ErrorPage } from '@/shared/ui';
-import { ApiError, ValidationError } from '@tipdapp/database';
+import { ApiError, ValidationError } from '@tipdapp/api';
 
 type Props = {
   error: unknown[];

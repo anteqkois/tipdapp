@@ -30,9 +30,10 @@ type TokenCoinGecko = {
 // export type HandledNetworks = 'rinkeby' | 'localhost' | 'hardhat';
 // export type HandledNetworks = 'mainnet' |'localhost' | 'hardhat';
 type HandledNetworks = 'hardhat' 
+type HandledNetworksCapitalize = Capitalize<HandledNetworks>; 
 
 type Address = `0x${string}`;
 
 type Hash = `0x${string}`;
 
-export type { TokenCoinGecko, HandledNetworks, Address, Hash };
+export type { TokenCoinGecko, HandledNetworks, Address, Hash, HandledNetworksCapitalize };

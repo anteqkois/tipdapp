@@ -1,7 +1,7 @@
 'use client';
 
 import { PageSpinner } from '@/shared/ui';
-import { Role } from '@tipdapp/database';
+import { Role } from '@tipdapp/types';
 import { useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 import { useUser } from './hooks/useUser';
