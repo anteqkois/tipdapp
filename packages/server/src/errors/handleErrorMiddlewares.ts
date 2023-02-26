@@ -76,7 +76,14 @@ const throwIfOperational = (err: unknown, helpMessage: string) => {
   throw err;
 };
 
-const handleErrors = (err: unknown, req: Request, res: Response) => {
+// next pamram must be always
+const handleErrors = (
+  err: unknown,
+  req: Request,
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  next: NextFunction
+) => {
   // eslint-disable-next-line no-console
   console.dir(err);
 

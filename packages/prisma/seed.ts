@@ -1,13 +1,13 @@
 import { faker } from '@faker-js/faker';
-import client from './client';
-import coins from './tokens.json';
+import { handledTokens } from '@tipdapp/server';
+import { PrismaClient } from './client';
 
-const { PrismaClient } = client;
+// const { PrismaClient } = client;
 
 const prisma = new PrismaClient();
 
-const ADDRESS_WALLET_DEV = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
-const ADDRESS_WALLET_DEV_2 = '0x69E952d100e786aAA6B63a3473D67ccaF1183271';
+const ADDRESS_WALLET_DEV = '0x69E952d100e786aAA6B63a3473D67ccaF1183271';
+const ADDRESS_WALLET_DEV_2 = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
 const ADDRESS_SAND = '0x3845badAde8e6dFF049820680d1F14bD3903a5d0';
 
 async function main() {
@@ -59,11 +59,11 @@ async function main() {
   console.log('Create user:', user);
 
   const createTokenPromises = [];
-  for (let i = 0; i < coins.length; i++) {
-    const { address, chainId, coinGeckoId, imageUrl, name, symbol } = coins[i];
+  for (let i = 0; i < handledTokens.length; i++) {
+    const { address, chainId, coinGeckoId, imageUrl, name, symbol } =
+      handledTokens[i];
 
     createTokenPromises.push(
-      //@ts-expect-error
       prisma.token.create({
         data: {
           address,
@@ -90,7 +90,6 @@ async function main() {
   const createTipperPromises = [];
   for (let index = 0; index < 3; index++) {
     createTipperPromises.push(
-      //@ts-expect-error
       prisma.tipper.create({
         data: {
           address: faker.finance.ethereumAddress(),
@@ -133,7 +132,6 @@ async function main() {
       max: 10000_000000000000000000,
     });
     createTipPromises.push(
-      //@ts-expect-error
       prisma.tip.create({
         data: {
           txHash: faker.datatype.hexadecimal({ length: 10 }),

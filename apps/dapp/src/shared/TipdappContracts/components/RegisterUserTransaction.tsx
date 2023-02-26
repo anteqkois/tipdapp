@@ -31,10 +31,10 @@ export const RegisterUserTransaction = ({ hash, tokenAddress }: Props) => {
           />
         </p>
       </div>
-      <p className="pl-1">
+      {/* <p className="pl-1">
         After confirming with 5 blocks, you will be automatically redirected to
         the token panel.
-      </p>
+      </p> */}
     </div>
   );
 };

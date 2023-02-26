@@ -117,7 +117,7 @@ export const TipForm = () => {
         className="w-full"
         // disabled={!registerUser.write}
       >
-        Send Tip
+        Prepare Tip Transaction
       </Button>
       <p className="px-2 pt-2">
         Making a payment, you accept the{' '}

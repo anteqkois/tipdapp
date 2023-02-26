@@ -58,7 +58,7 @@ const update = async (req: PageApi.Update.Req, res: PageApi.Update.Res) => {
   });
 
   res
-    .status(HttpStatusCode.Continue)
+    .status(HttpStatusCode.Ok)
     .send({ message: 'Your page was successfully updated' });
 };
 

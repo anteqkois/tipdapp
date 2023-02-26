@@ -53,16 +53,12 @@ function Page() {
     onSubmit: async (values: PageApi.Update.Body) => {
       if (!Object.keys(formik.errors).length) {
         try {
-          // pageApi.update.parse(values);
           const { message } = await apiClient.page.update(values);
           refreshUser();
           toast.success(message);
         } catch (error: any) {
           if (isValidationError(error[0])) {
             formik.setErrors(ValidationError.mapArrayByField(error));
-            // } else if (error instanceof ZodError) {
-            //   const err = ValidationError.fromZodErrorArray(error.issues);
-            //   formik.setErrors(ValidationError.mapArrayByField(err));
           } else {
             console.error(error);
             toast.error(

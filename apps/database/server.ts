@@ -1,11 +1,6 @@
 import './src/config/paths';
 
-import {
-  dotenvConfig,
-  handleErrors,
-  logRequest,
-  notFound,
-} from '@tipdapp/server';
+import { dotenvConfig, handleErrors, notFound } from '@tipdapp/server';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import { queryParser } from 'express-query-parser';
@@ -20,7 +15,7 @@ const port = process.env.PORT || 3002;
 
 const server = express();
 
-server.use('*', logRequest);
+// server.use(logRequest);
 server.use(useCors);
 server.use(
   queryParser({
@@ -38,7 +33,7 @@ server.use('/api', mainRouter);
 
 // handling errors
 server.use(notFound);
-server.use('*', handleErrors);
+server.use(handleErrors);
 
 server.listen(port, () => {
   // if (err) throw err;

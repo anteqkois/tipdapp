@@ -36,7 +36,6 @@ class TokenFeed {
       }
 
       await redis.hSet(CONSTANTS.KEY_HASH_TOKEN, mappedTokens);
-      // this.setTokenData(tokens);
       console.log('> Token data were update');
     } catch (error) {
       console.log('error :>> ', error);

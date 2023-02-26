@@ -15,7 +15,9 @@ export const saveUserTokenData = async (eventData: EventData) => {
   );
 
   const symbol = await userToken.symbol();
+  console.log('symbol :>> ', symbol);
   const name = await userToken.name();
+  console.log('name :>> ', name);
 
   const data: UserToken = {
     address: eventData.userTokenAddress as Address,

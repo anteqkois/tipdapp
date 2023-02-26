@@ -18,6 +18,7 @@ export const TokenPanel = ({ token }: Props) => {
     false
   );
   const { totalSupply, decimals } = useUserToken(token.address);
+  console.log('token :>> ', token);
   const { ClipboardIcon } = useClipboard();
   const { chain } = useNetwork();
 

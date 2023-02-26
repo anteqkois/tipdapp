@@ -1,4 +1,5 @@
 import { tipApi, TipApi } from '@tipdapp/api';
+import { TipUI } from '@tipdapp/types';
 import { tipService } from '../services/tipService';
 
 const findByAddress = async (
@@ -22,7 +23,7 @@ const findByAddress = async (
     userAddress: req.user.address,
   });
 
-  const tips = await tipService.findMany({
+  const tips = (await tipService.findMany({
     skip,
     take: pageSize,
     where: { userAddress: req.user.address },
@@ -40,7 +41,7 @@ const findByAddress = async (
         },
       },
     },
-  });
+  })) as TipUI[];
 
   if (tips) {
     return res.status(200).send({ tips, count });

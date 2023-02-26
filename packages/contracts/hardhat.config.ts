@@ -31,7 +31,7 @@ const config: HardhatUserConfig & any = {
   },
   networks: {
     hardhat: {
-      loggingEnabled: false,
+      // loggingEnabled: false,
       mining: {
         auto: false,
         interval: [2000, 5000],

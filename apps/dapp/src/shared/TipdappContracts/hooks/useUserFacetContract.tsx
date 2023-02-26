@@ -59,10 +59,13 @@ export const useUserFacet = () => {
       });
     },
     onSettled: async (data, error: any) => {
-      waitToast('Transaction was send. Wait for confirmation.', {
-        id: 'registerUser',
-        duration: Infinity,
-      });
+      waitToast(
+        'Transaction was send. After confirming with 5 blocks, you will be automatically redirected to the token panel.',
+        {
+          id: 'registerUser',
+          duration: Infinity,
+        }
+      );
 
       if (error) {
         console.log(error);
@@ -74,7 +77,6 @@ export const useUserFacet = () => {
         setHashToObserve(data.hash);
         await data.wait(1);
 
-        // const newTokenAddress = await userToken.refetch<{data: Address}>();
         const newTokenAddress = await userToken.refetch();
 
         transactionToast(
@@ -85,7 +87,7 @@ export const useUserFacet = () => {
           data.hash,
           { id: 'registerUser', duration: Infinity }
         );
-        (await data.wait(5)) && (await refreshUser());
+        (await data.wait(4)) && (await refreshUser());
       }
     },
   });

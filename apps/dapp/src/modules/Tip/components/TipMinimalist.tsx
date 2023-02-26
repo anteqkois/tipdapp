@@ -1,6 +1,6 @@
 import { dateFormat } from '@/lib/dayjs';
 import { useClipboard, useModal } from '@/shared/hooks';
-import { Button, Card, Flag, Tooltip } from '@/shared/ui';
+import { Button, Card, Flag, Tooltip, ViewOnExplorer } from '@/shared/ui';
 import { Avatar } from '@/shared/User/components/Avatar';
 import { cutAddress, parseNotation } from '@/utils';
 import {
@@ -108,19 +108,10 @@ export const TipMinimalist = ({
                 message="Address copied !"
               />
             </p>
-            <a
-              tabIndex={-1}
-              href={`https://etherscan.io/token/${tipperAddress}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Button
-                // variant="link"
-                className="mr-1 font-medium text-neutral-700"
-              >
-                View token on Explorer
-              </Button>
-            </a>
+            <ViewOnExplorer
+              subject="token"
+              value={token.address}
+            />
           </Card>
           <Card className="!p-2 text-neutral-800 shadow-none">
             <h6 className="text-primary">Tipper</h6>
@@ -138,19 +129,10 @@ export const TipMinimalist = ({
               />
             </p>
             <p className="flex items-end">
-              <a
-                tabIndex={-1}
-                href={`https://etherscan.io/address/${tipperAddress}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Button
-                  // variant="link"
-                  className="mr-1 font-medium text-neutral-700"
-                >
-                  View on Explorer
-                </Button>
-              </a>
+              <ViewOnExplorer
+                subject="address"
+                value={tipperAddress}
+              />
             </p>
           </Card>
           <Card className="!p-2 text-neutral-800 shadow-none">
@@ -169,19 +151,10 @@ export const TipMinimalist = ({
               />
             </p>
             <p className="flex items-end">
-              <a
-                tabIndex={-1}
-                href={`https://etherscan.io/tx/${tipperAddress}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Button
-                  // variant="link"
-                  className="mr-1 font-medium text-neutral-700"
-                >
-                  View on Explorer
-                </Button>
-              </a>
+              <ViewOnExplorer
+                subject="tx"
+                value={txHash}
+              />
             </p>
           </Card>
           <div className="!mt-4 flex justify-between">
