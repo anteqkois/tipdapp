@@ -11,6 +11,14 @@ const findByAddress = z.object({
     .optional(),
 });
 
+const signature = z.object({
+  body: z.object({
+    tokenAmount: z.number(),
+    tokenQuote: z.string(),
+    userAddress: z.string(),
+  }),
+});
+
 export namespace TipApi {
   export namespace FindByAddress {
     const reqShape = findByAddress.shape;
@@ -20,8 +28,16 @@ export namespace TipApi {
     export type Req = Request<any, any, any, Query>;
     export type Res = Response<ResBody>;
   }
+  export namespace Signature {
+    const reqShape = signature.shape;
+    export type Body = z.input<typeof reqShape.body>;
+    export type ResBody = { signature: string };
+    export type Req = Request<unknown, unknown, Body, unknown>;
+    export type Res = Response<ResBody>;
+  }
 }
 
 export const tipApi = {
   findByAddress,
+  signature
 };

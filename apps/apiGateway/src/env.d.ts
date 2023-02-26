@@ -2,7 +2,8 @@ export declare global {
   namespace NodeJS {
     interface ProcessEnv {
       COINMARKETCAP_API_KEY: string;
-      FRONTEND_URL: string;
+      URL_FRONTEND: string;
+      URL_DATABASE: string;
       FRONTEND_DOMAIN: string;
       JWT_TOKEN_SECRET: string;
       JWT_TOKEN_REFRESH: string;

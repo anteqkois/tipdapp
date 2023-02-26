@@ -34,7 +34,6 @@ export namespace TipperApi {
     const reqShape = create.shape;
     export type Body = z.input<typeof reqShape.body>;
     export type ResBody = { tipper: Tipper };
-    // export type ResBody = { address: string };
     export type Req = Request<unknown, unknown, Body, unknown>;
     export type Res = Response<ResBody>;
   }

@@ -9,7 +9,7 @@ declare global {
       THIRD_WALLET_PRIVATE_KEY: string;
       COINMARKETCAP_API_KEY: string;
 
-      FRONTEND_URL: string;
+      URL_FRONTEND: string;
       AMQP_URL: string;
       REDIS_HOSTNAME: string;
       REDIS_PORT: string;

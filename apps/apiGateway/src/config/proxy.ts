@@ -31,6 +31,6 @@ export const services: Service = {
     port: 3003,
     protocol: 'http',
     url: 'http://localhost:3003/',
-    routes: ['/api/token'],
+    routes: ['/api/token', '/api/tip/prepare'],
   },
 };

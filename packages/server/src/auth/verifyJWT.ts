@@ -39,7 +39,7 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
       maxAge: 60 * 60 * 1000,
     });
 
-    res.redirect(`${process.env.FRONTEND_URL}/login`);
+    res.redirect(`${process.env.URL_FRONTEND}/login`);
     // createApiError(`Invalid authentication token.`, StatusCodes.BAD_REQUEST);
   }
 };

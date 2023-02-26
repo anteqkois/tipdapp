@@ -1,4 +1,5 @@
 import {
+  apiClient,
   authApi,
   AuthApi,
   createApiError,
@@ -9,7 +10,7 @@ import { HttpStatusCode } from 'axios';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { generateNonce, SiweMessage } from 'siwe';
-import { apiAuth } from '../config/apiAuthConfig';
+// import { apiAuth } from '../config/apiAuthConfig';
 import { JWT_SETTINGS } from '../config/jwt';
 import { CONSTANTS, redis } from '../config/redis';
 
@@ -106,10 +107,13 @@ const signUp = async (req: AuthApi.SignUp.Req, res: AuthApi.SignUp.Res) => {
       HttpStatusCode.UnprocessableEntity
     );
 
-  const { user } = await apiAuth.user.create({
-    ...formData,
-    address: siweMessage.address,
-  });
+  const { user } = await apiClient.user.create(
+    {
+      ...formData,
+      address: siweMessage.address,
+    },
+    process.env.URL_DATABASE
+  );
 
   const authToken = createAuthToken(user);
   const refreshToken = await createRefreshToken(user, req.ip);
@@ -133,9 +137,6 @@ const signUp = async (req: AuthApi.SignUp.Req, res: AuthApi.SignUp.Res) => {
 };
 
 const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
-  // const resss = await apiAuth.token.findBasicInfo();
-  // console.log('resss.tokens:>> ', resss.tokens);
-  // console.log('from auth Controller :>> ');
   const { body } = authApi.login.parse({ ...req });
   const { message, signature, type } = body;
 
@@ -149,10 +150,13 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
     );
 
   if (type === 'user') {
-    const { user } = await apiAuth.user.find<{ user: UserSession }>({
-      address: siweMessage.address,
-      include: ['streamer', 'avatar', 'userToken'],
-    });
+    const { user } = await apiClient.user.find<{ user: UserSession }>(
+      {
+        address: siweMessage.address,
+        include: ['streamer', 'avatar', 'userToken'],
+      },
+      process.env.URL_DATABASE
+    );
 
     if (user) {
       const authToken = createAuthToken(user);
@@ -175,14 +179,20 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
         .json({ message: 'You are authorizated', user });
     }
   } else if (type === 'tipper') {
-    let { tipper } = await apiAuth.tipper.find<{ tipper: Tipper }>({
-      address: siweMessage.address,
-    });
+    let { tipper } = await apiClient.tipper.find<{ tipper: Tipper }>(
+      {
+        address: siweMessage.address,
+      },
+      process.env.URL_DATABASE
+    );
 
     if (!tipper) {
-      const data = await apiAuth.tipper.create({
-        address: siweMessage.address,
-      });
+      const data = await apiClient.tipper.create(
+        {
+          address: siweMessage.address,
+        },
+        process.env.URL_DATABASE
+      );
       tipper = data.tipper;
     }
 
@@ -200,10 +210,13 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
 };
 
 const refreshUserSession = async (req: Request, res: Response) => {
-  const { user } = await apiAuth.user.find<{ user: UserSession }>({
-    address: req.user.address,
-    include: ['streamer', 'avatar', 'userToken'],
-  });
+  const { user } = await apiClient.user.find<{ user: UserSession }>(
+    {
+      address: req.user.address,
+      include: ['streamer', 'avatar', 'userToken'],
+    },
+    process.env.URL_DATABASE
+  );
 
   if (user) {
     res.status(HttpStatusCode.Ok).json({ user });
