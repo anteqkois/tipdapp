@@ -27,7 +27,7 @@ export const services: Service = {
   },
   blockchainDataFeed: {
     host: 'localhost',
-    name: 'blockchainDataFeed',
+    name: 'blockchain',
     port: 3003,
     protocol: 'http',
     url: 'http://localhost:3003/',

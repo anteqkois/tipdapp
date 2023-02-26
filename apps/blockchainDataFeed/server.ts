@@ -1,6 +1,7 @@
 import { dotenvConfig, handleErrors, notFound } from '@tipdapp/server';
 import cors from 'cors';
 import express from 'express';
+import { startToListen } from './src/eventListeners';
 import { mainRouter } from './src/routes';
 import { TokenFeed } from './src/services/tokenFeedService';
 
@@ -31,5 +32,6 @@ server.use(notFound);
 server.use(handleErrors);
 
 server.listen(port, () => {
+  startToListen();
   console.log(`> Ready on http://localhost:${port}`);
 });

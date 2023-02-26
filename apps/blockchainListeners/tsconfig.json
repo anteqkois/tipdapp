@@ -1,8 +1,0 @@
-{
-  "extends": "@tipdapp/tsconfig/tsconfig.node.json",
-  "compilerOptions": {
-    "rootDir": ".",
-    "outDir": "dist",
-  },
-  "include": ["server.ts", "**/*.ts", "**/*.d.ts"]
-}
