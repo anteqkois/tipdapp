@@ -20,13 +20,13 @@ const findBasicInfo = z.object({
 // DATABASE
 const findMany = z.object({
   query: z.object({
-    symbol: z.array(z.string()).optional(),
+    ids: z.array(z.string()).optional(),
   }),
 });
 
 const find = z.object({
   params: z.object({
-    symbol: z.string(),
+    id: z.string(),
   }),
 });
 

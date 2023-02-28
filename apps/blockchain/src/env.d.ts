@@ -10,6 +10,7 @@ declare global {
       COINMARKETCAP_API_KEY: string;
 
       URL_FRONTEND: string;
+      URL_DATABASE: string;
       AMQP_URL: string;
       REDIS_HOSTNAME: string;
       REDIS_PORT: string;

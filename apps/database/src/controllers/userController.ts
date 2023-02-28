@@ -1,16 +1,23 @@
 import { userService } from '@services/userService';
-import { HttpStatusCode, userApi, UserApi, ValidationError } from '@tipdapp/api';
+import {
+  createApiError,
+  HttpStatusCode,
+  userApi,
+  UserApi,
+  ValidationError,
+} from '@tipdapp/api';
 import { Prisma } from '@tipdapp/prisma';
+import { UserToken } from '@tipdapp/types';
 import { Response } from 'express';
 
-const findByNick = async (
-  req: UserApi.FindByNick.Req,
-  res: UserApi.FindByNick.Res
+const findByAddress = async (
+  req: UserApi.FindByAddress.Req,
+  res: UserApi.FindByAddress.Res
 ) => {
-  const { params, query } = userApi.findByNick.parse({ ...req });
+  const { params, query } = userApi.findByAddress.parse({ ...req });
 
   const user = await userService.find({
-    where: { nick: params.nick },
+    where: { address: params.address },
     include: {
       avatar: true,
       streamer: query.include?.streamer
@@ -25,6 +32,23 @@ const findByNick = async (
     return res.status(200).send({ user });
   }
   // createApiError('Something went wrong.');
+};
+
+const findUserToken = async (
+  req: UserApi.FindUserToken.Req,
+  res: UserApi.FindUserToken.Res
+) => {
+  const { params } = userApi.findUserToken.parse({ ...req });
+
+  const { userToken } = (await userService.find({
+    where: { address: params.address },
+    select: { userToken: true },
+  })) as unknown as { userToken: UserToken | null };
+
+  if (userToken) {
+    return res.status(200).send({ userToken });
+  }
+  createApiError('User token not found.', 404);
 };
 
 const find = async (req: UserApi.Find.Req, res: UserApi.Find.Res) => {
@@ -149,4 +173,10 @@ const create = async (req: UserApi.Create.Req, res: Response) => {
   return res.status(200).send({ user });
 };
 
-export const userController = { findByNick, find, create, validate };
+export const userController = {
+  findByAddress,
+  findUserToken,
+  find,
+  create,
+  validate,
+};

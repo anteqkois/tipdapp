@@ -1,9 +1,9 @@
 import { api } from '@tipdapp/api';
-import { handledTokens } from '@tipdapp/server';
+import { handledTokens } from '@tipdapp/constants';
 import { TokenCoinGecko } from '@tipdapp/types';
 import { CONSTANTS, redis } from '../config/redis';
 
-class TokenFeed {
+class TokenFeedService {
   isRunning = false;
 
   intervalId: NodeJS.Timer | undefined;
@@ -57,4 +57,4 @@ class TokenFeed {
   }
 }
 
-export { TokenFeed };
+export { TokenFeedService };

@@ -3,7 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import { startToListen } from './src/eventListeners';
 import { mainRouter } from './src/routes';
-import { TokenFeed } from './src/services/tokenFeedService';
+import { TokenFeedService } from './src/services/tokenFeedService';
 
 dotenvConfig();
 
@@ -23,7 +23,7 @@ server.use(
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 // server.use(cookieParser());
-new TokenFeed().start();
+new TokenFeedService().start();
 
 server.use('/api', mainRouter);
 

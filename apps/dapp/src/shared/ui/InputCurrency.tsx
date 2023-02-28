@@ -47,6 +47,7 @@ export const InputCurrency = ({
         id={id}
         name={name}
         type="text"
+        inputMode='decimal'
         onChange={(e) => {
           const match = currencyRegex(e.target.value);
           if (match) {

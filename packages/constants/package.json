@@ -1,9 +1,9 @@
 {
-  "name": "@tipdapp/types",
+  "name": "@tipdapp/constants",
   "author": "Antek Kois",
   "license": "MIT",
   "version": "0.0.0",
-  "description": "Node server utils for other node microservices",
+  "description": "Package ofa sharable constants for all microservices",
   "main": "index.ts",
   "types": "index.ts",
   "files": [
@@ -14,8 +14,6 @@
   "keywords": [
     "typescript",
     "TypeScript",
-    "type",
-    "types",
     "microservice",
     "share"
   ],
@@ -26,7 +24,6 @@
     "eslint-config-tipdapp-node": "^0.0.0"
   },
   "devDependencies": {
-    "@tipdapp/prisma": "^0.0.0",
     "@tipdapp/tsconfig": "^0.0.0",
     "typescript": "^4.9.5"
   }

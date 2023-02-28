@@ -1,13 +1,16 @@
-import { handledTokens } from '@tipdapp/server';
 import { TokenCoinGecko } from '@tipdapp/types';
 import { CONSTANTS, redis } from '../config/redis';
 
-const getTokens = async (symbols?: string[]) => {
+const getTokens = async (ids?: string[]) => {
   const parsedData: TokenCoinGecko[] = [];
 
-  if (symbols) {
-    const coingeckoIds = handledTokens.filter((token) => symbols.includes(token.symbol)).map((token) => token.coinGeckoId);
-    (await redis.hmGet(CONSTANTS.KEY_HASH_TOKEN, coingeckoIds)).forEach((rawData) => parsedData.push(JSON.parse(rawData)));
+  if (ids) {
+    // const coingeckoIds = handledTokens
+    //   .filter((token) => symbols.includes(token.symbol))
+    //   .map((token) => token.coinGeckoId);
+    (await redis.hmGet(CONSTANTS.KEY_HASH_TOKEN, ids)).forEach((rawData) =>
+      parsedData.push(JSON.parse(rawData))
+    );
   } else {
     const tokensData = await redis.hGetAll(CONSTANTS.KEY_HASH_TOKEN);
     for (const [, value] of Object.entries(tokensData)) {
@@ -18,14 +21,16 @@ const getTokens = async (symbols?: string[]) => {
   return parsedData;
 };
 
-const getToken = async (symbol: string): Promise<TokenCoinGecko | null> => {
-  const coingeckoId = handledTokens.find((token) => token.symbol === symbol)?.coinGeckoId;
+const getToken = async (id: string): Promise<TokenCoinGecko | null> => {
+  // const coingeckoId = handledTokens.find(
+  //   (token) => token.symbol === symbol
+  // )?.coinGeckoId;
 
-  if (coingeckoId) {
-    const rawData = await redis.hGet(CONSTANTS.KEY_HASH_TOKEN, coingeckoId);
+  if (id) {
+    const rawData = await redis.hGet(CONSTANTS.KEY_HASH_TOKEN, id);
     if (rawData) return JSON.parse(rawData);
   }
   return null;
 };
 
-export const cryptocurrencyService = { getTokens, getToken };
+export const tokenService = { getTokens, getToken };

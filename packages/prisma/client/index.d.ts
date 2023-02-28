@@ -149,6 +149,7 @@ export type Widget = {
  * 
  */
 export type Token = {
+  id: string
   address: string
   symbol: string
   name: string
@@ -11287,6 +11288,7 @@ export namespace Prisma {
   }
 
   export type TokenMinAggregateOutputType = {
+    id: string | null
     address: string | null
     symbol: string | null
     name: string | null
@@ -11297,6 +11299,7 @@ export namespace Prisma {
   }
 
   export type TokenMaxAggregateOutputType = {
+    id: string | null
     address: string | null
     symbol: string | null
     name: string | null
@@ -11307,6 +11310,7 @@ export namespace Prisma {
   }
 
   export type TokenCountAggregateOutputType = {
+    id: number
     address: number
     symbol: number
     name: number
@@ -11327,6 +11331,7 @@ export namespace Prisma {
   }
 
   export type TokenMinAggregateInputType = {
+    id?: true
     address?: true
     symbol?: true
     name?: true
@@ -11337,6 +11342,7 @@ export namespace Prisma {
   }
 
   export type TokenMaxAggregateInputType = {
+    id?: true
     address?: true
     symbol?: true
     name?: true
@@ -11347,6 +11353,7 @@ export namespace Prisma {
   }
 
   export type TokenCountAggregateInputType = {
+    id?: true
     address?: true
     symbol?: true
     name?: true
@@ -11445,6 +11452,7 @@ export namespace Prisma {
 
 
   export type TokenGroupByOutputType = {
+    id: string
     address: string
     symbol: string
     name: string
@@ -11474,6 +11482,7 @@ export namespace Prisma {
 
 
   export type TokenSelect = {
+    id?: boolean
     address?: boolean
     symbol?: boolean
     name?: boolean
@@ -11603,8 +11612,8 @@ export namespace Prisma {
      * // Get first 10 Tokens
      * const tokens = await prisma.token.findMany({ take: 10 })
      * 
-     * // Only select the `address`
-     * const tokenWithAddressOnly = await prisma.token.findMany({ select: { address: true } })
+     * // Only select the `id`
+     * const tokenWithIdOnly = await prisma.token.findMany({ select: { id: true } })
      * 
     **/
     findMany<T extends TokenFindManyArgs>(
@@ -14340,6 +14349,7 @@ export namespace Prisma {
 
 
   export const TokenScalarFieldEnum: {
+    id: 'id',
     address: 'address',
     symbol: 'symbol',
     name: 'name',
@@ -15018,6 +15028,7 @@ export namespace Prisma {
     AND?: Enumerable<TokenWhereInput>
     OR?: Enumerable<TokenWhereInput>
     NOT?: Enumerable<TokenWhereInput>
+    id?: StringFilter | string
     address?: StringFilter | string
     symbol?: StringFilter | string
     name?: StringFilter | string
@@ -15031,6 +15042,7 @@ export namespace Prisma {
   }
 
   export type TokenOrderByWithRelationInput = {
+    id?: SortOrder
     address?: SortOrder
     symbol?: SortOrder
     name?: SortOrder
@@ -15044,11 +15056,14 @@ export namespace Prisma {
   }
 
   export type TokenWhereUniqueInput = {
+    id?: string
     address?: string
     name?: string
+    coinGeckoId?: string
   }
 
   export type TokenOrderByWithAggregationInput = {
+    id?: SortOrder
     address?: SortOrder
     symbol?: SortOrder
     name?: SortOrder
@@ -15067,6 +15082,7 @@ export namespace Prisma {
     AND?: Enumerable<TokenScalarWhereWithAggregatesInput>
     OR?: Enumerable<TokenScalarWhereWithAggregatesInput>
     NOT?: Enumerable<TokenScalarWhereWithAggregatesInput>
+    id?: StringWithAggregatesFilter | string
     address?: StringWithAggregatesFilter | string
     symbol?: StringWithAggregatesFilter | string
     name?: StringWithAggregatesFilter | string
@@ -15864,6 +15880,7 @@ export namespace Prisma {
   }
 
   export type TokenCreateInput = {
+    id: string
     address: string
     symbol: string
     name: string
@@ -15875,6 +15892,7 @@ export namespace Prisma {
   }
 
   export type TokenUncheckedCreateInput = {
+    id: string
     address: string
     symbol: string
     name: string
@@ -15886,6 +15904,7 @@ export namespace Prisma {
   }
 
   export type TokenUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -15897,6 +15916,7 @@ export namespace Prisma {
   }
 
   export type TokenUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -15908,6 +15928,7 @@ export namespace Prisma {
   }
 
   export type TokenCreateManyInput = {
+    id: string
     address: string
     symbol: string
     name: string
@@ -15918,6 +15939,7 @@ export namespace Prisma {
   }
 
   export type TokenUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -15926,6 +15948,7 @@ export namespace Prisma {
   }
 
   export type TokenUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -16714,6 +16737,7 @@ export namespace Prisma {
   }
 
   export type TokenCountOrderByAggregateInput = {
+    id?: SortOrder
     address?: SortOrder
     symbol?: SortOrder
     name?: SortOrder
@@ -16728,6 +16752,7 @@ export namespace Prisma {
   }
 
   export type TokenMaxOrderByAggregateInput = {
+    id?: SortOrder
     address?: SortOrder
     symbol?: SortOrder
     name?: SortOrder
@@ -16738,6 +16763,7 @@ export namespace Prisma {
   }
 
   export type TokenMinOrderByAggregateInput = {
+    id?: SortOrder
     address?: SortOrder
     symbol?: SortOrder
     name?: SortOrder
@@ -18767,6 +18793,7 @@ export namespace Prisma {
   }
 
   export type TokenCreateWithoutStreamerInput = {
+    id: string
     address: string
     symbol: string
     name: string
@@ -18777,6 +18804,7 @@ export namespace Prisma {
   }
 
   export type TokenUncheckedCreateWithoutStreamerInput = {
+    id: string
     address: string
     symbol: string
     name: string
@@ -18924,6 +18952,7 @@ export namespace Prisma {
     AND?: Enumerable<TokenScalarWhereInput>
     OR?: Enumerable<TokenScalarWhereInput>
     NOT?: Enumerable<TokenScalarWhereInput>
+    id?: StringFilter | string
     address?: StringFilter | string
     symbol?: StringFilter | string
     name?: StringFilter | string
@@ -19181,6 +19210,7 @@ export namespace Prisma {
   }
 
   export type TokenCreateWithoutTipInput = {
+    id: string
     address: string
     symbol: string
     name: string
@@ -19191,6 +19221,7 @@ export namespace Prisma {
   }
 
   export type TokenUncheckedCreateWithoutTipInput = {
+    id: string
     address: string
     symbol: string
     name: string
@@ -19304,6 +19335,7 @@ export namespace Prisma {
   }
 
   export type TokenUpdateWithoutTipInput = {
+    id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -19314,6 +19346,7 @@ export namespace Prisma {
   }
 
   export type TokenUncheckedUpdateWithoutTipInput = {
+    id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -19845,6 +19878,7 @@ export namespace Prisma {
   }
 
   export type TokenCreateWithoutImageInput = {
+    id: string
     address: string
     symbol: string
     name: string
@@ -19855,6 +19889,7 @@ export namespace Prisma {
   }
 
   export type TokenUncheckedCreateWithoutImageInput = {
+    id: string
     address: string
     symbol: string
     name: string
@@ -20086,6 +20121,7 @@ export namespace Prisma {
   }
 
   export type TokenCreateManyStreamerInput = {
+    id: string
     address: string
     symbol: string
     name: string
@@ -20108,6 +20144,7 @@ export namespace Prisma {
   }
 
   export type TokenUpdateWithoutStreamerInput = {
+    id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -20118,6 +20155,7 @@ export namespace Prisma {
   }
 
   export type TokenUncheckedUpdateWithoutStreamerInput = {
+    id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -20128,6 +20166,7 @@ export namespace Prisma {
   }
 
   export type TokenUncheckedUpdateManyWithoutActiveTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -20333,6 +20372,7 @@ export namespace Prisma {
   }
 
   export type TokenCreateManyImageInput = {
+    id: string
     address: string
     symbol: string
     name: string
@@ -20413,6 +20453,7 @@ export namespace Prisma {
   }
 
   export type TokenUpdateWithoutImageInput = {
+    id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -20423,6 +20464,7 @@ export namespace Prisma {
   }
 
   export type TokenUncheckedUpdateWithoutImageInput = {
+    id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -20433,6 +20475,7 @@ export namespace Prisma {
   }
 
   export type TokenUncheckedUpdateManyWithoutTokenInput = {
+    id?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string

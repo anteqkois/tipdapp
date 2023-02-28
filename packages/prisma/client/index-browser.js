@@ -153,6 +153,7 @@ exports.Prisma.TipperScalarFieldEnum = makeEnum({
 });
 
 exports.Prisma.TokenScalarFieldEnum = makeEnum({
+  id: 'id',
   address: 'address',
   symbol: 'symbol',
   name: 'name',

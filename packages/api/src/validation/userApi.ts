@@ -1,4 +1,4 @@
-import { NestedUser, Role, User, UserSession } from '@tipdapp/types';
+import { NestedUser, Role, User, UserSession, UserToken } from '@tipdapp/types';
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { transformApiInclude } from './utils';
@@ -14,12 +14,12 @@ const userInclude = z
   )
   .transform((include) => transformApiInclude(include));
 
-const findByNick = z.object({
+const findByAddress = z.object({
   query: z.object({
     include: userInclude.optional(),
   }),
   params: z.object({
-    nick: z.string(),
+    address: z.string(),
   }),
 });
 
@@ -31,12 +31,18 @@ const find = z.object({
   }),
 });
 
+const findUserToken = z.object({
+  params: z.object({
+    address: z.string(),
+  }),
+});
+
 const validate = z.object({
   body: z.object({
     email: z.string({ required_error: 'E-mail is required.' }).email(),
     nick: z
-      .string({ required_error: 'Nick is required.' })
-      .min(2, { message: 'Nick must have 2 or more characters.' }),
+    .string({ required_error: 'Nick is required.' })
+    .min(2, { message: 'Nick must have 2 or more characters.' }),
     firstName: z
       .string({ required_error: 'First name is required.' })
       .min(3, { message: 'First name must have 3 or more characters.' }),
@@ -71,8 +77,8 @@ const create = z.object({
 });
 
 export namespace UserApi {
-  export namespace FindByNick {
-    const requestShape = findByNick.shape;
+  export namespace FindByAddress {
+    const requestShape = findByAddress.shape;
     export type Params = z.input<typeof requestShape.params>;
     export type Query = z.input<typeof requestShape.query>;
     export type ResBody = { user: User };
@@ -84,6 +90,13 @@ export namespace UserApi {
     export type Query = z.input<typeof requestShape.query>;
     export type ResBody = { user: Partial<NestedUser> };
     export type Req = Request<any, any, any, Query>;
+    export type Res = Response<ResBody>;
+  }
+  export namespace FindUserToken {
+    const requestShape = findUserToken.shape;
+    export type Params = z.input<typeof requestShape.params>;
+    export type ResBody = { userToken: UserToken };
+    export type Req = Request<Params, any, any, any>;
     export type Res = Response<ResBody>;
   }
   export namespace Validate {
@@ -103,8 +116,9 @@ export namespace UserApi {
 }
 
 export const userApi = {
-  findByNick,
+  findByAddress,
   find,
+  findUserToken,
   validate,
   create,
 };

@@ -1,11 +1,11 @@
 import { HttpStatusCode, tokenApi, TokenApi } from '@tipdapp/api';
 import { Response } from 'express';
-import { cryptocurrencyService } from '../services/tokenService';
+import { tokenService } from '../services/tokenService';
 
 const findMany = async (req: TokenApi.FindMany.Req, res: Response) => {
   const parsedReq = tokenApi.findMany.parse({ ...req });
 
-  const data = await cryptocurrencyService.getTokens(parsedReq.query.symbol);
+  const data = await tokenService.getTokens(parsedReq.query.ids);
 
   res.status(HttpStatusCode.Ok).json({ tokens: data });
 };
@@ -13,7 +13,7 @@ const findMany = async (req: TokenApi.FindMany.Req, res: Response) => {
 const find = async (req: TokenApi.Find.Req, res: Response) => {
   const parsedReq = tokenApi.find.parse({ ...req });
 
-  const data = await cryptocurrencyService.getToken(parsedReq.params.symbol);
+  const data = await tokenService.getToken(parsedReq.params.id);
 
   res.status(HttpStatusCode.Ok).json({ data });
 };

@@ -1,4 +1,4 @@
-import { TipUI } from '@tipdapp/types';
+import { Address, TipUI } from '@tipdapp/types';
 import { Request, Response } from 'express';
 import { z } from 'zod';
 
@@ -13,8 +13,8 @@ const findByAddress = z.object({
 
 const signature = z.object({
   body: z.object({
-    tokenAmount: z.number(),
-    tokenQuote: z.string(),
+    tokenAmount: z.string(),
+    tokenId: z.string(),
     userAddress: z.string(),
   }),
 });
@@ -31,7 +31,18 @@ export namespace TipApi {
   export namespace Signature {
     const reqShape = signature.shape;
     export type Body = z.input<typeof reqShape.body>;
-    export type ResBody = { signature: string };
+    export type ResBody = {
+      signature: string;
+      signatureData: {
+        tokenAmount: string;
+        amountToMint: string;
+        tokenToUser: string;
+        fee: string;
+        timestamp: number;
+        tokenAddress: Address,
+        userAddress: Address;
+      };
+    };
     export type Req = Request<unknown, unknown, Body, unknown>;
     export type Res = Response<ResBody>;
   }
@@ -39,5 +50,5 @@ export namespace TipApi {
 
 export const tipApi = {
   findByAddress,
-  signature
+  signature,
 };
