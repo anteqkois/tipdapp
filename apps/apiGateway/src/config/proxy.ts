@@ -11,6 +11,14 @@ type Service = Record<
 >;
 
 export const services: Service = {
+  blockchainDataFeed: {
+    host: 'localhost',
+    name: 'blockchain',
+    port: 3003,
+    protocol: 'http',
+    url: 'http://localhost:3003/',
+    routes: ['/api/token', '/api/tip/signature'],
+  },
   database: {
     host: 'localhost',
     name: 'database',
@@ -24,13 +32,5 @@ export const services: Service = {
       '/api/tokenBasicInfo',
       '/api/userToken',
     ],
-  },
-  blockchainDataFeed: {
-    host: 'localhost',
-    name: 'blockchain',
-    port: 3003,
-    protocol: 'http',
-    url: 'http://localhost:3003/',
-    routes: ['/api/token', '/api/tip/prepare'],
   },
 };

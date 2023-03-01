@@ -22,7 +22,14 @@ const notFound = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const catchAsyncErrors =
-  (handler: (req: Request, res: Response, next: NextFunction) => void) =>
+  (
+    handler: (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      req: Request<any, any, any, any>,
+      res: Response,
+      next: NextFunction
+    ) => void
+  ) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await handler(req, res, next);
@@ -32,7 +39,14 @@ const catchAsyncErrors =
   };
 
 const catchErrors =
-  (handler: (req: Request, res: Response, next: NextFunction) => void) =>
+  (
+    handler: (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      req: Request<any, any, any, any>,
+      res: Response,
+      next: NextFunction
+    ) => void
+  ) =>
   (req: Request, res: Response, next: NextFunction) => {
     try {
       handler(req, res, next);

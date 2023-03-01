@@ -33,17 +33,6 @@ export type User = {
 }
 
 /**
- * Model Session
- * 
- */
-export type Session = {
-  ip: string
-  address: string
-  refreshTokens: string[]
-  expires: Date | null
-}
-
-/**
  * Model Settings
  * 
  */
@@ -341,16 +330,6 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<GlobalReject>;
-
-  /**
-   * `prisma.session`: Exposes CRUD operations for the **Session** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Sessions
-    * const sessions = await prisma.session.findMany()
-    * ```
-    */
-  get session(): Prisma.SessionDelegate<GlobalReject>;
 
   /**
    * `prisma.settings`: Exposes CRUD operations for the **Settings** model.
@@ -931,7 +910,6 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
-    Session: 'Session',
     Settings: 'Settings',
     VerificationEmailToken: 'VerificationEmailToken',
     Streamer: 'Streamer',
@@ -1111,13 +1089,11 @@ export namespace Prisma {
   export type UserCountOutputType = {
     witdraws: number
     tips: number
-    sessions: number
   }
 
   export type UserCountOutputTypeSelect = {
     witdraws?: boolean
     tips?: boolean
-    sessions?: boolean
   }
 
   export type UserCountOutputTypeGetPayload<S extends boolean | null | undefined | UserCountOutputTypeArgs> =
@@ -1664,7 +1640,6 @@ export namespace Prisma {
     userToken?: boolean | UserTokenArgs
     tips?: boolean | User$tipsArgs
     streamer?: boolean | StreamerArgs
-    sessions?: boolean | User$sessionsArgs
     verificationEmailToken?: boolean | VerificationEmailTokenArgs
     settings?: boolean | SettingsArgs
     _count?: boolean | UserCountOutputTypeArgs
@@ -1677,7 +1652,6 @@ export namespace Prisma {
     userToken?: boolean | UserTokenArgs
     tips?: boolean | User$tipsArgs
     streamer?: boolean | StreamerArgs
-    sessions?: boolean | User$sessionsArgs
     verificationEmailToken?: boolean | VerificationEmailTokenArgs
     settings?: boolean | SettingsArgs
     _count?: boolean | UserCountOutputTypeArgs
@@ -1695,7 +1669,6 @@ export namespace Prisma {
         P extends 'userToken' ? UserTokenGetPayload<S['include'][P]> | null :
         P extends 'tips' ? Array < TipGetPayload<S['include'][P]>>  :
         P extends 'streamer' ? StreamerGetPayload<S['include'][P]> | null :
-        P extends 'sessions' ? Array < SessionGetPayload<S['include'][P]>>  :
         P extends 'verificationEmailToken' ? VerificationEmailTokenGetPayload<S['include'][P]> | null :
         P extends 'settings' ? SettingsGetPayload<S['include'][P]> | null :
         P extends '_count' ? UserCountOutputTypeGetPayload<S['include'][P]> :  never
@@ -1708,7 +1681,6 @@ export namespace Prisma {
         P extends 'userToken' ? UserTokenGetPayload<S['select'][P]> | null :
         P extends 'tips' ? Array < TipGetPayload<S['select'][P]>>  :
         P extends 'streamer' ? StreamerGetPayload<S['select'][P]> | null :
-        P extends 'sessions' ? Array < SessionGetPayload<S['select'][P]>>  :
         P extends 'verificationEmailToken' ? VerificationEmailTokenGetPayload<S['select'][P]> | null :
         P extends 'settings' ? SettingsGetPayload<S['select'][P]> | null :
         P extends '_count' ? UserCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof User ? User[P] : never
@@ -2092,8 +2064,6 @@ export namespace Prisma {
     tips<T extends User$tipsArgs= {}>(args?: Subset<T, User$tipsArgs>): Prisma.PrismaPromise<Array<TipGetPayload<T>>| Null>;
 
     streamer<T extends StreamerArgs= {}>(args?: Subset<T, StreamerArgs>): Prisma__StreamerClient<StreamerGetPayload<T> | Null>;
-
-    sessions<T extends User$sessionsArgs= {}>(args?: Subset<T, User$sessionsArgs>): Prisma.PrismaPromise<Array<SessionGetPayload<T>>| Null>;
 
     verificationEmailToken<T extends VerificationEmailTokenArgs= {}>(args?: Subset<T, VerificationEmailTokenArgs>): Prisma__VerificationEmailTokenClient<VerificationEmailTokenGetPayload<T> | Null>;
 
@@ -2497,27 +2467,6 @@ export namespace Prisma {
 
 
   /**
-   * User.sessions
-   */
-  export type User$sessionsArgs = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SessionInclude | null
-    where?: SessionWhereInput
-    orderBy?: Enumerable<SessionOrderByWithRelationInput>
-    cursor?: SessionWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Enumerable<SessionScalarFieldEnum>
-  }
-
-
-  /**
    * User without action
    */
   export type UserArgs = {
@@ -2529,925 +2478,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well.
      */
     include?: UserInclude | null
-  }
-
-
-
-  /**
-   * Model Session
-   */
-
-
-  export type AggregateSession = {
-    _count: SessionCountAggregateOutputType | null
-    _min: SessionMinAggregateOutputType | null
-    _max: SessionMaxAggregateOutputType | null
-  }
-
-  export type SessionMinAggregateOutputType = {
-    ip: string | null
-    address: string | null
-    expires: Date | null
-  }
-
-  export type SessionMaxAggregateOutputType = {
-    ip: string | null
-    address: string | null
-    expires: Date | null
-  }
-
-  export type SessionCountAggregateOutputType = {
-    ip: number
-    address: number
-    refreshTokens: number
-    expires: number
-    _all: number
-  }
-
-
-  export type SessionMinAggregateInputType = {
-    ip?: true
-    address?: true
-    expires?: true
-  }
-
-  export type SessionMaxAggregateInputType = {
-    ip?: true
-    address?: true
-    expires?: true
-  }
-
-  export type SessionCountAggregateInputType = {
-    ip?: true
-    address?: true
-    refreshTokens?: true
-    expires?: true
-    _all?: true
-  }
-
-  export type SessionAggregateArgs = {
-    /**
-     * Filter which Session to aggregate.
-     */
-    where?: SessionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Sessions to fetch.
-     */
-    orderBy?: Enumerable<SessionOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: SessionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Sessions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Sessions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Sessions
-    **/
-    _count?: true | SessionCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: SessionMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: SessionMaxAggregateInputType
-  }
-
-  export type GetSessionAggregateType<T extends SessionAggregateArgs> = {
-        [P in keyof T & keyof AggregateSession]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateSession[P]>
-      : GetScalarType<T[P], AggregateSession[P]>
-  }
-
-
-
-
-  export type SessionGroupByArgs = {
-    where?: SessionWhereInput
-    orderBy?: Enumerable<SessionOrderByWithAggregationInput>
-    by: SessionScalarFieldEnum[]
-    having?: SessionScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: SessionCountAggregateInputType | true
-    _min?: SessionMinAggregateInputType
-    _max?: SessionMaxAggregateInputType
-  }
-
-
-  export type SessionGroupByOutputType = {
-    ip: string
-    address: string
-    refreshTokens: string[]
-    expires: Date | null
-    _count: SessionCountAggregateOutputType | null
-    _min: SessionMinAggregateOutputType | null
-    _max: SessionMaxAggregateOutputType | null
-  }
-
-  type GetSessionGroupByPayload<T extends SessionGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickArray<SessionGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof SessionGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], SessionGroupByOutputType[P]>
-            : GetScalarType<T[P], SessionGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type SessionSelect = {
-    ip?: boolean
-    user?: boolean | UserArgs
-    address?: boolean
-    refreshTokens?: boolean
-    expires?: boolean
-  }
-
-
-  export type SessionInclude = {
-    user?: boolean | UserArgs
-  }
-
-  export type SessionGetPayload<S extends boolean | null | undefined | SessionArgs> =
-    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? Session :
-    S extends undefined ? never :
-    S extends { include: any } & (SessionArgs | SessionFindManyArgs)
-    ? Session  & {
-    [P in TruthyKeys<S['include']>]:
-        P extends 'user' ? UserGetPayload<S['include'][P]> :  never
-  } 
-    : S extends { select: any } & (SessionArgs | SessionFindManyArgs)
-      ? {
-    [P in TruthyKeys<S['select']>]:
-        P extends 'user' ? UserGetPayload<S['select'][P]> :  P extends keyof Session ? Session[P] : never
-  } 
-      : Session
-
-
-  type SessionCountArgs = 
-    Omit<SessionFindManyArgs, 'select' | 'include'> & {
-      select?: SessionCountAggregateInputType | true
-    }
-
-  export interface SessionDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
-
-    /**
-     * Find zero or one Session that matches the filter.
-     * @param {SessionFindUniqueArgs} args - Arguments to find a Session
-     * @example
-     * // Get one Session
-     * const session = await prisma.session.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends SessionFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, SessionFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Session'> extends True ? Prisma__SessionClient<SessionGetPayload<T>> : Prisma__SessionClient<SessionGetPayload<T> | null, null>
-
-    /**
-     * Find one Session that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {SessionFindUniqueOrThrowArgs} args - Arguments to find a Session
-     * @example
-     * // Get one Session
-     * const session = await prisma.session.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends SessionFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, SessionFindUniqueOrThrowArgs>
-    ): Prisma__SessionClient<SessionGetPayload<T>>
-
-    /**
-     * Find the first Session that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SessionFindFirstArgs} args - Arguments to find a Session
-     * @example
-     * // Get one Session
-     * const session = await prisma.session.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends SessionFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, SessionFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Session'> extends True ? Prisma__SessionClient<SessionGetPayload<T>> : Prisma__SessionClient<SessionGetPayload<T> | null, null>
-
-    /**
-     * Find the first Session that matches the filter or
-     * throw `NotFoundError` if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SessionFindFirstOrThrowArgs} args - Arguments to find a Session
-     * @example
-     * // Get one Session
-     * const session = await prisma.session.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends SessionFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, SessionFindFirstOrThrowArgs>
-    ): Prisma__SessionClient<SessionGetPayload<T>>
-
-    /**
-     * Find zero or more Sessions that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SessionFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Sessions
-     * const sessions = await prisma.session.findMany()
-     * 
-     * // Get first 10 Sessions
-     * const sessions = await prisma.session.findMany({ take: 10 })
-     * 
-     * // Only select the `ip`
-     * const sessionWithIpOnly = await prisma.session.findMany({ select: { ip: true } })
-     * 
-    **/
-    findMany<T extends SessionFindManyArgs>(
-      args?: SelectSubset<T, SessionFindManyArgs>
-    ): Prisma.PrismaPromise<Array<SessionGetPayload<T>>>
-
-    /**
-     * Create a Session.
-     * @param {SessionCreateArgs} args - Arguments to create a Session.
-     * @example
-     * // Create one Session
-     * const Session = await prisma.session.create({
-     *   data: {
-     *     // ... data to create a Session
-     *   }
-     * })
-     * 
-    **/
-    create<T extends SessionCreateArgs>(
-      args: SelectSubset<T, SessionCreateArgs>
-    ): Prisma__SessionClient<SessionGetPayload<T>>
-
-    /**
-     * Create many Sessions.
-     *     @param {SessionCreateManyArgs} args - Arguments to create many Sessions.
-     *     @example
-     *     // Create many Sessions
-     *     const session = await prisma.session.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends SessionCreateManyArgs>(
-      args?: SelectSubset<T, SessionCreateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Session.
-     * @param {SessionDeleteArgs} args - Arguments to delete one Session.
-     * @example
-     * // Delete one Session
-     * const Session = await prisma.session.delete({
-     *   where: {
-     *     // ... filter to delete one Session
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends SessionDeleteArgs>(
-      args: SelectSubset<T, SessionDeleteArgs>
-    ): Prisma__SessionClient<SessionGetPayload<T>>
-
-    /**
-     * Update one Session.
-     * @param {SessionUpdateArgs} args - Arguments to update one Session.
-     * @example
-     * // Update one Session
-     * const session = await prisma.session.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends SessionUpdateArgs>(
-      args: SelectSubset<T, SessionUpdateArgs>
-    ): Prisma__SessionClient<SessionGetPayload<T>>
-
-    /**
-     * Delete zero or more Sessions.
-     * @param {SessionDeleteManyArgs} args - Arguments to filter Sessions to delete.
-     * @example
-     * // Delete a few Sessions
-     * const { count } = await prisma.session.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends SessionDeleteManyArgs>(
-      args?: SelectSubset<T, SessionDeleteManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Sessions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SessionUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Sessions
-     * const session = await prisma.session.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends SessionUpdateManyArgs>(
-      args: SelectSubset<T, SessionUpdateManyArgs>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Session.
-     * @param {SessionUpsertArgs} args - Arguments to update or create a Session.
-     * @example
-     * // Update or create a Session
-     * const session = await prisma.session.upsert({
-     *   create: {
-     *     // ... data to create a Session
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Session we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends SessionUpsertArgs>(
-      args: SelectSubset<T, SessionUpsertArgs>
-    ): Prisma__SessionClient<SessionGetPayload<T>>
-
-    /**
-     * Count the number of Sessions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SessionCountArgs} args - Arguments to filter Sessions to count.
-     * @example
-     * // Count the number of Sessions
-     * const count = await prisma.session.count({
-     *   where: {
-     *     // ... the filter for the Sessions we want to count
-     *   }
-     * })
-    **/
-    count<T extends SessionCountArgs>(
-      args?: Subset<T, SessionCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends _Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], SessionCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Session.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends SessionAggregateArgs>(args: Subset<T, SessionAggregateArgs>): Prisma.PrismaPromise<GetSessionAggregateType<T>>
-
-    /**
-     * Group by Session.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SessionGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends SessionGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: SessionGroupByArgs['orderBy'] }
-        : { orderBy?: SessionGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends TupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, SessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Session.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export class Prisma__SessionClient<T, Null = never> implements Prisma.PrismaPromise<T> {
-    private readonly _dmmf;
-    private readonly _queryType;
-    private readonly _rootField;
-    private readonly _clientMethod;
-    private readonly _args;
-    private readonly _dataPath;
-    private readonly _errorFormat;
-    private readonly _measurePerformance?;
-    private _isList;
-    private _callsite;
-    private _requestPromise?;
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-    constructor(_dmmf: runtime.DMMFClass, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
-
-    user<T extends UserArgs= {}>(args?: Subset<T, UserArgs>): Prisma__UserClient<UserGetPayload<T> | Null>;
-
-    private get _document();
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
-  }
-
-
-
-  // Custom InputTypes
-
-  /**
-   * Session base type for findUnique actions
-   */
-  export type SessionFindUniqueArgsBase = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SessionInclude | null
-    /**
-     * Filter, which Session to fetch.
-     */
-    where: SessionWhereUniqueInput
-  }
-
-  /**
-   * Session findUnique
-   */
-  export interface SessionFindUniqueArgs extends SessionFindUniqueArgsBase {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
-
-  /**
-   * Session findUniqueOrThrow
-   */
-  export type SessionFindUniqueOrThrowArgs = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SessionInclude | null
-    /**
-     * Filter, which Session to fetch.
-     */
-    where: SessionWhereUniqueInput
-  }
-
-
-  /**
-   * Session base type for findFirst actions
-   */
-  export type SessionFindFirstArgsBase = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SessionInclude | null
-    /**
-     * Filter, which Session to fetch.
-     */
-    where?: SessionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Sessions to fetch.
-     */
-    orderBy?: Enumerable<SessionOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Sessions.
-     */
-    cursor?: SessionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Sessions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Sessions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Sessions.
-     */
-    distinct?: Enumerable<SessionScalarFieldEnum>
-  }
-
-  /**
-   * Session findFirst
-   */
-  export interface SessionFindFirstArgs extends SessionFindFirstArgsBase {
-   /**
-    * Throw an Error if query returns no results
-    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
-    */
-    rejectOnNotFound?: RejectOnNotFound
-  }
-      
-
-  /**
-   * Session findFirstOrThrow
-   */
-  export type SessionFindFirstOrThrowArgs = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SessionInclude | null
-    /**
-     * Filter, which Session to fetch.
-     */
-    where?: SessionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Sessions to fetch.
-     */
-    orderBy?: Enumerable<SessionOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Sessions.
-     */
-    cursor?: SessionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Sessions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Sessions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Sessions.
-     */
-    distinct?: Enumerable<SessionScalarFieldEnum>
-  }
-
-
-  /**
-   * Session findMany
-   */
-  export type SessionFindManyArgs = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SessionInclude | null
-    /**
-     * Filter, which Sessions to fetch.
-     */
-    where?: SessionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Sessions to fetch.
-     */
-    orderBy?: Enumerable<SessionOrderByWithRelationInput>
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Sessions.
-     */
-    cursor?: SessionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Sessions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Sessions.
-     */
-    skip?: number
-    distinct?: Enumerable<SessionScalarFieldEnum>
-  }
-
-
-  /**
-   * Session create
-   */
-  export type SessionCreateArgs = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SessionInclude | null
-    /**
-     * The data needed to create a Session.
-     */
-    data: XOR<SessionCreateInput, SessionUncheckedCreateInput>
-  }
-
-
-  /**
-   * Session createMany
-   */
-  export type SessionCreateManyArgs = {
-    /**
-     * The data used to create many Sessions.
-     */
-    data: Enumerable<SessionCreateManyInput>
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * Session update
-   */
-  export type SessionUpdateArgs = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SessionInclude | null
-    /**
-     * The data needed to update a Session.
-     */
-    data: XOR<SessionUpdateInput, SessionUncheckedUpdateInput>
-    /**
-     * Choose, which Session to update.
-     */
-    where: SessionWhereUniqueInput
-  }
-
-
-  /**
-   * Session updateMany
-   */
-  export type SessionUpdateManyArgs = {
-    /**
-     * The data used to update Sessions.
-     */
-    data: XOR<SessionUpdateManyMutationInput, SessionUncheckedUpdateManyInput>
-    /**
-     * Filter which Sessions to update
-     */
-    where?: SessionWhereInput
-  }
-
-
-  /**
-   * Session upsert
-   */
-  export type SessionUpsertArgs = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SessionInclude | null
-    /**
-     * The filter to search for the Session to update in case it exists.
-     */
-    where: SessionWhereUniqueInput
-    /**
-     * In case the Session found by the `where` argument doesn't exist, create a new Session with this data.
-     */
-    create: XOR<SessionCreateInput, SessionUncheckedCreateInput>
-    /**
-     * In case the Session was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<SessionUpdateInput, SessionUncheckedUpdateInput>
-  }
-
-
-  /**
-   * Session delete
-   */
-  export type SessionDeleteArgs = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SessionInclude | null
-    /**
-     * Filter which Session to delete.
-     */
-    where: SessionWhereUniqueInput
-  }
-
-
-  /**
-   * Session deleteMany
-   */
-  export type SessionDeleteManyArgs = {
-    /**
-     * Filter which Sessions to delete
-     */
-    where?: SessionWhereInput
-  }
-
-
-  /**
-   * Session without action
-   */
-  export type SessionArgs = {
-    /**
-     * Select specific fields to fetch from the Session
-     */
-    select?: SessionSelect | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SessionInclude | null
   }
 
 
@@ -14285,16 +13315,6 @@ export namespace Prisma {
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
-  export const SessionScalarFieldEnum: {
-    ip: 'ip',
-    address: 'address',
-    refreshTokens: 'refreshTokens',
-    expires: 'expires'
-  };
-
-  export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
-
-
   export const SettingsScalarFieldEnum: {
     address: 'address',
     apperanceMode: 'apperanceMode'
@@ -14471,7 +13491,6 @@ export namespace Prisma {
     userToken?: XOR<UserTokenRelationFilter, UserTokenWhereInput> | null
     tips?: TipListRelationFilter
     streamer?: XOR<StreamerRelationFilter, StreamerWhereInput> | null
-    sessions?: SessionListRelationFilter
     verificationEmailToken?: XOR<VerificationEmailTokenRelationFilter, VerificationEmailTokenWhereInput> | null
     settings?: XOR<SettingsRelationFilter, SettingsWhereInput> | null
   }
@@ -14497,7 +13516,6 @@ export namespace Prisma {
     userToken?: UserTokenOrderByWithRelationInput
     tips?: TipOrderByRelationAggregateInput
     streamer?: StreamerOrderByWithRelationInput
-    sessions?: SessionOrderByRelationAggregateInput
     verificationEmailToken?: VerificationEmailTokenOrderByWithRelationInput
     settings?: SettingsOrderByWithRelationInput
   }
@@ -14550,49 +13568,6 @@ export namespace Prisma {
     roles?: EnumRoleNullableListFilter
     activeRole?: EnumRoleWithAggregatesFilter | Role
     avatarUrl?: StringNullableWithAggregatesFilter | string | null
-  }
-
-  export type SessionWhereInput = {
-    AND?: Enumerable<SessionWhereInput>
-    OR?: Enumerable<SessionWhereInput>
-    NOT?: Enumerable<SessionWhereInput>
-    ip?: StringFilter | string
-    user?: XOR<UserRelationFilter, UserWhereInput>
-    address?: StringFilter | string
-    refreshTokens?: StringNullableListFilter
-    expires?: DateTimeNullableFilter | Date | string | null
-  }
-
-  export type SessionOrderByWithRelationInput = {
-    ip?: SortOrder
-    user?: UserOrderByWithRelationInput
-    address?: SortOrder
-    refreshTokens?: SortOrder
-    expires?: SortOrder
-  }
-
-  export type SessionWhereUniqueInput = {
-    ip?: string
-  }
-
-  export type SessionOrderByWithAggregationInput = {
-    ip?: SortOrder
-    address?: SortOrder
-    refreshTokens?: SortOrder
-    expires?: SortOrder
-    _count?: SessionCountOrderByAggregateInput
-    _max?: SessionMaxOrderByAggregateInput
-    _min?: SessionMinOrderByAggregateInput
-  }
-
-  export type SessionScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<SessionScalarWhereWithAggregatesInput>
-    OR?: Enumerable<SessionScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<SessionScalarWhereWithAggregatesInput>
-    ip?: StringWithAggregatesFilter | string
-    address?: StringWithAggregatesFilter | string
-    refreshTokens?: StringNullableListFilter
-    expires?: DateTimeNullableWithAggregatesFilter | Date | string | null
   }
 
   export type SettingsWhereInput = {
@@ -15206,7 +14181,6 @@ export namespace Prisma {
     userToken?: UserTokenCreateNestedOneWithoutUserInput
     tips?: TipCreateNestedManyWithoutUserInput
     streamer?: StreamerCreateNestedOneWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenCreateNestedOneWithoutUserInput
     settings?: SettingsCreateNestedOneWithoutUserInput
   }
@@ -15231,7 +14205,6 @@ export namespace Prisma {
     userToken?: UserTokenUncheckedCreateNestedOneWithoutUserInput
     tips?: TipUncheckedCreateNestedManyWithoutUserInput
     streamer?: StreamerUncheckedCreateNestedOneWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenUncheckedCreateNestedOneWithoutUserInput
     settings?: SettingsUncheckedCreateNestedOneWithoutUserInput
   }
@@ -15256,7 +14229,6 @@ export namespace Prisma {
     userToken?: UserTokenUpdateOneWithoutUserNestedInput
     tips?: TipUpdateManyWithoutUserNestedInput
     streamer?: StreamerUpdateOneWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUpdateOneWithoutUserNestedInput
     settings?: SettingsUpdateOneWithoutUserNestedInput
   }
@@ -15281,7 +14253,6 @@ export namespace Prisma {
     userToken?: UserTokenUncheckedUpdateOneWithoutUserNestedInput
     tips?: TipUncheckedUpdateManyWithoutUserNestedInput
     streamer?: StreamerUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUncheckedUpdateOneWithoutUserNestedInput
     settings?: SettingsUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -15337,54 +14308,6 @@ export namespace Prisma {
     roles?: UserUpdaterolesInput | Enumerable<Role>
     activeRole?: EnumRoleFieldUpdateOperationsInput | Role
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type SessionCreateInput = {
-    ip: string
-    user: UserCreateNestedOneWithoutSessionsInput
-    refreshTokens?: SessionCreaterefreshTokensInput | Enumerable<string>
-    expires?: Date | string | null
-  }
-
-  export type SessionUncheckedCreateInput = {
-    ip: string
-    address: string
-    refreshTokens?: SessionCreaterefreshTokensInput | Enumerable<string>
-    expires?: Date | string | null
-  }
-
-  export type SessionUpdateInput = {
-    ip?: StringFieldUpdateOperationsInput | string
-    user?: UserUpdateOneRequiredWithoutSessionsNestedInput
-    refreshTokens?: SessionUpdaterefreshTokensInput | Enumerable<string>
-    expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type SessionUncheckedUpdateInput = {
-    ip?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    refreshTokens?: SessionUpdaterefreshTokensInput | Enumerable<string>
-    expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type SessionCreateManyInput = {
-    ip: string
-    address: string
-    refreshTokens?: SessionCreaterefreshTokensInput | Enumerable<string>
-    expires?: Date | string | null
-  }
-
-  export type SessionUpdateManyMutationInput = {
-    ip?: StringFieldUpdateOperationsInput | string
-    refreshTokens?: SessionUpdaterefreshTokensInput | Enumerable<string>
-    expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type SessionUncheckedUpdateManyInput = {
-    ip?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    refreshTokens?: SessionUpdaterefreshTokensInput | Enumerable<string>
-    expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SettingsCreateInput = {
@@ -16188,12 +15111,6 @@ export namespace Prisma {
     isNot?: StreamerWhereInput | null
   }
 
-  export type SessionListRelationFilter = {
-    every?: SessionWhereInput
-    some?: SessionWhereInput
-    none?: SessionWhereInput
-  }
-
   export type VerificationEmailTokenRelationFilter = {
     is?: VerificationEmailTokenWhereInput | null
     isNot?: VerificationEmailTokenWhereInput | null
@@ -16209,10 +15126,6 @@ export namespace Prisma {
   }
 
   export type TipOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type SessionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16397,33 +15310,6 @@ export namespace Prisma {
   export type UserRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
-  }
-
-  export type StringNullableListFilter = {
-    equals?: Enumerable<string> | null
-    has?: string | null
-    hasEvery?: Enumerable<string>
-    hasSome?: Enumerable<string>
-    isEmpty?: boolean
-  }
-
-  export type SessionCountOrderByAggregateInput = {
-    ip?: SortOrder
-    address?: SortOrder
-    refreshTokens?: SortOrder
-    expires?: SortOrder
-  }
-
-  export type SessionMaxOrderByAggregateInput = {
-    ip?: SortOrder
-    address?: SortOrder
-    expires?: SortOrder
-  }
-
-  export type SessionMinOrderByAggregateInput = {
-    ip?: SortOrder
-    address?: SortOrder
-    expires?: SortOrder
   }
 
   export type EnumApperanceModeFilter = {
@@ -16905,13 +15791,6 @@ export namespace Prisma {
     connect?: StreamerWhereUniqueInput
   }
 
-  export type SessionCreateNestedManyWithoutUserInput = {
-    create?: XOR<Enumerable<SessionCreateWithoutUserInput>, Enumerable<SessionUncheckedCreateWithoutUserInput>>
-    connectOrCreate?: Enumerable<SessionCreateOrConnectWithoutUserInput>
-    createMany?: SessionCreateManyUserInputEnvelope
-    connect?: Enumerable<SessionWhereUniqueInput>
-  }
-
   export type VerificationEmailTokenCreateNestedOneWithoutUserInput = {
     create?: XOR<VerificationEmailTokenCreateWithoutUserInput, VerificationEmailTokenUncheckedCreateWithoutUserInput>
     connectOrCreate?: VerificationEmailTokenCreateOrConnectWithoutUserInput
@@ -16948,13 +15827,6 @@ export namespace Prisma {
     create?: XOR<StreamerCreateWithoutUserInput, StreamerUncheckedCreateWithoutUserInput>
     connectOrCreate?: StreamerCreateOrConnectWithoutUserInput
     connect?: StreamerWhereUniqueInput
-  }
-
-  export type SessionUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<Enumerable<SessionCreateWithoutUserInput>, Enumerable<SessionUncheckedCreateWithoutUserInput>>
-    connectOrCreate?: Enumerable<SessionCreateOrConnectWithoutUserInput>
-    createMany?: SessionCreateManyUserInputEnvelope
-    connect?: Enumerable<SessionWhereUniqueInput>
   }
 
   export type VerificationEmailTokenUncheckedCreateNestedOneWithoutUserInput = {
@@ -17072,20 +15944,6 @@ export namespace Prisma {
     update?: XOR<StreamerUpdateWithoutUserInput, StreamerUncheckedUpdateWithoutUserInput>
   }
 
-  export type SessionUpdateManyWithoutUserNestedInput = {
-    create?: XOR<Enumerable<SessionCreateWithoutUserInput>, Enumerable<SessionUncheckedCreateWithoutUserInput>>
-    connectOrCreate?: Enumerable<SessionCreateOrConnectWithoutUserInput>
-    upsert?: Enumerable<SessionUpsertWithWhereUniqueWithoutUserInput>
-    createMany?: SessionCreateManyUserInputEnvelope
-    set?: Enumerable<SessionWhereUniqueInput>
-    disconnect?: Enumerable<SessionWhereUniqueInput>
-    delete?: Enumerable<SessionWhereUniqueInput>
-    connect?: Enumerable<SessionWhereUniqueInput>
-    update?: Enumerable<SessionUpdateWithWhereUniqueWithoutUserInput>
-    updateMany?: Enumerable<SessionUpdateManyWithWhereWithoutUserInput>
-    deleteMany?: Enumerable<SessionScalarWhereInput>
-  }
-
   export type VerificationEmailTokenUpdateOneWithoutUserNestedInput = {
     create?: XOR<VerificationEmailTokenCreateWithoutUserInput, VerificationEmailTokenUncheckedCreateWithoutUserInput>
     connectOrCreate?: VerificationEmailTokenCreateOrConnectWithoutUserInput
@@ -17154,20 +16012,6 @@ export namespace Prisma {
     update?: XOR<StreamerUpdateWithoutUserInput, StreamerUncheckedUpdateWithoutUserInput>
   }
 
-  export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<Enumerable<SessionCreateWithoutUserInput>, Enumerable<SessionUncheckedCreateWithoutUserInput>>
-    connectOrCreate?: Enumerable<SessionCreateOrConnectWithoutUserInput>
-    upsert?: Enumerable<SessionUpsertWithWhereUniqueWithoutUserInput>
-    createMany?: SessionCreateManyUserInputEnvelope
-    set?: Enumerable<SessionWhereUniqueInput>
-    disconnect?: Enumerable<SessionWhereUniqueInput>
-    delete?: Enumerable<SessionWhereUniqueInput>
-    connect?: Enumerable<SessionWhereUniqueInput>
-    update?: Enumerable<SessionUpdateWithWhereUniqueWithoutUserInput>
-    updateMany?: Enumerable<SessionUpdateManyWithWhereWithoutUserInput>
-    deleteMany?: Enumerable<SessionScalarWhereInput>
-  }
-
   export type VerificationEmailTokenUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<VerificationEmailTokenCreateWithoutUserInput, VerificationEmailTokenUncheckedCreateWithoutUserInput>
     connectOrCreate?: VerificationEmailTokenCreateOrConnectWithoutUserInput
@@ -17186,29 +16030,6 @@ export namespace Prisma {
     delete?: boolean
     connect?: SettingsWhereUniqueInput
     update?: XOR<SettingsUpdateWithoutUserInput, SettingsUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserCreateNestedOneWithoutSessionsInput = {
-    create?: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutSessionsInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type SessionCreaterefreshTokensInput = {
-    set: Enumerable<string>
-  }
-
-  export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
-    create?: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutSessionsInput
-    upsert?: UserUpsertWithoutSessionsInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<UserUpdateWithoutSessionsInput, UserUncheckedUpdateWithoutSessionsInput>
-  }
-
-  export type SessionUpdaterefreshTokensInput = {
-    set?: Enumerable<string>
-    push?: string | Enumerable<string>
   }
 
   export type UserCreateNestedOneWithoutSettingsInput = {
@@ -18172,28 +16993,6 @@ export namespace Prisma {
     create: XOR<StreamerCreateWithoutUserInput, StreamerUncheckedCreateWithoutUserInput>
   }
 
-  export type SessionCreateWithoutUserInput = {
-    ip: string
-    refreshTokens?: SessionCreaterefreshTokensInput | Enumerable<string>
-    expires?: Date | string | null
-  }
-
-  export type SessionUncheckedCreateWithoutUserInput = {
-    ip: string
-    refreshTokens?: SessionCreaterefreshTokensInput | Enumerable<string>
-    expires?: Date | string | null
-  }
-
-  export type SessionCreateOrConnectWithoutUserInput = {
-    where: SessionWhereUniqueInput
-    create: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput>
-  }
-
-  export type SessionCreateManyUserInputEnvelope = {
-    data: Enumerable<SessionCreateManyUserInput>
-    skipDuplicates?: boolean
-  }
-
   export type VerificationEmailTokenCreateWithoutUserInput = {
     token: string
     expires: Date | string
@@ -18348,32 +17147,6 @@ export namespace Prisma {
     widgets?: WidgetUncheckedUpdateManyWithoutStreamerNestedInput
   }
 
-  export type SessionUpsertWithWhereUniqueWithoutUserInput = {
-    where: SessionWhereUniqueInput
-    update: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
-    create: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput>
-  }
-
-  export type SessionUpdateWithWhereUniqueWithoutUserInput = {
-    where: SessionWhereUniqueInput
-    data: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
-  }
-
-  export type SessionUpdateManyWithWhereWithoutUserInput = {
-    where: SessionScalarWhereInput
-    data: XOR<SessionUpdateManyMutationInput, SessionUncheckedUpdateManyWithoutSessionsInput>
-  }
-
-  export type SessionScalarWhereInput = {
-    AND?: Enumerable<SessionScalarWhereInput>
-    OR?: Enumerable<SessionScalarWhereInput>
-    NOT?: Enumerable<SessionScalarWhereInput>
-    ip?: StringFilter | string
-    address?: StringFilter | string
-    refreshTokens?: StringNullableListFilter
-    expires?: DateTimeNullableFilter | Date | string | null
-  }
-
   export type VerificationEmailTokenUpsertWithoutUserInput = {
     update: XOR<VerificationEmailTokenUpdateWithoutUserInput, VerificationEmailTokenUncheckedUpdateWithoutUserInput>
     create: XOR<VerificationEmailTokenCreateWithoutUserInput, VerificationEmailTokenUncheckedCreateWithoutUserInput>
@@ -18402,112 +17175,6 @@ export namespace Prisma {
     apperanceMode?: EnumApperanceModeFieldUpdateOperationsInput | ApperanceMode
   }
 
-  export type UserCreateWithoutSessionsInput = {
-    address: string
-    nick: string
-    email: string
-    emailVerified?: Date | string | null
-    firstName?: string | null
-    lastName?: string | null
-    verified?: boolean
-    createdAt?: Date | string
-    updateAt?: Date | string
-    allTipsCount?: number
-    allTipsValue?: Decimal | DecimalJsLike | number | string
-    allWithdrawsValue?: Decimal | DecimalJsLike | number | string
-    roles?: UserCreaterolesInput | Enumerable<Role>
-    activeRole: Role
-    avatar?: FileCreateNestedOneWithoutUserInput
-    witdraws?: WithdrawCreateNestedManyWithoutUserInput
-    userToken?: UserTokenCreateNestedOneWithoutUserInput
-    tips?: TipCreateNestedManyWithoutUserInput
-    streamer?: StreamerCreateNestedOneWithoutUserInput
-    verificationEmailToken?: VerificationEmailTokenCreateNestedOneWithoutUserInput
-    settings?: SettingsCreateNestedOneWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutSessionsInput = {
-    address: string
-    nick: string
-    email: string
-    emailVerified?: Date | string | null
-    firstName?: string | null
-    lastName?: string | null
-    verified?: boolean
-    createdAt?: Date | string
-    updateAt?: Date | string
-    allTipsCount?: number
-    allTipsValue?: Decimal | DecimalJsLike | number | string
-    allWithdrawsValue?: Decimal | DecimalJsLike | number | string
-    roles?: UserCreaterolesInput | Enumerable<Role>
-    activeRole: Role
-    avatarUrl?: string | null
-    witdraws?: WithdrawUncheckedCreateNestedManyWithoutUserInput
-    userToken?: UserTokenUncheckedCreateNestedOneWithoutUserInput
-    tips?: TipUncheckedCreateNestedManyWithoutUserInput
-    streamer?: StreamerUncheckedCreateNestedOneWithoutUserInput
-    verificationEmailToken?: VerificationEmailTokenUncheckedCreateNestedOneWithoutUserInput
-    settings?: SettingsUncheckedCreateNestedOneWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutSessionsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
-  }
-
-  export type UserUpsertWithoutSessionsInput = {
-    update: XOR<UserUpdateWithoutSessionsInput, UserUncheckedUpdateWithoutSessionsInput>
-    create: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
-  }
-
-  export type UserUpdateWithoutSessionsInput = {
-    address?: StringFieldUpdateOperationsInput | string
-    nick?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    allTipsCount?: IntFieldUpdateOperationsInput | number
-    allTipsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    roles?: UserUpdaterolesInput | Enumerable<Role>
-    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
-    avatar?: FileUpdateOneWithoutUserNestedInput
-    witdraws?: WithdrawUpdateManyWithoutUserNestedInput
-    userToken?: UserTokenUpdateOneWithoutUserNestedInput
-    tips?: TipUpdateManyWithoutUserNestedInput
-    streamer?: StreamerUpdateOneWithoutUserNestedInput
-    verificationEmailToken?: VerificationEmailTokenUpdateOneWithoutUserNestedInput
-    settings?: SettingsUpdateOneWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutSessionsInput = {
-    address?: StringFieldUpdateOperationsInput | string
-    nick?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    allTipsCount?: IntFieldUpdateOperationsInput | number
-    allTipsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    allWithdrawsValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    roles?: UserUpdaterolesInput | Enumerable<Role>
-    activeRole?: EnumRoleFieldUpdateOperationsInput | Role
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    witdraws?: WithdrawUncheckedUpdateManyWithoutUserNestedInput
-    userToken?: UserTokenUncheckedUpdateOneWithoutUserNestedInput
-    tips?: TipUncheckedUpdateManyWithoutUserNestedInput
-    streamer?: StreamerUncheckedUpdateOneWithoutUserNestedInput
-    verificationEmailToken?: VerificationEmailTokenUncheckedUpdateOneWithoutUserNestedInput
-    settings?: SettingsUncheckedUpdateOneWithoutUserNestedInput
-  }
-
   export type UserCreateWithoutSettingsInput = {
     address: string
     nick: string
@@ -18528,7 +17195,6 @@ export namespace Prisma {
     userToken?: UserTokenCreateNestedOneWithoutUserInput
     tips?: TipCreateNestedManyWithoutUserInput
     streamer?: StreamerCreateNestedOneWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenCreateNestedOneWithoutUserInput
   }
 
@@ -18552,7 +17218,6 @@ export namespace Prisma {
     userToken?: UserTokenUncheckedCreateNestedOneWithoutUserInput
     tips?: TipUncheckedCreateNestedManyWithoutUserInput
     streamer?: StreamerUncheckedCreateNestedOneWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -18586,7 +17251,6 @@ export namespace Prisma {
     userToken?: UserTokenUpdateOneWithoutUserNestedInput
     tips?: TipUpdateManyWithoutUserNestedInput
     streamer?: StreamerUpdateOneWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUpdateOneWithoutUserNestedInput
   }
 
@@ -18610,7 +17274,6 @@ export namespace Prisma {
     userToken?: UserTokenUncheckedUpdateOneWithoutUserNestedInput
     tips?: TipUncheckedUpdateManyWithoutUserNestedInput
     streamer?: StreamerUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -18634,7 +17297,6 @@ export namespace Prisma {
     userToken?: UserTokenCreateNestedOneWithoutUserInput
     tips?: TipCreateNestedManyWithoutUserInput
     streamer?: StreamerCreateNestedOneWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
     settings?: SettingsCreateNestedOneWithoutUserInput
   }
 
@@ -18658,7 +17320,6 @@ export namespace Prisma {
     userToken?: UserTokenUncheckedCreateNestedOneWithoutUserInput
     tips?: TipUncheckedCreateNestedManyWithoutUserInput
     streamer?: StreamerUncheckedCreateNestedOneWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     settings?: SettingsUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -18692,7 +17353,6 @@ export namespace Prisma {
     userToken?: UserTokenUpdateOneWithoutUserNestedInput
     tips?: TipUpdateManyWithoutUserNestedInput
     streamer?: StreamerUpdateOneWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
     settings?: SettingsUpdateOneWithoutUserNestedInput
   }
 
@@ -18716,7 +17376,6 @@ export namespace Prisma {
     userToken?: UserTokenUncheckedUpdateOneWithoutUserNestedInput
     tips?: TipUncheckedUpdateManyWithoutUserNestedInput
     streamer?: StreamerUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     settings?: SettingsUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -18739,7 +17398,6 @@ export namespace Prisma {
     witdraws?: WithdrawCreateNestedManyWithoutUserInput
     userToken?: UserTokenCreateNestedOneWithoutUserInput
     tips?: TipCreateNestedManyWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenCreateNestedOneWithoutUserInput
     settings?: SettingsCreateNestedOneWithoutUserInput
   }
@@ -18763,7 +17421,6 @@ export namespace Prisma {
     witdraws?: WithdrawUncheckedCreateNestedManyWithoutUserInput
     userToken?: UserTokenUncheckedCreateNestedOneWithoutUserInput
     tips?: TipUncheckedCreateNestedManyWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenUncheckedCreateNestedOneWithoutUserInput
     settings?: SettingsUncheckedCreateNestedOneWithoutUserInput
   }
@@ -18884,7 +17541,6 @@ export namespace Prisma {
     witdraws?: WithdrawUpdateManyWithoutUserNestedInput
     userToken?: UserTokenUpdateOneWithoutUserNestedInput
     tips?: TipUpdateManyWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUpdateOneWithoutUserNestedInput
     settings?: SettingsUpdateOneWithoutUserNestedInput
   }
@@ -18908,7 +17564,6 @@ export namespace Prisma {
     witdraws?: WithdrawUncheckedUpdateManyWithoutUserNestedInput
     userToken?: UserTokenUncheckedUpdateOneWithoutUserNestedInput
     tips?: TipUncheckedUpdateManyWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUncheckedUpdateOneWithoutUserNestedInput
     settings?: SettingsUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -19152,7 +17807,6 @@ export namespace Prisma {
     witdraws?: WithdrawCreateNestedManyWithoutUserInput
     userToken?: UserTokenCreateNestedOneWithoutUserInput
     streamer?: StreamerCreateNestedOneWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenCreateNestedOneWithoutUserInput
     settings?: SettingsCreateNestedOneWithoutUserInput
   }
@@ -19176,7 +17830,6 @@ export namespace Prisma {
     witdraws?: WithdrawUncheckedCreateNestedManyWithoutUserInput
     userToken?: UserTokenUncheckedCreateNestedOneWithoutUserInput
     streamer?: StreamerUncheckedCreateNestedOneWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenUncheckedCreateNestedOneWithoutUserInput
     settings?: SettingsUncheckedCreateNestedOneWithoutUserInput
   }
@@ -19277,7 +17930,6 @@ export namespace Prisma {
     witdraws?: WithdrawUpdateManyWithoutUserNestedInput
     userToken?: UserTokenUpdateOneWithoutUserNestedInput
     streamer?: StreamerUpdateOneWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUpdateOneWithoutUserNestedInput
     settings?: SettingsUpdateOneWithoutUserNestedInput
   }
@@ -19301,7 +17953,6 @@ export namespace Prisma {
     witdraws?: WithdrawUncheckedUpdateManyWithoutUserNestedInput
     userToken?: UserTokenUncheckedUpdateOneWithoutUserNestedInput
     streamer?: StreamerUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUncheckedUpdateOneWithoutUserNestedInput
     settings?: SettingsUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -19392,7 +18043,6 @@ export namespace Prisma {
     witdraws?: WithdrawCreateNestedManyWithoutUserInput
     tips?: TipCreateNestedManyWithoutUserInput
     streamer?: StreamerCreateNestedOneWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenCreateNestedOneWithoutUserInput
     settings?: SettingsCreateNestedOneWithoutUserInput
   }
@@ -19416,7 +18066,6 @@ export namespace Prisma {
     witdraws?: WithdrawUncheckedCreateNestedManyWithoutUserInput
     tips?: TipUncheckedCreateNestedManyWithoutUserInput
     streamer?: StreamerUncheckedCreateNestedOneWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenUncheckedCreateNestedOneWithoutUserInput
     settings?: SettingsUncheckedCreateNestedOneWithoutUserInput
   }
@@ -19488,7 +18137,6 @@ export namespace Prisma {
     witdraws?: WithdrawUpdateManyWithoutUserNestedInput
     tips?: TipUpdateManyWithoutUserNestedInput
     streamer?: StreamerUpdateOneWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUpdateOneWithoutUserNestedInput
     settings?: SettingsUpdateOneWithoutUserNestedInput
   }
@@ -19512,7 +18160,6 @@ export namespace Prisma {
     witdraws?: WithdrawUncheckedUpdateManyWithoutUserNestedInput
     tips?: TipUncheckedUpdateManyWithoutUserNestedInput
     streamer?: StreamerUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUncheckedUpdateOneWithoutUserNestedInput
     settings?: SettingsUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -19732,7 +18379,6 @@ export namespace Prisma {
     userToken?: UserTokenCreateNestedOneWithoutUserInput
     tips?: TipCreateNestedManyWithoutUserInput
     streamer?: StreamerCreateNestedOneWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenCreateNestedOneWithoutUserInput
     settings?: SettingsCreateNestedOneWithoutUserInput
   }
@@ -19756,7 +18402,6 @@ export namespace Prisma {
     userToken?: UserTokenUncheckedCreateNestedOneWithoutUserInput
     tips?: TipUncheckedCreateNestedManyWithoutUserInput
     streamer?: StreamerUncheckedCreateNestedOneWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenUncheckedCreateNestedOneWithoutUserInput
     settings?: SettingsUncheckedCreateNestedOneWithoutUserInput
   }
@@ -19790,7 +18435,6 @@ export namespace Prisma {
     userToken?: UserTokenUpdateOneWithoutUserNestedInput
     tips?: TipUpdateManyWithoutUserNestedInput
     streamer?: StreamerUpdateOneWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUpdateOneWithoutUserNestedInput
     settings?: SettingsUpdateOneWithoutUserNestedInput
   }
@@ -19814,7 +18458,6 @@ export namespace Prisma {
     userToken?: UserTokenUncheckedUpdateOneWithoutUserNestedInput
     tips?: TipUncheckedUpdateManyWithoutUserNestedInput
     streamer?: StreamerUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUncheckedUpdateOneWithoutUserNestedInput
     settings?: SettingsUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -19838,7 +18481,6 @@ export namespace Prisma {
     userToken?: UserTokenCreateNestedOneWithoutUserInput
     tips?: TipCreateNestedManyWithoutUserInput
     streamer?: StreamerCreateNestedOneWithoutUserInput
-    sessions?: SessionCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenCreateNestedOneWithoutUserInput
     settings?: SettingsCreateNestedOneWithoutUserInput
   }
@@ -19862,7 +18504,6 @@ export namespace Prisma {
     userToken?: UserTokenUncheckedCreateNestedOneWithoutUserInput
     tips?: TipUncheckedCreateNestedManyWithoutUserInput
     streamer?: StreamerUncheckedCreateNestedOneWithoutUserInput
-    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     verificationEmailToken?: VerificationEmailTokenUncheckedCreateNestedOneWithoutUserInput
     settings?: SettingsUncheckedCreateNestedOneWithoutUserInput
   }
@@ -20033,12 +18674,6 @@ export namespace Prisma {
     tipperAddress: string
   }
 
-  export type SessionCreateManyUserInput = {
-    ip: string
-    refreshTokens?: SessionCreaterefreshTokensInput | Enumerable<string>
-    expires?: Date | string | null
-  }
-
   export type WithdrawUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -20100,24 +18735,6 @@ export namespace Prisma {
     userTokenAddress?: StringFieldUpdateOperationsInput | string
     tokenAddress?: StringFieldUpdateOperationsInput | string
     tipperAddress?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type SessionUpdateWithoutUserInput = {
-    ip?: StringFieldUpdateOperationsInput | string
-    refreshTokens?: SessionUpdaterefreshTokensInput | Enumerable<string>
-    expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type SessionUncheckedUpdateWithoutUserInput = {
-    ip?: StringFieldUpdateOperationsInput | string
-    refreshTokens?: SessionUpdaterefreshTokensInput | Enumerable<string>
-    expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type SessionUncheckedUpdateManyWithoutSessionsInput = {
-    ip?: StringFieldUpdateOperationsInput | string
-    refreshTokens?: SessionUpdaterefreshTokensInput | Enumerable<string>
-    expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type TokenCreateManyStreamerInput = {
@@ -20406,7 +19023,6 @@ export namespace Prisma {
     userToken?: UserTokenUpdateOneWithoutUserNestedInput
     tips?: TipUpdateManyWithoutUserNestedInput
     streamer?: StreamerUpdateOneWithoutUserNestedInput
-    sessions?: SessionUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUpdateOneWithoutUserNestedInput
     settings?: SettingsUpdateOneWithoutUserNestedInput
   }
@@ -20430,7 +19046,6 @@ export namespace Prisma {
     userToken?: UserTokenUncheckedUpdateOneWithoutUserNestedInput
     tips?: TipUncheckedUpdateManyWithoutUserNestedInput
     streamer?: StreamerUncheckedUpdateOneWithoutUserNestedInput
-    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     verificationEmailToken?: VerificationEmailTokenUncheckedUpdateOneWithoutUserNestedInput
     settings?: SettingsUncheckedUpdateOneWithoutUserNestedInput
   }

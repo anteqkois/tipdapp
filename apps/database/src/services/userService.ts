@@ -23,22 +23,8 @@ const checkIfExist = async (where: Prisma.UserWhereInput) =>
     where,
   });
 
-const findByRefreshToken = async ({ refreshToken }: { refreshToken: string }) =>
-  prisma.user.findFirst({
-    where: {
-      sessions: { some: { refreshTokens: { has: refreshToken } } },
-    },
-    select: {
-      address: true,
-      roles: true,
-      activeRole: true,
-      nick: true,
-    },
-  });
-
 export const userService = {
   create,
   find,
   checkIfExist,
-  findByRefreshToken,
 };

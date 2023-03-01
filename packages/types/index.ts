@@ -2,7 +2,6 @@ export { ApperanceMode, Extension, Role } from '@tipdapp/prisma/types';
 export type {
   File,
   Page,
-  Session,
   Settings,
   Streamer,
   Tip,

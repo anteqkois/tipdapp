@@ -107,13 +107,6 @@ exports.Prisma.QueryMode = makeEnum({
   insensitive: 'insensitive'
 });
 
-exports.Prisma.SessionScalarFieldEnum = makeEnum({
-  ip: 'ip',
-  address: 'address',
-  refreshTokens: 'refreshTokens',
-  expires: 'expires'
-});
-
 exports.Prisma.SettingsScalarFieldEnum = makeEnum({
   address: 'address',
   apperanceMode: 'apperanceMode'
@@ -243,7 +236,6 @@ exports.Role = makeEnum({
 
 exports.Prisma.ModelName = makeEnum({
   User: 'User',
-  Session: 'Session',
   Settings: 'Settings',
   VerificationEmailToken: 'VerificationEmailToken',
   Streamer: 'Streamer',

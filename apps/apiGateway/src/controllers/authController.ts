@@ -112,7 +112,7 @@ const signUp = async (req: AuthApi.SignUp.Req, res: AuthApi.SignUp.Res) => {
       ...formData,
       address: siweMessage.address,
     },
-    process.env.URL_DATABASE
+    `${process.env.URL_DATABASE}/api`
   );
 
   const authToken = createAuthToken(user);
@@ -155,7 +155,7 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
         address: siweMessage.address,
         include: ['streamer', 'avatar', 'userToken'],
       },
-      process.env.URL_DATABASE
+      `${process.env.URL_DATABASE}/api`
     );
 
     if (user) {
@@ -183,7 +183,7 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
       {
         address: siweMessage.address,
       },
-      process.env.URL_DATABASE
+      `${process.env.URL_DATABASE}/api`
     );
 
     if (!tipper) {
@@ -191,7 +191,7 @@ const login = async (req: AuthApi.Login.Req, res: AuthApi.Login.Res) => {
         {
           address: siweMessage.address,
         },
-        process.env.URL_DATABASE
+        `${process.env.URL_DATABASE}/api`
       );
       tipper = data.tipper;
     }
@@ -215,7 +215,7 @@ const refreshUserSession = async (req: Request, res: Response) => {
       address: req.user.address,
       include: ['streamer', 'avatar', 'userToken'],
     },
-    process.env.URL_DATABASE
+    `${process.env.URL_DATABASE}/api`
   );
 
   if (user) {

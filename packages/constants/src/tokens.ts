@@ -74,6 +74,4 @@ const handledTokens = [
   },
 ] as const;
 
-// const tokenQuotes = ['sand', 'shib', 'usdt', 'matic', 'bnb', 'usdc', 'uni', 'link', 'doge'] as const
-
 export { handledTokens };

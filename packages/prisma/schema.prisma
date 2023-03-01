@@ -49,17 +49,8 @@ model User {
   tips                   Tip[]
   streamer               Streamer?
   // tipper                 Tipper?
-  sessions               Session[]
   verificationEmailToken VerificationEmailToken?
   settings               Settings?
-}
-
-model Session {
-  ip            String    @id
-  user          User      @relation(fields: [address], references: [address], onDelete: Cascade)
-  address       String    @db.VarChar(42)
-  refreshTokens String[]
-  expires       DateTime?
 }
 
 model Settings {

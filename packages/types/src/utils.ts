@@ -15,5 +15,6 @@ type DecodedUser = {
 };
 
 type ModifyObjectKey<T, R> = Omit<T, keyof R> & R;
+// EXAMPLE type Body = ModifyObjectKey<{ message: number }, { message: string }>;
 
 export type { PartialExcept, DecodedUser, ModifyObjectKey };

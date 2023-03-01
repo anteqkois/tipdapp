@@ -2,7 +2,6 @@ export { ApperanceMode, Extension, Prisma, Role } from './client';
 export type {
   File,
   Page,
-  Session,
   Settings,
   Streamer,
   Tip,
