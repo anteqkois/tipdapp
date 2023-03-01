@@ -6,6 +6,9 @@ const find = async (queryParams: TipApi.FindByAddress.Query) =>
     params: queryParams,
   });
 
-const tips = { find}
+const signature = async (body: TipApi.Signature.Body) =>
+  api.post<never, TipApi.Signature.ResBody>('tip/signature', body);
+
+const tips = { find, signature };
 
 export { tips };

@@ -15,13 +15,18 @@ import {
   TextArea,
 } from '@/shared/ui';
 import { useTipper } from '@/shared/User/hooks/useTipper';
-import { ValidationError } from '@tipdapp/api';
-import { Token } from '@tipdapp/types';
+import { apiClient, ValidationError } from '@tipdapp/api';
+import { Address } from '@tipdapp/types';
 import { useFormik } from 'formik';
 import { useMemo } from 'react';
 import { z } from 'zod';
 
-const initialValues = { nick: '', message: '', token: {} as Token, amount: '' };
+const initialValues = {
+  nick: '',
+  message: '',
+  tokenAddress: '',
+  amount: '',
+};
 
 const tipFieldValidation = z.object({
   nick: z.string().min(3, 'Nick to short'),
@@ -30,14 +35,15 @@ const tipFieldValidation = z.object({
     .string()
     .regex(new RegExp('(?!0)\\d+', 'g'), { message: 'Wrong tip amount' }),
   // .regex(/^(?!0)\d+$/g, { message: 'Wrong tip amount' }),
-  token: z.string(),
+  tokenAddress: z.string().length(42, 'Chose token'),
 });
 
-export const TipForm = () => {
+type Props = { userAddress: Address };
+
+export const TipForm = ({ userAddress }: Props) => {
   const { data } = useTokenFind();
   const { status } = useTipper();
 
-  
   const tokensToSelect = useMemo(
     () => data?.tokens && formTokenOptions(data.tokens),
     [data?.tokens]
@@ -48,6 +54,16 @@ export const TipForm = () => {
     onSubmit: async (values) => {
       try {
         tipFieldValidation.parse(values);
+        const dataToSign = {
+          tokenAmount: values.amount,
+          tokenAddress: values.tokenAddress as Address,
+          userAddress,
+        };
+
+        const {signature, signatureData} = await apiClient.tips.signature(dataToSign);
+
+        console.log({ signature, signatureData });
+        
       } catch (error: any) {
         formik.setErrors(
           ValidationError.mapArrayByField(
@@ -82,15 +98,15 @@ export const TipForm = () => {
         {tokensToSelect && (
           <SelectTokens
             label="Choose the token you want to use to send the tip"
-            id="token"
+            id="tokenAddress"
             options={tokensToSelect}
-            name="token"
+            name="tokenAddress"
             closeMenuOnSelect
-            defaultValue={tokensToSelect.find(
-              (token) => token.symbol === 'sand'
-            )}
+            // defaultValue={
+            //   tokensToSelect.find((token) => token.symbol === 'sand')?.address
+            // }
             setFieldValue={formik.setFieldValue}
-            error={formik.errors.token as string}
+            error={formik.errors.tokenAddress}
           />
         )}
         <p className="text-xs italic md:hidden">

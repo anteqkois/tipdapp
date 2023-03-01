@@ -25,22 +25,17 @@ const signature = async (
 
   const tokenAmountBigNumber = ethers.utils.parseEther(body.tokenAmount);
 
-  const tokenAddress = handledTokens.find(
-    (token) => token.coinGeckoId === body.tokenId
-  )?.address;
+  const coinGeckoId = handledTokens.find(
+    (token) => token.address === body.tokenAddress
+  )?.coinGeckoId;
 
-  if (!tokenAddress)
+  if (!coinGeckoId)
     return createApiError(
       'Token not handled by dapp.',
       HttpStatusCode.UpgradeRequired
     );
 
-  // const userToken = await apiClient.user.findUserToken(
-  //   { address: body.userAddress },
-  //   process.env.URL_DATABASE
-  // );
-
-  const token = await tokenService.getToken(body.tokenId);
+  const token = await tokenService.getToken(coinGeckoId);
 
   if (!token) {
     return createApiError(
@@ -83,7 +78,7 @@ const signature = async (
       tokenToUser,
       fee,
       timestamp,
-      tokenAddress,
+      body.tokenAddress,
       body.userAddress,
     ]
   );
@@ -99,7 +94,7 @@ const signature = async (
       tokenToUser: tokenToUser.toString(),
       fee: fee.toString(),
       timestamp,
-      tokenAddress,
+      tokenAddress: body.userAddress as Address,
       userAddress: body.userAddress as Address,
     },
   });

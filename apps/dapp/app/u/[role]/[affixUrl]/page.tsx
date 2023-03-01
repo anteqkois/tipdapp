@@ -62,7 +62,7 @@ export default function Page({ params }: Props) {
           <p className="p-2">{page.description}</p>
         </Card>
         <Card className="col-span-2 row-start-2 lg:col-span-1">
-          <TipForm />
+          <TipForm userAddress={user.address}/>
         </Card>
         <Card className="col-span-2 row-start-3 flex flex-col gap-2 lg:col-span-1 lg:col-start-2 lg:row-start-2">
           <h5>User details</h5>

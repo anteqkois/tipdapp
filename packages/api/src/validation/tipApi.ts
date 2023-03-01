@@ -14,7 +14,7 @@ const findByAddress = z.object({
 const signature = z.object({
   body: z.object({
     tokenAmount: z.string().min(1),
-    tokenId: z.string().min(3),
+    tokenAddress: z.string().length(42),
     userAddress: z.string().length(42),
   }),
 });
@@ -31,7 +31,7 @@ export namespace TipApi {
     const reqShape = signature.shape;
     export type Body = ModifyObjectKey<
       z.input<typeof reqShape.body>,
-      { userAddress: Address }
+      { userAddress: Address; tokenAddress: Address }
     >;
     export type ResBody = {
       signature: string;
