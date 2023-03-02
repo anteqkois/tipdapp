@@ -5,8 +5,8 @@ import {
   Streamer,
   Tip,
   Tipper,
-  Token,
-  User,
+  Token as TokenDB,
+  User as UserDB,
   UserToken as UserTokenDB,
 } from '@tipdapp/prisma/types';
 import { Address, Hash } from './crypto';
@@ -33,6 +33,9 @@ type UserToken = ModifyObjectKey<
   UserTokenDB,
   { address: Address; txHash: Hash }
 >;
+
+type User = ModifyObjectKey<UserDB, { address: Address }>;
+type Token = ModifyObjectKey<TokenDB, { address: Address }>;
 
 type ValueOf<T> = T[keyof T];
 type PickByValue<T, V extends T[keyof T]> = {
@@ -77,7 +80,7 @@ type FullModelType<
   S = Required<PickValueByKey<SelectMap, N>>
 > = PickValueByKey<PayloadMap<keyof S>, N>;
 
-type NestedUser = FullModelType<User>;
+type NestedUser = ModifyObjectKey<FullModelType<User>, { address: Address }>;
 type NestedUserToken = FullModelType<UserToken>;
 type NestedPage = FullModelType<Page>;
 type NestedStreamer = FullModelType<Streamer>;
@@ -115,4 +118,6 @@ export type {
   NestedToken,
   TipUI,
   UserToken,
+  User,
+  Token,
 };

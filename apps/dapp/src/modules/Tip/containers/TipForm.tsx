@@ -16,7 +16,7 @@ import {
 } from '@/shared/ui';
 import { useTipper } from '@/shared/User/hooks/useTipper';
 import { apiClient, ValidationError } from '@tipdapp/api';
-import { Address } from '@tipdapp/types';
+import { Address, TokenCoinGecko } from '@tipdapp/types';
 import { useFormik } from 'formik';
 import { useMemo } from 'react';
 import { z } from 'zod';
@@ -28,25 +28,44 @@ const initialValues = {
   amount: '',
 };
 
-const tipFieldValidation = z.object({
-  nick: z.string().min(3, 'Nick to short'),
-  message: z.string().min(3, 'Message to short').max(220, 'Message to long'),
-  amount: z
-    .string()
-    .regex(new RegExp('(?!0)\\d+', 'g'), { message: 'Wrong tip amount' }),
-  // .regex(/^(?!0)\d+$/g, { message: 'Wrong tip amount' }),
-  tokenAddress: z.string().length(42, 'Chose token'),
-});
+// TODO if user didn't chose token, show information that donate to tis user can't be perform
+type Props = {
+  userAddress: Address;
+  avaibleTokenIds?: string[];
+  messageLength?: number;
+  tokens: TokenCoinGecko[];
+};
 
-type Props = { userAddress: Address };
-
-export const TipForm = ({ userAddress }: Props) => {
+export const TipForm = ({
+  userAddress,
+  // avaibleTokenIds,
+  tokens,
+  messageLength = 250,
+}: Props) => {
   const { data } = useTokenFind();
   const { status } = useTipper();
 
+  // TODO filter token which should be avaible
   const tokensToSelect = useMemo(
     () => data?.tokens && formTokenOptions(data.tokens),
     [data?.tokens]
+  );
+
+  const tipFieldValidation = useMemo(
+    () =>
+      z.object({
+        nick: z.string().min(3, 'Nick to short'),
+        message: z
+          .string()
+          .min(3, 'Message to short')
+          .max(messageLength, 'Message to long'),
+        amount: z
+          .string()
+          .regex(new RegExp('(?!0)\\d+', 'g'), { message: 'Wrong tip amount' }),
+        // .regex(/^(?!0)\d+$/g, { message: 'Wrong tip amount' }),
+        tokenAddress: z.string().length(42, 'Chose token'),
+      }),
+    [messageLength]
   );
 
   const formik = useFormik({
@@ -60,10 +79,11 @@ export const TipForm = ({ userAddress }: Props) => {
           userAddress,
         };
 
-        const {signature, signatureData} = await apiClient.tips.signature(dataToSign);
+        const { signature, signatureData } = await apiClient.tips.signature(
+          dataToSign
+        );
 
         console.log({ signature, signatureData });
-        
       } catch (error: any) {
         formik.setErrors(
           ValidationError.mapArrayByField(
@@ -73,6 +93,17 @@ export const TipForm = ({ userAddress }: Props) => {
       }
     },
   });
+
+  const selectedToken = useMemo(() => {
+    if (tokensToSelect) {
+      // TODO implement ratio in better way, token select should store all selected token information !
+      const selectedTokenFromInput = tokensToSelect.find(
+        (token) => token.address === formik.values.tokenAddress
+      );
+      return tokens.find((token) => token.id === selectedTokenFromInput?.id);
+    }
+    return undefined;
+  }, [formik.values.tokenAddress, tokens, tokensToSelect]);
 
   return status === 'authenticated' ? (
     <form onSubmit={formik.handleSubmit}>
@@ -87,14 +118,19 @@ export const TipForm = ({ userAddress }: Props) => {
           value={formik.values.nick}
           onChange={formik.handleChange}
         />
-        <TextArea
-          label="Message"
-          id="message"
-          name="message"
-          error={formik.errors.message}
-          value={formik.values.message}
-          onChange={formik.handleChange}
-        />
+        <div className="relative">
+          <TextArea
+            label="Message"
+            id="message"
+            name="message"
+            error={formik.errors.message}
+            value={formik.values.message}
+            onChange={formik.handleChange}
+          />
+          <span className="absolute bottom-7 right-2 italic text-primary-400">
+            {formik.values.message.length}/{messageLength}
+          </span>
+        </div>
         {tokensToSelect && (
           <SelectTokens
             label="Choose the token you want to use to send the tip"
@@ -103,8 +139,10 @@ export const TipForm = ({ userAddress }: Props) => {
             name="tokenAddress"
             closeMenuOnSelect
             // defaultValue={
-            //   tokensToSelect.find((token) => token.symbol === 'sand')?.address
+            //   // tokensToSelect.find((token) => token.symbol === 'sand')?.address
+            //   tokensToSelect.find((token) => token.symbol === 'sand')
             // }
+            // defaultValue={tokensToSelect[0]}
             setFieldValue={formik.setFieldValue}
             error={formik.errors.tokenAddress}
           />
@@ -123,6 +161,9 @@ export const TipForm = ({ userAddress }: Props) => {
           label="Amount"
           id="amount"
           name="amount"
+          withRatio
+          ratio={selectedToken?.current_price.toString()}
+          symbol={selectedToken?.symbol}
           error={formik.errors.amount}
           value={formik.values.amount}
           onChange={formik.handleChange}

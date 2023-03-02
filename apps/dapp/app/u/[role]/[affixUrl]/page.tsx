@@ -23,9 +23,7 @@ type Props = {
 };
 
 export default function Page({ params }: Props) {
-  const { data: pageRes } = usePageFindByAffixUrl(
-    params,
-  );
+  const { data: pageRes } = usePageFindByAffixUrl(params);
 
   // const activeTokensSymbol = ['sand', 'shib', 'bnb'];
 
@@ -61,8 +59,11 @@ export default function Page({ params }: Props) {
           </p>
           <p className="p-2">{page.description}</p>
         </Card>
-        <Card className="col-span-2 row-start-2 lg:col-span-1">
-          <TipForm userAddress={user.address}/>
+        <Card className="col-span-2 row-start-2 lg:col-span-1 lg:row-span-2">
+          <TipForm
+            userAddress={user.address}
+            tokens={tokenRes.tokens}
+          />
         </Card>
         <Card className="col-span-2 row-start-3 flex flex-col gap-2 lg:col-span-1 lg:col-start-2 lg:row-start-2">
           <h5>User details</h5>
@@ -84,7 +85,7 @@ export default function Page({ params }: Props) {
             socialMedium="twitch"
           />
         </Card>
-        <Card className="col-span-2 row-start-4">
+        <Card className="col-span-2 row-start-4 lg:col-span-1 lg:col-start-2 lg:row-start-3 ">
           {tokenRes?.tokens && (
             <TokenPriceList
               tokens={tokenRes.tokens}

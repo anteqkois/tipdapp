@@ -43,6 +43,8 @@ const formTokenOptions = (tokens: Token[]) =>
     name: token.name,
     imageUrl: token.imageUrl,
     symbol: token.symbol,
+    id: token.id,
+    coinGeckoId: token.coinGeckoId,
     value: token.address,
   }));
 

@@ -31,3 +31,4 @@
 - [ ] Delete uneccesery packages from microservices
 - [x] Check if all package needs ts-node and tsc packages
 - [ ] Refactor apiClient to be created when is using in app/package, not in package, something like factory pattern
+- [ ] Add to user page creator: way to add link, how long message can be

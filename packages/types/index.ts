@@ -6,8 +6,6 @@ export type {
   Streamer,
   Tip,
   Tipper,
-  Token,
-  User,
   VerificationEmailToken,
   Widget,
   Withdraw,
