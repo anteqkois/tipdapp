@@ -5,7 +5,7 @@ import {
   SelectTokens
 } from '@/modules/Token/components/SelectTokens';
 import { useTokenFind } from '@/modules/Token/hooks';
-import { useModal } from '@/shared/hooks';
+import { useDataFormater, useModal } from '@/shared/hooks';
 import {
   Button,
   CustomConnectButton,
@@ -58,6 +58,7 @@ export const TipForm = ({
     useState<TipApi.Signature.ResBody>();
   const { status } = useTipper();
   const [TipModal, TipContent, , setShowTip] = useModal();
+  const {formatDateBasic} =useDataFormater()
 
   // TODO filter token which should be avaible
   const tokensToSelect = useMemo(
@@ -143,12 +144,18 @@ export const TipForm = ({
               {formik.values.amount}{' '}
               <TokenQuote>{selectedToken?.symbol.toUpperCase()}</TokenQuote>
               <span className="italic text-neutral-400">
-                ≈ {ethers.utils.formatUnits(signatureResponse?.signedData.amountToMint ?? '0')}$
+                ≈{' '}
+                {ethers.utils.formatUnits(
+                  signatureResponse?.signedData.amountToMint ?? '0'
+                )}
+                $
               </span>
             </InfoParagraph>
             <InfoParagraph header="Tip Recipient">{user.nick}</InfoParagraph>
             <InfoParagraph header="Tokens In Return">
-              {ethers.utils.formatUnits(signatureResponse?.signedData.amountToMint ?? '0')}
+              {ethers.utils.formatUnits(
+                signatureResponse?.signedData.amountToMint ?? '0'
+              )}
               <ViewOnExplorer
                 subject="token"
                 value="ddede2"
@@ -158,13 +165,17 @@ export const TipForm = ({
               </ViewOnExplorer>
             </InfoParagraph>
             <InfoParagraph header="Message">
-             {formik.values.message}
+              {formik.values.message}
             </InfoParagraph>
             <InfoParagraph header="Network Fee">~$6.33</InfoParagraph>
-            <InfoParagraph header="Dapp Fee">{parseInt(constants.config.fee, 10) / 100}%</InfoParagraph>
+            <InfoParagraph header="Dapp Fee">
+              {parseInt(constants.config.fee, 10) / 100}%
+            </InfoParagraph>
             <InfoParagraph header="Date">
-              12 March 2020
-              {/* {new Date(78914236789423 * 1000).} */}
+              {signatureResponse?.signedData &&
+                formatDateBasic(
+                  new Date(signatureResponse.signedData.timestamp * 1000)
+                )}
             </InfoParagraph>
             <Button
               icon={

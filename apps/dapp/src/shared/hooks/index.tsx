@@ -8,3 +8,4 @@ export { useLocalStorage } from './useLocalStorage';
 export { useMediaQuery } from './useMediaQuery';
 export { ModalProvider, useModal } from './useModal';
 export { useTimeout } from './useTimeout';
+export { useDataFormater } from './useDataFormater';
