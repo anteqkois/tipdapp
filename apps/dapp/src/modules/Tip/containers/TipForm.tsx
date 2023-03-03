@@ -2,23 +2,34 @@
 
 import {
   formTokenOptions,
-  SelectTokens,
+  SelectTokens
 } from '@/modules/Token/components/SelectTokens';
 import { useTokenFind } from '@/modules/Token/hooks';
+import { useModal } from '@/shared/hooks';
 import {
   Button,
   CustomConnectButton,
   InfoMessage,
+  InfoParagraph,
   Input,
   InputCurrency,
   Link,
   TextArea,
+  TokenQuote,
+  ViewOnExplorer
 } from '@/shared/ui';
 import { useTipper } from '@/shared/User/hooks/useTipper';
-import { apiClient, ValidationError } from '@tipdapp/api';
-import { Address, TokenCoinGecko } from '@tipdapp/types';
+import {
+  PaperAirplaneIcon,
+  PencilSquareIcon
+} from '@heroicons/react/24/outline';
+import { apiClient, TipApi, ValidationError } from '@tipdapp/api';
+import { constants } from '@tipdapp/helpers';
+import { Address, NestedUser, TokenCoinGecko } from '@tipdapp/types';
+import { ethers } from 'ethers';
 import { useFormik } from 'formik';
-import { useMemo } from 'react';
+import Image from 'next/image';
+import { useMemo, useState } from 'react';
 import { z } from 'zod';
 
 const initialValues = {
@@ -30,20 +41,23 @@ const initialValues = {
 
 // TODO if user didn't chose token, show information that donate to tis user can't be perform
 type Props = {
-  userAddress: Address;
-  avaibleTokenIds?: string[];
+  user: NestedUser;
+  // avaibleTokenIds?: string[];
   messageLength?: number;
-  tokens: TokenCoinGecko[];
+  tokenCoinGecko?: TokenCoinGecko[];
 };
 
 export const TipForm = ({
-  userAddress,
+  user,
   // avaibleTokenIds,
-  tokens,
+  tokenCoinGecko,
   messageLength = 250,
 }: Props) => {
   const { data } = useTokenFind();
+  const [signatureResponse, setSignatureResponse] =
+    useState<TipApi.Signature.ResBody>();
   const { status } = useTipper();
+  const [TipModal, TipContent, , setShowTip] = useModal();
 
   // TODO filter token which should be avaible
   const tokensToSelect = useMemo(
@@ -76,14 +90,14 @@ export const TipForm = ({
         const dataToSign = {
           tokenAmount: values.amount,
           tokenAddress: values.tokenAddress as Address,
-          userAddress,
+          userAddress: user.address,
         };
 
-        const { signature, signatureData } = await apiClient.tips.signature(
-          dataToSign
-        );
+        const response = await apiClient.tips.signature(dataToSign);
 
-        console.log({ signature, signatureData });
+        setSignatureResponse(response);
+
+        setShowTip(true);
       } catch (error: any) {
         formik.setErrors(
           ValidationError.mapArrayByField(
@@ -100,13 +114,68 @@ export const TipForm = ({
       const selectedTokenFromInput = tokensToSelect.find(
         (token) => token.address === formik.values.tokenAddress
       );
-      return tokens.find((token) => token.id === selectedTokenFromInput?.id);
+      return tokenCoinGecko?.find(
+        (token) => token.id === selectedTokenFromInput?.id
+      );
     }
     return undefined;
-  }, [formik.values.tokenAddress, tokens, tokensToSelect]);
+  }, [formik.values.tokenAddress, tokenCoinGecko, tokensToSelect]);
 
   return status === 'authenticated' ? (
     <form onSubmit={formik.handleSubmit}>
+      <TipModal>
+        <TipContent
+          title="Tip Details"
+          icon={<PencilSquareIcon className="icon" />}
+        >
+          <div className="flex flex-col gap-1">
+            <InfoParagraph header="Token">
+              <Image
+                height={24}
+                width={24}
+                className="rounded-full"
+                alt={selectedToken?.name ?? ''}
+                src={selectedToken?.image ?? ''}
+              />
+              {selectedToken?.name}
+            </InfoParagraph>
+            <InfoParagraph header="Amount">
+              {formik.values.amount}{' '}
+              <TokenQuote>{selectedToken?.symbol.toUpperCase()}</TokenQuote>
+              <span className="italic text-neutral-400">
+                ≈ {ethers.utils.formatUnits(signatureResponse?.signedData.amountToMint ?? '0')}$
+              </span>
+            </InfoParagraph>
+            <InfoParagraph header="Tip Recipient">{user.nick}</InfoParagraph>
+            <InfoParagraph header="Tokens In Return">
+              {ethers.utils.formatUnits(signatureResponse?.signedData.amountToMint ?? '0')}
+              <ViewOnExplorer
+                subject="token"
+                value="ddede2"
+                className="font-semibold"
+              >
+                <TokenQuote>{user.userToken?.symbol.toUpperCase()}</TokenQuote>
+              </ViewOnExplorer>
+            </InfoParagraph>
+            <InfoParagraph header="Message">
+             {formik.values.message}
+            </InfoParagraph>
+            <InfoParagraph header="Network Fee">~$6.33</InfoParagraph>
+            <InfoParagraph header="Dapp Fee">{parseInt(constants.config.fee, 10) / 100}%</InfoParagraph>
+            <InfoParagraph header="Date">
+              12 March 2020
+              {/* {new Date(78914236789423 * 1000).} */}
+            </InfoParagraph>
+            <Button
+              icon={
+                <PaperAirplaneIcon className="icon -translate-y-0.5 -rotate-45 stroke-2" />
+              }
+            >
+              Send Tip
+            </Button>
+          </div>
+        </TipContent>
+      </TipModal>
       <h5>Your tip details</h5>
       <div>
         <Input

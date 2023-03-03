@@ -61,8 +61,8 @@ export default function Page({ params }: Props) {
         </Card>
         <Card className="col-span-2 row-start-2 lg:col-span-1 lg:row-span-2">
           <TipForm
-            userAddress={user.address}
-            tokens={tokenRes.tokens}
+            user={user}
+            tokenCoinGecko={tokenRes?.tokens}
           />
         </Card>
         <Card className="col-span-2 row-start-3 flex flex-col gap-2 lg:col-span-1 lg:col-start-2 lg:row-start-2">

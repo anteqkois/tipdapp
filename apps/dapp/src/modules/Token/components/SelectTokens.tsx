@@ -7,7 +7,7 @@ import ReactSelect, {
   MultiValueGenericProps,
   OptionProps,
   SingleValue,
-  SingleValueProps,
+  SingleValueProps
 } from 'react-select';
 import { StateManagerProps } from 'react-select/dist/declarations/src/useStateManager';
 
@@ -111,8 +111,7 @@ const CustomSingleValue = ({
       className="rounded-full"
       alt={data.name}
       // TODO remove when package was updated
-      // @ts-ignore
-      src={data.imageUrl}
+      src={data?.imageUrl ?? ''}
     />
     {data.name}
     {children}

@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/anteqkois/tipdapp#readme",
   "dependencies": {
-    "@tipdapp/constants": "^0.0.0",
+    "@tipdapp/helpers": "^0.0.0",
     "@tipdapp/contracts": "^0.0.15",
     "@tipdapp/server": "^0.0.0",
     "@wagmi/chains": "^0.2.9",

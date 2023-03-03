@@ -1,5 +1,5 @@
 import { api } from '@tipdapp/api';
-import { handledTokens } from '@tipdapp/constants';
+import { constants } from '@tipdapp/helpers';
 import { TokenCoinGecko } from '@tipdapp/types';
 import { CONSTANTS, redis } from '../config/redis';
 
@@ -8,7 +8,7 @@ class TokenFeedService {
 
   intervalId: NodeJS.Timer | undefined;
 
-  tokensIds = handledTokens.map((token) => token.coinGeckoId).join();
+  tokensIds = constants.handledTokens.map((token) => token.coinGeckoId).join();
 
   async fetchTokensData() {
     return api.get<unknown, TokenCoinGecko[]>(

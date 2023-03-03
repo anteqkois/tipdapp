@@ -1,4 +1,5 @@
 import { Prisma } from '@tipdapp/prisma';
+import { Token } from '@tipdapp/types';
 import { prisma } from '../config/db';
 
 const findMany = async ({ where }: Prisma.TokenAggregateArgs) =>
@@ -9,6 +10,6 @@ const findMany = async ({ where }: Prisma.TokenAggregateArgs) =>
     },
     // include: {
     // },
-  });
+  }) as unknown as Token[] | null;
 
 export const tokenService = { findMany };

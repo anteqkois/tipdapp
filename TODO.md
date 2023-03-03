@@ -32,3 +32,5 @@
 - [x] Check if all package needs ts-node and tsc packages
 - [ ] Refactor apiClient to be created when is using in app/package, not in package, something like factory pattern
 - [ ] Add to user page creator: way to add link, how long message can be
+- [ ] Replace datejs by new native JavaScript way
+- [ ] Show in user page only avaible tokens

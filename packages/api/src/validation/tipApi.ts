@@ -35,7 +35,7 @@ export namespace TipApi {
     >;
     export type ResBody = {
       signature: string;
-      signatureData: {
+      signedData: {
         tokenAmount: string;
         amountToMint: string;
         tokenToUser: string;

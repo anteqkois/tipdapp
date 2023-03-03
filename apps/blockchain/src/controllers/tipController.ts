@@ -1,5 +1,5 @@
 import { createApiError, HttpStatusCode, TipApi, tipApi } from '@tipdapp/api';
-import { handledTokens } from '@tipdapp/constants';
+import { constants } from '@tipdapp/helpers';
 import { Address } from '@tipdapp/types';
 import { calculateFee } from '../calculateFee';
 import { ethers, provider } from '../lib/ethersProvider';
@@ -25,7 +25,7 @@ const signature = async (
 
   const tokenAmountBigNumber = ethers.utils.parseEther(body.tokenAmount);
 
-  const coinGeckoId = handledTokens.find(
+  const coinGeckoId = constants.handledTokens.find(
     (token) => token.address === body.tokenAddress
   )?.coinGeckoId;
 
@@ -88,7 +88,7 @@ const signature = async (
 
   return res.status(HttpStatusCode.Ok).json({
     signature: tipSignature,
-    signatureData: {
+    signedData: {
       tokenAmount: tokenAmountBigNumber.toString(),
       amountToMint: amountToMint.toString(),
       tokenToUser: tokenToUser.toString(),

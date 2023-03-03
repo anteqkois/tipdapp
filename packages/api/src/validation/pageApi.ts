@@ -1,4 +1,4 @@
-import { NestedPage, Role, User } from '@tipdapp/types';
+import { NestedPage, NestedUser, Role, User } from '@tipdapp/types';
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { transformApiInclude } from './utils';

@@ -1,4 +1,5 @@
 import { Role } from '@tipdapp/prisma/types';
+import { Address } from './crypto';
 
 type PartialExcept<T, U extends string[]> = {
   [K in keyof T as K extends U[number] ? K : never]?: T[K];
@@ -8,7 +9,7 @@ type PartialExcept<T, U extends string[]> = {
 
 type DecodedUser = {
   ip: string;
-  address: string;
+  address: Address;
   nick: string;
   roles: Role[];
   activeRole: Role;

@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { ButtonHTMLAttributes, forwardRef } from 'react';
+import { ButtonHTMLAttributes, forwardRef, ReactElement } from 'react';
 
 type ButtonVariant =
   | 'default'
@@ -14,11 +14,19 @@ type ButtonVariant =
 
 type ButtonProps = {
   variant?: ButtonVariant;
+  icon?: ReactElement;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { children, className, variant = 'default', type = 'button', ...props },
+    {
+      children,
+      className,
+      icon,
+      variant = 'default',
+      type = 'button',
+      ...props
+    },
     ref
   ) => (
     <button
@@ -30,7 +38,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ref={ref}
       className={classnames(
         className,
-        'state-focus select-none rounded text-sm font-medium disabled:from-neutral-400 disabled:via-neutral-400 disabled:to-neutral-400 disabled:text-neutral-50 disabled:hover:cursor-not-allowed disabled:hover:text-neutral-50',
+        'state-focus flex select-none items-center justify-center gap-1 rounded text-sm font-medium disabled:from-neutral-400 disabled:via-neutral-400 disabled:to-neutral-400 disabled:text-neutral-50 disabled:hover:cursor-not-allowed disabled:hover:text-neutral-50',
+        // ' state-focus select-none rounded text-sm font-medium disabled:from-neutral-400 disabled:via-neutral-400 disabled:to-neutral-400 disabled:text-neutral-50 disabled:hover:cursor-not-allowed disabled:hover:text-neutral-50',
         {
           'px-4 py-2': [
             'default',
@@ -62,6 +71,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         }[variant]
       )}
     >
+      {/* {icon && <span>{icon}</span>} */}
+      {icon}
       {children}
     </button>
   )

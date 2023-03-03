@@ -8,7 +8,12 @@ type Props = {
   value: Address | Hash | string;
 } & AnchorHTMLAttributes<HTMLAnchorElement>;
 
-export const ViewOnExplorer = ({ subject, value, ...rest }: Props) => {
+export const ViewOnExplorer = ({
+  subject,
+  value,
+  children,
+  ...rest
+}: Props) => {
   const { chain } = useNetwork();
 
   let link: string;
@@ -32,7 +37,8 @@ export const ViewOnExplorer = ({ subject, value, ...rest }: Props) => {
       href={link}
       icon
     >
-      View {subject === 'tx' ? 'transaction' : subject} on Explorer
+      {children ??
+        `View ${subject === 'tx' ? 'transaction' : subject} on Explorer`}
     </Link>
   );
 };

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { handledTokens } from '@tipdapp/constants';
+import { constants } from '@tipdapp/helpers';
 import { PrismaClient } from './client';
 
 const prisma = new PrismaClient();
@@ -57,9 +57,9 @@ async function main() {
   console.log('Create user:', user);
 
   const createTokenPromises = [];
-  for (let i = 0; i < handledTokens.length; i++) {
+  for (let i = 0; i < constants.handledTokens.length; i++) {
     const { address, chainId, coinGeckoId, imageUrl, name, symbol } =
-      handledTokens[i];
+      constants.handledTokens[i];
 
     createTokenPromises.push(
       prisma.token.create({
