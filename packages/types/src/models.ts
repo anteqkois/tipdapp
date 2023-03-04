@@ -7,7 +7,7 @@ import {
   Tipper,
   Token as TokenDB,
   User as UserDB,
-  UserToken as UserTokenDB,
+  UserToken as UserTokenDB
 } from '@tipdapp/prisma/types';
 import { Address, Hash } from './crypto';
 import { ModifyObjectKey, PartialExcept } from './utils';
@@ -25,7 +25,10 @@ const user = Prisma.validator<Prisma.UserArgs>()({
 });
 
 type UserSession = ModifyObjectKey<
-  PartialExcept<Prisma.UserGetPayload<typeof user>, [Role, 'userToken']>,
+  PartialExcept<
+    Prisma.UserGetPayload<typeof user>,
+    [Role, 'userToken']
+  >,
   { address: Address; userToken: UserToken; streamer: NestedStreamer }
 >;
 
@@ -80,10 +83,13 @@ type FullModelType<
   S = Required<PickValueByKey<SelectMap, N>>
 > = PickValueByKey<PayloadMap<keyof S>, N>;
 
-type NestedUser = ModifyObjectKey<FullModelType<User>, { address: Address }>;
+type NestedUser = ModifyObjectKey<FullModelType<User>, { address: Address, streamer: NestedStreamer }>;
 type NestedUserToken = FullModelType<UserToken>;
 type NestedPage = FullModelType<Page>;
-type NestedStreamer = FullModelType<Streamer>;
+type NestedStreamer = ModifyObjectKey<
+  FullModelType<Streamer>,
+  { activeTokens: Token[] }
+>;
 type NestedTipper = FullModelType<Tipper>;
 type NestedTip = FullModelType<Tip>;
 type NestedToken = FullModelType<Token>;

@@ -2,9 +2,9 @@
 
 import {
   formTokenOptions,
-  SelectTokens
+  SelectTokens,
 } from '@/modules/Token/components/SelectTokens';
-import { useTokenFind } from '@/modules/Token/hooks';
+import { useTokenBasicInfoFind } from '@/modules/Token/hooks';
 import { useDataFormater, useModal } from '@/shared/hooks';
 import {
   Button,
@@ -16,12 +16,12 @@ import {
   Link,
   TextArea,
   TokenQuote,
-  ViewOnExplorer
+  ViewOnExplorer,
 } from '@/shared/ui';
 import { useTipper } from '@/shared/User/hooks/useTipper';
 import {
   PaperAirplaneIcon,
-  PencilSquareIcon
+  PencilSquareIcon,
 } from '@heroicons/react/24/outline';
 import { apiClient, TipApi, ValidationError } from '@tipdapp/api';
 import { constants } from '@tipdapp/helpers';
@@ -42,23 +42,23 @@ const initialValues = {
 // TODO if user didn't chose token, show information that donate to tis user can't be perform
 type Props = {
   user: NestedUser;
-  // avaibleTokenIds?: string[];
+  avaibleTokenIds?: string[];
   messageLength?: number;
-  tokenCoinGecko?: TokenCoinGecko[];
+  tokenCoinGecko: TokenCoinGecko[];
 };
 
 export const TipForm = ({
   user,
-  // avaibleTokenIds,
+  avaibleTokenIds,
   tokenCoinGecko,
   messageLength = 250,
 }: Props) => {
-  const { data } = useTokenFind();
+  const { data } = useTokenBasicInfoFind({ ids: avaibleTokenIds });
   const [signatureResponse, setSignatureResponse] =
     useState<TipApi.Signature.ResBody>();
   const { status } = useTipper();
   const [TipModal, TipContent, , setShowTip] = useModal();
-  const {formatDateBasic} =useDataFormater()
+  const { formatDateBasic } = useDataFormater();
 
   // TODO filter token which should be avaible
   const tokensToSelect = useMemo(
@@ -256,7 +256,7 @@ export const TipForm = ({
       >
         Prepare Tip Transaction
       </Button>
-      <p className="px-2 pt-2">
+      <p className="px-2 pt-2 text-sm">
         Making a payment, you accept the{' '}
         <Link href="/conditions">General Terms and Conditions</Link> and the{' '}
         <Link href="/privacypolice">Privacy Policy</Link>

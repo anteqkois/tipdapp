@@ -41,8 +41,8 @@ const validate = z.object({
   body: z.object({
     email: z.string({ required_error: 'E-mail is required.' }).email(),
     nick: z
-    .string({ required_error: 'Nick is required.' })
-    .min(2, { message: 'Nick must have 2 or more characters.' }),
+      .string({ required_error: 'Nick is required.' })
+      .min(2, { message: 'Nick must have 2 or more characters.' }),
     firstName: z
       .string({ required_error: 'First name is required.' })
       .min(3, { message: 'First name must have 3 or more characters.' }),
@@ -88,7 +88,8 @@ export namespace UserApi {
   export namespace Find {
     const requestShape = find.shape;
     export type Query = z.input<typeof requestShape.query>;
-    export type ResBody = { user: Partial<NestedUser> };
+    // export type ResBody = { user: Partial<NestedUser> };
+    export type ResBody = { user: NestedUser };
     export type Req = Request<any, any, any, Query>;
     export type Res = Response<ResBody>;
   }

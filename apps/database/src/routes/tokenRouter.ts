@@ -5,6 +5,6 @@ import { tokenController } from '../controllers/tokenController';
 const tokenRouter = Router();
 
 // GET
-tokenRouter.get('/', catchAsyncErrors(tokenController.find));
+tokenRouter.get('/', catchAsyncErrors(tokenController.findMany));
 
 export { tokenRouter };

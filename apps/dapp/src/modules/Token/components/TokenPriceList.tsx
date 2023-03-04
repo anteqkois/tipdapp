@@ -58,17 +58,19 @@ export const TokenPriceList = ({ tokens, className }: Props) => (
           colSpan={2}
           className="border-t border-t-neutral-600/10"
         >
-          <p className="inline-flex items-center gap-1 px-2 py-1 text-xs italic">
-            *Data provided by
-            <Link
-              href="https://www.coingecko.com"
-              className="inline-flex items-center gap-1"
-            >
-              <CoinGeckoLogo className="inline-block h-4" />
-              CoinGecko,
-            </Link>
-            prices are updated every 2 minutes.
-          </p>
+          <div className="px-2 py-1 text-xs italic leading-none">
+            <p className="inline-flex items-center gap-1 text-xs">
+              *Data provided by
+              <Link
+                href="https://www.coingecko.com"
+                className="inline-flex items-center gap-1"
+              >
+                <CoinGeckoLogo className="inline-block h-4" />
+                CoinGecko.
+              </Link>
+            </p>
+            <p className="pl-1 text-xs">Prices are updated every 2 minutes.</p>
+          </div>
         </td>
       </tr>
     </tfoot>

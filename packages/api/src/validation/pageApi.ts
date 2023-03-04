@@ -1,4 +1,4 @@
-import { NestedPage, NestedUser, Role, User } from '@tipdapp/types';
+import { NestedPage, Role } from '@tipdapp/types';
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { transformApiInclude } from './utils';
@@ -54,7 +54,6 @@ export namespace PageApi {
     export type Params = z.input<typeof reqShape.params>;
     export type ResBody = {
       page: NestedPage;
-      user: NestedUser;
     };
     export type Req = Request<Params, any, any, Query>;
     export type Res = Response<ResBody>;

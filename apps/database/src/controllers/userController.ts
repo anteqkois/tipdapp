@@ -7,7 +7,7 @@ import {
   ValidationError,
 } from '@tipdapp/api';
 import { Prisma } from '@tipdapp/prisma';
-import { UserToken } from '@tipdapp/types';
+import { NestedUser, UserToken } from '@tipdapp/types';
 import { Response } from 'express';
 
 const findByAddress = async (
@@ -55,7 +55,7 @@ const find = async (req: UserApi.Find.Req, res: UserApi.Find.Res) => {
   // const parsedQuery = userApi.find.query.parse(req.query);
   const { query } = userApi.find.parse({ ...req });
 
-  const user = await userService.find({
+  const user = (await userService.find({
     where: { nick: query.nick, address: query.address },
     include: {
       avatar: true,
@@ -65,7 +65,7 @@ const find = async (req: UserApi.Find.Req, res: UserApi.Find.Res) => {
       userToken: query.include?.userToken ?? false,
       tips: query.include?.tips ?? false,
     },
-  });
+  })) as NestedUser;
 
   if (user) {
     return res.status(200).send({ user });

@@ -18,7 +18,7 @@ export const Link = ({
     href={href}
     target={target}
     rel="noreferrer"
-    className={`flex cursor-pointer underline decoration-primary decoration-2 underline-offset-1 ${className}`}
+    className={`inline-flex cursor-pointer underline decoration-primary decoration-2 underline-offset-1 ${className}`}
   >
     {children}
     {icon && (

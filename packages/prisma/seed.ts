@@ -9,6 +9,37 @@ const ADDRESS_WALLET_DEV_2 = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
 const ADDRESS_SAND = '0x3845badAde8e6dFF049820680d1F14bD3903a5d0';
 
 async function main() {
+  // create ERC20 tokens
+  const createTokenPromises = [];
+  for (let i = 0; i < constants.handledTokens.length; i++) {
+    const { address, chainId, coinGeckoId, imageUrl, name, symbol } =
+      constants.handledTokens[i];
+
+    createTokenPromises.push(
+      prisma.token.create({
+        data: {
+          id: coinGeckoId,
+          address,
+          coinGeckoId,
+          chainId,
+          name,
+          symbol,
+          image: {
+            connectOrCreate: {
+              where: { url: imageUrl },
+              create: {
+                url: imageUrl,
+                extension: 'png',
+                filename: symbol,
+              },
+            },
+          },
+        },
+      })
+    );
+  }
+  await Promise.all(createTokenPromises);
+
   // create user
   const user = await prisma.user.create({
     data: {
@@ -21,6 +52,9 @@ async function main() {
       activeRole: 'streamer',
       streamer: {
         create: {
+          activeTokens: {
+            connect: { coinGeckoId: constants.handledTokens[0].coinGeckoId },
+          },
           page: {
             create: {
               role: 'streamer',
@@ -33,6 +67,7 @@ async function main() {
       },
     },
   });
+
   await prisma.user.create({
     data: {
       email: 'whitex@gmail.com',
@@ -55,36 +90,6 @@ async function main() {
     },
   });
   console.log('Create user:', user);
-
-  const createTokenPromises = [];
-  for (let i = 0; i < constants.handledTokens.length; i++) {
-    const { address, chainId, coinGeckoId, imageUrl, name, symbol } =
-      constants.handledTokens[i];
-
-    createTokenPromises.push(
-      prisma.token.create({
-        data: {
-          id: coinGeckoId, 
-          address,
-          coinGeckoId,
-          chainId,
-          name,
-          symbol,
-          image: {
-            connectOrCreate: {
-              where: { url: imageUrl },
-              create: {
-                url: imageUrl,
-                extension: 'png',
-                filename: symbol,
-              },
-            },
-          },
-        },
-      })
-    );
-  }
-  await Promise.all(createTokenPromises);
 
   const createTipperPromises = [];
   for (let index = 0; index < 3; index++) {

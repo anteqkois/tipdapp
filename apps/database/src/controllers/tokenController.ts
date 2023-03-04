@@ -1,17 +1,17 @@
 import { tokenService } from '@services/tokenService';
 import { tokenApi, TokenApi } from '@tipdapp/api';
 
-const find = async (
-  req: TokenApi.FindBasicInfo.Req,
-  res: TokenApi.FindBasicInfo.Res
+const findMany = async (
+  req: TokenApi.FindManyBasicInfo.Req,
+  res: TokenApi.FindManyBasicInfo.Res
 ) => {
-  const { query } = tokenApi.findBasicInfo.parse({ ...req });
+  const { query } = tokenApi.findManyBasicInfo.parse({ ...req });
 
   const tokens = await tokenService.findMany({
     where: {
       chainId: query.chainId,
       name: query.name,
-      symbol: query.symbol,
+      id: { in: query.ids },
     },
   });
 
@@ -22,4 +22,4 @@ const find = async (
   // createApiError('No tokens found.', 404);
 };
 
-export const tokenController = { find };
+export const tokenController = { findMany };

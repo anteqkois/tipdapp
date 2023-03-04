@@ -12,8 +12,10 @@ import {
   Verified,
 } from '@/shared/ui';
 import { Avatar } from '@/shared/User/components/Avatar';
+import { useUserFind } from '@/shared/User/hooks';
 import { Role } from '@tipdapp/types';
 import Image from 'next/image';
+import { useMemo } from 'react';
 
 type Props = {
   params: {
@@ -24,14 +26,24 @@ type Props = {
 
 export default function Page({ params }: Props) {
   const { data: pageRes } = usePageFindByAffixUrl(params);
-
-  // const activeTokensSymbol = ['sand', 'shib', 'bnb'];
-
-  const { data: tokenRes } = useTokenfindMany({
-    // symbol: activeTokensSymbol,
+  const { data: userRes } = useUserFind({
+    nick: params.affixUrl,
+    include: ['streamer'],
   });
+  const { page } = pageRes!;
+  const { user } = userRes!;
 
-  const { page, user } = pageRes!;
+  const activeTokensIds = useMemo(
+    () => user.streamer.activeTokens.map((token) => token.id),
+    [user.streamer.activeTokens]
+  );
+
+  const { data: tokenRes } = useTokenfindMany(
+    {
+      ids: activeTokensIds,
+    },
+    { enabled: !!activeTokensIds }
+  );
 
   return (
     <div className="h-screen w-screen bg-[url('/wave.svg')] bg-cover bg-center bg-no-repeat">
@@ -39,7 +51,7 @@ export default function Page({ params }: Props) {
         <Card className="col-span-2 row-start-1">
           <div className="relative mb-7 aspect-video max-h-60 w-full">
             <Image
-              className="rounded"
+              className="rounded object-cover"
               src="/sky.jpeg"
               alt="user baner"
               fill
@@ -60,10 +72,15 @@ export default function Page({ params }: Props) {
           <p className="p-2">{page.description}</p>
         </Card>
         <Card className="col-span-2 row-start-2 lg:col-span-1 lg:row-span-2">
-          <TipForm
-            user={user}
-            tokenCoinGecko={tokenRes?.tokens}
-          />
+          {tokenRes?.tokens && activeTokensIds ? (
+            <TipForm
+              user={user}
+              tokenCoinGecko={tokenRes.tokens}
+              avaibleTokenIds={activeTokensIds}
+            />
+          ) : (
+            <span>siema</span>
+          )}
         </Card>
         <Card className="col-span-2 row-start-3 flex flex-col gap-2 lg:col-span-1 lg:col-start-2 lg:row-start-2">
           <h5>User details</h5>

@@ -4,7 +4,7 @@ import {
   formTokenOptions,
   SelectTokens,
 } from '@/modules/Token/components/SelectTokens';
-import { useTokenFind } from '@/modules/Token/hooks';
+import { useTokenBasicInfoFind } from '@/modules/Token/hooks';
 import {
   Button,
   Card,
@@ -27,7 +27,7 @@ import toast from 'react-hot-toast';
 
 function Page() {
   const { user, refreshUser } = useUser();
-  const { data } = useTokenFind();
+  const { data } = useTokenBasicInfoFind();
 
   const tokensToSelect = useMemo(
     () => data?.tokens && formTokenOptions(data.tokens),

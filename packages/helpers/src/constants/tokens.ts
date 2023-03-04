@@ -1,5 +1,13 @@
 const handledTokens = [
   {
+    address: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
+    coinGeckoId: 'binancecoin',
+    symbol: 'bnb',
+    name: ' BNB',
+    chainId: 1,
+    imageUrl: '/coins/bnb.png',
+  },
+  {
     address: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
     coinGeckoId: 'the-sandbox',
     symbol: 'sand',
@@ -31,15 +39,6 @@ const handledTokens = [
     chainId: 1,
     imageUrl: '/coins/matic.png',
   },
-  {
-    address: '0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
-    coinGeckoId: 'binancecoin',
-    symbol: 'bnb',
-    name: ' BNB',
-    chainId: 1,
-    imageUrl: '/coins/bnb.png',
-  },
-
   {
     address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     coinGeckoId: 'usd-coin',

@@ -8,10 +8,10 @@ import { z } from 'zod';
 //   .transform((include) => transformApiInclude(include));
 
 // BLOCKCHAIN_DATA_FEED
-const findBasicInfo = z.object({
+const findManyBasicInfo = z.object({
   query: z.object({
     chainId: z.number().optional(),
-    symbol: z.string().optional(),
+    ids: z.array(z.string()).optional(),
     name: z.string().optional(),
     // include: pageInclude,
   }),
@@ -31,8 +31,8 @@ const find = z.object({
 });
 
 export namespace TokenApi {
-  export namespace FindBasicInfo {
-    const requestShape = findBasicInfo.shape;
+  export namespace FindManyBasicInfo {
+    const requestShape = findManyBasicInfo.shape;
     export type Query = z.input<typeof requestShape.query>;
     export type ResBody = { tokens: Token[] };
     export type Req = Request<any, any, any, Query>;
@@ -55,7 +55,7 @@ export namespace TokenApi {
 }
 
 export const tokenApi = {
-  findBasicInfo,
+  findManyBasicInfo,
   findMany,
   find,
 };

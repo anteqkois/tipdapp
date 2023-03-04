@@ -1,8 +1,10 @@
 import { TokenApi } from '../validation';
 import { api } from './axiosConfig';
 
-const findBasicInfo = async (queryParams?: TokenApi.FindBasicInfo.Query) =>
-  api.get<never, TokenApi.FindBasicInfo.ResBody>('tokenBasicInfo', {
+const findManyBasicInfo = async (
+  queryParams?: TokenApi.FindManyBasicInfo.Query
+) =>
+  api.get<never, TokenApi.FindManyBasicInfo.ResBody>('tokenBasicInfo', {
     params: queryParams,
   });
 
@@ -11,6 +13,6 @@ const findMany = async (queryParams?: TokenApi.FindMany.Query) =>
     params: queryParams,
   });
 
-const token = { findBasicInfo, findMany };
+const token = { findManyBasicInfo, findMany };
 
 export { token };

@@ -1,8 +1,7 @@
 import { pageService } from '@services/pageService';
-import { userService } from '@services/userService';
 import { createApiError, HttpStatusCode, pageApi, PageApi } from '@tipdapp/api';
 import { Prisma } from '@tipdapp/prisma';
-import { NestedPage, NestedUser } from '@tipdapp/types';
+import { NestedPage } from '@tipdapp/types';
 
 const findByAffixUrl = async (
   req: PageApi.FindByAffixUrl.Req,
@@ -15,16 +14,21 @@ const findByAffixUrl = async (
       AND: [{ affixUrl: params.affixUrl }, { role: params.role }],
     },
     include: {
-      [params.role]: true,
+      baner: true,
+      // [params.role]: true,
+      // [params.role]: {},
+      // streamer: { include: { activeTokens: true } },
+      // [params.role]: { include: { activeTokens: true } },
     },
   })) as NestedPage;
 
-  const user = (await userService.find({
-    where: { [params.role]: { pageAffixUrl: params.affixUrl } },
-  })) as NestedUser;
+  // const user = (await userService.find({
+  //   where: { [params.role]: { pageAffixUrl: params.affixUrl } },
+  // })) as NestedUser;
 
   if (page) {
-    return res.status(HttpStatusCode.Ok).send({ page, user });
+    // return res.status(HttpStatusCode.Ok).send({ page, user });
+    return res.status(HttpStatusCode.Ok).send({ page });
   }
   // createApiError('Page not found for this role and affix.');
   return createApiError('Page not found for this role and affix.');

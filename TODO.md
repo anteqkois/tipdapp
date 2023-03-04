@@ -34,3 +34,4 @@
 - [ ] Add to user page creator: way to add link, how long message can be
 - [ ] Replace datejs by new native JavaScript way
 - [ ] Show in user page only avaible tokens
+- [ ] Refactor token api to have only one entry endpoint and return all data from coinGecko + address, delete token endpoint from database service
