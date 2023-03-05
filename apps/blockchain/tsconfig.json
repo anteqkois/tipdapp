@@ -4,5 +4,5 @@
     "rootDir": ".",
     "outDir": "dist"
   },
-  "include": ["server.ts", "**/*.ts", "**/*.d.ts"]
+  "include": ["server.ts", "**/*.ts", "**/*.d.ts", "playground.mjs"]
 }

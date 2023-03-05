@@ -21,6 +21,7 @@ import {
 
 describe("AdministrationFacet", async function () {
   // let accounts: Awaited<ReturnType<typeof ethers.getSigners>>;
+  // this.timeout(0);
   let accounts: SignerWithAddress[];
   let contractOwner: SignerWithAddress;
   let signerAdmin: SignerWithAddress;
@@ -82,9 +83,18 @@ describe("AdministrationFacet", async function () {
     });
 
     it("only owner can change paused veriable", async () => {
+      const diamondOwner = await ownershipFacet.owner();
+      console.log("diamondOwner :>> ", diamondOwner);
+      // console.log("contractOwner :>> ", contractOwner);
+      // console.log("accounts[1] :>> ", accounts[1]);
+
+      // try {
       await expect(
         administrationFacet.connect(accounts[1]).pause()
       ).to.be.revertedWith("LibDiamond: Must be contract owner");
+      // } catch (error) {
+      //   console.log("error :>> ", error);
+      // }
     });
 
     it("owner can change paused veriable", async () => {
@@ -105,7 +115,7 @@ describe("AdministrationFacet", async function () {
       );
     });
 
-    it("owne can change signer address", async () => {
+    it("owner can change signer address", async () => {
       await administrationFacet.changeSignerAdmin(accounts[2].address);
       expect(await administrationFacet.signerAdmin()).to.be.equal(
         accounts[2].address

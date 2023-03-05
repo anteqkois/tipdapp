@@ -38,7 +38,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ref={ref}
       className={classnames(
         className,
-        'state-focus flex select-none items-center justify-center gap-1 rounded text-sm font-medium disabled:from-neutral-400 disabled:via-neutral-400 disabled:to-neutral-400 disabled:text-neutral-50 disabled:hover:cursor-not-allowed disabled:hover:text-neutral-50',
+        'state-focus inline-flex select-none items-center justify-center gap-1 rounded text-sm font-medium disabled:from-neutral-400 disabled:via-neutral-400 disabled:to-neutral-400 disabled:text-neutral-50 disabled:hover:cursor-not-allowed disabled:hover:text-neutral-50',
         // ' state-focus select-none rounded text-sm font-medium disabled:from-neutral-400 disabled:via-neutral-400 disabled:to-neutral-400 disabled:text-neutral-50 disabled:hover:cursor-not-allowed disabled:hover:text-neutral-50',
         {
           'px-4 py-2': [

@@ -4,6 +4,7 @@
     // "module": "commonjs",
     "module": "CommonJS",
     // "moduleResolution": "NodeNext",
+    // "rootDirs": ["./src", "./scripts", "./test"],
     "declaration": true,
     "outDir": "./esm",
     "esModuleInterop": true,
@@ -14,7 +15,9 @@
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["./index.ts"]
+  // "include": ["./index.ts"]
+  "include": ["./index.ts", "./test", "./src", "./scripts"],
+  "files": ["./hardhat.config.ts"]
 }
 
 // "target": "ES2020",

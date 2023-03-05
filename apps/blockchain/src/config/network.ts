@@ -1,4 +1,7 @@
+import { dotenvConfig } from '@tipdapp/server';
 import { Chain, hardhat } from './chains';
+
+dotenvConfig();
 
 const networks = new Map<string, Chain>([['hardhat', hardhat]]);
 
