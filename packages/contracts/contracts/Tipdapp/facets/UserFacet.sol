@@ -38,6 +38,8 @@ contract UserFacet is Modifier {
         // console.log("IN DIAMOND Diamond", address(this));
         // console.log("IN DIAMOND msg.sender", msg.sender);
         address newToken = Clones.clone(s.userTokenImplementation);
+        
+        //TODO! User token cant' be initailize in this sam eblock when create
         UserToken(newToken).initialize(_tokenSymbol, _tokenName);
 
         s.tokenToUser[msg.sender] = newToken;

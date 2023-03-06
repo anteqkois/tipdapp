@@ -83,18 +83,9 @@ describe("AdministrationFacet", async function () {
     });
 
     it("only owner can change paused veriable", async () => {
-      const diamondOwner = await ownershipFacet.owner();
-      console.log("diamondOwner :>> ", diamondOwner);
-      // console.log("contractOwner :>> ", contractOwner);
-      // console.log("accounts[1] :>> ", accounts[1]);
-
-      // try {
       await expect(
         administrationFacet.connect(accounts[1]).pause()
       ).to.be.revertedWith("LibDiamond: Must be contract owner");
-      // } catch (error) {
-      //   console.log("error :>> ", error);
-      // }
     });
 
     it("owner can change paused veriable", async () => {

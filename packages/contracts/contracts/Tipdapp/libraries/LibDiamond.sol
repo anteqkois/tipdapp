@@ -7,7 +7,6 @@ pragma solidity ^0.8.0;
 /******************************************************************************/
 import {IDiamondCut} from "../interfaces/IDiamondCut.sol";
 import {AggregatorV3Interface} from "../interfaces/AggregatorV3Interface.sol";
-import "hardhat/console.sol";
 // Remember to add the loupe functions from DiamondLoupeFacet to the diamond.
 // The loupe functions are required by the EIP2535 Diamonds standard
 
@@ -54,8 +53,6 @@ library LibDiamond {
     }
 
     function enforceIsContractOwner() internal view {
-        console.log(msg.sender);
-        console.log(diamondStorage().contractOwner);
         require(msg.sender == diamondStorage().contractOwner, "LibDiamond: Must be contract owner");
     }
 

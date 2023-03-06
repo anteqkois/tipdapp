@@ -27,10 +27,9 @@ const saveAddress = async (address: Record<string, string>) => {
     return;
   }
 
-  // If file exist
-  const data = JSON.parse(
-    (await fs.readFile(pathToFile)) as unknown as string
-  ) as Record<string, Record<string, string>>;
+  const fileBuffor = await fs.readFile(pathToFile);
+  // Check if file isn't empty
+  const data = fileBuffor.length !== 0 ? JSON.parse(fileBuffor.toString()) : {};
 
   await fs.writeFile(
     pathToFile,

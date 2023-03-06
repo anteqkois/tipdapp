@@ -2,13 +2,12 @@
 // import "@typechain/hardhat";
 // import "@nomiclabs/hardhat-ethers";
 
-    // "@nomiclabs/hardhat-etherscan": "^3.1.6",
-    // "@openzeppelin/contracts": "^4.8.0",
-    // "@typechain/ethers-v5": "^10.2.0",
+// "@nomiclabs/hardhat-etherscan": "^3.1.6",
+// "@openzeppelin/contracts": "^4.8.0",
+// "@typechain/ethers-v5": "^10.2.0",
 
-
-import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
+import { HardhatUserConfig } from "hardhat/config";
 // import "solidity-coverage";
 
 import dotenv from "dotenv";
@@ -32,7 +31,7 @@ const config: HardhatUserConfig & any = {
   networks: {
     hardhat: {
       loggingEnabled: true,
-      // you can't use auto mining when try to run test 
+      // you must use auto mining when try to run test, or manually mint block when try to test without automining
       mining: {
         auto: false,
         interval: [2000, 5000],
