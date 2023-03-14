@@ -45,7 +45,7 @@
     "@types/express": "^4.17.17",
     "@types/module-alias": "^2.0.1",
     "@types/node": "^18.11.18",
-    "eslint": "^8.28.0",
+    "eslint": "^8.36.0",
     "eslint-config-tipdapp-node": "*",
     "module-alias": "^2.2.2",
     "nodemon": "^2.0.20",
