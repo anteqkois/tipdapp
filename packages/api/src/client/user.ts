@@ -12,7 +12,7 @@ const findUserToken = async <R = UserApi.FindUserToken.ResBody>(
 ) => api.get<never, R>(`/user/${params.address}/user-token`, { baseURL });
 
 const create = async (body: UserApi.Create.Body, baseURL?: string) =>
-  api.post<never, UserApi.Create.ResBody>('user', { body, baseURL });
+  api.post<never, UserApi.Create.ResBody>('/user', { body, baseURL });
 
 const user = { find, findUserToken, create };
 

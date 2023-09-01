@@ -35,3 +35,4 @@
 - [ ] Replace datejs by new native JavaScript way
 - [ ] Show in user page only avaible tokens
 - [ ] Refactor token api to have only one entry endpoint and return all data from coinGecko + address, delete token endpoint from database service
+- [ ] change UserToken smart contract implementation to not use initialize function, (chnage upgradebility pattern to use OppenZeppelin implementation)

@@ -268,7 +268,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/anteqkois/Code/Projects/tipdapp/packages/prisma/client",
+      "value": "/Users/anteqkois/Code/Projects/me/tipdapp/packages/prisma/client",
       "fromEnvVar": null
     },
     "config": {

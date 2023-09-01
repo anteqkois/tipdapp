@@ -8,7 +8,10 @@ const CONSTANTS = {
 };
 
 const client = createClient({
-  url: `redis://${process.env.REDIS_USER_NAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOSTNAME}:${process.env.REDIS_PORT}`,
+  url:
+    process.env.NODE === 'prodeuction'
+      ? `redis://${process.env.REDIS_USER_NAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOSTNAME}:${process.env.REDIS_PORT}`
+      : `redis://${process.env.REDIS_HOSTNAME}:${process.env.REDIS_PORT}`,
 });
 
 client.on('error', (err) => console.log('Redis Client Error', err));
