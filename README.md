@@ -107,8 +107,8 @@ TippDAPP's architecture is designed for scalability, maintainability, and reliab
 
 ### Overview Video
 
-<!-- [<img src="./doc/media/dashboard.jpg" width="100%">](https://youtu.be/G2ty-_-b6LY 'TipDPP Overview') -->
-![TipDAPP Overview](./doc/media/tipdapp_overview.mp4)
+[<img src="./doc/media/dashboard.jpg" width="100%">](https://youtu.be/G2ty-_-b6LY 'TipDPP Overview')
+<!-- ![TipDAPP Overview](./doc/media/tipdapp_overview.mp4) -->
 
 ### Screenshots
 
