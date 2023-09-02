@@ -4,6 +4,7 @@
 # TippDAPP - A Decentralized Tipping and Utility Token Platform
 
 ## Table of Contents
+
 - [Introduction](#introduction)
 - [Architecture](#architecture)
 - [Key Features](#key-features)
@@ -11,13 +12,9 @@
 - [Images and Video](#images-and-video)
 <!-- - [License](#license) -->
 
-
-
 ## Introduction
 
 TippDAPP is a powerful web application built on the Ethereum blockchain and web3 technology, designed to empower content creators, influencers, charities, and similar individuals/organizations. It enables these users to receive tips from their fans and donors while giving back personalized utility tokens in return. These utility tokens can be utilized as assets in the user's store, granting access to exclusive events, and much more.
-
-
 
 ## Key Features
 
@@ -37,8 +34,6 @@ TippDAPP offers a range of key features:
 
 - **Secure Web3 Authentication:** Implement secure authentication using web3 technology.
 
-
-
 ## Architecture
 
 TippDAPP's architecture is designed for scalability, maintainability, and reliability:
@@ -55,11 +50,38 @@ TippDAPP's architecture is designed for scalability, maintainability, and reliab
 
 - **Web3 Authentication:** Implement secure authentication using web3 technology.
 
-
-
 ## Technologies
 
-TippDAPP leverages a modern technology stack to deliver its capabilities:
+<!-- [![My Skills](https://skillicons.dev/icons?i=bash,docker,express,postgres,nextjs,nodejs,postman,prisma,rabbitmq,react,redis,redux,solidity,tailwind,ts,)](https://skillicons.dev) -->
+
+<div style="margin-block: 1.5em;">
+<img height="40" width="40" title="react" alt="react" src="https://cdn.simpleicons.org/react" />
+<img height="40" width="40" title="typescript" alt="typescript" src="https://cdn.simpleicons.org/typescript" />
+<img height="40" width="40" title="nextdotjs" alt="nextdotjs" src="https://cdn.simpleicons.org/nextdotjs/_/eee" />
+<img height="40" width="40" title="redux" alt="redux" src="https://cdn.simpleicons.org/redux" />
+<img height="40" width="40" title="tailwindcss" alt="tailwindcss" src="https://cdn.simpleicons.org/tailwindcss" />
+<img height="40" width="40" title="express" alt="express" src="https://cdn.simpleicons.org/express/_/eee" />
+<img height="40" width="40" title="nodedotjs" alt="nodedotjs" src="https://cdn.simpleicons.org/nodedotjs" />
+<img height="40" width="40" title="rabbitmq" alt="rabbitmq" src="https://cdn.simpleicons.org/rabbitmq" />
+<img height="40" width="40" title="prisma" alt="prisma" src="https://cdn.simpleicons.org/prisma/_/eee" />
+<img height="40" width="40" title="postgresql" alt="postgresql" src="https://cdn.simpleicons.org/postgresql" />
+<img height="40" width="40" title="redis" alt="redis" src="https://cdn.simpleicons.org/redis" />
+<img height="40" width="40" title="solidity" alt="solidity" src="https://cdn.simpleicons.org/solidity/_/eee" />
+<br>
+<br>
+<img height="25" width="25" title="ethereum" alt="ethereum" src="https://cdn.simpleicons.org/ethereum" />
+<img height="25" width="25" title="postman" alt="postman" src="https://cdn.simpleicons.org/postman" />
+<img height="25" width="25" title="gnubash" alt="gnubash" src="https://cdn.simpleicons.org/gnubash" />
+<img height="25" width="25" title="turborepo" alt="turborepo" src="https://cdn.simpleicons.org/turborepo" />
+<img height="25" width="25" title="zod" alt="zod" src="https://cdn.simpleicons.org/zod" />
+<img height="25" width="25" title="mocha" alt="mocha" src="https://cdn.simpleicons.org/mocha" />
+<img height="25" width="25" title="openzeppelin" alt="openzeppelin" src="https://cdn.simpleicons.org/openzeppelin" />
+<img height="25" width="25" title="dotenv" alt="dotenv" src="https://cdn.simpleicons.org/dotenv" />
+<img height="25" width="25" title="nodemon" alt="nodemon" src="https://cdn.simpleicons.org/nodemon" />
+<img height="25" width="25" title="radixui" alt="radixui" src="https://cdn.simpleicons.org/radixui/_/eee" />
+<img height="25" width="25" title="reactquery" alt="reactquery" src="https://cdn.simpleicons.org/reactquery" />
+<img height="25" width="25" title="jsonwebtokens" alt="jsonwebtokens" src="https://cdn.simpleicons.org/jsonwebtokens/purple" />
+</div>
 
 - **Frontend:** Developed with ReactJS (NextJS), utilizing TypeScript and Redux for state management.
 
@@ -81,13 +103,12 @@ TippDAPP leverages a modern technology stack to deliver its capabilities:
 
 - **Project Management:** Turborepo simplifies the management of a monorepo codebase.
 
-
 ## Images and Video
 
+### Overview Video
 
-### Demo Video
-
-[<img src="./doc/media/dashboard.jpg" width="100%">](https://youtu.be/G2ty-_-b6LY "TipDPP Overview")
+<!-- [<img src="./doc/media/dashboard.jpg" width="100%">](https://youtu.be/G2ty-_-b6LY 'TipDPP Overview') -->
+![TipDAPP Overview](./doc/media/tipdapp_overview.mp4)
 
 ### Screenshots
 
@@ -99,7 +120,7 @@ TippDAPP leverages a modern technology stack to deliver its capabilities:
 ![User Dashboard](./doc/media/signup_step_2.jpg)
 ![User Dashboard](./doc/media/tip_quick_view.jpg)
 
-<!-- 
+<!--
 
 ## License
 
