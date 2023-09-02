@@ -8,6 +8,7 @@
 - [Architecture](#architecture)
 - [Key Features](#key-features)
 - [Technologies](#technologies)
+- [Images and Video](#images-and-video)
 <!-- - [License](#license) -->
 
 
@@ -79,6 +80,24 @@ TippDAPP leverages a modern technology stack to deliver its capabilities:
 - **Smart Contracts:** Solidity, along with Hardhat for development and testing.
 
 - **Project Management:** Turborepo simplifies the management of a monorepo codebase.
+
+
+## Images and Video
+
+
+### Demo Video
+
+[<img src="./doc/media/dashboard.jpg" width="100%">](https://youtu.be/G2ty-_-b6LY "TipDPP Overview")
+
+### Screenshots
+
+![Monorepo Setup](./doc/media/monorepo_setup.jpg)
+![User Dashboard](./doc/media/dashboard.jpg)
+![User Dashboard](./doc/media/connect_ethereum.jpg)
+![User Dashboard](./doc/media/verify_nonce.jpg)
+![User Dashboard](./doc/media/signup_step_1.jpg)
+![User Dashboard](./doc/media/signup_step_2.jpg)
+![User Dashboard](./doc/media/tip_quick_view.jpg)
 
 <!-- 
 
